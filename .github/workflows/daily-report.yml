@@ -2,7 +2,7 @@ name: XCF Daily Capacity Report
 
 on:
   schedule:
-    - cron: '0 17 * * 1-5'  # 5am NZT, Monday–Friday
+    - cron: '0 16 * * 1-5'  # 4am NZT, Monday–Friday
   workflow_dispatch:          # allows manual run from GitHub
 
 jobs:
