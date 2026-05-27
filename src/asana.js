@@ -271,11 +271,11 @@ async function buildMemberData() {
       });
     }
 
-    // Aggregate totals from non-overdue tasks
+    // Aggregate totals from non-overdue tasks — zero out hours if member is OOO
     const activeTasks = memberTasks.filter((t) => !t.overdue);
-    const hoursToday = round1(activeTasks.reduce((s, t) => s + t.th, 0));
-    const hours7Days = round1(activeTasks.reduce((s, t) => s + t.wh, 0));
-    const hours21Days = round1(
+    const hoursToday = isOoo ? 0 : round1(activeTasks.reduce((s, t) => s + t.th, 0));
+    const hours7Days = isOoo ? 0 : round1(activeTasks.reduce((s, t) => s + t.wh, 0));
+    const hours21Days = isOoo ? 0 : round1(
       activeTasks.reduce((s, t) => s + sumHoursOverRange(t.est, null, t.due, today, in21), 0)
     );
 
