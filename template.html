@@ -516,7 +516,7 @@ function renderPodSummary(){
     const totalWeek=members.reduce((s,m)=>s+m.week,0);
     const totalMissing=members.reduce((s,m)=>s+m.missing,0);
     const totalOverdue=members.reduce((s,m)=>s+m.overdue,0);
-    const availToday=members.filter(m=>m.today<3).length;
+    const availToday=members.filter(m=>!m.ooo&&m.today<3).length;
     const sorted=[...members].sort((a,b2)=>b2.today-a.today);
     html+=`
       <div class="ps-card">
@@ -534,6 +534,11 @@ function renderPodSummary(){
           ${sorted.map(m=>{
             const pct=Math.min(100,(m.today/8)*100);
             const bc=barCol(m.today,'today',b.bar);
+            if(m.ooo) return `<div class="ps-member-line">
+              <span class="ps-member-name">${m.name}</span>
+              <div class="ps-mini-bar"></div>
+              <span class="status-chip chip-ooo" style="font-size:10px;padding:2px 7px">Out of Office</span>
+            </div>`;
             return `<div class="ps-member-line">
               <span class="ps-member-name">${m.name}</span>
               <div class="ps-mini-bar"><div class="ps-mini-fill" style="width:${pct.toFixed(1)}%;background:${bc}"></div></div>
