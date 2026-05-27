@@ -152,6 +152,14 @@ function round2(n) { return Math.round(n * 100) / 100; }
 
 const EXCLUDED_MEMBERS = [
   'Gabrielle George',
+  'Christie Sinai',
+  'Sha Edalati',
+  'Chris Larcombe',
+  'Pete Montgomery',
+  'Nadim Malvat',
+  'Ben Smith',
+  'Ali Berg',
+  'Quincey Brinker',
 ];
 
 const EXCLUDED_PROJECTS = [
@@ -187,6 +195,7 @@ async function buildMemberData() {
     const memberTasks = [];
     let missingCount = 0;
     let overdueCount = 0;
+    let isOoo = false;
 
     for (const t of incomplete) {
       const estMinutes = getCustomFieldNumber(t, estGid);
@@ -196,6 +205,15 @@ async function buildMemberData() {
 
       // Use the first project membership as the display project name
       const projectName = t.memberships?.[0]?.project?.name ?? '';
+
+      // Detect OOO: leave calendar task with "OOO" in name that covers today
+      if (projectName === 'XCF: Leave calendar (NOW USE THE NEW WAY)!' &&
+          t.name && t.name.toUpperCase().includes('OOO') && dueDate) {
+        const oooStart = new Date((startDate || dueDate) + 'T00:00:00');
+        const oooEnd = new Date(dueDate + 'T00:00:00');
+        const todayDate = new Date(today + 'T00:00:00');
+        if (todayDate >= oooStart && todayDate <= oooEnd) isOoo = true;
+      }
 
       // Skip tasks from excluded projects
       if (EXCLUDED_PROJECTS.some(p => projectName.startsWith(p))) continue;
@@ -264,6 +282,7 @@ async function buildMemberData() {
     members.push({
       name: member.name,
       pod,
+      ooo: isOoo,
       today: hoursToday,
       week: hours7Days,
       month: hours21Days,

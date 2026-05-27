@@ -78,6 +78,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .chip-over{background:#3a0a0a;color:#f87171;border:1px solid #6b1c1c}
 .chip-under{background:#2a1f00;color:#fbbf24;border:1px solid #6b4e00}
 .chip-avail{background:#082a1a;color:#6aeaaa;border:1px solid #0f5233}
+.chip-ooo{background:#1a1a2e;color:#a78bfa;border:1px solid #4c3a8a}
 .tasks-cell{font-size:11px;color:var(--muted);overflow:hidden;display:flex;flex-direction:column;gap:2px}
 .task-name-short{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--txt);font-size:11px}
 .task-proj-short{font-size:10px;padding:1px 5px;border-radius:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;max-width:100%}
@@ -390,7 +391,9 @@ function render(){
   document.getElementById('tbl-date').innerHTML=dlabels[key]+' <span>Click row to expand tasks</span>';
   const creative=MEMBERS.filter(m=>!['Campaign Ops','GM Creative'].includes(m.pod));
   let over=0,at=0,under=0,avail=0;
-  creative.forEach(m=>{const h=m[key];
+  creative.forEach(m=>{
+    if(m.ooo)return;
+    const h=m[key];
     if(key==='today'){if(h>8)over++;else if(h>=6)at++;else if(h>=1)under++;else avail++;}
     else if(key==='week'){if(h>40)over++;else if(h>=30)at++;else if(h>=10)under++;else avail++;}
     else{if(h>160)over++;else if(h>=100)at++;else if(h>=40)under++;else avail++;}
@@ -407,7 +410,7 @@ function render(){
     const h=m[key],b=BRAND[m.pod]||BRAND['Campaign'];
     const pct=Math.min(100,(h/maxH)*100);
     const bc=barCol(h,key,b.bar);
-    const sc=statusChip(h,key);
+    const sc=m.ooo?{cls:'chip-ooo',label:'Out of Office'}:statusChip(h,key);
     const id='x-'+m.name.replace(/[\s&]/g,'-');
     const first=m.tasks[0];
     const tasksHtml=first
@@ -476,7 +479,7 @@ function renderFindResource(){
             const h=m[range];
             const used=Math.min(100,(h/maxH)*100);
             const free=100-used;
-            const sc=statusChip(h,range);
+            const sc=m.ooo?{cls:'chip-ooo',label:'Out of Office'}:statusChip(h,range);
             const fc=availColor(used);
             return `<div class="fr-member-row">
               <div class="r-name">${m.name}</div>
