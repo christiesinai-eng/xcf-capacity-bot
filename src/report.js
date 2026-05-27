@@ -31,7 +31,7 @@ function generateReport({ members, missingTasks, overdueTasks }) {
 }
 
 function saveReport(data) {
-  const dateStr = new Date().toISOString().slice(0, 10);
+  const dateStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Pacific/Auckland' });
   const reportPath = buildReportPath(dateStr);
 
   if (!fs.existsSync(REPORTS_DIR)) {

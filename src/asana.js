@@ -172,7 +172,8 @@ async function buildMemberData() {
   const estGid = process.env.ASANA_FIELD_GID_ESTIMATED_TIME;
   const podMap = process.env.ASANA_POD_MAP ? JSON.parse(process.env.ASANA_POD_MAP) : {};
 
-  const today = new Date().toISOString().slice(0, 10);
+  // Use NZT (Auckland) date so OOO/due-date logic matches the team's timezone
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Pacific/Auckland' });
   const in7 = addDays(today, 7);
   const in21 = addDays(today, 21);
 
