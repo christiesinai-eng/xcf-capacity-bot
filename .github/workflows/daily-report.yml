@@ -2,7 +2,9 @@ name: XCF Daily Capacity Report
 
 on:
   schedule:
-    - cron: '0 16 * * 1-5'  # 4am NZT, Monday–Friday
+    - cron: '0 16 * * 1-5'  # 4am NZT primary
+    - cron: '0 17 * * 1-5'  # 5am NZT backup
+    - cron: '0 18 * * 1-5'  # 6am NZT final backup
   workflow_dispatch:          # allows manual run from GitHub
 
 jobs:
@@ -20,7 +22,28 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Check if already ran today
+        id: dedup
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TODAY_NZT=$(TZ='Pacific/Auckland' date +%Y-%m-%d)
+          ALREADY=$(gh run list --workflow=daily-report.yml --status=success --limit=20 --json databaseId,createdAt \
+            | node -e "
+              const runs=JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));
+              const today=process.argv[1];
+              const RUN_ID=${{ github.run_id }};
+              const prev=runs.filter(r=>
+                r.databaseId!==RUN_ID &&
+                new Date(r.createdAt).toLocaleDateString('en-CA',{timeZone:'Pacific/Auckland'})===today
+              );
+              console.log(prev.length>0?'true':'false');
+            " - "$TODAY_NZT")
+          echo "already_ran=$ALREADY" >> $GITHUB_OUTPUT
+          echo "Already ran today: $ALREADY"
+
       - name: Run capacity report
+        if: steps.dedup.outputs.already_ran == 'false' || github.event_name == 'workflow_dispatch'
         env:
           ASANA_TOKEN: ${{ secrets.ASANA_TOKEN }}
           ASANA_WORKSPACE_GID: ${{ secrets.ASANA_WORKSPACE_GID }}
