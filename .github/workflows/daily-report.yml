@@ -24,26 +24,20 @@ jobs:
 
       - name: Check if already ran today
         id: dedup
+        if: github.event_name == 'schedule'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TODAY_NZT=$(TZ='Pacific/Auckland' date +%Y-%m-%d)
+          TODAY=$(date +%Y-%m-%d)
+          RUN_ID=${{ github.run_id }}
           ALREADY=$(gh run list --workflow=daily-report.yml --status=success --limit=20 --json databaseId,createdAt \
-            | node -e "
-              const runs=JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));
-              const today=process.argv[1];
-              const RUN_ID=${{ github.run_id }};
-              const prev=runs.filter(r=>
-                r.databaseId!==RUN_ID &&
-                new Date(r.createdAt).toLocaleDateString('en-CA',{timeZone:'Pacific/Auckland'})===today
-              );
-              console.log(prev.length>0?'true':'false');
-            " - "$TODAY_NZT")
+            | jq --arg today "$TODAY" --argjson runid "$RUN_ID" \
+              '[.[] | select(.databaseId != $runid) | select(.createdAt | startswith($today))] | length > 0')
           echo "already_ran=$ALREADY" >> $GITHUB_OUTPUT
           echo "Already ran today: $ALREADY"
 
       - name: Run capacity report
-        if: steps.dedup.outputs.already_ran == 'false' || github.event_name == 'workflow_dispatch'
+        if: steps.dedup.outputs.already_ran != 'true'
         env:
           ASANA_TOKEN: ${{ secrets.ASANA_TOKEN }}
           ASANA_WORKSPACE_GID: ${{ secrets.ASANA_WORKSPACE_GID }}
