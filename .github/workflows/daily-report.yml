@@ -10,6 +10,9 @@ on:
 jobs:
   run-report:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -47,3 +50,25 @@ jobs:
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
           SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
         run: node src/index.js --once
+
+      - name: Publish to GitHub Pages
+        if: steps.dedup.outputs.already_ran != 'true'
+        run: |
+          # Find today's report
+          REPORT=$(ls reports/xcf-report-*.html | sort | tail -1)
+
+          # Set up git identity
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+
+          # Checkout or create gh-pages branch
+          git fetch origin gh-pages 2>/dev/null || true
+          git checkout gh-pages 2>/dev/null || git checkout --orphan gh-pages
+
+          # Copy report as index.html so it loads at the root URL
+          cp "$REPORT" index.html
+
+          # Commit and push
+          git add index.html
+          git commit -m "Update report $(date +%Y-%m-%d)" || echo "No changes"
+          git push origin gh-pages
