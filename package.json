@@ -1,0 +1,16 @@
+{
+  "name": "xcf-capacity-bot",
+  "version": "1.0.0",
+  "description": "Daily XCF capacity report generator and Slack poster",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "report": "node src/index.js --once"
+  },
+  "dependencies": {
+    "@slack/web-api": "^7.3.4",
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "node-cron": "^3.0.3"
+  }
+}

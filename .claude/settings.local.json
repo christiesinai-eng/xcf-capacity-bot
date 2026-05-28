@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(/usr/local/bin/npm install *)",
+      "Bash(/opt/homebrew/bin/npm install *)",
+      "Bash(find /usr /opt /Users/christie.sinai/.nvm /Users/christie.sinai/.n -name \"npm\" -type f 2>/dev/null | head -5)",
+      "Bash(ls /opt/pkg/env/active/bin/ | grep -E \"node|npm\" 2>/dev/null)",
+      "Bash(find /opt /Applications -name \"node\" -type f 2>/dev/null | head -10)",
+      "Bash(ls \"/Users/christie.sinai/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/42175514-ea7c-4382-acae-c03905f0a325/65a93480-5c33-4e1d-9ceb-48110eedcb07/bin/\" 2>/dev/null)",
+      "Bash(find \"/Users/christie.sinai/Library/Application Support/Claude\" -name \"node\" -o -name \"npm\" -o -name \"bun\" 2>/dev/null | head -20)",
+      "Read(//Users/christie.sinai/.volta/**)",
+      "Read(//Users/christie.sinai/**)",
+      "Read(//Users/christie.sinai/.nvm/**)",
+      "Bash(find \"/Users/christie.sinai/Library/Application Support/Claude/Claude Extensions\" -name \"*.node\" -o -name \"node_modules/.bin/node\" 2>/dev/null | head -5 *)",
+      "Bash(\"/Users/christie.sinai/Library/Application Support/Claude/claude-code/2.1.142/claude.app/Contents/MacOS/claude\" --version)",
+      "Bash(curl --version)",
+      "Bash(cat >> *)",
+      "Bash(launchctl load *)",
+      "Bash(launchctl list *)",
+      "Bash(cp .env.example .env)",
+      "Bash(node -e \"require\\('./src/report'\\); require\\('./src/asana'\\); require\\('./src/slack'\\); console.log\\('✅ all modules load OK'\\)\")",
+      "Bash(npm test *)",
+      "Bash(node -e ' *)",
+      "Bash(npm run *)",
+      "Bash(npm start *)",
+      "Bash(echo \"Scheduler PID: $!\")",
+      "Bash(gh auth *)",
+      "Bash(git --version)",
+      "Skill(schedule)",
+      "Skill(schedule:*)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git branch *)",
+      "Bash(git remote *)",
+      "Bash(git config *)",
+      "Bash(git push *)"
+    ]
+  }
+}

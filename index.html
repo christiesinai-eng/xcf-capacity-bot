@@ -1,0 +1,4574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>XCF Capacity Report · 19 May 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh}
+#pw-overlay{position:fixed;inset:0;background:#0f1117;z-index:9999;display:flex;align-items:center;justify-content:center}
+#pw-box{background:#1a1d27;border:1px solid #2a2f45;border-radius:12px;padding:40px;width:340px;text-align:center}
+#pw-box h2{font-size:18px;font-weight:600;color:#fff;margin-bottom:6px}
+#pw-box p{font-size:13px;color:#8b91ad;margin-bottom:24px}
+#pw-input{width:100%;padding:10px 14px;background:#0f1117;border:1px solid #2a2f45;border-radius:8px;color:#fff;font-size:15px;text-align:center;outline:none;margin-bottom:12px}
+#pw-input:focus{border-color:#1f65d6}
+#pw-btn{width:100%;padding:10px;background:#1f65d6;border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer}
+#pw-btn:hover{background:#1755b8}
+#pw-error{font-size:12px;color:#f87171;margin-top:10px;display:none}
+:root{
+  --mid:#000856;--blue:#1f65d6;--sky:#3eccff;--yellow:#FDCC08;--purple:#a78bfa;
+  --green:#6aeaaa;--ops:#CF89FE;--surface:#1a1d27;--surface2:#22263a;
+  --border:#2a2f45;--txt:#e8eaf0;--muted:#8b91ad;--red:#ef4444;--amber:#f59e0b;
+}
+
+/* ── TOP BAR ── */
+.top-bar{background:#0f1117;border-bottom:1px solid var(--border);padding:18px 24px 0}
+.top-row{display:flex;align-items:center;gap:14px;margin-bottom:4px}
+.xcf-badge{background:var(--mid);color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.08em;text-transform:uppercase}
+.top-title{font-size:26px;font-weight:700;color:#fff;letter-spacing:-.02em}
+.top-subtitle{font-size:13px;font-weight:400;color:var(--muted);margin-left:2px}
+.top-meta{font-size:11px;color:var(--muted);margin-top:6px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:8px}
+.top-meta .dot{width:3px;height:3px;border-radius:50%;background:var(--muted);display:inline-block;opacity:.5}
+.stat-pills{display:flex;gap:10px;padding-bottom:16px}
+.stat-pill{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:70px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface)}
+.stat-pill .sv{font-size:26px;font-weight:700;line-height:1}
+.stat-pill .sl{font-size:11px;color:var(--muted);margin-top:4px;font-weight:500;letter-spacing:.02em}
+.stat-pill.red{border-color:#6b1c1c;background:#1a0505}.stat-pill.red .sv{color:var(--red)}
+.stat-pill.amber{border-color:#6b4e00;background:#1a1200}.stat-pill.amber .sv{color:var(--amber)}
+.stat-pill.blue{border-color:#1e3a6e;background:#050e20}.stat-pill.blue .sv{color:var(--sky)}
+
+/* ── NAV ── */
+.nav-bar{display:flex;gap:8px;padding:12px 20px;background:#0f1117;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.nav-btn{font-size:12px;font-weight:500;padding:7px 16px;border-radius:6px;border:1px solid var(--border);cursor:pointer;background:var(--surface);color:var(--txt);transition:all .15s;white-space:nowrap}
+.nav-btn.active{background:#fff;color:#0f1117;border-color:#fff}
+.nav-btn:hover:not(.active){background:var(--surface2)}
+
+/* ── VIEWS ── */
+.view{display:none;padding:0 0 20px}
+.view.active{display:block}
+
+/* ── TIME TABS ── */
+.time-tabs{display:grid;grid-template-columns:repeat(3,1fr);margin:12px 20px;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.time-tab{padding:12px 8px;text-align:center;cursor:pointer;background:var(--surface);border:none;color:var(--muted);transition:all .15s;font-size:13px}
+.time-tab:not(:last-child){border-right:1px solid var(--border)}
+.time-tab.active{background:var(--surface2);color:#fff}
+.time-tab .tt{font-weight:600;color:inherit;display:block}
+.time-tab .ts{font-size:11px;color:var(--muted);display:block;margin-top:2px}
+
+/* ── BUCKETS ── */
+.buckets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 20px 12px}
+.bucket{border-radius:10px;padding:14px 16px;border:1px solid var(--border);text-align:center}
+.bucket .bv{font-size:28px;font-weight:700;line-height:1}
+.bucket .bl{font-size:11px;margin-top:3px;font-weight:500}
+.bucket .bs{font-size:10px;color:var(--muted);margin-top:2px}
+.bucket.over{background:#2a0a0a;border-color:#6b1c1c}.bucket.over .bv,.bucket.over .bl{color:#f87171}
+.bucket.at{background:#0d1a2e;border-color:#1e3a6e}.bucket.at .bv,.bucket.at .bl{color:var(--sky)}
+.bucket.under{background:#2a1f00;border-color:#6b4e00}.bucket.under .bv,.bucket.under .bl{color:var(--yellow)}
+.bucket.avail{background:#082a1a;border-color:#0f5233}.bucket.avail .bv,.bucket.avail .bl{color:var(--green)}
+
+/* ── TABLE (shared) ── */
+.tbl-wrap{margin:0 20px}
+.section-title{font-size:13px;font-weight:600;color:#fff;padding:10px 0 6px;display:flex;justify-content:space-between;align-items:center}
+.section-title span{font-size:11px;color:var(--muted);font-weight:400}
+.tbl-head{padding:6px 10px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);display:grid;gap:8px}
+.tbl-row{display:grid;gap:8px;align-items:center;padding:9px 10px;border-bottom:.5px solid var(--border);cursor:pointer;transition:background .1s}
+.tbl-row:hover{background:var(--surface)}
+.tbl-row.no-expand{cursor:default}
+.r-name{font-size:13px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pod-pill{display:inline-flex;align-items:center;padding:3px 9px;border-radius:12px;font-size:10px;font-weight:600;white-space:nowrap}
+.bar-cell{display:flex;align-items:center;gap:6px}
+.bar-bg{flex:1;height:5px;border-radius:3px;background:var(--border);overflow:hidden}
+.bar-fill{height:100%;border-radius:3px}
+.bar-pct{font-size:11px;color:var(--muted);min-width:32px;text-align:right}
+.r-hrs{font-size:13px;font-weight:500;color:#fff;text-align:right}
+.r-hrs.zero{color:var(--muted);font-weight:400}
+.status-chip{display:inline-flex;align-items:center;padding:3px 9px;border-radius:10px;font-size:11px;font-weight:500;white-space:nowrap}
+.chip-over{background:#3a0a0a;color:#f87171;border:1px solid #6b1c1c}
+.chip-under{background:#2a1f00;color:#fbbf24;border:1px solid #6b4e00}
+.chip-avail{background:#082a1a;color:#6aeaaa;border:1px solid #0f5233}
+.chip-ooo{background:#1a1a2e;color:#a78bfa;border:1px solid #4c3a8a}
+.tasks-cell{font-size:11px;color:var(--muted);overflow:hidden;display:flex;flex-direction:column;gap:2px}
+.task-name-short{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--txt);font-size:11px}
+.task-proj-short{font-size:10px;padding:1px 5px;border-radius:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;max-width:100%}
+.more-tag{font-size:10px;color:var(--blue)}
+
+/* ── EXPAND PANEL ── */
+.expand-panel{background:var(--surface);border-radius:8px;padding:12px 14px;margin:0 10px 4px;border:.5px solid var(--border);display:none}
+.expand-panel.open{display:block}
+.ep-task{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:.5px solid var(--border)}
+.ep-task:last-of-type{border-bottom:none}
+.ep-task-name{font-size:12px;color:var(--txt);flex:1;padding-right:10px;line-height:1.4}
+.ep-task-proj{font-size:10px;color:var(--muted);margin-top:2px}
+.ep-task-right{font-size:11px;color:var(--muted);text-align:right;white-space:nowrap;line-height:1.7}
+.ep-notice{font-size:10px;color:var(--muted);font-style:italic;margin-top:6px;display:flex;align-items:center;gap:4px}
+
+/* ── FIND RESOURCE ── */
+.fr-controls{display:flex;gap:10px;padding:12px 20px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.fr-controls label{font-size:11px;color:var(--muted);margin-right:4px}
+.fr-select{background:var(--surface2);color:var(--txt);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12px;cursor:pointer;outline:none}
+.fr-select:focus{border-color:var(--blue)}
+.fr-pod-section{margin:0 20px;border-bottom:1px solid var(--border);padding-bottom:4px}
+.fr-pod-hdr{display:flex;align-items:center;gap:8px;padding:10px 0 6px;cursor:pointer;user-select:none}
+.fr-pod-hdr .pod-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.fr-pod-label{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.fr-pod-stats{font-size:11px;color:var(--muted);margin-left:auto;display:flex;gap:10px}
+.fr-chevron{color:var(--muted);font-size:12px;transition:transform .2s;margin-left:6px}
+.fr-pod-hdr.collapsed .fr-chevron{transform:rotate(-90deg)}
+.fr-members{overflow:hidden}
+.fr-member-row{display:grid;grid-template-columns:160px 1fr 90px 100px;gap:10px;align-items:center;padding:7px 8px;border-radius:6px;transition:background .1s}
+.fr-member-row:hover{background:var(--surface)}
+.fr-avail-bar{display:flex;align-items:center;gap:6px}
+.fr-avail-bg{flex:1;height:6px;border-radius:3px;background:var(--border);overflow:hidden}
+.fr-avail-fill{height:100%;border-radius:3px}
+
+/* ── POD SUMMARY ── */
+.pod-summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:16px 20px}
+.ps-card{background:var(--surface);border-radius:10px;border:1px solid var(--border);overflow:hidden}
+.ps-card-hdr{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)}
+.ps-card-hdr .pod-dot{width:10px;height:10px;border-radius:50%}
+.ps-pod-name{font-size:13px;font-weight:600;color:#fff}
+.ps-pod-count{font-size:11px;color:var(--muted);margin-left:auto}
+.ps-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-bottom:1px solid var(--border)}
+.ps-metric{padding:10px 14px;text-align:center;border-right:1px solid var(--border)}
+.ps-metric:last-child{border-right:none}
+.ps-metric .mv{font-size:18px;font-weight:700}
+.ps-metric .ml{font-size:10px;color:var(--muted);margin-top:2px}
+.ps-members{padding:8px 14px}
+.ps-member-line{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:.5px solid var(--border)}
+.ps-member-line:last-child{border-bottom:none}
+.ps-member-name{font-size:12px;color:var(--txt);width:130px;flex-shrink:0}
+.ps-mini-bar{flex:1;height:4px;border-radius:2px;background:var(--border);overflow:hidden}
+.ps-mini-fill{height:100%;border-radius:2px}
+.ps-member-hrs{font-size:11px;color:var(--muted);min-width:36px;text-align:right}
+
+/* ── OVERDUE ── */
+.od-head{grid-template-columns:2fr 1fr 80px 80px}
+.od-row{grid-template-columns:2fr 1fr 80px 80px}
+.od-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:600;background:#3a0a0a;color:#f87171;border:1px solid #6b1c1c}
+.days-overdue{font-size:11px;color:#f87171;font-weight:600}
+
+/* ── MISSING FIELDS ── */
+.mf-head{grid-template-columns:2fr 1fr 100px 100px}
+.mf-row{grid-template-columns:2fr 1fr 100px 100px}
+.mf-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:600;background:#2a1f00;color:#fbbf24;border:1px solid #6b4e00}
+
+/* ── FOOTER ── */
+.footer{font-size:10px;color:var(--muted);padding:10px 20px 20px;line-height:1.6;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<div id="pw-overlay">
+  <div id="pw-box">
+    <h2>XCF Capacity Report</h2>
+    <p>Enter the password to view this report</p>
+    <input id="pw-input" type="password" placeholder="Password" autofocus />
+    <button id="pw-btn" onclick="checkPw()">View Report</button>
+    <div id="pw-error">Incorrect password. Please try again.</div>
+  </div>
+</div>
+<script>
+(function(){
+  if(sessionStorage.getItem('xcf-auth')==='1'){
+    document.getElementById('pw-overlay').style.display='none';
+  }
+})();
+function checkPw(){
+  const val=document.getElementById('pw-input').value;
+  if(val==='Capacity'){
+    sessionStorage.setItem('xcf-auth','1');
+    document.getElementById('pw-overlay').style.display='none';
+  } else {
+    document.getElementById('pw-error').style.display='block';
+    document.getElementById('pw-input').value='';
+    document.getElementById('pw-input').focus();
+  }
+}
+document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
+</script>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-row">
+    <span class="xcf-badge">XCF</span>
+    <span class="top-title">Creative Foundry <span class="top-subtitle">· Capacity Report</span></span>
+  </div>
+  <div class="top-meta">
+    Run: <strong style="color:#fff">19 May 2026</strong>
+    <span class="dot"></span> 446 tasks across all pages
+    <span class="dot"></span> PODs: XCF Utilisation
+    <span class="dot"></span> Includes due-date-only tasks
+  </div>
+  <div class="stat-pills">
+    <div class="stat-pill blue"><span class="sv" id="pill-team">32</span><span class="sl">Team</span></div>
+    <div class="stat-pill red"><span class="sv" id="pill-overdue">96</span><span class="sl">Overdue</span></div>
+    <div class="stat-pill amber"><span class="sv" id="pill-missing">69</span><span class="sl">Missing</span></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-bar">
+  <button class="nav-btn active" onclick="showView('capacity',this)">Capacity report</button>
+  <button class="nav-btn" onclick="showView('findresource',this)">Find resource</button>
+  <button class="nav-btn" onclick="showView('podsummary',this)">POD summary</button>
+  <button class="nav-btn" id="nav-overdue" onclick="showView('overdue',this)">Overdue (96)</button>
+  <button class="nav-btn" id="nav-missing" onclick="showView('missing',this)">Missing fields (69)</button>
+</div>
+
+<!-- ══════════════ VIEW: CAPACITY REPORT ══════════════ -->
+<div id="view-capacity" class="view active">
+  <div class="time-tabs">
+    <button class="time-tab active" onclick="setTab('today',this)">
+      <span class="tt">Today</span><span class="ts" id="tab-today-date">19 May 2026</span>
+    </button>
+    <button class="time-tab" onclick="setTab('week',this)">
+      <span class="tt">Next 7 days</span><span class="ts" id="tab-week-date">→ 27 May</span>
+    </button>
+    <button class="time-tab" onclick="setTab('month',this)">
+      <span class="tt">Next month</span><span class="ts" id="tab-month-date">→ 17 Jun</span>
+    </button>
+  </div>
+  <div class="buckets" id="buckets"></div>
+  <div class="tbl-wrap">
+    <div class="section-title" id="tbl-date">Today — 19 May 2026 <span>Click row to expand tasks</span></div>
+    <div class="tbl-head" style="grid-template-columns:160px 120px 1fr 100px 120px 1fr">
+      <span>Member</span><span>POD</span><span>Utilisation</span><span style="text-align:right">Hours (%)</span><span>Status</span><span>Tasks</span>
+    </div>
+    <div id="roster"></div>
+  </div>
+</div>
+
+<!-- ══════════════ VIEW: FIND RESOURCE ══════════════ -->
+<div id="view-findresource" class="view">
+  <div class="fr-controls">
+    <div>
+      <label>Date range</label>
+      <select class="fr-select" id="fr-range" onchange="renderFindResource()">
+        <option value="today">Today</option>
+        <option value="week">Next 7 days</option>
+        <option value="month">Next 21 days</option>
+      </select>
+    </div>
+    <div>
+      <label>POD</label>
+      <select class="fr-select" id="fr-pod" onchange="renderFindResource()">
+        <option value="all">All PODs</option>
+        <option value="Performance">Performance</option>
+        <option value="Design">Design</option>
+        <option value="Design Studio">Design Studio</option>
+        <option value="Campaign">Campaign</option>
+        <option value="AI & Media">AI &amp; Media</option>
+        <option value="Campaign Ops">Campaign Ops</option>
+        <option value="GM Creative">GM Creative</option>
+      </select>
+    </div>
+  </div>
+  <div id="fr-body"></div>
+</div>
+
+<!-- ══════════════ VIEW: POD SUMMARY ══════════════ -->
+<div id="view-podsummary" class="view">
+  <div class="pod-summary-grid" id="ps-body"></div>
+</div>
+
+<!-- ══════════════ VIEW: OVERDUE ══════════════ -->
+<div id="view-overdue" class="view">
+  <div class="tbl-wrap">
+    <div class="section-title">Overdue tasks <span>Tasks past their due date — excluded from workload calculations</span></div>
+    <div class="tbl-head od-head" style="grid-template-columns:2fr 1fr 90px 100px">
+      <span>Task</span><span>Assignee</span><span>Due date</span><span>Days overdue</span>
+    </div>
+    <div id="od-body"></div>
+  </div>
+</div>
+
+<!-- ══════════════ VIEW: MISSING FIELDS ══════════════ -->
+<div id="view-missing" class="view">
+  <div class="tbl-wrap">
+    <div class="section-title">Missing fields <span>Tasks with no estimated time or no due date — excluded from capacity calculations</span></div>
+    <div class="tbl-head mf-head" style="grid-template-columns:2fr 1fr 110px 110px">
+      <span>Task / Project</span><span>Assignee</span><span>Missing</span><span>POD</span>
+    </div>
+    <div id="mf-body"></div>
+  </div>
+</div>
+
+<div class="footer" id="footer-bar">
+  XCF Capacity Report &nbsp;·&nbsp; 19 May 2026 &nbsp;·&nbsp; 446 tasks (all pages) &nbsp;·&nbsp;
+  Formula: est time ÷ working days (start→due); no start date = all hours on due date &nbsp;·&nbsp; 8h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation
+</div>
+
+<script>
+const BRAND={
+  'Performance':   {bg:'#2a2200',fg:'#FDCC08',bar:'#FDCC08',dot:'#FDCC08'},
+  'Design':        {bg:'#1e1535',fg:'#a78bfa',bar:'#a78bfa',dot:'#a78bfa'},
+  'Design Studio': {bg:'#062318',fg:'#6aeaaa',bar:'#6aeaaa',dot:'#6aeaaa'},
+  'Campaign':      {bg:'#0d1a2e',fg:'#60a5fa',bar:'#1f65d6',dot:'#1f65d6'},
+  'AI & Media':    {bg:'#002233',fg:'#3eccff',bar:'#3eccff',dot:'#3eccff'},
+  'Campaign Ops':  {bg:'#1d0d33',fg:'#CF89FE',bar:'#CF89FE',dot:'#CF89FE'},
+  'GM Creative':   {bg:'#0a0c1a',fg:'#8b9abf',bar:'#4a5580',dot:'#4a5580'},
+};
+const PODS=['Performance','Design','Design Studio','Campaign','AI & Media','Campaign Ops','GM Creative'];
+
+const MEMBERS = [
+  {
+    "name": "Alex Downey",
+    "pod": "Campaign",
+    "ooo": false,
+    "today": 0.9,
+    "week": 0.9,
+    "month": 0,
+    "qualifying": 1,
+    "missing": 1,
+    "overdue": 6,
+    "tasks": [
+      {
+        "name": "Design R1 - UK | Xero Files & Smart Data Capture Videos: ITG Creative Brief",
+        "due": "2026-04-16",
+        "est": 5,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design",
+        "due": "2026-04-17",
+        "est": 6,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design R2 - US | Xero Coaches Videos: ITG Creative Brief",
+        "due": "2026-04-24",
+        "est": 4,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design",
+        "due": "2026-05-04",
+        "est": 10,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design",
+        "due": "2026-05-18",
+        "est": 2,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design",
+        "due": "2026-05-18",
+        "est": 3,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Photography AI Library Build - Ongoing",
+        "due": "2026-05-29",
+        "est": 40,
+        "proj": "XCFP-300 | 2026 | Brand Refresh",
+        "th": 0.89,
+        "wh": 0.89
+      }
+    ]
+  },
+  {
+    "name": "Aniqah Mitha",
+    "pod": "Performance",
+    "ooo": false,
+    "today": 0.7,
+    "week": 1.2,
+    "month": 2,
+    "qualifying": 1,
+    "missing": 3,
+    "overdue": 3,
+    "tasks": [
+      {
+        "name": "Copy R2 - GL | Ease LP Copy Review",
+        "due": "2026-05-08",
+        "est": 3,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy R2 - GL | Support LP Copy Review",
+        "due": "2026-05-15",
+        "est": 2,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy R2 - Xero Payments Claim Test – End More Months in the Black",
+        "due": "2026-05-15",
+        "est": 1.5,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy - New ETR Message",
+        "due": "2026-06-01",
+        "est": 2,
+        "proj": "XCF: POD Boards",
+        "th": 0.67,
+        "wh": 1.17
+      }
+    ]
+  },
+  {
+    "name": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "ooo": false,
+    "today": 0,
+    "week": 0,
+    "month": 0,
+    "qualifying": 0,
+    "missing": 93,
+    "overdue": 4,
+    "tasks": [
+      {
+        "name": "XCFT-728 | Celebration GIF | Add stripe + Go Cardless logo",
+        "due": "2026-04-14",
+        "est": 2,
+        "proj": "XCF | Performance BAU Board",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Why Xero: Additional Aspect Ratio",
+        "due": "2026-04-17",
+        "est": 4,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "XCFT-971 | LN1382 New Plan Welcome Header Images",
+        "due": "2026-04-20",
+        "est": 1,
+        "proj": "XCF | Performance BAU Board",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "XCFT-1072 | LN1377 Auto Bank Rec Upgrade Trigger Images",
+        "due": "2026-05-04",
+        "est": 1,
+        "proj": "XCF | Performance BAU Board",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      }
+    ]
+  },
+  {
+    "name": "Ben Hobbs",
+    "pod": "AI & Media",
+    "ooo": false,
+    "today": 4.5,
+    "week": 22,
+    "month": 25,
+    "qualifying": 5,
+    "missing": 4,
+    "overdue": 15,
+    "tasks": [
+      {
+        "name": "1 Explore 2-3 creative territories (2-4 weeks depending on complexity)",
+        "due": "2025-11-17",
+        "est": 20,
+        "proj": "969800 - Plaid GTM Campaign",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Radio: Receipt capture (30s)",
+        "due": "2025-12-12",
+        "est": 6,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Digital audio: Financial visibility (30s)",
+        "due": "2025-12-12",
+        "est": 1.5,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Digital audio: Financial visibility (30s)",
+        "due": "2025-12-12",
+        "est": 1.5,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Radio: Financial visibility (30s)",
+        "due": "2025-12-12",
+        "est": 6,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "2.1 Explore 2-3 creative territories (2-4 weeks depending on complexity)",
+        "due": "2026-01-20",
+        "est": 20,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "2.2 Present creative territories",
+        "due": "2026-01-21",
+        "est": 1,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "2.3 Feedback collection from key stakeholders",
+        "due": "2026-01-26",
+        "est": 1,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "2.4 Feedback due",
+        "due": "2026-01-27",
+        "est": 1,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "2.5 Concept refinement based on feedback",
+        "due": "2026-02-02",
+        "est": 15,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "XCFT-284 | AI VO + Audio Production | 3x3 Audio Ad",
+        "due": "2026-03-18",
+        "est": 8,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Avatar creation",
+        "due": "2026-05-08",
+        "est": 20,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Location creation",
+        "due": "2026-05-08",
+        "est": 20,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "ITG AI UGC Oversight: AIM",
+        "due": "2026-05-21",
+        "est": 18,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Voice sampling in development",
+        "due": "2026-05-27",
+        "est": 2,
+        "proj": "989350 | 2026 | Xero Partner Advisory Summit",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Podcast In Development",
+        "due": "2026-06-02",
+        "est": 4,
+        "proj": "989350 | 2026 | Xero Partner Advisory Summit",
+        "th": 0,
+        "wh": 4
+      },
+      {
+        "name": "BH Ai Video Generation: AI UGC: Business Verticals",
+        "due": "2026-06-05",
+        "est": 36,
+        "proj": "",
+        "th": 4.5,
+        "wh": 18
+      },
+      {
+        "name": "Stakeholder amends",
+        "due": "2026-06-09",
+        "est": 2,
+        "proj": "989350 | 2026 | Xero Partner Advisory Summit",
+        "th": 0,
+        "wh": 0
+      },
+      {
+        "name": "BH Smartly Upload: AI UGC: Business Verticals",
+        "due": "2026-06-10",
+        "est": 18,
+        "proj": "",
+        "th": 0,
+        "wh": 0
+      },
+      {
+        "name": "Files prepared for final delivery",
+        "due": "2026-06-15",
+        "est": 1,
+        "proj": "989350 | 2026 | Xero Partner Advisory Summit",
+        "th": 0,
+        "wh": 0
+      }
+    ]
+  },
+  {
+    "name": "Blair Williams",
+    "pod": "Campaign",
+    "ooo": false,
+    "today": 0,
+    "week": 0,
+    "month": 0,
+    "qualifying": 0,
+    "missing": 0,
+    "overdue": 0,
+    "tasks": []
+  },
+  {
+    "name": "Brad Donovan",
+    "pod": "Campaign",
+    "ooo": false,
+    "today": 0.6,
+    "week": 0.6,
+    "month": 0,
+    "qualifying": 1,
+    "missing": 0,
+    "overdue": 0,
+    "tasks": [
+      {
+        "name": "Copy R1 - LC Copy writing agent",
+        "due": "2026-05-29",
+        "est": 5,
+        "proj": "XCF: POD Boards",
+        "th": 0.56,
+        "wh": 0.56
+      }
+    ]
+  },
+  {
+    "name": "Brad Holland",
+    "pod": "Performance",
+    "ooo": false,
+    "today": 0,
+    "week": 0,
+    "month": 0,
+    "qualifying": 0,
+    "missing": 13,
+    "overdue": 3,
+    "tasks": [
+      {
+        "name": "Web Design: CRO lamding page concept",
+        "due": "2026-05-15",
+        "est": 6,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design",
+        "due": "2026-05-24",
+        "est": 3,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design",
+        "due": "2026-05-24",
+        "est": 15,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      }
+    ]
+  },
+  {
+    "name": "Chiko Kurniawan",
+    "pod": "Design Studio",
+    "ooo": true,
+    "today": 0,
+    "week": 0,
+    "month": 0,
+    "qualifying": 8,
+    "missing": 2,
+    "overdue": 1,
+    "tasks": [
+      {
+        "name": "Design",
+        "due": "2026-01-21",
+        "est": 10,
+        "proj": "985200_Syft_Xero Analytics AB One Pager",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "XCFT-1385 - Update banner specs",
+        "due": "2026-05-29",
+        "est": 4,
+        "proj": "XCF: Intake The Creative Foundry",
+        "th": 0.8,
+        "wh": 0.8
+      },
+      {
+        "name": "SNH Powerpoint: Melio Breakout",
+        "due": "2026-06-01",
+        "est": 3,
+        "proj": "XCFP-87 | 2026 | Q1 - Q2 Industry Sponsored Events",
+        "th": 0.75,
+        "wh": 1.5
+      },
+      {
+        "name": "Badge artwork",
+        "due": "2026-06-05",
+        "est": 2,
+        "proj": "XCFP-328 | 2026 | CA Kickstart",
+        "th": 0.2,
+        "wh": 0.8
+      },
+      {
+        "name": "Welcome sign",
+        "due": "2026-06-12",
+        "est": 2,
+        "proj": "XCFP-328 | 2026 | CA Kickstart",
+        "th": 0.13,
+        "wh": 0.53
+      },
+      {
+        "name": "Agenda sign",
+        "due": "2026-06-12",
+        "est": 1,
+        "proj": "XCFP-328 | 2026 | CA Kickstart",
+        "th": 0.07,
+        "wh": 0.29
+      },
+      {
+        "name": "Agenda table top sign",
+        "due": "2026-06-12",
+        "est": 1,
+        "proj": "XCFP-328 | 2026 | CA Kickstart",
+        "th": 0.07,
+        "wh": 0.27
+      },
+      {
+        "name": "Slide design | Xerocon 2026",
+        "due": "2026-06-15",
+        "est": 88,
+        "proj": "XCF: POD Boards",
+        "th": 6.77,
+        "wh": 24
+      },
+      {
+        "name": "Slide design | Xerocon 2026",
+        "due": "2026-07-31",
+        "est": 88,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0
+      }
+    ]
+  },
+  {
+    "name": "Chris Bull",
+    "pod": "Campaign",
+    "ooo": false,
+    "today": 0,
+    "week": 0,
+    "month": 0,
+    "qualifying": 0,
+    "missing": 0,
+    "overdue": 1,
+    "tasks": [
+      {
+        "name": "Copy",
+        "due": "2026-05-18",
+        "est": 3,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      }
+    ]
+  },
+  {
+    "name": "Ciaran Carroll",
+    "pod": "Design Studio",
+    "ooo": false,
+    "today": 6.8,
+    "week": 24,
+    "month": 88,
+    "qualifying": 2,
+    "missing": 1,
+    "overdue": 3,
+    "tasks": [
+      {
+        "name": "Design:  Promo-Led Hierarchy Template | HUB | Performance BAU Board",
+        "due": "2026-02-27",
+        "est": 0.13333333333333333,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design: Flexible CVP / value led Template | HUB | Performance BAU Board",
+        "due": "2026-02-27",
+        "est": 8,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "UK Dotcom asset updates",
+        "due": "2026-05-08",
+        "est": 1.5,
+        "proj": "979554 - XPH Phase Launch Assets",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Slide design | Xerocon 2026",
+        "due": "2026-06-15",
+        "est": 88,
+        "proj": "XCFP-14 | 2026 | Xerocon 2026",
+        "th": 6.77,
+        "wh": 24
+      },
+      {
+        "name": "Slide design | Xerocon 2026",
+        "due": "2026-07-31",
+        "est": 88,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0
+      }
+    ]
+  },
+  {
+    "name": "Dan Elliott",
+    "pod": "Design",
+    "ooo": false,
+    "today": 19.6,
+    "week": 33.5,
+    "month": 88,
+    "qualifying": 5,
+    "missing": 3,
+    "overdue": 2,
+    "tasks": [
+      {
+        "name": "AI photography prompt development | Brand Refresh | XCF-458",
+        "due": "2026-03-27",
+        "est": 8,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Investor Deck design v1",
+        "due": "2026-04-29",
+        "est": 20,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Illustrations - Ongoing ",
+        "due": "2026-05-29",
+        "est": 20,
+        "proj": "XCFP-300 | 2026 | Brand Refresh",
+        "th": 10,
+        "wh": 6.67
+      },
+      {
+        "name": "Consult with Rich McNabb on Xero Central Illustrations",
+        "due": "2026-05-29",
+        "est": 8,
+        "proj": "XCF: POD Boards",
+        "th": 0.47,
+        "wh": 0.47
+      },
+      {
+        "name": "Canva Template Brand Updates",
+        "due": "2026-05-29",
+        "est": 24,
+        "proj": "",
+        "th": 2.4,
+        "wh": 2.4
+      },
+      {
+        "name": "Slide design | Xerocon 2026",
+        "due": "2026-06-15",
+        "est": 88,
+        "proj": "XCFP-14 | 2026 | Xerocon 2026",
+        "th": 6.77,
+        "wh": 24
+      },
+      {
+        "name": "Slide design | Xerocon 2026",
+        "due": "2026-07-31",
+        "est": 88,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0
+      }
+    ]
+  },
+  {
+    "name": "Domenic Iaria",
+    "pod": "AI & Media",
+    "ooo": false,
+    "today": 1.7,
+    "week": 8,
+    "month": 29,
+    "qualifying": 7,
+    "missing": 3,
+    "overdue": 12,
+    "tasks": [
+      {
+        "name": "1.3 Brief amends (if necessary)",
+        "due": "2025-12-19",
+        "est": 0.016666666666666666,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "2.1 Explore 2-3 creative territories (2-4 weeks depending on complexity)",
+        "due": "2026-01-20",
+        "est": 3,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "2.3 Feedback collection from key stakeholders",
+        "due": "2026-01-26",
+        "est": 2,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "4 Develop 2-3 creative concepts (2-4 weeks depending on complexity)",
+        "due": "2026-02-17",
+        "est": 10,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "4.1 Present creative concepts",
+        "due": "2026-02-18",
+        "est": 1,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "4.2 Feedback collection key stakeholders",
+        "due": "2026-02-20",
+        "est": 1,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "4.3 Feedback due",
+        "due": "2026-02-23",
+        "est": 0.25,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "4.4 Creative concept refinement based on feedback",
+        "due": "2026-02-27",
+        "est": 5,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "4.5 Present final concept for approval",
+        "due": "2026-03-02",
+        "est": 0.016666666666666666,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "6.1 Partner Hub animaton (1x1)",
+        "due": "2026-03-06",
+        "est": 3,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Admin: Upload working files to Drive",
+        "due": "2026-03-27",
+        "est": 0.5,
+        "proj": "986751 - Xero Files product GIFs and statics",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Testing",
+        "due": "2026-05-08",
+        "est": 20,
+        "proj": "XCF: AIM | AI Research | Figma Weave",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "2.9 Creative concept refinement based on feedback",
+        "due": "2026-06-03",
+        "est": 10,
+        "proj": "XCFT-1146 Xerocon motion graphics + opening video",
+        "th": 1.67,
+        "wh": 6.67
+      },
+      {
+        "name": "2.13 Creative ammends with SH feedback",
+        "due": "2026-06-04",
+        "est": 3,
+        "proj": "XCFT-1146 Xerocon motion graphics + opening video",
+        "th": 0,
+        "wh": 1
+      },
+      {
+        "name": "Stakeholder review",
+        "due": "2026-06-04",
+        "est": 1,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0.33
+      },
+      {
+        "name": "3.1 Technical Build in Production",
+        "due": "2026-06-10",
+        "est": 10,
+        "proj": "XCFT-1146 Xerocon motion graphics + opening video",
+        "th": 0,
+        "wh": 0
+      },
+      {
+        "name": "Creative edits",
+        "due": "2026-06-11",
+        "est": 5,
+        "proj": "XCFT-1146 Xerocon motion graphics + opening video",
+        "th": 0,
+        "wh": 0
+      },
+      {
+        "name": "3.9 Production edits",
+        "due": "2026-06-19",
+        "est": 6,
+        "proj": "XCFT-1146 Xerocon motion graphics + opening video",
+        "th": 0,
+        "wh": 0
+      },
+      {
+        "name": "Final build and format for delivery",
+        "due": "2026-06-23",
+        "est": 6,
+        "proj": "XCFT-1146 Xerocon motion graphics + opening video",
+        "th": 0,
+        "wh": 0
+      }
+    ]
+  },
+  {
+    "name": "Hannah Boekhorst",
+    "pod": "Performance",
+    "ooo": false,
+    "today": 0,
+    "week": 0,
+    "month": 0,
+    "qualifying": 1,
+    "missing": 1,
+    "overdue": 15,
+    "tasks": [
+      {
+        "name": "2.1 Develop 1-2 creative concepts - name",
+        "due": "2026-01-29",
+        "est": 60,
+        "proj": "982450 - Xero Social Profiles",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design: Update Banners",
+        "due": "2026-03-13",
+        "est": 2,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design R2 - Xero Files & Smart Data Capture | XCF-484",
+        "due": "2026-03-20",
+        "est": 4,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "R2 Smartly Template Update with Copy | XCF-556",
+        "due": "2026-04-16",
+        "est": 2,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design Tools Review",
+        "due": "2026-04-30",
+        "est": 10,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design: First invoice payment congrats GIF",
+        "due": "2026-05-01",
+        "est": 3,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Web Design R2 - GL | FY27 PS/Display LP Creatives | 8 Buckets",
+        "due": "2026-05-13",
+        "est": 3,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design R1 - Xero Payments Claim Test – End More Months in the Black",
+        "due": "2026-05-14",
+        "est": 3,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design: 6 months iteration Celebration",
+        "due": "2026-05-15",
+        "est": 1,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design R2 - Xero Payments Claim Test – End More Months in the Black",
+        "due": "2026-05-18",
+        "est": 2,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design R2 - US | Xero Coaches",
+        "due": "2026-05-19",
+        "est": 3,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design R1 - Xero Lite - ROW Launch - Apple Search Ads Template Resize",
+        "due": "2026-05-22",
+        "est": 2,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Update Template - Xero Lite - ROW Launch - Apple Search Ads Template Resize",
+        "due": "2026-05-25",
+        "est": 2,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design R2 - USA Competitive Messaging | Meta",
+        "due": "2026-05-26",
+        "est": 2,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "New Celebration Design: First quote sent payments xsell email header GIF",
+        "due": "2026-05-27",
+        "est": 3,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Design: New Celebration First Bill Header",
+        "due": "2026-06-12",
+        "est": 2,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0
+      }
+    ]
+  },
+  {
+    "name": "Jai Harji",
+    "pod": "Campaign",
+    "ooo": false,
+    "today": 10.1,
+    "week": 30,
+    "month": 3,
+    "qualifying": 8,
+    "missing": 0,
+    "overdue": 0,
+    "tasks": [
+      {
+        "name": "4.6 eDM copy",
+        "due": "2026-05-29",
+        "est": 6,
+        "proj": "XCFP-34 | 2026 | Data Health & Efficiency Campaign",
+        "th": 0.6,
+        "wh": 0.6
+      },
+      {
+        "name": "4.1 Finalise banner copy for Demandbase",
+        "due": "2026-05-29",
+        "est": 4,
+        "proj": "XCFP-34 | 2026 | Data Health & Efficiency Campaign",
+        "th": 0.4,
+        "wh": 0.4
+      },
+      {
+        "name": "4.3 Landing page copy",
+        "due": "2026-05-29",
+        "est": 4,
+        "proj": "XCFP-34 | 2026 | Data Health & Efficiency Campaign",
+        "th": 0.4,
+        "wh": 0.4
+      },
+      {
+        "name": "4.8 Video script",
+        "due": "2026-05-29",
+        "est": 20,
+        "proj": "XCFP-34 | 2026 | Data Health & Efficiency Campaign",
+        "th": 2.5,
+        "wh": 2.5
+      },
+      {
+        "name": "2.3 eDM copy",
+        "due": "2026-06-03",
+        "est": 3,
+        "proj": "XCF: POD Boards",
+        "th": 0.38,
+        "wh": 1.5
+      },
+      {
+        "name": "4.2 Landing page copy",
+        "due": "2026-06-05",
+        "est": 8,
+        "proj": "XCFP-37 | 2026 | SB Smart tools campaign",
+        "th": 1.14,
+        "wh": 4.8
+      },
+      {
+        "name": "4.1 eDM journey copy",
+        "due": "2026-06-05",
+        "est": 8,
+        "proj": "XCFP-37 | 2026 | SB Smart tools campaign",
+        "th": 1.14,
+        "wh": 4.8
+      },
+      {
+        "name": "4.3 Video script",
+        "due": "2026-06-05",
+        "est": 25,
+        "proj": "XCFP-37 | 2026 | SB Smart tools campaign",
+        "th": 3.57,
+        "wh": 15
+      }
+    ]
+  },
+  {
+    "name": "James Blow",
+    "pod": "Campaign",
+    "ooo": false,
+    "today": 3.2,
+    "week": 12.2,
+    "month": 16,
+    "qualifying": 12,
+    "missing": 3,
+    "overdue": 16,
+    "tasks": [
+      {
+        "name": "Copy   | 985250-Updated one-pager for Xero Analytics",
+        "due": "2026-01-20",
+        "est": 6,
+        "proj": "985250-Updated one-pager for Xero Analytics",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy",
+        "due": "2026-01-21",
+        "est": 10,
+        "proj": "985200_Syft_Xero Analytics AB One Pager",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy for webinar Partner Acquisition Banners",
+        "due": "2026-02-19",
+        "est": 2,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy for EDM",
+        "due": "2026-02-20",
+        "est": 2,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy for webinar Partner Acquisition Banners",
+        "due": "2026-02-24",
+        "est": 2,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy R1 - Script",
+        "due": "2026-02-27",
+        "est": 6,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy R2 - Script",
+        "due": "2026-03-03",
+        "est": 6,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy R1 - US | AB | Q1 FY27 regional requests",
+        "due": "2026-03-17",
+        "est": 6,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy R2 - US | AB | Q1 FY27 regional requests",
+        "due": "2026-03-20",
+        "est": 3,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy ",
+        "due": "2026-04-03",
+        "est": 6,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy",
+        "due": "2026-04-08",
+        "est": 6,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy",
+        "due": "2026-04-13",
+        "est": 4,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy R1 - USA Competitive Messaging | Meta",
+        "due": "2026-05-13",
+        "est": 3,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy R1 - Review and approval of customer referral email copy",
+        "due": "2026-05-21",
+        "est": 2,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Copy R2 - USA Competitive Messaging | Meta",
+        "due": "2026-05-21",
+        "est": 2,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "R4 Copy Review - add claim disclaimer",
+        "due": "2026-05-22",
+        "est": 1,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "AU | R2 Copy Updates",
+        "due": "2026-05-29",
+        "est": 2,
+        "proj": "",
+        "th": 0.67,
+        "wh": 0.67
+      },
+      {
+        "name": "US | R2 Copy Updates",
+        "due": "2026-05-29",
+        "est": 4,
+        "proj": "",
+        "th": 1.33,
+        "wh": 1.33
+      },
+      {
+        "name": "UK | R2 Copy Updates",
+        "due": "2026-06-01",
+        "est": 2,
+        "proj": "",
+        "th": 0.67,
+        "wh": 1.17
+      },
+      {
+        "name": "US | R3 Copy Updates",
+        "due": "2026-06-02",
+        "est": 2,
+        "proj": "",
+        "th": 0.5,
+        "wh": 2
+      },
+      {
+        "name": "UK | R3 Copy Updates",
+        "due": "2026-06-03",
+        "est": 2,
+        "proj": "",
+        "th": 0,
+        "wh": 2
+      },
+      {
+        "name": "NZ | R2 Copy Updates",
+        "due": "2026-06-03",
+        "est": 2,
+        "proj": "",
+        "th": 0,
+        "wh": 2
+      },
+      {
+        "name": "AU | R3 Copy Updates",
+        "due": "2026-06-03",
+        "est": 2,
+        "proj": "",
+        "th": 0,
+        "wh": 2
+      },
+      {
+        "name": "UK | Update Copy w/Regional Lead Feedback",
+        "due": "2026-06-05",
+        "est": 2,
+        "proj": "",
+        "th": 0,
+        "wh": 0.5
+      },
+      {
+        "name": "US | Update Copy w/Regional Lead Feedback",
+        "due": "2026-06-05",
+        "est": 2,
+        "proj": "",
+        "th": 0,
+        "wh": 0.5
+      },
+      {
+        "name": "NZ | R3 Copy Updates",
+        "due": "2026-06-08",
+        "est": 2,
+        "proj": "",
+        "th": 0,
+        "wh": 0
+      },
+      {
+        "name": "AU | Update Copy w/Regional Lead Feedback",
+        "due": "2026-06-08",
+        "est": 2,
+        "proj": "",
+        "th": 0,
+        "wh": 0
+      },
+      {
+        "name": "NZ | Update Copy w/Regional Lead Feedback",
+        "due": "2026-06-10",
+        "est": 2,
+        "proj": "",
+        "th": 0,
+        "wh": 0
+      }
+    ]
+  },
+  {
+    "name": "Laura Fuldseth",
+    "pod": "Design",
+    "ooo": false,
+    "today": 6.8,
+    "week": 24,
+    "month": 88,
+    "qualifying": 3,
+    "missing": 4,
+    "overdue": 0,
+    "tasks": [
+      {
+        "name": "Slide design | Xerocon 2026",
+        "due": "2026-06-15",
+        "est": 88,
+        "proj": "XCFP-14 | 2026 | Xerocon 2026",
+        "th": 6.77,
+        "wh": 24
+      },
+      {
+        "name": "Xero Swag Store Update",
+        "due": "2026-07-20",
+        "est": 8,
+        "proj": "",
+        "th": 0,
+        "wh": 0
+      },
+      {
+        "name": "Slide design | Xerocon 2026",
+        "due": "2026-07-31",
+        "est": 88,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0
+      }
+    ]
+  },
+  {
+    "name": "Logen Stent",
+    "pod": "Campaign Ops",
+    "ooo": true,
+    "today": 0,
+    "week": 0,
+    "month": 0,
+    "qualifying": 0,
+    "missing": 6,
+    "overdue": 0,
+    "tasks": []
+  },
+  {
+    "name": "Michelle Crocker",
+    "pod": "Design",
+    "ooo": true,
+    "today": 0,
+    "week": 0,
+    "month": 0,
+    "qualifying": 11,
+    "missing": 2,
+    "overdue": 0,
+    "tasks": [
+      {
+        "name": "4.4 Landing page assets",
+        "due": "2026-05-29",
+        "est": 3,
+        "proj": "XCFP-34 | 2026 | Data Health & Efficiency Campaign",
+        "th": 0.3,
+        "wh": 0.3
+      },
+      {
+        "name": "4.2 Design Demandbase banners",
+        "due": "2026-05-29",
+        "est": 3,
+        "proj": "XCFP-34 | 2026 | Data Health & Efficiency Campaign",
+        "th": 0.33,
+        "wh": 0.33
+      },
+      {
+        "name": "4.7 eDM assets",
+        "due": "2026-05-29",
+        "est": 2,
+        "proj": "XCFP-34 | 2026 | Data Health & Efficiency Campaign",
+        "th": 0.2,
+        "wh": 0.2
+      },
+      {
+        "name": "4.9 Video storyboard",
+        "due": "2026-05-29",
+        "est": 7,
+        "proj": "XCFP-34 | 2026 | Data Health & Efficiency Campaign",
+        "th": 1,
+        "wh": 1
+      },
+      {
+        "name": "2.4 Guide design",
+        "due": "2026-06-01",
+        "est": 12,
+        "proj": "XCFT-1533 - MTD for landlords guide and landing page",
+        "th": 3,
+        "wh": 6
+      },
+      {
+        "name": "2.5 Landing page and eDM assets",
+        "due": "2026-06-05",
+        "est": 1,
+        "proj": "XCFT-1533 - MTD for landlords guide and landing page",
+        "th": 0.14,
+        "wh": 0.6
+      },
+      {
+        "name": "2.5 Landing page assets",
+        "due": "2026-06-05",
+        "est": 2,
+        "proj": "XCFT-1210 | 2026 | UK Partner Acquisition: MTD IT guide and display",
+        "th": 0.2,
+        "wh": 0.8
+      },
+      {
+        "name": "2.3 Demandbase design",
+        "due": "2026-06-05",
+        "est": 3,
+        "proj": "XCFT-1210 | 2026 | UK Partner Acquisition: MTD IT guide and display",
+        "th": 0.3,
+        "wh": 1.2
+      },
+      {
+        "name": "4.5 Guide design",
+        "due": "2026-06-12",
+        "est": 18,
+        "proj": "XCFP-34 | 2026 | Data Health & Efficiency Campaign",
+        "th": 0,
+        "wh": 0
+      },
+      {
+        "name": "Slide design | Xerocon 2026",
+        "due": "2026-06-15",
+        "est": 88,
+        "proj": "XCFP-14 | 2026 | Xerocon 2026",
+        "th": 6.77,
+        "wh": 24
+      },
+      {
+        "name": "Slide design | Xerocon 2026",
+        "due": "2026-07-31",
+        "est": 88,
+        "proj": "XCFP-14 | 2026 | Xerocon 2026",
+        "th": 0,
+        "wh": 0
+      }
+    ]
+  },
+  {
+    "name": "mikeohall@me.com",
+    "pod": "Design",
+    "ooo": false,
+    "today": 0,
+    "week": 0,
+    "month": 0,
+    "qualifying": 0,
+    "missing": 0,
+    "overdue": 0,
+    "tasks": []
+  },
+  {
+    "name": "Naomi Lawson",
+    "pod": "Campaign Ops",
+    "ooo": false,
+    "today": 0,
+    "week": 0,
+    "month": 0,
+    "qualifying": 0,
+    "missing": 7,
+    "overdue": 1,
+    "tasks": [
+      {
+        "name": "2.6 SR - Stakeholder Review",
+        "due": "2026-05-28",
+        "est": 1.5,
+        "proj": "XCFT-1146 Xerocon motion graphics + opening video",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      }
+    ]
+  },
+  {
+    "name": "Natalie Wei Jia Lee",
+    "pod": "Unknown",
+    "ooo": false,
+    "today": 0,
+    "week": 0,
+    "month": 0,
+    "qualifying": 0,
+    "missing": 0,
+    "overdue": 1,
+    "tasks": [
+      {
+        "name": "XCFT-1619 - Co-branded banner needed ASAP",
+        "due": "2026-05-28",
+        "est": 3,
+        "proj": "XCF: Intake The Creative Foundry",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      }
+    ]
+  },
+  {
+    "name": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "ooo": false,
+    "today": 0.7,
+    "week": 2.1,
+    "month": 6,
+    "qualifying": 6,
+    "missing": 20,
+    "overdue": 0,
+    "tasks": [
+      {
+        "name": "XCFT-1315 - Amend S&O template in Google Template Gallery to latest version",
+        "due": "2026-05-29",
+        "est": 2,
+        "proj": "XCF: Intake The Creative Foundry",
+        "th": 0.29,
+        "wh": 0.29
+      },
+      {
+        "name": "Review and refinement of staff briefing deck ",
+        "due": "2026-06-04",
+        "est": 2,
+        "proj": "XCFP-14 | 2026 | Xerocon 2026",
+        "th": 0.33,
+        "wh": 1.5
+      },
+      {
+        "name": "XCFT-1578 - Global Terms of Use Update",
+        "due": "2026-06-10",
+        "est": 2,
+        "proj": "XCF: Intake The Creative Foundry",
+        "th": 0,
+        "wh": 0
+      },
+      {
+        "name": "20x20 booth graphics",
+        "due": "2026-06-12",
+        "est": 1,
+        "proj": "XCF | Design Studio BAU Board",
+        "th": 0.08,
+        "wh": 0.3
+      },
+      {
+        "name": "XCFT-2275 - ISCA House - Ice Cream Freezer Branding",
+        "due": "2026-06-15",
+        "est": 2,
+        "proj": "XCF: Intake The Creative Foundry",
+        "th": 0,
+        "wh": 0
+      },
+      {
+        "name": "XCFT-2780 - Update to Insolvency Access Request PDF form",
+        "due": "2026-06-19",
+        "est": 2,
+        "proj": "XCF: Intake The Creative Foundry",
+        "th": 0,
+        "wh": 0
+      }
+    ]
+  },
+  {
+    "name": "Sherry Choe",
+    "pod": "Campaign Ops",
+    "ooo": false,
+    "today": 0,
+    "week": 0,
+    "month": 0,
+    "qualifying": 0,
+    "missing": 0,
+    "overdue": 0,
+    "tasks": []
+  },
+  {
+    "name": "Steph Gardner",
+    "pod": "Design Studio",
+    "ooo": false,
+    "today": 11.3,
+    "week": 29.5,
+    "month": 90,
+    "qualifying": 6,
+    "missing": 0,
+    "overdue": 1,
+    "tasks": [
+      {
+        "name": "Canva approvals | XCF-477",
+        "due": "2026-04-06",
+        "est": 2.5,
+        "proj": "XCF | Design Studio BAU Board",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "2.1 MTD guide design",
+        "due": "2026-05-29",
+        "est": 15,
+        "proj": "XCFT-1210 | 2026 | UK Partner Acquisition: MTD IT guide and display",
+        "th": 3.75,
+        "wh": 3.75
+      },
+      {
+        "name": "XLS - attendee lanyard backing card design (new)",
+        "due": "2026-05-29",
+        "est": 2,
+        "proj": "XCFP-14 | 2026 | Xerocon 2026",
+        "th": 0.4,
+        "wh": 0.4
+      },
+      {
+        "name": "Xerocon lanyard design  | Xerocon 2026 | XCF-503 | Xerocon 2026",
+        "due": "2026-06-02",
+        "est": 2,
+        "proj": "XCF | Design Studio BAU Board",
+        "th": 0.04,
+        "wh": 0.11
+      },
+      {
+        "name": "2.1 3x Social tiles",
+        "due": "2026-06-05",
+        "est": 2,
+        "proj": "XCFP-5 | 2026 | SG60 soundbites",
+        "th": 0.29,
+        "wh": 1.2
+      },
+      {
+        "name": "Slide design | Xerocon 2026",
+        "due": "2026-06-15",
+        "est": 88,
+        "proj": "XCF: POD Boards",
+        "th": 6.77,
+        "wh": 24
+      },
+      {
+        "name": "Slide design | Xerocon 2026",
+        "due": "2026-07-31",
+        "est": 88,
+        "proj": "XCFP-14 | 2026 | Xerocon 2026",
+        "th": 0,
+        "wh": 0
+      }
+    ]
+  },
+  {
+    "name": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "ooo": false,
+    "today": 0,
+    "week": 0,
+    "month": 0,
+    "qualifying": 0,
+    "missing": 49,
+    "overdue": 0,
+    "tasks": []
+  },
+  {
+    "name": "Will Rich",
+    "pod": "AI & Media",
+    "ooo": false,
+    "today": 4.3,
+    "week": 13.6,
+    "month": 18,
+    "qualifying": 3,
+    "missing": 2,
+    "overdue": 7,
+    "tasks": [
+      {
+        "name": "1.2 Brief alignment meeting",
+        "due": "2025-12-17",
+        "est": 1,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "2.5 Concept refinement based on feedback",
+        "due": "2026-02-02",
+        "est": 1,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "AI photography prompt development | Brand Refresh",
+        "due": "2026-04-10",
+        "est": 10,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Location creation",
+        "due": "2026-05-08",
+        "est": 20,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Avatar creation",
+        "due": "2026-05-08",
+        "est": 20,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Location creation",
+        "due": "2026-05-08",
+        "est": 20,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "WR Revisions: AI UGC: Business Verticals",
+        "due": "2026-05-25",
+        "est": 15,
+        "proj": "",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Video - USA Competitive Messaging | Meta",
+        "due": "2026-05-29",
+        "est": 8,
+        "proj": "XCF: POD Boards",
+        "th": 1.14,
+        "wh": 1.14
+      },
+      {
+        "name": "WR Ai Video Generation: AI UGC: Business Verticals",
+        "due": "2026-06-05",
+        "est": 25,
+        "proj": "",
+        "th": 3.13,
+        "wh": 12.5
+      },
+      {
+        "name": "WR Smartly Upload: AI UGC: Business Verticals",
+        "due": "2026-06-10",
+        "est": 18,
+        "proj": "",
+        "th": 0,
+        "wh": 0
+      }
+    ]
+  }
+];
+
+const MISSING_TASKS = [
+  {
+    "name": "Design",
+    "proj": "XCF: POD Boards",
+    "assignee": "Alex Downey",
+    "pod": "Campaign",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Copy Review: First invoice payment congrats EDM",
+    "proj": "XCF: POD Boards",
+    "assignee": "Aniqah Mitha",
+    "pod": "Performance",
+    "missing": "No estimate"
+  },
+  {
+    "name": "[no value] | Hub: Creative board",
+    "proj": "XCF: POD Boards",
+    "assignee": "Aniqah Mitha",
+    "pod": "Performance",
+    "missing": "No estimate"
+  },
+  {
+    "name": "[no value] | Hub: Creative board",
+    "proj": "XCF: POD Boards",
+    "assignee": "Aniqah Mitha",
+    "pod": "Performance",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Discuss with project owner if additional channels need to be explored to stress test",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Refining the creative concepts",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Agree ways of communication for production discussions",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Take the confirmed asset matrix and build out a deliverables sheet",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Create campaign proofing deck for review stage",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Amend / prepare assets for dispatch once approved",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Consolidate feedback / gain approvals from key decision makers",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Build out creative assets into proofing deck for review",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Script and Storyboard Creation",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Video: First draft edit + feedback",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Video: Second edit + feedback ",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "PDF One Pager Copy ",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "SMB webpage copy",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "AB toolkit webpage copy",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Google Slides Images (x4)",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "PDF One Pager Design",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Blog Header Image",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Newsletter Static Image",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "AEM Build",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "AEM Build",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Video: Final Edit",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "AB toolkit Landing page tweaks (if required)",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Landing page tweaks (if required)",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Cutdowns",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "AB toolkit Landing page go live",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Landing page go live",
+    "proj": "Campaign process_Cash flow campaign_WF944800",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-587 | [Lifecycle] Analytics Experiment",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-446 | US | AB | Q1 FY27 regional requests",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-451 | UK | AB | Q1 FY27 regional requests",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-958 | HUB ASSETS | Triggered bank feed nudge in the base: regional bank logos - UR1408",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1111 | Bills Campaign Asset Update",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1036 | HUB ASSETS | Triggered nudge to set up automated invoice reminders - UR1409 + ID ",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-590 | [Lifecycle] [Agency] Email redesign",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-935 | GL | FY27 PS/Display LP Creatives | 8 Buckets",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1045 | GL | Ease LP Copy Review",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1318 | HUB ASSETS | 6 months iteration UR1407",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCF revise performance ads",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1336 | GL | Automation LP Copy Review",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCF First Review",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1387 | GL | Confidence LP Copy Review",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Brief 1: Avatar Representation",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-463 | Ai UGC Briefs For Agency",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "SH Review",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1394 | Xero Lite - ROW Launch - Apple Search Ads Template Resize",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Assets access + delivery",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Final Review",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1353 | ASSETS | Claims in feature emails - TC1247",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Delivery",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1498 | Medium+ / Multi Entity – Meta Statics",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "TPP Production",
+    "proj": "979554 - XPH Phase Launch Assets",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1344 | REQUEST | PP1423 - Partner Education Challenge banner ",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-779 | GL | Switch LP",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-592 | [Design] RAP report",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-753 | UK | Xero Files & Smart Data Capture Videos",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-748 | US | Xero Coaches Videos",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1556 | META | ANZ High Value SB Acquisition | Static, Graphics and AI Video",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "AI UGC: Business Verticals",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1390 | Update Meta Video Template Promo Banners",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1401 | REQUEST | CS1385 Bill: First bill \"Marked as paid\" payments xsell",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1582 | GL | DCO Creative Refresh 2026 | HTML5 Programmatic Display (DV360)",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-2983 | ANZ | 📈 High-Value SB: Demand Gen (Static/Video)",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFP-339 | [no value] | XCF delivery support | Brand Refreshed Banners for Associations in SG and MY (AB and SB)",
+    "proj": "The Creative Foundry Roadmap requests",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFP-48 | 2026 | Switch Campaign",
+    "proj": "The Creative Foundry Roadmap requests",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Design R1 - Christie test",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-606 | HUB REQUEST | Placeholder for Q2 - CS1343",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-516 | Web Design: CRO component priorities | XCF-539",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-508 | Web Design: Refer a friend webpage | XCF-536",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No due date"
+  },
+  {
+    "name": "XCFT-518 | Web Design: Innovations dotcom | XCF-540",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No due date"
+  },
+  {
+    "name": "XCFT-760 | Pro-Active Perf Projects",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1261 | Xero.com new request",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "re-name task",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "re-name task",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "re-name task",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "re-name task",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "re-name task",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "re-name task",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "re-name task",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "re-name task",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "re-name task",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "re-name task",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "re-name task",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "re-name task",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "re-name task",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Brief creative teams to develop assets as per deliverables list",
+    "proj": "",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "BH AI Still: AI UGC: Business Verticals",
+    "proj": "",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "missing": "No estimate"
+  },
+  {
+    "name": "BH Revisions: AI UGC: Business Verticals",
+    "proj": "",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Sample voices to SH for selection",
+    "proj": "989350 | 2026 | Xero Partner Advisory Summit",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "missing": "No estimate"
+  },
+  {
+    "name": "CR1 - Creative Review",
+    "proj": "989350 | 2026 | Xero Partner Advisory Summit",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "missing": "No estimate"
+  },
+  {
+    "name": "IMPACT EMAIL DESIGN",
+    "proj": "XCF: POD Boards",
+    "assignee": "Brad Holland",
+    "pod": "Performance",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1190 | Web Design: Platform testing",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Brad Holland",
+    "pod": "Performance",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Web Design: Home page development v2 ",
+    "proj": "XCF: POD Boards",
+    "assignee": "Brad Holland",
+    "pod": "Performance",
+    "missing": "No due date"
+  },
+  {
+    "name": "Web Design: Home page development v1 | XCF-527",
+    "proj": "XCF: POD Boards",
+    "assignee": "Brad Holland",
+    "pod": "Performance",
+    "missing": "No due date"
+  },
+  {
+    "name": "Web Design: Discovery Innovations dotcom v2 | XCF-528",
+    "proj": "XCF: POD Boards",
+    "assignee": "Brad Holland",
+    "pod": "Performance",
+    "missing": "No due date"
+  },
+  {
+    "name": "Web Design: Discovery Innovations dotcom v1 | XCF-528",
+    "proj": "XCF: POD Boards",
+    "assignee": "Brad Holland",
+    "pod": "Performance",
+    "missing": "No due date"
+  },
+  {
+    "name": "Web Design: Brandfolder Migration v2 ",
+    "proj": "XCF: POD Boards",
+    "assignee": "Brad Holland",
+    "pod": "Performance",
+    "missing": "No due date"
+  },
+  {
+    "name": "Web Design: CRO component priorities v1 | XCF-534",
+    "proj": "XCF: POD Boards",
+    "assignee": "Brad Holland",
+    "pod": "Performance",
+    "missing": "No due date"
+  },
+  {
+    "name": "Web Design: Brandfolder Migration v1 | XCF-533",
+    "proj": "XCF: POD Boards",
+    "assignee": "Brad Holland",
+    "pod": "Performance",
+    "missing": "No due date"
+  },
+  {
+    "name": "Web Design: CRO component priorities v2 | XCF-534",
+    "proj": "XCF: POD Boards",
+    "assignee": "Brad Holland",
+    "pod": "Performance",
+    "missing": "No due date"
+  },
+  {
+    "name": "Navigation v3 ",
+    "proj": "XCF: POD Boards",
+    "assignee": "Brad Holland",
+    "pod": "Performance",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Web Design: Discovery Innovations dotcom v3 ",
+    "proj": "XCF: POD Boards",
+    "assignee": "Brad Holland",
+    "pod": "Performance",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Web Design: CRO component priorities v3",
+    "proj": "XCF: POD Boards",
+    "assignee": "Brad Holland",
+    "pod": "Performance",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Final Files Here",
+    "proj": "",
+    "assignee": "Chiko Kurniawan",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Update Xero logo for Gift box | XCF-189",
+    "proj": "XCF | Design Studio BAU Board",
+    "assignee": "Chiko Kurniawan",
+    "pod": "Design Studio",
+    "missing": "No due date"
+  },
+  {
+    "name": "Beautiful.ai Exploration",
+    "proj": "",
+    "assignee": "Ciaran Carroll",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Dan review design",
+    "proj": "",
+    "assignee": "Dan Elliott",
+    "pod": "Design",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Charm Development",
+    "proj": "",
+    "assignee": "Dan Elliott",
+    "pod": "Design",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Canva Template Design",
+    "proj": "XCF: POD Boards",
+    "assignee": "Dan Elliott",
+    "pod": "Design",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Motion Toolkit Development",
+    "proj": "",
+    "assignee": "Domenic Iaria",
+    "pod": "AI & Media",
+    "missing": "No estimate"
+  },
+  {
+    "name": "2.2 Animation | Xero Melio ",
+    "proj": "XCF: AIM | Xero Website | Animation",
+    "assignee": "Domenic Iaria",
+    "pod": "AI & Media",
+    "missing": "No due date"
+  },
+  {
+    "name": "2.2 Redesign | JAX UI  | XCF: AIM | Xero Website | Animation | XCF-464",
+    "proj": "XCF: AIM | Xero Website | Animation",
+    "assignee": "Domenic Iaria",
+    "pod": "AI & Media",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-478 | Sunsetting Smartly Templates | XCF-498",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Hannah Boekhorst",
+    "pod": "Performance",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Copy webpage review",
+    "proj": "XCF: POD Boards",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCF Copy review",
+    "proj": "",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "missing": "No estimate"
+  },
+  {
+    "name": "NZ | R1 Copy Development",
+    "proj": "",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Sub-brands architecture ",
+    "proj": "",
+    "assignee": "Laura Fuldseth",
+    "pod": "Design",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Canva Template Design ",
+    "proj": "XCF: POD Boards",
+    "assignee": "Laura Fuldseth",
+    "pod": "Design",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Māori & Pasifika | HUB | Design BAU Board",
+    "proj": "XCF: POD Boards",
+    "assignee": "Laura Fuldseth",
+    "pod": "Design",
+    "missing": "No due date"
+  },
+  {
+    "name": "PEARL | HUB | Design BAU Board",
+    "proj": "XCF: POD Boards",
+    "assignee": "Laura Fuldseth",
+    "pod": "Design",
+    "missing": "No due date"
+  },
+  {
+    "name": "1.2 IR: With Sha",
+    "proj": "969552 | 2026 | Blue Book",
+    "assignee": "Logen Stent",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1066 - Education workbooks converted to canva",
+    "proj": "XCF: Intake The Creative Foundry",
+    "assignee": "Logen Stent",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFP-38 | 2026 | Q2 SB Storybook updates",
+    "proj": "The Creative Foundry Roadmap requests",
+    "assignee": "Logen Stent",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Logen Stent",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Logen Stent",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFP-89 | 2026 | FY27 Canada Kickstart Xero Hosted Events ",
+    "proj": "The Creative Foundry Roadmap requests",
+    "assignee": "Logen Stent",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "4.5 Landing Page Design",
+    "proj": "XCFP-37 | 2026 | SB Smart tools campaign",
+    "assignee": "Michelle Crocker",
+    "pod": "Design",
+    "missing": "No estimate"
+  },
+  {
+    "name": "4.4 EDM Assets Rollout",
+    "proj": "XCFP-37 | 2026 | SB Smart tools campaign",
+    "assignee": "Michelle Crocker",
+    "pod": "Design",
+    "missing": "No estimate"
+  },
+  {
+    "name": "2.12 SR2 - Stakeholder review",
+    "proj": "XCFT-1146 Xerocon motion graphics + opening video",
+    "assignee": "Naomi Lawson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "SH review",
+    "proj": "989350 | 2026 | Xero Partner Advisory Summit",
+    "assignee": "Naomi Lawson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "2.14 SR - Final Stakeholder Review",
+    "proj": "XCFT-1146 Xerocon motion graphics + opening video",
+    "assignee": "Naomi Lawson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "SR1 - Stakeholder Review ",
+    "proj": "989350 | 2026 | Xero Partner Advisory Summit",
+    "assignee": "Naomi Lawson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "SR2 - Stakeholder Review  ",
+    "proj": "989350 | 2026 | Xero Partner Advisory Summit",
+    "assignee": "Naomi Lawson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Final Delivery",
+    "proj": "989350 | 2026 | Xero Partner Advisory Summit",
+    "assignee": "Naomi Lawson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1195 - Modern Practice Playbook",
+    "proj": "XCF: POD Boards",
+    "assignee": "Naomi Lawson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XSBI social posts | HUB: Canva template optimisation",
+    "proj": "XCF: Canva template optimisation",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Deck Template / Self Serve Option | Self Serve Creative Services Roadmap",
+    "proj": "XCF: POD Boards",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Design Templates | Self Serve Creative Services Roadmap",
+    "proj": "XCF: POD Boards",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "AI Deck templates | Self Serve Creative Services Roadmap",
+    "proj": "XCF: POD Boards",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Business Cards | Self Serve Creative Services Roadmap",
+    "proj": "XCF: POD Boards",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1440 - Syft Analytics QR code update for Accountex Showreel",
+    "proj": "XCF: Intake The Creative Foundry",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1552 - Enterprise pop up banner and tablecloth ",
+    "proj": "XCF: Intake The Creative Foundry",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-2161 - Xero Pop-up Event (9 Jul)",
+    "proj": "XCF: Intake The Creative Foundry",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "US&CA Partner Awards: Assets Rollout",
+    "proj": "XCFP-83 | 2026 | US and Canada Partner Awards",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Scaling new heights",
+    "proj": "XCFP-87 | 2026 | Q1 - Q2 Industry Sponsored Events",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFP-68 | 2026 | Get paid fast with flexible payments for a flexible business > Schedule invoicing",
+    "proj": "The Creative Foundry Roadmap requests",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFP-44 | 2026 | WP > New Workpapers updates",
+    "proj": "The Creative Foundry Roadmap requests",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No due date"
+  },
+  {
+    "name": "One week to go - 20% ticket offer",
+    "proj": "XCFP-14 | 2026 | Xerocon 2026",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1503 - Business card digital file creation",
+    "proj": "XCF: Intake The Creative Foundry",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Xero Social Profiles\n\n\n | HUB | Design Studio BAU Board",
+    "proj": "XCF: POD Boards",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Update existing Xero TechTalks assets with new Xero logo | XCF-174",
+    "proj": "XCF: POD Boards",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "AI Driven Deck Design ",
+    "proj": "XCF: 2027 Goals",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Canva Approval Process",
+    "proj": "XCF: POD Boards",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Terms and conditions | HUB: Canva template optimisation",
+    "proj": "XCF: Canva template optimisation",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Read the doc and make some suggestions if you have any",
+    "proj": "",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-1374 - Assets for 20 year hype video",
+    "proj": "XCF: Intake The Creative Foundry",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "In Market",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "Production",
+    "proj": "",
+    "assignee": "Tom Gregson",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-468 | Video - Xero Files & Smart Data Capture | XCF-495",
+    "proj": "XCF: POD Boards",
+    "assignee": "Will Rich",
+    "pod": "AI & Media",
+    "missing": "No estimate"
+  },
+  {
+    "name": "WR AI Still: AI UGC: Business Verticals",
+    "proj": "",
+    "assignee": "Will Rich",
+    "pod": "AI & Media",
+    "missing": "No estimate"
+  }
+];
+
+const OVERDUE_TASKS = [
+  {
+    "name": "Design R1 - UK | Xero Files & Smart Data Capture Videos: ITG Creative Brief",
+    "proj": "XCF: POD Boards",
+    "assignee": "Alex Downey",
+    "pod": "Campaign",
+    "due": "2026-04-16"
+  },
+  {
+    "name": "Design",
+    "proj": "XCF: POD Boards",
+    "assignee": "Alex Downey",
+    "pod": "Campaign",
+    "due": "2026-04-17"
+  },
+  {
+    "name": "Design R2 - US | Xero Coaches Videos: ITG Creative Brief",
+    "proj": "XCF: POD Boards",
+    "assignee": "Alex Downey",
+    "pod": "Campaign",
+    "due": "2026-04-24"
+  },
+  {
+    "name": "Design",
+    "proj": "XCF: POD Boards",
+    "assignee": "Alex Downey",
+    "pod": "Campaign",
+    "due": "2026-05-04"
+  },
+  {
+    "name": "Design",
+    "proj": "XCF: POD Boards",
+    "assignee": "Alex Downey",
+    "pod": "Campaign",
+    "due": "2026-05-18"
+  },
+  {
+    "name": "Design",
+    "proj": "XCF: POD Boards",
+    "assignee": "Alex Downey",
+    "pod": "Campaign",
+    "due": "2026-05-18"
+  },
+  {
+    "name": "Copy R2 - GL | Ease LP Copy Review",
+    "proj": "XCF: POD Boards",
+    "assignee": "Aniqah Mitha",
+    "pod": "Performance",
+    "due": "2026-05-08"
+  },
+  {
+    "name": "Copy R2 - GL | Support LP Copy Review",
+    "proj": "XCF: POD Boards",
+    "assignee": "Aniqah Mitha",
+    "pod": "Performance",
+    "due": "2026-05-15"
+  },
+  {
+    "name": "Copy R2 - Xero Payments Claim Test – End More Months in the Black",
+    "proj": "XCF: POD Boards",
+    "assignee": "Aniqah Mitha",
+    "pod": "Performance",
+    "due": "2026-05-15"
+  },
+  {
+    "name": "XCFT-728 | Celebration GIF | Add stripe + Go Cardless logo",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "due": "2026-04-14"
+  },
+  {
+    "name": "Why Xero: Additional Aspect Ratio",
+    "proj": "XCF: POD Boards",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "due": "2026-04-17"
+  },
+  {
+    "name": "XCFT-971 | LN1382 New Plan Welcome Header Images",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "due": "2026-04-20"
+  },
+  {
+    "name": "XCFT-1072 | LN1377 Auto Bank Rec Upgrade Trigger Images",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "due": "2026-05-04"
+  },
+  {
+    "name": "1 Explore 2-3 creative territories (2-4 weeks depending on complexity)",
+    "proj": "969800 - Plaid GTM Campaign",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "due": "2025-11-17"
+  },
+  {
+    "name": "Radio: Receipt capture (30s)",
+    "proj": "",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "due": "2025-12-12"
+  },
+  {
+    "name": "Digital audio: Financial visibility (30s)",
+    "proj": "",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "due": "2025-12-12"
+  },
+  {
+    "name": "Digital audio: Financial visibility (30s)",
+    "proj": "",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "due": "2025-12-12"
+  },
+  {
+    "name": "Radio: Financial visibility (30s)",
+    "proj": "",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "due": "2025-12-12"
+  },
+  {
+    "name": "2.1 Explore 2-3 creative territories (2-4 weeks depending on complexity)",
+    "proj": "",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "due": "2026-01-20"
+  },
+  {
+    "name": "2.2 Present creative territories",
+    "proj": "",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "due": "2026-01-21"
+  },
+  {
+    "name": "2.3 Feedback collection from key stakeholders",
+    "proj": "",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "due": "2026-01-26"
+  },
+  {
+    "name": "2.4 Feedback due",
+    "proj": "",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "due": "2026-01-27"
+  },
+  {
+    "name": "2.5 Concept refinement based on feedback",
+    "proj": "",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "due": "2026-02-02"
+  },
+  {
+    "name": "XCFT-284 | AI VO + Audio Production | 3x3 Audio Ad",
+    "proj": "XCF: POD Boards",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "due": "2026-03-18"
+  },
+  {
+    "name": "Avatar creation",
+    "proj": "XCF: POD Boards",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "due": "2026-05-08"
+  },
+  {
+    "name": "Location creation",
+    "proj": "XCF: POD Boards",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "due": "2026-05-08"
+  },
+  {
+    "name": "ITG AI UGC Oversight: AIM",
+    "proj": "XCF: POD Boards",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "due": "2026-05-21"
+  },
+  {
+    "name": "Voice sampling in development",
+    "proj": "989350 | 2026 | Xero Partner Advisory Summit",
+    "assignee": "Ben Hobbs",
+    "pod": "AI & Media",
+    "due": "2026-05-27"
+  },
+  {
+    "name": "Web Design: CRO lamding page concept",
+    "proj": "XCF: POD Boards",
+    "assignee": "Brad Holland",
+    "pod": "Performance",
+    "due": "2026-05-15"
+  },
+  {
+    "name": "Design",
+    "proj": "XCF: POD Boards",
+    "assignee": "Brad Holland",
+    "pod": "Performance",
+    "due": "2026-05-24"
+  },
+  {
+    "name": "Design",
+    "proj": "XCF: POD Boards",
+    "assignee": "Brad Holland",
+    "pod": "Performance",
+    "due": "2026-05-24"
+  },
+  {
+    "name": "Design",
+    "proj": "985200_Syft_Xero Analytics AB One Pager",
+    "assignee": "Chiko Kurniawan",
+    "pod": "Design Studio",
+    "due": "2026-01-21"
+  },
+  {
+    "name": "Copy",
+    "proj": "",
+    "assignee": "Chris Bull",
+    "pod": "Campaign",
+    "due": "2026-05-18"
+  },
+  {
+    "name": "Design:  Promo-Led Hierarchy Template | HUB | Performance BAU Board",
+    "proj": "XCF: POD Boards",
+    "assignee": "Ciaran Carroll",
+    "pod": "Design Studio",
+    "due": "2026-02-27"
+  },
+  {
+    "name": "Design: Flexible CVP / value led Template | HUB | Performance BAU Board",
+    "proj": "XCF: POD Boards",
+    "assignee": "Ciaran Carroll",
+    "pod": "Design Studio",
+    "due": "2026-02-27"
+  },
+  {
+    "name": "UK Dotcom asset updates",
+    "proj": "979554 - XPH Phase Launch Assets",
+    "assignee": "Ciaran Carroll",
+    "pod": "Design Studio",
+    "due": "2026-05-08"
+  },
+  {
+    "name": "AI photography prompt development | Brand Refresh | XCF-458",
+    "proj": "XCF: POD Boards",
+    "assignee": "Dan Elliott",
+    "pod": "Design",
+    "due": "2026-03-27"
+  },
+  {
+    "name": "Investor Deck design v1",
+    "proj": "XCF: POD Boards",
+    "assignee": "Dan Elliott",
+    "pod": "Design",
+    "due": "2026-04-29"
+  },
+  {
+    "name": "1.3 Brief amends (if necessary)",
+    "proj": "",
+    "assignee": "Domenic Iaria",
+    "pod": "AI & Media",
+    "due": "2025-12-19"
+  },
+  {
+    "name": "2.1 Explore 2-3 creative territories (2-4 weeks depending on complexity)",
+    "proj": "",
+    "assignee": "Domenic Iaria",
+    "pod": "AI & Media",
+    "due": "2026-01-20"
+  },
+  {
+    "name": "2.3 Feedback collection from key stakeholders",
+    "proj": "",
+    "assignee": "Domenic Iaria",
+    "pod": "AI & Media",
+    "due": "2026-01-26"
+  },
+  {
+    "name": "4 Develop 2-3 creative concepts (2-4 weeks depending on complexity)",
+    "proj": "",
+    "assignee": "Domenic Iaria",
+    "pod": "AI & Media",
+    "due": "2026-02-17"
+  },
+  {
+    "name": "4.1 Present creative concepts",
+    "proj": "",
+    "assignee": "Domenic Iaria",
+    "pod": "AI & Media",
+    "due": "2026-02-18"
+  },
+  {
+    "name": "4.2 Feedback collection key stakeholders",
+    "proj": "",
+    "assignee": "Domenic Iaria",
+    "pod": "AI & Media",
+    "due": "2026-02-20"
+  },
+  {
+    "name": "4.3 Feedback due",
+    "proj": "",
+    "assignee": "Domenic Iaria",
+    "pod": "AI & Media",
+    "due": "2026-02-23"
+  },
+  {
+    "name": "4.4 Creative concept refinement based on feedback",
+    "proj": "",
+    "assignee": "Domenic Iaria",
+    "pod": "AI & Media",
+    "due": "2026-02-27"
+  },
+  {
+    "name": "4.5 Present final concept for approval",
+    "proj": "",
+    "assignee": "Domenic Iaria",
+    "pod": "AI & Media",
+    "due": "2026-03-02"
+  },
+  {
+    "name": "6.1 Partner Hub animaton (1x1)",
+    "proj": "",
+    "assignee": "Domenic Iaria",
+    "pod": "AI & Media",
+    "due": "2026-03-06"
+  },
+  {
+    "name": "Admin: Upload working files to Drive",
+    "proj": "986751 - Xero Files product GIFs and statics",
+    "assignee": "Domenic Iaria",
+    "pod": "AI & Media",
+    "due": "2026-03-27"
+  },
+  {
+    "name": "Testing",
+    "proj": "XCF: AIM | AI Research | Figma Weave",
+    "assignee": "Domenic Iaria",
+    "pod": "AI & Media",
+    "due": "2026-05-08"
+  },
+  {
+    "name": "2.1 Develop 1-2 creative concepts - name",
+    "proj": "982450 - Xero Social Profiles",
+    "assignee": "Hannah Boekhorst",
+    "pod": "Performance",
+    "due": "2026-01-29"
+  },
+  {
+    "name": "Design: Update Banners",
+    "proj": "XCF: POD Boards",
+    "assignee": "Hannah Boekhorst",
+    "pod": "Performance",
+    "due": "2026-03-13"
+  },
+  {
+    "name": "Design R2 - Xero Files & Smart Data Capture | XCF-484",
+    "proj": "XCF: POD Boards",
+    "assignee": "Hannah Boekhorst",
+    "pod": "Performance",
+    "due": "2026-03-20"
+  },
+  {
+    "name": "R2 Smartly Template Update with Copy | XCF-556",
+    "proj": "XCF: POD Boards",
+    "assignee": "Hannah Boekhorst",
+    "pod": "Performance",
+    "due": "2026-04-16"
+  },
+  {
+    "name": "Design Tools Review",
+    "proj": "XCF: POD Boards",
+    "assignee": "Hannah Boekhorst",
+    "pod": "Performance",
+    "due": "2026-04-30"
+  },
+  {
+    "name": "Design: First invoice payment congrats GIF",
+    "proj": "XCF: POD Boards",
+    "assignee": "Hannah Boekhorst",
+    "pod": "Performance",
+    "due": "2026-05-01"
+  },
+  {
+    "name": "Web Design R2 - GL | FY27 PS/Display LP Creatives | 8 Buckets",
+    "proj": "XCF: POD Boards",
+    "assignee": "Hannah Boekhorst",
+    "pod": "Performance",
+    "due": "2026-05-13"
+  },
+  {
+    "name": "Design R1 - Xero Payments Claim Test – End More Months in the Black",
+    "proj": "XCF: POD Boards",
+    "assignee": "Hannah Boekhorst",
+    "pod": "Performance",
+    "due": "2026-05-14"
+  },
+  {
+    "name": "Design: 6 months iteration Celebration",
+    "proj": "XCF: POD Boards",
+    "assignee": "Hannah Boekhorst",
+    "pod": "Performance",
+    "due": "2026-05-15"
+  },
+  {
+    "name": "Design R2 - Xero Payments Claim Test – End More Months in the Black",
+    "proj": "XCF: POD Boards",
+    "assignee": "Hannah Boekhorst",
+    "pod": "Performance",
+    "due": "2026-05-18"
+  },
+  {
+    "name": "Design R2 - US | Xero Coaches",
+    "proj": "XCF: POD Boards",
+    "assignee": "Hannah Boekhorst",
+    "pod": "Performance",
+    "due": "2026-05-19"
+  },
+  {
+    "name": "Design R1 - Xero Lite - ROW Launch - Apple Search Ads Template Resize",
+    "proj": "XCF: POD Boards",
+    "assignee": "Hannah Boekhorst",
+    "pod": "Performance",
+    "due": "2026-05-22"
+  },
+  {
+    "name": "Update Template - Xero Lite - ROW Launch - Apple Search Ads Template Resize",
+    "proj": "XCF: POD Boards",
+    "assignee": "Hannah Boekhorst",
+    "pod": "Performance",
+    "due": "2026-05-25"
+  },
+  {
+    "name": "Design R2 - USA Competitive Messaging | Meta",
+    "proj": "XCF: POD Boards",
+    "assignee": "Hannah Boekhorst",
+    "pod": "Performance",
+    "due": "2026-05-26"
+  },
+  {
+    "name": "New Celebration Design: First quote sent payments xsell email header GIF",
+    "proj": "XCF: POD Boards",
+    "assignee": "Hannah Boekhorst",
+    "pod": "Performance",
+    "due": "2026-05-27"
+  },
+  {
+    "name": "Copy   | 985250-Updated one-pager for Xero Analytics",
+    "proj": "985250-Updated one-pager for Xero Analytics",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "due": "2026-01-20"
+  },
+  {
+    "name": "Copy",
+    "proj": "985200_Syft_Xero Analytics AB One Pager",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "due": "2026-01-21"
+  },
+  {
+    "name": "Copy for webinar Partner Acquisition Banners",
+    "proj": "XCF: POD Boards",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "due": "2026-02-19"
+  },
+  {
+    "name": "Copy for EDM",
+    "proj": "XCF: POD Boards",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "due": "2026-02-20"
+  },
+  {
+    "name": "Copy for webinar Partner Acquisition Banners",
+    "proj": "XCF: POD Boards",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "due": "2026-02-24"
+  },
+  {
+    "name": "Copy R1 - Script",
+    "proj": "XCF: POD Boards",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "due": "2026-02-27"
+  },
+  {
+    "name": "Copy R2 - Script",
+    "proj": "XCF: POD Boards",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "due": "2026-03-03"
+  },
+  {
+    "name": "Copy R1 - US | AB | Q1 FY27 regional requests",
+    "proj": "",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "due": "2026-03-17"
+  },
+  {
+    "name": "Copy R2 - US | AB | Q1 FY27 regional requests",
+    "proj": "",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "due": "2026-03-20"
+  },
+  {
+    "name": "Copy ",
+    "proj": "",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "due": "2026-04-03"
+  },
+  {
+    "name": "Copy",
+    "proj": "",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "due": "2026-04-08"
+  },
+  {
+    "name": "Copy",
+    "proj": "",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "due": "2026-04-13"
+  },
+  {
+    "name": "Copy R1 - USA Competitive Messaging | Meta",
+    "proj": "",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "due": "2026-05-13"
+  },
+  {
+    "name": "Copy R1 - Review and approval of customer referral email copy",
+    "proj": "",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "due": "2026-05-21"
+  },
+  {
+    "name": "Copy R2 - USA Competitive Messaging | Meta",
+    "proj": "",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "due": "2026-05-21"
+  },
+  {
+    "name": "R4 Copy Review - add claim disclaimer",
+    "proj": "",
+    "assignee": "James Blow",
+    "pod": "Campaign",
+    "due": "2026-05-22"
+  },
+  {
+    "name": "2.6 SR - Stakeholder Review",
+    "proj": "XCFT-1146 Xerocon motion graphics + opening video",
+    "assignee": "Naomi Lawson",
+    "pod": "Campaign Ops",
+    "due": "2026-05-28"
+  },
+  {
+    "name": "XCFT-1619 - Co-branded banner needed ASAP",
+    "proj": "XCF: Intake The Creative Foundry",
+    "assignee": "Natalie Wei Jia Lee",
+    "pod": "Unknown",
+    "due": "2026-05-28"
+  },
+  {
+    "name": "Canva approvals | XCF-477",
+    "proj": "XCF | Design Studio BAU Board",
+    "assignee": "Steph Gardner",
+    "pod": "Design Studio",
+    "due": "2026-04-06"
+  },
+  {
+    "name": "1.2 Brief alignment meeting",
+    "proj": "",
+    "assignee": "Will Rich",
+    "pod": "AI & Media",
+    "due": "2025-12-17"
+  },
+  {
+    "name": "2.5 Concept refinement based on feedback",
+    "proj": "",
+    "assignee": "Will Rich",
+    "pod": "AI & Media",
+    "due": "2026-02-02"
+  },
+  {
+    "name": "AI photography prompt development | Brand Refresh",
+    "proj": "XCF: POD Boards",
+    "assignee": "Will Rich",
+    "pod": "AI & Media",
+    "due": "2026-04-10"
+  },
+  {
+    "name": "Location creation",
+    "proj": "XCF: POD Boards",
+    "assignee": "Will Rich",
+    "pod": "AI & Media",
+    "due": "2026-05-08"
+  },
+  {
+    "name": "Avatar creation",
+    "proj": "XCF: POD Boards",
+    "assignee": "Will Rich",
+    "pod": "AI & Media",
+    "due": "2026-05-08"
+  },
+  {
+    "name": "Location creation",
+    "proj": "XCF: POD Boards",
+    "assignee": "Will Rich",
+    "pod": "AI & Media",
+    "due": "2026-05-08"
+  },
+  {
+    "name": "WR Revisions: AI UGC: Business Verticals",
+    "proj": "",
+    "assignee": "Will Rich",
+    "pod": "AI & Media",
+    "due": "2026-05-25"
+  }
+];
+
+const TODAY = new Date('2026-05-19');
+
+function daysSince(dateStr){
+  const d=new Date(dateStr);
+  return Math.floor((TODAY-d)/(1000*60*60*24));
+}
+
+let tab='today', openId=null, currentView='capacity';
+
+/* ── INIT: update dynamic elements ── */
+(function initDates(){
+  const now = new Date();
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmt(d){ return d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear(); }
+  function fmtShort(d){ return d.getDate()+' '+months[d.getMonth()]; }
+  function addD(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
+
+  const in7=addD(now,7), in21=addD(now,21);
+  document.querySelector('title').textContent='XCF Capacity Report · '+fmt(now);
+  document.getElementById('tab-today-date').textContent=fmt(now);
+  document.getElementById('tab-week-date').textContent='→ '+fmtShort(in7);
+  document.getElementById('tab-month-date').textContent='→ '+fmtShort(in21);
+
+  const overdueCt=OVERDUE_TASKS.length;
+  const missingCt=MISSING_TASKS.length;
+  const teamCt=MEMBERS.length;
+  document.getElementById('pill-team').textContent=teamCt;
+  document.getElementById('pill-overdue').textContent=overdueCt;
+  document.getElementById('pill-missing').textContent=missingCt;
+  document.getElementById('nav-overdue').textContent='Overdue ('+overdueCt+')';
+  document.getElementById('nav-missing').textContent='Missing fields ('+missingCt+')';
+
+  // top-meta run date
+  const strong=document.querySelector('.top-meta strong');
+  if(strong) strong.textContent=fmt(now);
+
+  // footer
+  const footer=document.getElementById('footer-bar');
+  if(footer){
+    const total=MEMBERS.reduce((s,m)=>s+(m.qualifying||0)+(m.missing||0)+(m.overdue||0),0);
+    footer.innerHTML='XCF Capacity Report &nbsp;·&nbsp; '+fmt(now)+' &nbsp;·&nbsp; '+total+' tasks (all pages) &nbsp;·&nbsp; Formula: est time &divide; working days (start&rarr;due); no start date = all hours on due date &nbsp;·&nbsp; 8h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation';
+  }
+
+  // capacity table header date label
+  const dlabels={
+    today:'Today — '+fmt(now),
+    week:'Next 7 days — to '+fmtShort(in7),
+    month:'Next month — to '+fmtShort(in21)
+  };
+  window._dlabels=dlabels;
+})();
+
+/* ── VIEW SWITCHER ── */
+function showView(v, btn){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  btn.classList.add('active');
+  currentView=v;
+  if(v==='findresource') renderFindResource();
+  if(v==='podsummary') renderPodSummary();
+  if(v==='overdue') renderOverdue();
+  if(v==='missing') renderMissing();
+}
+
+/* ── HELPERS ── */
+function statusChip(h,t){
+  if(t==='today'){if(h>8)return{cls:'chip-over',label:'Over capacity'};if(h>=6)return{cls:'chip-over',label:'Over capacity'};if(h>=1)return{cls:'chip-under',label:'Under capacity'};return{cls:'chip-avail',label:'Available'};}
+  if(t==='week'){if(h>=40)return{cls:'chip-over',label:'Over capacity'};if(h>=20)return{cls:'chip-under',label:'Under capacity'};return{cls:'chip-avail',label:'Available'};}
+  if(h>=100)return{cls:'chip-over',label:'Over capacity'};if(h>=40)return{cls:'chip-under',label:'Under capacity'};return{cls:'chip-avail',label:'Available'};
+}
+function barCol(h,t,bar){
+  if(t==='today'){if(h>8)return'#ef4444';if(h>=6)return'#ef4444';if(h>=3)return'#f59e0b';return bar;}
+  return bar;
+}
+function availColor(pct){
+  if(pct<=25) return '#6aeaaa';
+  if(pct<=60) return '#f59e0b';
+  return '#ef4444';
+}
+
+/* ══════════════ CAPACITY REPORT ══════════════ */
+function setTab(t,btn){
+  tab=t;
+  document.querySelectorAll('.time-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function render(){
+  const key=tab, maxH=key==='today'?8:key==='week'?40:160;
+  const dlabels=window._dlabels||{today:'Today',week:'Next 7 days',month:'Next month'};
+  document.getElementById('tbl-date').innerHTML=dlabels[key]+' <span>Click row to expand tasks</span>';
+  const creative=MEMBERS.filter(m=>!['Campaign Ops','GM Creative'].includes(m.pod));
+  let over=0,at=0,under=0,avail=0;
+  creative.forEach(m=>{
+    if(m.ooo)return;
+    const h=m[key];
+    if(key==='today'){if(h>8)over++;else if(h>=6)at++;else if(h>=1)under++;else avail++;}
+    else if(key==='week'){if(h>40)over++;else if(h>=30)at++;else if(h>=10)under++;else avail++;}
+    else{if(h>160)over++;else if(h>=100)at++;else if(h>=40)under++;else avail++;}
+  });
+  const bsub=key==='today'?['>8h','6–8h','1–5.9h','0h']:key==='week'?['>40h','30–40h','10–29h','<10h']:['>160h','100–160h','40–99h','<40h'];
+  document.getElementById('buckets').innerHTML=`
+    <div class="bucket over"><div class="bv">${over}</div><div class="bl">Over capacity</div><div class="bs">${bsub[0]}</div></div>
+    <div class="bucket at"><div class="bv">${at}</div><div class="bl">At capacity</div><div class="bs">${bsub[1]}</div></div>
+    <div class="bucket under"><div class="bv">${under}</div><div class="bl">Under capacity</div><div class="bs">${bsub[2]}</div></div>
+    <div class="bucket avail"><div class="bv">${avail}</div><div class="bl">Available</div><div class="bs">${bsub[3]}</div></div>`;
+  const sorted=[...MEMBERS].sort((a,b)=>b[key]-a[key]);
+  let html='';
+  sorted.forEach(m=>{
+    const h=m[key],b=BRAND[m.pod]||BRAND['Campaign'];
+    const pct=Math.min(100,(h/maxH)*100);
+    const bc=barCol(h,key,b.bar);
+    const sc=m.ooo?{cls:'chip-ooo',label:'Out of Office'}:statusChip(h,key);
+    const id='x-'+m.name.replace(/[\s&]/g,'-');
+    const first=m.tasks[0];
+    const tasksHtml=first
+      ?`<div class="task-name-short">${first.name}</div><div><span class="task-proj-short" style="background:${b.bg};color:${b.fg}">${first.proj||'—'}</span></div>${m.tasks.length>1?`<div class="more-tag">+${m.tasks.length-1} more</div>`:''}`
+      :`<div style="color:var(--muted)">—</div>`;
+    html+=`
+      <div class="tbl-row" style="grid-template-columns:160px 120px 1fr 100px 120px 1fr" onclick="tog('${id}')">
+        <div class="r-name">${m.name}</div>
+        <div><span class="pod-pill" style="background:${b.bg};color:${b.fg}">${m.pod}</span></div>
+        <div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:${pct.toFixed(1)}%;background:${bc}"></div></div><span class="bar-pct">${pct.toFixed(0)}%</span></div>
+        <div class="r-hrs${h===0?' zero':''}" style="text-align:right">${h.toFixed(1)}h (${pct.toFixed(0)}%)</div>
+        <div><span class="status-chip ${sc.cls}">${sc.label}</span></div>
+        <div class="tasks-cell">${tasksHtml}</div>
+      </div>
+      <div class="expand-panel" id="${id}">
+        ${m.tasks.length?m.tasks.map(t=>{
+          const thPct=Math.min(100,((t.th||0)/8*100)).toFixed(0);
+          const whPct=Math.min(100,((t.wh||0)/40*100)).toFixed(0);
+          return `<div class="ep-task"><div style="flex:1;min-width:0"><div class="ep-task-name">${t.name}</div><div class="ep-task-proj">${t.proj||'—'}</div></div><div class="ep-task-right"><div>${t.est}h est · due ${t.due}</div><div>today <strong>${(t.th||0).toFixed(2)}h</strong> <span style="opacity:.6">(${thPct}%)</span> · week <strong>${(t.wh||0).toFixed(2)}h</strong> <span style="opacity:.6">(${whPct}%)</span></div></div></div>`;
+        }).join(''):`<div style="font-size:12px;color:var(--muted)">No qualifying tasks with est. time + due date</div>`}
+        ${m.missing>0?`<div class="ep-notice">⚠ ${m.missing} task${m.missing>1?'s':''} excluded — no estimated time or due date</div>`:''}
+        ${m.overdue>0?`<div class="ep-notice">🕐 ${m.overdue} overdue task${m.overdue>1?'s':''} excluded from workload</div>`:''}
+      </div>`;
+  });
+  document.getElementById('roster').innerHTML=html;
+}
+
+function tog(id){
+  const el=document.getElementById(id);if(!el)return;
+  if(openId&&openId!==id){const p=document.getElementById(openId);if(p)p.classList.remove('open');}
+  const was=el.classList.contains('open');el.classList.toggle('open',!was);openId=was?null:id;
+}
+
+/* ══════════════ FIND RESOURCE ══════════════ */
+function renderFindResource(){
+  const range=document.getElementById('fr-range').value;
+  const podFilter=document.getElementById('fr-pod').value;
+  const maxH=range==='today'?8:range==='week'?40:160;
+  const podsToShow=podFilter==='all'?PODS:[podFilter];
+  let html='';
+  podsToShow.forEach(pod=>{
+    const members=MEMBERS.filter(m=>m.pod===pod);
+    if(!members.length)return;
+    const b=BRAND[pod]||BRAND['Campaign'];
+    const totalH=members.reduce((s,m)=>s+m[range],0);
+    const availCount=members.filter(m=>m[range]<(range==='today'?3:range==='week'?15:50)).length;
+    const sorted=[...members].sort((a,b2)=>a[range]-b2[range]);
+    const podId='fr-'+pod.replace(/[\s&]/g,'-');
+    html+=`
+      <div class="fr-pod-section">
+        <div class="fr-pod-hdr" onclick="toggleFrPod('${podId}',this)">
+          <div class="pod-dot" style="background:${b.dot};width:9px;height:9px;border-radius:50%"></div>
+          <span class="fr-pod-label" style="color:${b.fg}">${pod}</span>
+          <span class="fr-pod-stats">
+            <span>${members.length} members</span>
+            <span style="color:#6aeaaa">${availCount} available</span>
+            <span style="color:var(--muted)">${totalH.toFixed(1)}h total</span>
+          </span>
+          <span class="fr-chevron">▼</span>
+        </div>
+        <div class="fr-members" id="${podId}">
+          <div style="display:grid;grid-template-columns:160px 1fr 90px 100px;gap:10px;padding:4px 8px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:.5px solid var(--border)">
+            <span>Member</span><span>Available capacity</span><span style="text-align:right">Hours used</span><span>Status</span>
+          </div>
+          ${sorted.map(m=>{
+            const h=m[range];
+            const used=Math.min(100,(h/maxH)*100);
+            const free=100-used;
+            const sc=m.ooo?{cls:'chip-ooo',label:'Out of Office'}:statusChip(h,range);
+            const fc=availColor(used);
+            return `<div class="fr-member-row">
+              <div class="r-name">${m.name}</div>
+              <div class="fr-avail-bar">
+                <div class="fr-avail-bg"><div class="fr-avail-fill" style="width:${free.toFixed(1)}%;background:${fc}"></div></div>
+                <span style="font-size:11px;color:var(--muted);min-width:32px;text-align:right">${free.toFixed(0)}%</span>
+              </div>
+              <div style="font-size:12px;font-weight:500;text-align:right;color:${h===0?'var(--muted)':'#fff'}">${h.toFixed(1)}h</div>
+              <div><span class="status-chip ${sc.cls}">${sc.label}</span></div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+  });
+  document.getElementById('fr-body').innerHTML=html;
+}
+
+function toggleFrPod(id,hdr){
+  const el=document.getElementById(id);
+  if(!el)return;
+  const isOpen=el.style.display!=='none';
+  el.style.display=isOpen?'none':'block';
+  hdr.classList.toggle('collapsed',isOpen);
+}
+
+/* ══════════════ POD SUMMARY ══════════════ */
+function renderPodSummary(){
+  let html='';
+  PODS.forEach(pod=>{
+    const members=MEMBERS.filter(m=>m.pod===pod);
+    if(!members.length)return;
+    const b=BRAND[pod]||BRAND['Campaign'];
+    const totalToday=members.reduce((s,m)=>s+m.today,0);
+    const totalWeek=members.reduce((s,m)=>s+m.week,0);
+    const totalMissing=members.reduce((s,m)=>s+m.missing,0);
+    const totalOverdue=members.reduce((s,m)=>s+m.overdue,0);
+    const availToday=members.filter(m=>!m.ooo&&m.today<3).length;
+    const sorted=[...members].sort((a,b2)=>b2.today-a.today);
+    html+=`
+      <div class="ps-card">
+        <div class="ps-card-hdr">
+          <div class="pod-dot" style="background:${b.dot}"></div>
+          <span class="ps-pod-name">${pod}</span>
+          <span class="ps-pod-count">${members.length} members</span>
+        </div>
+        <div class="ps-metrics">
+          <div class="ps-metric"><div class="mv" style="color:#fff">${totalToday.toFixed(1)}h</div><div class="ml">Today</div></div>
+          <div class="ps-metric"><div class="mv" style="color:${totalMissing>0?'#fbbf24':'#6aeaaa'}">${totalMissing}</div><div class="ml">Missing</div></div>
+          <div class="ps-metric"><div class="mv" style="color:${totalOverdue>0?'#f87171':'#6aeaaa'}">${totalOverdue}</div><div class="ml">Overdue</div></div>
+        </div>
+        <div class="ps-members">
+          ${sorted.map(m=>{
+            const pct=Math.min(100,(m.today/8)*100);
+            const bc=barCol(m.today,'today',b.bar);
+            if(m.ooo) return `<div class="ps-member-line">
+              <span class="ps-member-name">${m.name}</span>
+              <div class="ps-mini-bar"></div>
+              <span class="status-chip chip-ooo" style="font-size:10px;padding:2px 7px">Out of Office</span>
+            </div>`;
+            return `<div class="ps-member-line">
+              <span class="ps-member-name">${m.name}</span>
+              <div class="ps-mini-bar"><div class="ps-mini-fill" style="width:${pct.toFixed(1)}%;background:${bc}"></div></div>
+              <span class="ps-member-hrs">${m.today.toFixed(1)}h <span style="color:var(--muted);font-size:10px">(${pct.toFixed(0)}%)</span></span>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+  });
+  document.getElementById('ps-body').innerHTML=html;
+}
+
+/* ══════════════ OVERDUE ══════════════ */
+function renderOverdue(){
+  const sorted=[...OVERDUE_TASKS].sort((a,b)=>new Date(a.due)-new Date(b.due));
+  let html='';
+  sorted.forEach(t=>{
+    const days=daysSince(t.due);
+    const b=BRAND[t.pod]||BRAND['Campaign'];
+    html+=`
+      <div class="tbl-row no-expand" style="grid-template-columns:2fr 1fr 90px 100px">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:#fff;margin-bottom:2px">${t.name}</div>
+          <div style="font-size:11px;color:var(--muted)">${t.proj}</div>
+        </div>
+        <div>
+          <div style="font-size:13px;color:#fff;margin-bottom:2px">${t.assignee}</div>
+          <span class="pod-pill" style="background:${b.bg};color:${b.fg}">${t.pod}</span>
+        </div>
+        <div style="font-size:12px;color:var(--muted)">${t.due}</div>
+        <div><span class="days-overdue">${days}d overdue</span></div>
+      </div>`;
+  });
+  document.getElementById('od-body').innerHTML=html||'<div style="padding:16px 10px;font-size:12px;color:var(--muted)">No overdue tasks</div>';
+}
+
+/* ══════════════ MISSING FIELDS ══════════════ */
+function renderMissing(){
+  let html='';
+  MISSING_TASKS.forEach(t=>{
+    const b=BRAND[t.pod]||BRAND['Campaign'];
+    html+=`
+      <div class="tbl-row no-expand" style="grid-template-columns:2fr 1fr 110px 110px">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:#fff;margin-bottom:2px">${t.name}</div>
+          <div style="font-size:11px;color:var(--muted)">${t.proj}</div>
+        </div>
+        <div>
+          <div style="font-size:13px;color:#fff;margin-bottom:2px">${t.assignee}</div>
+          <span class="pod-pill" style="background:${b.bg};color:${b.fg}">${t.pod}</span>
+        </div>
+        <div><span class="mf-badge">${t.missing}</span></div>
+        <div><span class="pod-pill" style="background:${b.bg};color:${b.fg}">${t.pod}</span></div>
+      </div>`;
+  });
+  document.getElementById('mf-body').innerHTML=html||'<div style="padding:16px 10px;font-size:12px;color:var(--muted)">No tasks missing fields</div>';
+}
+
+render();
+</script>
+</body>
+</html>

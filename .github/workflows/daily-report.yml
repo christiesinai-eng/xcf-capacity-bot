@@ -1,0 +1,74 @@
+name: XCF Daily Capacity Report
+
+on:
+  schedule:
+    - cron: '0 16 * * 1-5'  # 4am NZT primary
+    - cron: '0 17 * * 1-5'  # 5am NZT backup
+    - cron: '0 18 * * 1-5'  # 6am NZT final backup
+  workflow_dispatch:          # allows manual run from GitHub
+
+jobs:
+  run-report:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check if already ran today
+        id: dedup
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TODAY=$(date +%Y-%m-%d)
+          RUN_ID=${{ github.run_id }}
+          ALREADY=$(gh run list --workflow=daily-report.yml --status=success --limit=20 --json databaseId,createdAt \
+            | jq --arg today "$TODAY" --argjson runid "$RUN_ID" \
+              '[.[] | select(.databaseId != $runid) | select(.createdAt | startswith($today))] | length > 0')
+          echo "already_ran=$ALREADY" >> $GITHUB_OUTPUT
+          echo "Already ran today: $ALREADY"
+
+      - name: Run capacity report
+        if: steps.dedup.outputs.already_ran != 'true'
+        env:
+          ASANA_TOKEN: ${{ secrets.ASANA_TOKEN }}
+          ASANA_WORKSPACE_GID: ${{ secrets.ASANA_WORKSPACE_GID }}
+          ASANA_TEAM_GID: ${{ secrets.ASANA_TEAM_GID }}
+          ASANA_FIELD_GID_ESTIMATED_TIME: ${{ secrets.ASANA_FIELD_GID_ESTIMATED_TIME }}
+          ASANA_POD_MAP: ${{ secrets.ASANA_POD_MAP }}
+          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+        run: node src/index.js --once
+
+      - name: Publish to GitHub Pages
+        if: steps.dedup.outputs.already_ran != 'true'
+        run: |
+          # Find today's report
+          REPORT=$(ls reports/xcf-report-*.html | sort | tail -1)
+
+          # Set up git identity
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+
+          # Checkout or create gh-pages branch
+          git fetch origin gh-pages 2>/dev/null || true
+          git checkout gh-pages 2>/dev/null || git checkout --orphan gh-pages
+
+          # Copy report as index.html so it loads at the root URL
+          cp "$REPORT" index.html
+
+          # Commit and push
+          git add index.html
+          git commit -m "Update report $(date +%Y-%m-%d)" || echo "No changes"
+          git push origin gh-pages
