@@ -227,7 +227,8 @@ async function buildMemberData() {
       if (EXCLUDED_PROJECTS.some(p => projectName.startsWith(p))) continue;
 
       // Only include tasks from qualifying projects (starting with X, 8, or 9)
-      if (!projectName || !/^[X89]/i.test(projectName)) continue;
+      // Tasks with no project name are subtasks — include them (they belong to a qualifying parent)
+      if (projectName && !/^[X89]/i.test(projectName)) continue;
 
       const isMissingFields = !estimatedHours || !dueDate;
       const isOverdue =
