@@ -273,6 +273,7 @@ async function buildMemberData() {
 
       memberTasks.push({
         name: t.name,
+        start: startDate,
         due: dueDate,
         est: estimatedHours,
         proj: projectName,
@@ -286,7 +287,7 @@ async function buildMemberData() {
     const hoursToday = isOoo ? 0 : round1(activeTasks.reduce((s, t) => s + t.th, 0));
     const hours7Days = isOoo ? 0 : round1(activeTasks.reduce((s, t) => s + t.wh, 0));
     const hours21Days = isOoo ? 0 : round1(
-      activeTasks.reduce((s, t) => s + sumHoursOverRange(t.est, null, t.due, today, in21), 0)
+      activeTasks.reduce((s, t) => s + sumHoursOverRange(t.est, t.start, t.due, today, in21), 0)
     );
 
     members.push({
