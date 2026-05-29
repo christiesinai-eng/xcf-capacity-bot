@@ -275,12 +275,7 @@ async function buildMemberData() {
       }
 
       // Qualifying, non-overdue task — compute per-task hour contributions
-      // th (Today): if due today show all hours (matches Asana — deadline = full load today)
-      //             otherwise use even-spread per working day
-      // wh (7-day): even-spread across the range
-      const th = round2(dueDate === today
-        ? estimatedHours
-        : hoursOnDate(estimatedHours, startDate, dueDate, today));
+      const th = round2(hoursOnDate(estimatedHours, startDate, dueDate, today));
       const wh = round2(sumHoursOverRange(estimatedHours, startDate, dueDate, today, in7));
 
       memberTasks.push({
