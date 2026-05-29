@@ -211,11 +211,11 @@ async function buildMemberData() {
       const startDate = t.start_on || null;
       const dueDate = t.due_on || null;
 
-      // Use the first project membership as the display project name
-      const projectName = t.memberships?.[0]?.project?.name ?? '';
+      // All project names across all memberships (task may be multihomed)
+      const allProjectNames = t.memberships?.map(m => m.project?.name).filter(Boolean) ?? [];
 
-      // Detect OOO: leave calendar task with "OOO" in name that covers today
-      if (projectName === 'XCF: Leave calendar (NOW USE THE NEW WAY)!' &&
+      // Detect OOO: check ALL memberships for the leave calendar
+      if (allProjectNames.includes('XCF: Leave calendar (NOW USE THE NEW WAY)!') &&
           t.name && t.name.toUpperCase().includes('OOO') && dueDate) {
         const oooStart = new Date((startDate || dueDate) + 'T00:00:00');
         const oooEnd = new Date(dueDate + 'T00:00:00');
@@ -223,12 +223,19 @@ async function buildMemberData() {
         if (todayDate >= oooStart && todayDate <= oooEnd) isOoo = true;
       }
 
-      // Skip tasks from excluded projects
-      if (EXCLUDED_PROJECTS.some(p => projectName.startsWith(p))) continue;
+      // Find qualifying projects: starts with X/8/9 and not in the excluded list
+      // A multihomed task (e.g. in "Brand Refresh" + "XCF: POD Boards") will qualify
+      // via its secondary membership and display under the qualifying project name.
+      const qualifyingProjects = allProjectNames.filter(p =>
+        /^[X89]/i.test(p) && !EXCLUDED_PROJECTS.some(ex => p.startsWith(ex))
+      );
 
-      // Only include tasks from qualifying projects (starting with X, 8, or 9)
-      // Tasks with no project name are subtasks — include them (they belong to a qualifying parent)
-      if (projectName && !/^[X89]/i.test(projectName)) continue;
+      // Skip only if the task has explicit memberships but none qualify
+      // (Tasks with no memberships are subtasks — always include them)
+      if (allProjectNames.length > 0 && qualifyingProjects.length === 0) continue;
+
+      // Use first qualifying project as the display name
+      const projectName = qualifyingProjects[0] ?? '';
 
       const isMissingFields = !estimatedHours || !dueDate;
       const isOverdue =
