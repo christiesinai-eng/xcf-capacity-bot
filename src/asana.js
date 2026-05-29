@@ -206,6 +206,9 @@ async function buildMemberData() {
       if (seenGids.has(t.gid)) continue;
       seenGids.add(t.gid);
 
+      // Skip completed tasks (belt-and-suspenders on top of completed_since:now)
+      if (t.completed === true) continue;
+
       const estMinutes = getCustomFieldNumber(t, estGid);
       const estimatedHours = estMinutes ? estMinutes / 60 : null;
       const startDate = t.start_on || null;
