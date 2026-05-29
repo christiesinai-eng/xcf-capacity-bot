@@ -30,6 +30,7 @@ async function getWorkspaceMembers() {
 async function getTasksForUser(userGid) {
   const client = asanaClient();
   const optFields = [
+    'gid',
     'name',
     'completed',
     'due_on',
@@ -197,8 +198,13 @@ async function buildMemberData() {
     let missingCount = 0;
     let overdueCount = 0;
     let isOoo = false;
+    const seenGids = new Set();
 
     for (const t of incomplete) {
+      // Deduplicate — skip if we've already processed this task GID
+      if (seenGids.has(t.gid)) continue;
+      seenGids.add(t.gid);
+
       const estMinutes = getCustomFieldNumber(t, estGid);
       const estimatedHours = estMinutes ? estMinutes / 60 : null;
       const startDate = t.start_on || null;
@@ -218,6 +224,9 @@ async function buildMemberData() {
 
       // Skip tasks from excluded projects
       if (EXCLUDED_PROJECTS.some(p => projectName.startsWith(p))) continue;
+
+      // Only include tasks from qualifying projects (starting with X, 8, or 9)
+      if (projectName && !/^[X89]/i.test(projectName)) continue;
 
       const isMissingFields = !estimatedHours || !dueDate;
       const isOverdue =
