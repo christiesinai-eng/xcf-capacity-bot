@@ -112,18 +112,19 @@ function hoursOnDate(estimatedHours, startDate, dueDate, targetStr) {
 
   const start = new Date(startDate + 'T00:00:00');
 
-  // Only clamp if start is within 1 working day of target (i.e. tomorrow)
+  // Only clamp if start is strictly before the next working day (i.e. tomorrow only)
+  // Tasks starting on or after the next working day contribute 0 for today
   if (start > target) {
     const nextWorkingDay = new Date(target);
     do {
       nextWorkingDay.setDate(nextWorkingDay.getDate() + 1);
     } while (nextWorkingDay.getDay() === 0 || nextWorkingDay.getDay() === 6);
 
-    if (start > nextWorkingDay) return 0; // starts too far in future
+    if (start >= nextWorkingDay) return 0; // starts on next working day or later
   }
 
-  const effectiveStart = start > target ? target : start;
-  const effectiveStartStr = effectiveStart.toISOString().slice(0, 10);
+  // Use original date strings (not toISOString) to avoid NZT→UTC timezone shift
+  const effectiveStartStr = start > target ? targetStr : startDate;
   return estimatedHours / workingDaysBetween(effectiveStartStr, dueDate);
 }
 
