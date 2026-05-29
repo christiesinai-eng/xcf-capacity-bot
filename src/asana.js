@@ -171,6 +171,8 @@ const EXCLUDED_PROJECTS = [
 async function buildMemberData() {
   const estGid = process.env.ASANA_FIELD_GID_ESTIMATED_TIME;
   const podMap = process.env.ASANA_POD_MAP ? JSON.parse(process.env.ASANA_POD_MAP) : {};
+  // Hide overdue tasks older than this many days (stale subtasks from closed projects)
+  const maxOverdueDays = parseInt(process.env.ASANA_OVERDUE_CUTOFF_DAYS ?? '30', 10);
 
   // Use NZT (Auckland) date so OOO/due-date logic matches the team's timezone
   const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Pacific/Auckland' });
@@ -253,6 +255,12 @@ async function buildMemberData() {
       }
 
       if (isOverdue) {
+        // Skip tasks overdue beyond the cutoff — stale subtasks from old/closed projects
+        const daysOverdue = Math.floor(
+          (new Date(today + 'T00:00:00') - new Date(dueDate + 'T00:00:00')) / 86400000
+        );
+        if (daysOverdue > maxOverdueDays) continue;
+
         overdueCount++;
         allOverdueTasks.push({
           name: t.name,
