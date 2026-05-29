@@ -93,9 +93,8 @@ function workingDaysBetween(startStr, endStr) {
 }
 
 // Hours this task contributes on a single calendar date.
-// Tasks starting within 1 working day of target are clamped to target so they
-// appear in today's load (matches Asana Workload "starting tomorrow" behaviour).
-// Tasks starting further in the future contribute 0 for target.
+// Uses even-spread: estimatedHours ÷ working days from effective start to due.
+// Tasks starting on or after the next working day contribute 0 for the target day.
 function hoursOnDate(estimatedHours, startDate, dueDate, targetStr) {
   if (!estimatedHours || !dueDate) return 0;
 
@@ -112,7 +111,6 @@ function hoursOnDate(estimatedHours, startDate, dueDate, targetStr) {
 
   const start = new Date(startDate + 'T00:00:00');
 
-  // Only clamp if start is strictly before the next working day (i.e. tomorrow only)
   // Tasks starting on or after the next working day contribute 0 for today
   if (start > target) {
     const nextWorkingDay = new Date(target);
@@ -120,7 +118,7 @@ function hoursOnDate(estimatedHours, startDate, dueDate, targetStr) {
       nextWorkingDay.setDate(nextWorkingDay.getDate() + 1);
     } while (nextWorkingDay.getDay() === 0 || nextWorkingDay.getDay() === 6);
 
-    if (start >= nextWorkingDay) return 0; // starts on next working day or later
+    if (start >= nextWorkingDay) return 0;
   }
 
   // Use original date strings (not toISOString) to avoid NZT→UTC timezone shift
@@ -277,7 +275,12 @@ async function buildMemberData() {
       }
 
       // Qualifying, non-overdue task — compute per-task hour contributions
-      const th = round2(hoursOnDate(estimatedHours, startDate, dueDate, today));
+      // th (Today): if due today show all hours (matches Asana — deadline = full load today)
+      //             otherwise use even-spread per working day
+      // wh (7-day): even-spread across the range
+      const th = round2(dueDate === today
+        ? estimatedHours
+        : hoursOnDate(estimatedHours, startDate, dueDate, today));
       const wh = round2(sumHoursOverRange(estimatedHours, startDate, dueDate, today, in7));
 
       memberTasks.push({
