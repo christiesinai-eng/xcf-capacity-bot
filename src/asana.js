@@ -246,6 +246,10 @@ async function buildMemberData() {
         new Date(dueDate + 'T00:00:00') < new Date(today + 'T00:00:00');
 
       if (isMissingFields) {
+        // Skip noise tasks that are never actionable in this report
+        const skipNames = ['Product', 'In Market'];
+        if (skipNames.includes(t.name?.trim())) continue;
+
         missingCount++;
         allMissingTasks.push({
           name: t.name,
