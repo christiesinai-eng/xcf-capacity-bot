@@ -247,7 +247,7 @@ async function buildMemberData() {
 
       if (isMissingFields) {
         // Skip noise tasks that are never actionable in this report
-        const skipNames = ['Product', 'In Market'];
+        const skipNames = ['Production', 'In Market'];
         if (skipNames.includes(t.name?.trim())) continue;
 
         missingCount++;
