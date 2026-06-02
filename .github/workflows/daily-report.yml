@@ -30,13 +30,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TODAY=$(date +%Y-%m-%d)
           RUN_ID=${{ github.run_id }}
+          # Check for any successful run in the last 20 hours
+          # (NZT day starts at UTC-12h, so 20h covers the full NZT day safely)
+          CUTOFF=$(date -u -d "20 hours ago" +%Y-%m-%dT%H:%M:%SZ)
           ALREADY=$(gh run list --workflow=daily-report.yml --status=success --limit=20 --json databaseId,createdAt \
-            | jq --arg today "$TODAY" --argjson runid "$RUN_ID" \
-              '[.[] | select(.databaseId != $runid) | select(.createdAt | startswith($today))] | length > 0')
+            | jq --arg cutoff "$CUTOFF" --argjson runid "$RUN_ID" \
+              '[.[] | select(.databaseId != $runid) | select(.createdAt > $cutoff)] | length > 0')
           echo "already_ran=$ALREADY" >> $GITHUB_OUTPUT
-          echo "Already ran today: $ALREADY"
+          echo "Cutoff: $CUTOFF  Already ran: $ALREADY"
 
       - name: Run capacity report
         if: steps.dedup.outputs.already_ran != 'true'
