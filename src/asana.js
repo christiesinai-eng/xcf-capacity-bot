@@ -30,6 +30,7 @@ async function getWorkspaceMembers() {
 async function getTasksForUser(userGid) {
   const client = asanaClient();
   const optFields = [
+    'gid',
     'name',
     'completed',
     'due_on',
@@ -92,9 +93,8 @@ function workingDaysBetween(startStr, endStr) {
 }
 
 // Hours this task contributes on a single calendar date.
-// Tasks starting within 1 working day of target are clamped to target so they
-// appear in today's load (matches Asana Workload "starting tomorrow" behaviour).
-// Tasks starting further in the future contribute 0 for target.
+// Uses even-spread: estimatedHours ÷ working days from effective start to due.
+// Tasks starting on or after the next working day contribute 0 for the target day.
 function hoursOnDate(estimatedHours, startDate, dueDate, targetStr) {
   if (!estimatedHours || !dueDate) return 0;
 
@@ -111,18 +111,18 @@ function hoursOnDate(estimatedHours, startDate, dueDate, targetStr) {
 
   const start = new Date(startDate + 'T00:00:00');
 
-  // Only clamp if start is within 1 working day of target (i.e. tomorrow)
+  // Tasks starting on or after the next working day contribute 0 for today
   if (start > target) {
     const nextWorkingDay = new Date(target);
     do {
       nextWorkingDay.setDate(nextWorkingDay.getDate() + 1);
     } while (nextWorkingDay.getDay() === 0 || nextWorkingDay.getDay() === 6);
 
-    if (start > nextWorkingDay) return 0; // starts too far in future
+    if (start >= nextWorkingDay) return 0; // starts on next working day or later
   }
 
-  const effectiveStart = start > target ? target : start;
-  const effectiveStartStr = effectiveStart.toISOString().slice(0, 10);
+  // Use original date strings (not toISOString) to avoid NZT→UTC timezone shift
+  const effectiveStartStr = start > target ? targetStr : startDate;
   return estimatedHours / workingDaysBetween(effectiveStartStr, dueDate);
 }
 
@@ -171,6 +171,8 @@ const EXCLUDED_PROJECTS = [
 async function buildMemberData() {
   const estGid = process.env.ASANA_FIELD_GID_ESTIMATED_TIME;
   const podMap = process.env.ASANA_POD_MAP ? JSON.parse(process.env.ASANA_POD_MAP) : {};
+  // Hide overdue tasks older than this many days (stale subtasks from closed projects)
+  const maxOverdueDays = parseInt(process.env.ASANA_OVERDUE_CUTOFF_DAYS ?? '30', 10);
 
   // Use NZT (Auckland) date so OOO/due-date logic matches the team's timezone
   const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Pacific/Auckland' });
@@ -197,18 +199,26 @@ async function buildMemberData() {
     let missingCount = 0;
     let overdueCount = 0;
     let isOoo = false;
+    const seenGids = new Set();
 
     for (const t of incomplete) {
+      // Deduplicate — skip if we've already processed this task GID
+      if (seenGids.has(t.gid)) continue;
+      seenGids.add(t.gid);
+
+      // Skip completed tasks (belt-and-suspenders on top of completed_since:now)
+      if (t.completed === true) continue;
+
       const estMinutes = getCustomFieldNumber(t, estGid);
       const estimatedHours = estMinutes ? estMinutes / 60 : null;
       const startDate = t.start_on || null;
       const dueDate = t.due_on || null;
 
-      // Use the first project membership as the display project name
-      const projectName = t.memberships?.[0]?.project?.name ?? '';
+      // All project names across all memberships (task may be multihomed)
+      const allProjectNames = t.memberships?.map(m => m.project?.name).filter(Boolean) ?? [];
 
-      // Detect OOO: leave calendar task with "OOO" in name that covers today
-      if (projectName === 'XCF: Leave calendar (NOW USE THE NEW WAY)!' &&
+      // Detect OOO: check ALL memberships for the leave calendar
+      if (allProjectNames.includes('XCF: Leave calendar (NOW USE THE NEW WAY)!') &&
           t.name && t.name.toUpperCase().includes('OOO') && dueDate) {
         const oooStart = new Date((startDate || dueDate) + 'T00:00:00');
         const oooEnd = new Date(dueDate + 'T00:00:00');
@@ -216,8 +226,19 @@ async function buildMemberData() {
         if (todayDate >= oooStart && todayDate <= oooEnd) isOoo = true;
       }
 
-      // Skip tasks from excluded projects
-      if (EXCLUDED_PROJECTS.some(p => projectName.startsWith(p))) continue;
+      // Find qualifying projects: starts with X/8/9 and not in the excluded list
+      // A multihomed task (e.g. in "Brand Refresh" + "XCF: POD Boards") will qualify
+      // via its secondary membership and display under the qualifying project name.
+      const qualifyingProjects = allProjectNames.filter(p =>
+        /^[X89]/i.test(p) && !EXCLUDED_PROJECTS.some(ex => p.startsWith(ex))
+      );
+
+      // Skip only if the task has explicit memberships but none qualify
+      // (Tasks with no memberships are subtasks — always include them)
+      if (allProjectNames.length > 0 && qualifyingProjects.length === 0) continue;
+
+      // Use first qualifying project as the display name
+      const projectName = qualifyingProjects[0] ?? '';
 
       const isMissingFields = !estimatedHours || !dueDate;
       const isOverdue =
@@ -225,6 +246,10 @@ async function buildMemberData() {
         new Date(dueDate + 'T00:00:00') < new Date(today + 'T00:00:00');
 
       if (isMissingFields) {
+        // Skip noise tasks that are never actionable in this report
+        const skipNames = ['Production', 'In Market'];
+        if (skipNames.includes(t.name?.trim())) continue;
+
         missingCount++;
         allMissingTasks.push({
           name: t.name,
@@ -237,6 +262,12 @@ async function buildMemberData() {
       }
 
       if (isOverdue) {
+        // Skip tasks overdue beyond the cutoff — stale subtasks from old/closed projects
+        const daysOverdue = Math.floor(
+          (new Date(today + 'T00:00:00') - new Date(dueDate + 'T00:00:00')) / 86400000
+        );
+        if (daysOverdue > maxOverdueDays) continue;
+
         overdueCount++;
         allOverdueTasks.push({
           name: t.name,
@@ -264,6 +295,7 @@ async function buildMemberData() {
 
       memberTasks.push({
         name: t.name,
+        start: startDate,
         due: dueDate,
         est: estimatedHours,
         proj: projectName,
@@ -277,7 +309,7 @@ async function buildMemberData() {
     const hoursToday = isOoo ? 0 : round1(activeTasks.reduce((s, t) => s + t.th, 0));
     const hours7Days = isOoo ? 0 : round1(activeTasks.reduce((s, t) => s + t.wh, 0));
     const hours21Days = isOoo ? 0 : round1(
-      activeTasks.reduce((s, t) => s + sumHoursOverRange(t.est, null, t.due, today, in21), 0)
+      activeTasks.reduce((s, t) => s + sumHoursOverRange(t.est, t.start, t.due, today, in21), 0)
     );
 
     members.push({
