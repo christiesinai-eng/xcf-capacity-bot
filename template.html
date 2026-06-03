@@ -595,10 +595,11 @@ function renderOverdue(){
   sorted.forEach(t=>{
     const days=daysSince(t.due);
     const b=BRAND[t.pod]||BRAND['Campaign'];
+    const asanaUrl=`https://app.asana.com/0/0/${t.gid}/f`;
     html+=`
       <div class="tbl-row no-expand" style="grid-template-columns:2fr 1fr 90px 100px">
         <div>
-          <div style="font-size:13px;font-weight:500;color:#fff;margin-bottom:2px">${t.name}</div>
+          <a href="${asanaUrl}" target="_blank" rel="noopener" style="font-size:13px;font-weight:500;color:#fff;margin-bottom:2px;text-decoration:none;display:block" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${t.name} ↗</a>
           <div style="font-size:11px;color:var(--muted)">${t.proj}</div>
         </div>
         <div>

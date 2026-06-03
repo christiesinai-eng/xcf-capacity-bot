@@ -272,6 +272,7 @@ async function buildMemberData() {
         overdueCount++;
         allOverdueTasks.push({
           name: t.name,
+          gid: t.gid,
           proj: projectName,
           assignee: member.name,
           pod,
