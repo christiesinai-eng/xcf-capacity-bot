@@ -9,7 +9,6 @@ async function runReport() {
 
   const data = await buildMemberData();
   const reportPath = saveReport(data);
-  await postReport(data.members, reportPath);
 
   console.log(`[${new Date().toISOString()}] Done.`);
 }

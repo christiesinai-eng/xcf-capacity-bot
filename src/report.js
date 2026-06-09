@@ -19,14 +19,35 @@ function replaceArray(html, name, data) {
   return updated;
 }
 
+// Replace a named JS string literal in the template: const NAME = "...";
+function replaceString(html, name, value) {
+  const regex = new RegExp(`const\\s+${name}\\s*=\\s*"[^"]*";`);
+  const replacement = `const ${name} = ${JSON.stringify(value)};`;
+  const updated = html.replace(regex, replacement);
+  if (updated === html) {
+    throw new Error(`Could not find 'const ${name} = "...";' in template.html`);
+  }
+  return updated;
+}
+
 function generateReport({ members, missingTasks, overdueTasks }) {
   if (!fs.existsSync(TEMPLATE_PATH)) {
     throw new Error(`HTML template not found at ${TEMPLATE_PATH}`);
   }
+
+  // NZT timestamp at generation time
+  const generatedAt = new Date().toLocaleString('en-NZ', {
+    timeZone: 'Pacific/Auckland',
+    day: 'numeric', month: 'short', year: 'numeric',
+    hour: '2-digit', minute: '2-digit',
+    hour12: true,
+  }) + ' NZT';
+
   let html = fs.readFileSync(TEMPLATE_PATH, 'utf8');
   html = replaceArray(html, 'MEMBERS', members);
   html = replaceArray(html, 'MISSING_TASKS', missingTasks);
   html = replaceArray(html, 'OVERDUE_TASKS', overdueTasks);
+  html = replaceString(html, 'GENERATED_AT', generatedAt);
   return html;
 }
 

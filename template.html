@@ -194,8 +194,8 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
     <span class="top-title">Creative Foundry <span class="top-subtitle">· Capacity Report</span></span>
   </div>
   <div class="top-meta">
-    Run: <strong style="color:#fff">19 May 2026</strong>
-    <span class="dot"></span> 446 tasks across all pages
+    Updated: <strong style="color:#fff" id="generated-at">—</strong>
+    <span class="dot"></span> <span id="task-count">—</span> tasks across all pages
     <span class="dot"></span> PODs: XCF Utilisation
     <span class="dot"></span> Includes due-date-only tasks
   </div>
@@ -309,6 +309,7 @@ const BRAND={
   'GM Creative':   {bg:'#0a0c1a',fg:'#8b9abf',bar:'#4a5580',dot:'#4a5580'},
 };
 const PODS=['Performance','Design','Design Studio','Campaign','AI & Media','Campaign Ops','GM Creative'];
+const GENERATED_AT = "—";
 
 const MEMBERS=[
   {name:"Hannah Boekhorst",pod:"Performance",today:5.72,week:23.95,month:26.87,qualifying:14,missing:5,overdue:0,tasks:[
@@ -365,15 +366,20 @@ let tab='today', openId=null, currentView='capacity';
   document.getElementById('nav-overdue').textContent='Overdue ('+overdueCt+')';
   document.getElementById('nav-missing').textContent='Missing fields ('+missingCt+')';
 
-  // top-meta run date
-  const strong=document.querySelector('.top-meta strong');
-  if(strong) strong.textContent=fmt(now);
+  // top-meta: NZT generation timestamp injected at build time
+  const genEl=document.getElementById('generated-at');
+  if(genEl) genEl.textContent=GENERATED_AT;
+  const taskCountEl=document.getElementById('task-count');
+  if(taskCountEl){
+    const total=MEMBERS.reduce((s,m)=>s+(m.qualifying||0)+(m.missing||0)+(m.overdue||0),0);
+    taskCountEl.textContent=total;
+  }
 
   // footer
   const footer=document.getElementById('footer-bar');
   if(footer){
     const total=MEMBERS.reduce((s,m)=>s+(m.qualifying||0)+(m.missing||0)+(m.overdue||0),0);
-    footer.innerHTML='XCF Capacity Report &nbsp;·&nbsp; '+fmt(now)+' &nbsp;·&nbsp; '+total+' tasks (all pages) &nbsp;·&nbsp; Formula: est time &divide; working days (start&rarr;due); no start date = all hours on due date &nbsp;·&nbsp; 8h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation';
+    footer.innerHTML='XCF Capacity Report &nbsp;·&nbsp; Updated: '+GENERATED_AT+' &nbsp;·&nbsp; '+total+' tasks (all pages) &nbsp;·&nbsp; Formula: est time &divide; working days (start&rarr;due); no start date = all hours on due date &nbsp;·&nbsp; 8h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation';
   }
 
   // capacity table header date label
