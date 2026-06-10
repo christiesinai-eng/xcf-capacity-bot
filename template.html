@@ -201,7 +201,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
   </div>
   <div class="stat-pills">
     <div class="stat-pill blue"><span class="sv" id="pill-team">32</span><span class="sl">Team</span></div>
-    <div class="stat-pill red"><span class="sv" id="pill-overdue">96</span><span class="sl">Overdue</span></div>
     <div class="stat-pill amber"><span class="sv" id="pill-missing">69</span><span class="sl">Missing</span></div>
   </div>
 </div>
@@ -211,7 +210,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
   <button class="nav-btn active" onclick="showView('capacity',this)">Capacity report</button>
   <button class="nav-btn" onclick="showView('findresource',this)">Find resource</button>
   <button class="nav-btn" onclick="showView('podsummary',this)">POD summary</button>
-  <button class="nav-btn" id="nav-overdue" onclick="showView('overdue',this)">Overdue (96)</button>
   <button class="nav-btn" id="nav-missing" onclick="showView('missing',this)">Missing fields (69)</button>
 </div>
 
@@ -271,16 +269,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
   <div class="pod-summary-grid" id="ps-body"></div>
 </div>
 
-<!-- ══════════════ VIEW: OVERDUE ══════════════ -->
-<div id="view-overdue" class="view">
-  <div class="tbl-wrap">
-    <div class="section-title">Overdue tasks <span>Tasks past their due date — excluded from workload calculations</span></div>
-    <div class="tbl-head od-head" style="grid-template-columns:2fr 1fr 90px 100px">
-      <span>Task</span><span>Assignee</span><span>Due date</span><span>Days overdue</span>
-    </div>
-    <div id="od-body"></div>
-  </div>
-</div>
 
 <!-- ══════════════ VIEW: MISSING FIELDS ══════════════ -->
 <div id="view-missing" class="view">
@@ -357,13 +345,10 @@ let tab='today', openId=null, currentView='capacity';
   document.getElementById('tab-week-date').textContent='→ '+fmtShort(in7);
   document.getElementById('tab-month-date').textContent='→ '+fmtShort(in21);
 
-  const overdueCt=OVERDUE_TASKS.length;
   const missingCt=MISSING_TASKS.length;
   const teamCt=MEMBERS.length;
   document.getElementById('pill-team').textContent=teamCt;
-  document.getElementById('pill-overdue').textContent=overdueCt;
   document.getElementById('pill-missing').textContent=missingCt;
-  document.getElementById('nav-overdue').textContent='Overdue ('+overdueCt+')';
   document.getElementById('nav-missing').textContent='Missing fields ('+missingCt+')';
 
   // top-meta: NZT generation timestamp injected at build time
@@ -400,7 +385,6 @@ function showView(v, btn){
   currentView=v;
   if(v==='findresource') renderFindResource();
   if(v==='podsummary') renderPodSummary();
-  if(v==='overdue') renderOverdue();
   if(v==='missing') renderMissing();
 }
 
@@ -594,30 +578,6 @@ function renderPodSummary(){
   document.getElementById('ps-body').innerHTML=html;
 }
 
-/* ══════════════ OVERDUE ══════════════ */
-function renderOverdue(){
-  const sorted=[...OVERDUE_TASKS].sort((a,b)=>new Date(a.due)-new Date(b.due));
-  let html='';
-  sorted.forEach(t=>{
-    const days=daysSince(t.due);
-    const b=BRAND[t.pod]||BRAND['Campaign'];
-    const asanaUrl=`https://app.asana.com/0/0/${t.gid}/f`;
-    html+=`
-      <div class="tbl-row no-expand" style="grid-template-columns:2fr 1fr 90px 100px">
-        <div>
-          <a href="${asanaUrl}" target="_blank" rel="noopener" style="font-size:13px;font-weight:500;color:#fff;margin-bottom:2px;text-decoration:none;display:block" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${t.name} ↗</a>
-          <div style="font-size:11px;color:var(--muted)">${t.proj}</div>
-        </div>
-        <div>
-          <div style="font-size:13px;color:#fff;margin-bottom:2px">${t.assignee}</div>
-          <span class="pod-pill" style="background:${b.bg};color:${b.fg}">${t.pod}</span>
-        </div>
-        <div style="font-size:12px;color:var(--muted)">${t.due}</div>
-        <div><span class="days-overdue">${days}d overdue</span></div>
-      </div>`;
-  });
-  document.getElementById('od-body').innerHTML=html||'<div style="padding:16px 10px;font-size:12px;color:var(--muted)">No overdue tasks</div>';
-}
 
 /* ══════════════ MISSING FIELDS ══════════════ */
 function renderMissing(){
