@@ -274,8 +274,8 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
 <div id="view-missing" class="view">
   <div class="tbl-wrap">
     <div class="section-title">Missing fields <span>Tasks with no estimated time or no due date — excluded from capacity calculations</span></div>
-    <div class="tbl-head mf-head" style="grid-template-columns:2fr 1fr 110px 110px">
-      <span>Task / Project</span><span>Assignee</span><span>Missing</span><span>POD</span>
+    <div class="tbl-head mf-head" style="grid-template-columns:2fr 1fr 1fr 110px">
+      <span>Task / Project</span><span>Assignee</span><span>Created by</span><span>Missing</span>
     </div>
     <div id="mf-body"></div>
   </div>
@@ -297,7 +297,7 @@ const BRAND={
   'GM Creative':   {bg:'#0a0c1a',fg:'#8b9abf',bar:'#4a5580',dot:'#4a5580'},
 };
 const PODS=['Performance','Design','Design Studio','Campaign','AI & Media','Campaign Ops','GM Creative'];
-const GENERATED_AT = "10 Jun 2026, 05:32 pm NZT";
+const GENERATED_AT = "10 Jun 2026, 05:39 pm NZT";
 
 const MEMBERS = [
   {
@@ -2430,7 +2430,7 @@ const MEMBERS = [
     "week": 37.1,
     "month": 62,
     "qualifying": 10,
-    "missing": 30,
+    "missing": 0,
     "overdue": 0,
     "tasks": [
       {
@@ -2855,6 +2855,7 @@ const MISSING_TASKS = [
     "gid": "1214005170231935",
     "proj": "XCF: POD Boards",
     "assignee": "Alex Downey",
+    "createdBy": "Quincey Brinker",
     "pod": "Campaign",
     "missing": "No estimate"
   },
@@ -2863,6 +2864,7 @@ const MISSING_TASKS = [
     "gid": "1214638032637370",
     "proj": "XCF: POD Boards",
     "assignee": "Alex Downey",
+    "createdBy": "Quincey Brinker",
     "pod": "Campaign",
     "missing": "No due date"
   },
@@ -2871,6 +2873,7 @@ const MISSING_TASKS = [
     "gid": "1215469417723289",
     "proj": "",
     "assignee": "Brad Donovan",
+    "createdBy": "Sherry Choe",
     "pod": "Campaign",
     "missing": "No due date"
   },
@@ -2879,6 +2882,7 @@ const MISSING_TASKS = [
     "gid": "1215469345864350",
     "proj": "",
     "assignee": "Brad Donovan",
+    "createdBy": "Sherry Choe",
     "pod": "Campaign",
     "missing": "No due date"
   },
@@ -2887,6 +2891,7 @@ const MISSING_TASKS = [
     "gid": "1215476704765604",
     "proj": "",
     "assignee": "Brad Donovan",
+    "createdBy": "Sherry Choe",
     "pod": "Campaign",
     "missing": "No due date"
   },
@@ -2895,6 +2900,7 @@ const MISSING_TASKS = [
     "gid": "1214638032637371",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Donovan",
+    "createdBy": "Quincey Brinker",
     "pod": "Campaign",
     "missing": "No due date"
   },
@@ -2903,6 +2909,7 @@ const MISSING_TASKS = [
     "gid": "1214385499383002",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No estimate"
   },
@@ -2911,6 +2918,7 @@ const MISSING_TASKS = [
     "gid": "1214251553239769",
     "proj": "XCF | Performance BAU Board",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No estimate"
   },
@@ -2919,6 +2927,7 @@ const MISSING_TASKS = [
     "gid": "1214251553239766",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No estimate"
   },
@@ -2927,6 +2936,7 @@ const MISSING_TASKS = [
     "gid": "1215534279640381",
     "proj": "",
     "assignee": "Brad Holland",
+    "createdBy": "Katya Richardson",
     "pod": "Performance",
     "missing": "No estimate"
   },
@@ -2935,6 +2945,7 @@ const MISSING_TASKS = [
     "gid": "1213763422427387",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No due date"
   },
@@ -2943,6 +2954,7 @@ const MISSING_TASKS = [
     "gid": "1213644307201118",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No due date"
   },
@@ -2951,6 +2963,7 @@ const MISSING_TASKS = [
     "gid": "1213763422427382",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No due date"
   },
@@ -2959,6 +2972,7 @@ const MISSING_TASKS = [
     "gid": "1213763422427378",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No due date"
   },
@@ -2967,6 +2981,7 @@ const MISSING_TASKS = [
     "gid": "1213763422427380",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No due date"
   },
@@ -2975,6 +2990,7 @@ const MISSING_TASKS = [
     "gid": "1213665723251677",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No due date"
   },
@@ -2983,6 +2999,7 @@ const MISSING_TASKS = [
     "gid": "1213665723251667",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No due date"
   },
@@ -2991,6 +3008,7 @@ const MISSING_TASKS = [
     "gid": "1213644307201131",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No due date"
   },
@@ -2999,6 +3017,7 @@ const MISSING_TASKS = [
     "gid": "1213665723251675",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No due date"
   },
@@ -3007,6 +3026,7 @@ const MISSING_TASKS = [
     "gid": "1213644307201125",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No due date"
   },
@@ -3015,6 +3035,7 @@ const MISSING_TASKS = [
     "gid": "1213763422427373",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No due date"
   },
@@ -3023,6 +3044,7 @@ const MISSING_TASKS = [
     "gid": "1214251553239761",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No estimate"
   },
@@ -3031,6 +3053,7 @@ const MISSING_TASKS = [
     "gid": "1214251553239762",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No estimate"
   },
@@ -3039,6 +3062,7 @@ const MISSING_TASKS = [
     "gid": "1214251553239759",
     "proj": "XCF: POD Boards",
     "assignee": "Brad Holland",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No estimate"
   },
@@ -3047,6 +3071,7 @@ const MISSING_TASKS = [
     "gid": "1215127626016263",
     "proj": "XCF: POD Boards",
     "assignee": "Chiko Kurniawan",
+    "createdBy": "Sandeep Garcha",
     "pod": "Design Studio",
     "missing": "No estimate"
   },
@@ -3055,6 +3080,7 @@ const MISSING_TASKS = [
     "gid": "1213903893872667",
     "proj": "XCFP-88 | 2026 | US Post Tax Season Events",
     "assignee": "Chiko Kurniawan",
+    "createdBy": "Logen Stent",
     "pod": "Design Studio",
     "missing": "No due date"
   },
@@ -3063,6 +3089,7 @@ const MISSING_TASKS = [
     "gid": "1214075342929831",
     "proj": "XCFP-328 | 2026 | CA Kickstart",
     "assignee": "Chiko Kurniawan",
+    "createdBy": "Logen Stent",
     "pod": "Design Studio",
     "missing": "No due date"
   },
@@ -3071,6 +3098,7 @@ const MISSING_TASKS = [
     "gid": "1213322493108351",
     "proj": "XCF | Design Studio BAU Board",
     "assignee": "Chiko Kurniawan",
+    "createdBy": "Christie Sinai",
     "pod": "Design Studio",
     "missing": "No due date"
   },
@@ -3079,6 +3107,7 @@ const MISSING_TASKS = [
     "gid": "1213637865710415",
     "proj": "",
     "assignee": "Ciaran Carroll",
+    "createdBy": "Sandeep Garcha",
     "pod": "Design Studio",
     "missing": "No estimate"
   },
@@ -3087,6 +3116,7 @@ const MISSING_TASKS = [
     "gid": "1214279719407982",
     "proj": "",
     "assignee": "Dan Elliott",
+    "createdBy": "Erin Fredin",
     "pod": "Design",
     "missing": "No estimate"
   },
@@ -3095,6 +3125,7 @@ const MISSING_TASKS = [
     "gid": "1215356710135933",
     "proj": "XCF: POD Boards",
     "assignee": "Dan Elliott",
+    "createdBy": "Pete Montgomery",
     "pod": "Design",
     "missing": "No estimate"
   },
@@ -3103,6 +3134,7 @@ const MISSING_TASKS = [
     "gid": "1215359791750438",
     "proj": "XCFP-542 | Xero Values Launch ",
     "assignee": "Dan Elliott",
+    "createdBy": "Naomi Lawson",
     "pod": "Design",
     "missing": "No estimate"
   },
@@ -3111,6 +3143,7 @@ const MISSING_TASKS = [
     "gid": "1214321829358666",
     "proj": "XCF: POD Boards",
     "assignee": "Dan Elliott",
+    "createdBy": "Erin Fredin",
     "pod": "Design",
     "missing": "No estimate"
   },
@@ -3119,6 +3152,7 @@ const MISSING_TASKS = [
     "gid": "1215282243844809",
     "proj": "XCF: POD Boards",
     "assignee": "Domenic Iaria",
+    "createdBy": "Naomi Lawson",
     "pod": "AI & Media",
     "missing": "No estimate"
   },
@@ -3127,6 +3161,7 @@ const MISSING_TASKS = [
     "gid": "1215282243844816",
     "proj": "XCF: POD Boards",
     "assignee": "Domenic Iaria",
+    "createdBy": "Naomi Lawson",
     "pod": "AI & Media",
     "missing": "No estimate"
   },
@@ -3135,6 +3170,7 @@ const MISSING_TASKS = [
     "gid": "1213830416473518",
     "proj": "",
     "assignee": "Domenic Iaria",
+    "createdBy": "Erin Fredin",
     "pod": "AI & Media",
     "missing": "No estimate"
   },
@@ -3143,6 +3179,7 @@ const MISSING_TASKS = [
     "gid": "1213550182427748",
     "proj": "XCFT-3190 - AIM | Xero Website | Animation",
     "assignee": "Domenic Iaria",
+    "createdBy": "Domenic Iaria",
     "pod": "AI & Media",
     "missing": "No due date"
   },
@@ -3151,6 +3188,7 @@ const MISSING_TASKS = [
     "gid": "1213550184354435",
     "proj": "XCFT-3190 - AIM | Xero Website | Animation",
     "assignee": "Domenic Iaria",
+    "createdBy": "Domenic Iaria",
     "pod": "AI & Media",
     "missing": "No estimate"
   },
@@ -3159,6 +3197,7 @@ const MISSING_TASKS = [
     "gid": "1212986781868789",
     "proj": "XCF | Performance BAU Board",
     "assignee": "Hannah Boekhorst",
+    "createdBy": "Becky Sharp",
     "pod": "Performance",
     "missing": "No due date"
   },
@@ -3167,6 +3206,7 @@ const MISSING_TASKS = [
     "gid": "1213985006545289",
     "proj": "",
     "assignee": "James Blow",
+    "createdBy": "Quincey Brinker",
     "pod": "Campaign",
     "missing": "No estimate"
   },
@@ -3175,6 +3215,7 @@ const MISSING_TASKS = [
     "gid": "1213484367712087",
     "proj": "",
     "assignee": "Laura Fuldseth",
+    "createdBy": "Pete Montgomery",
     "pod": "Design",
     "missing": "No estimate"
   },
@@ -3183,6 +3224,7 @@ const MISSING_TASKS = [
     "gid": "1215363038163713",
     "proj": "XCF: POD Boards",
     "assignee": "Laura Fuldseth",
+    "createdBy": "Sally Law",
     "pod": "Design",
     "missing": "No estimate"
   },
@@ -3191,6 +3233,7 @@ const MISSING_TASKS = [
     "gid": "1213825769827267",
     "proj": "XCF: POD Boards",
     "assignee": "Laura Fuldseth",
+    "createdBy": "Justin Fraser",
     "pod": "Design",
     "missing": "No estimate"
   },
@@ -3199,6 +3242,7 @@ const MISSING_TASKS = [
     "gid": "1212626531312185",
     "proj": "XCF: POD Boards",
     "assignee": "Laura Fuldseth",
+    "createdBy": "Logen Stent",
     "pod": "Design",
     "missing": "No due date"
   },
@@ -3207,6 +3251,7 @@ const MISSING_TASKS = [
     "gid": "1212626531312183",
     "proj": "XCF: POD Boards",
     "assignee": "Laura Fuldseth",
+    "createdBy": "Logen Stent",
     "pod": "Design",
     "missing": "No due date"
   },
@@ -3215,6 +3260,7 @@ const MISSING_TASKS = [
     "gid": "1213714120350972",
     "proj": "XCFP-37 | 2026 | SB Smart tools campaign",
     "assignee": "Michelle Crocker",
+    "createdBy": "Tom Gregson",
     "pod": "Design",
     "missing": "No estimate"
   },
@@ -3223,247 +3269,8 @@ const MISSING_TASKS = [
     "gid": "1213714118497390",
     "proj": "XCFP-37 | 2026 | SB Smart tools campaign",
     "assignee": "Michelle Crocker",
+    "createdBy": "Tom Gregson",
     "pod": "Design",
-    "missing": "No estimate"
-  },
-  {
-    "name": "Deck Template / Self Serve Option | Self Serve Creative Services Roadmap",
-    "gid": "1213260516610608",
-    "proj": "XCF: POD Boards",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "Design Templates | Self Serve Creative Services Roadmap",
-    "gid": "1213309543791273",
-    "proj": "XCF: POD Boards",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "AI Deck templates | Self Serve Creative Services Roadmap",
-    "gid": "1212822087620098",
-    "proj": "XCF: POD Boards",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "Business Cards | Self Serve Creative Services Roadmap",
-    "gid": "1212822087620096",
-    "proj": "XCF: POD Boards",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "XCFT-1439 - Trust pilot QR code update for Accountex Showreel",
-    "gid": "1214647989054983",
-    "proj": "XCF: POD Boards",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "XCFT-1440 - Syft Analytics QR code update for Accountex Showreel",
-    "gid": "1214647843232565",
-    "proj": "XCF: Intake The Creative Foundry",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "XCFT-4829 - Generic Xero fabric frame banner",
-    "gid": "1215283850351667",
-    "proj": "XCF: Intake The Creative Foundry",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "XCFT-5264 - Print design for folders ",
-    "gid": "1215577519655725",
-    "proj": "XCF: Intake The Creative Foundry",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "XCFT-5223 - Sophie McCullen",
-    "gid": "1215486362481807",
-    "proj": "XCF: POD Boards",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "XCFT-5236 - Xerocon \"Corner Shop\" takeaways - A5 print files needed",
-    "gid": "1215517246125738",
-    "proj": "XCF: POD Boards",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "XCFT-2161 - Xero Pop-up Event (9 Jul)",
-    "gid": "1215048267958198",
-    "proj": "XCF: Intake The Creative Foundry",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "XCFT-5227 - Xerocon London 2026 - CX Trustpilot QR sign",
-    "gid": "1215509992680647",
-    "proj": "XCF: Intake The Creative Foundry",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "XCFT-4900 - Small changes to image on Bill Payments campaign LP ",
-    "gid": "1215319147540209",
-    "proj": "XCF: Intake The Creative Foundry",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "XCFT-4945 - New Facebook Banner for US & CA page",
-    "gid": "1215343187879511",
-    "proj": "XCF: Intake The Creative Foundry",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "XCFT-5245 - BGL - design assets for our stand ",
-    "gid": "1215523938650927",
-    "proj": "XCF: POD Boards",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "US&CA Partner Awards: Assets Rollout",
-    "gid": "1215162800814110",
-    "proj": "XCFP-83 | 2026 | US and Canada Partner Awards",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "XCFT-4967 - COSBOA Coffee Cart Signage Design ",
-    "gid": "1215357316988986",
-    "proj": "XCF: Intake The Creative Foundry",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "XCFP-44 | 2026 | WP > New Workpapers updates",
-    "gid": "1213346472448126",
-    "proj": "XCF | Design Studio BAU Board",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No due date"
-  },
-  {
-    "name": "XCFT-5238 - Business Cards",
-    "gid": "1215517234359588",
-    "proj": "XCF: Intake The Creative Foundry",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "20x20 booth graphics",
-    "gid": "1214075342929777",
-    "proj": "XCF | Design Studio BAU Board",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No due date"
-  },
-  {
-    "name": "Scaling new heights",
-    "gid": "1214075342929773",
-    "proj": "XCFP-87 | 2026 | Q1 - Q2 Industry Sponsored Events",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "XCFP-68 | 2026 | Get paid fast with flexible payments for a flexible business > Schedule invoicing",
-    "gid": "1213407601622616",
-    "proj": "XCF | Design Studio BAU Board",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "XCFT-929 - Update Syft handbook to include Xero look and feel branding ",
-    "gid": "1213911438099359",
-    "proj": "XCF: Intake The Creative Foundry",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "One week to go - 20% ticket offer",
-    "gid": "1214059735962099",
-    "proj": "XCFP-14 | 2026 | Xerocon 2026",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "Xero Social Profiles\n\n\n | HUB | Design Studio BAU Board",
-    "gid": "1213145270336534",
-    "proj": "XCF: POD Boards",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "Update existing Xero TechTalks assets with new Xero logo | XCF-174",
-    "gid": "1213306956430228",
-    "proj": "XCF: POD Boards",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "AI Driven Deck Design ",
-    "gid": "1212873958256105",
-    "proj": "XCF: 2027 Goals",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "Canva Approval Process",
-    "gid": "1212797456899363",
-    "proj": "XCF: POD Boards",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "Terms and conditions | HUB: Canva template optimisation",
-    "gid": "1212213137381297",
-    "proj": "XCF: Canva template optimisation",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "missing": "No estimate"
-  },
-  {
-    "name": "Read the doc and make some suggestions if you have any",
-    "gid": "1159582986732846",
-    "proj": "",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
     "missing": "No estimate"
   },
   {
@@ -3471,6 +3278,7 @@ const MISSING_TASKS = [
     "gid": "1213577428257051",
     "proj": "XCF: POD Boards",
     "assignee": "Steph Gardner",
+    "createdBy": "Sandeep Garcha",
     "pod": "Design Studio",
     "missing": "No estimate"
   }
@@ -4207,7 +4015,7 @@ function renderMissing(){
     const b=BRAND[t.pod]||BRAND['Campaign'];
     const asanaUrl=`https://app.asana.com/0/0/${t.gid}/f`;
     html+=`
-      <div class="tbl-row no-expand" style="grid-template-columns:2fr 1fr 110px 110px">
+      <div class="tbl-row no-expand" style="grid-template-columns:2fr 1fr 1fr 110px">
         <div>
           <a href="${asanaUrl}" target="_blank" rel="noopener" style="font-size:13px;font-weight:500;color:#fff;margin-bottom:2px;text-decoration:none;display:block" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${t.name} ↗</a>
           <div style="font-size:11px;color:var(--muted)">${t.proj}</div>
@@ -4216,8 +4024,8 @@ function renderMissing(){
           <div style="font-size:13px;color:#fff;margin-bottom:2px">${t.assignee}</div>
           <span class="pod-pill" style="background:${b.bg};color:${b.fg}">${t.pod}</span>
         </div>
+        <div style="font-size:13px;color:var(--muted)">${t.createdBy||'—'}</div>
         <div><span class="mf-badge">${t.missing}</span></div>
-        <div><span class="pod-pill" style="background:${b.bg};color:${b.fg}">${t.pod}</span></div>
       </div>`;
   });
   document.getElementById('mf-body').innerHTML=html||'<div style="padding:16px 10px;font-size:12px;color:var(--muted)">No tasks missing fields</div>';
