@@ -36,6 +36,7 @@ async function getTasksForUser(userGid) {
     'due_on',
     'start_on',
     'created_by.name',
+    'created_by.gid',
     'memberships.project.name',
     'memberships.project.gid',
     'custom_fields.gid',
@@ -193,6 +194,8 @@ async function buildMemberData() {
   const in21 = addDays(today, 21);
 
   const workspaceMembers = await getWorkspaceMembers();
+  // Set of team member GIDs — used to filter out tasks created by people outside the team
+  const teamGids = new Set(workspaceMembers.map(m => m.gid));
 
   const members = [];
   const allMissingTasks = [];
@@ -265,6 +268,10 @@ async function buildMemberData() {
 
         // Skip members excluded from the missing fields tab
         if (MISSING_EXCLUDED_MEMBERS.includes(member.name)) continue;
+
+        // Skip tasks created by someone outside the Creative Foundry team
+        const creatorGid = t.created_by?.gid;
+        if (creatorGid && !teamGids.has(creatorGid)) continue;
 
         missingCount++;
         allMissingTasks.push({
