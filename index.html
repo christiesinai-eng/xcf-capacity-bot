@@ -201,7 +201,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
   </div>
   <div class="stat-pills">
     <div class="stat-pill blue"><span class="sv" id="pill-team">32</span><span class="sl">Team</span></div>
-    <div class="stat-pill red"><span class="sv" id="pill-overdue">96</span><span class="sl">Overdue</span></div>
     <div class="stat-pill amber"><span class="sv" id="pill-missing">69</span><span class="sl">Missing</span></div>
   </div>
 </div>
@@ -211,7 +210,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
   <button class="nav-btn active" onclick="showView('capacity',this)">Capacity report</button>
   <button class="nav-btn" onclick="showView('findresource',this)">Find resource</button>
   <button class="nav-btn" onclick="showView('podsummary',this)">POD summary</button>
-  <button class="nav-btn" id="nav-overdue" onclick="showView('overdue',this)">Overdue (96)</button>
   <button class="nav-btn" id="nav-missing" onclick="showView('missing',this)">Missing fields (69)</button>
 </div>
 
@@ -271,16 +269,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
   <div class="pod-summary-grid" id="ps-body"></div>
 </div>
 
-<!-- ══════════════ VIEW: OVERDUE ══════════════ -->
-<div id="view-overdue" class="view">
-  <div class="tbl-wrap">
-    <div class="section-title">Overdue tasks <span>Tasks past their due date — excluded from workload calculations</span></div>
-    <div class="tbl-head od-head" style="grid-template-columns:2fr 1fr 90px 100px">
-      <span>Task</span><span>Assignee</span><span>Due date</span><span>Days overdue</span>
-    </div>
-    <div id="od-body"></div>
-  </div>
-</div>
 
 <!-- ══════════════ VIEW: MISSING FIELDS ══════════════ -->
 <div id="view-missing" class="view">
@@ -309,7 +297,7 @@ const BRAND={
   'GM Creative':   {bg:'#0a0c1a',fg:'#8b9abf',bar:'#4a5580',dot:'#4a5580'},
 };
 const PODS=['Performance','Design','Design Studio','Campaign','AI & Media','Campaign Ops','GM Creative'];
-const GENERATED_AT = "10 Jun 2026, 11:56 am NZT";
+const GENERATED_AT = "10 Jun 2026, 05:19 pm NZT";
 
 const MEMBERS = [
   {
@@ -437,10 +425,10 @@ const MEMBERS = [
     "name": "Aniqah Mitha",
     "pod": "Performance",
     "ooo": false,
-    "today": 7,
-    "week": 22.7,
-    "month": 31.3,
-    "qualifying": 10,
+    "today": 4,
+    "week": 16.7,
+    "month": 25.3,
+    "qualifying": 8,
     "missing": 0,
     "overdue": 1,
     "tasks": [
@@ -459,24 +447,6 @@ const MEMBERS = [
         "due": "2026-06-10",
         "est": 2,
         "proj": "",
-        "th": 1,
-        "wh": 2
-      },
-      {
-        "name": "Copy R1 - XCFT-2282 | Small Business Confidence – Smart Tools - META | TIKTOK",
-        "start": "2026-06-09",
-        "due": "2026-06-10",
-        "est": 4,
-        "proj": "XCF: POD Boards",
-        "th": 2,
-        "wh": 4
-      },
-      {
-        "name": "Copy R2 - META | ANZ High Value SB Acquisition | Static, Graphics and AI Video",
-        "start": "2026-06-08",
-        "due": "2026-06-10",
-        "est": 3,
-        "proj": "XCF: POD Boards",
         "th": 1,
         "wh": 2
       },
@@ -746,13 +716,13 @@ const MEMBERS = [
         "wh": 0
       },
       {
-        "name": "XCFT-2270 | MTD Deadline Assets | Meta ",
-        "start": "2026-06-18",
+        "name": "XCFT-2282 | Small Business Confidence – Smart Tools - META | TIKTOK",
+        "start": "2026-05-27",
         "due": "2026-06-18",
-        "est": 3,
-        "proj": "XCF | Performance BAU Board",
-        "th": 0,
-        "wh": 0
+        "est": 6,
+        "proj": "XCF: POD Boards",
+        "th": 0.35,
+        "wh": 1.41
       },
       {
         "name": "XCFT-1556 | META | ANZ High Value SB Acquisition | Static, Graphics and AI Video",
@@ -764,6 +734,15 @@ const MEMBERS = [
         "wh": 2.18
       },
       {
+        "name": "XCFT-2270 | MTD Deadline Assets | Meta ",
+        "start": "2026-06-18",
+        "due": "2026-06-18",
+        "est": 3,
+        "proj": "XCF | Performance BAU Board",
+        "th": 0,
+        "wh": 0
+      },
+      {
         "name": "XCFT-1515 | LC Copy writing agent",
         "start": "2026-05-20",
         "due": "2026-06-18",
@@ -773,13 +752,13 @@ const MEMBERS = [
         "wh": 0.55
       },
       {
-        "name": "XCFT-2282 | Small Business Confidence – Smart Tools - META | TIKTOK",
-        "start": "2026-05-27",
-        "due": "2026-06-18",
-        "est": 6,
-        "proj": "XCF: POD Boards",
-        "th": 0.35,
-        "wh": 1.41
+        "name": "XCFT-748 | US | Xero Coaches Videos",
+        "start": "2026-05-30",
+        "due": "2026-06-19",
+        "est": 10,
+        "proj": "XCF | Performance BAU Board",
+        "th": 0.67,
+        "wh": 2.67
       },
       {
         "name": "AI UGC: Native language",
@@ -789,15 +768,6 @@ const MEMBERS = [
         "proj": "XCF: POD Boards",
         "th": 0.63,
         "wh": 2.5
-      },
-      {
-        "name": "XCFT-748 | US | Xero Coaches Videos",
-        "start": "2026-05-30",
-        "due": "2026-06-19",
-        "est": 10,
-        "proj": "XCF | Performance BAU Board",
-        "th": 0.67,
-        "wh": 2.67
       },
       {
         "name": "XCFT-753 | UK | Xero Files & Smart Data Capture Videos",
@@ -922,10 +892,10 @@ const MEMBERS = [
     "name": "Ben Hobbs",
     "pod": "AI & Media",
     "ooo": false,
-    "today": 6,
-    "week": 29.5,
-    "month": 75.7,
-    "qualifying": 8,
+    "today": 0,
+    "week": 20.5,
+    "month": 69.7,
+    "qualifying": 9,
     "missing": 0,
     "overdue": 4,
     "tasks": [
@@ -966,13 +936,13 @@ const MEMBERS = [
         "overdue": true
       },
       {
-        "name": "BH Smartly Upload: AI UGC: Business Verticals",
-        "start": "2026-06-08",
-        "due": "2026-06-10",
-        "est": 18,
-        "proj": "XCF: POD Boards",
-        "th": 6,
-        "wh": 12
+        "name": "AI VO",
+        "start": "2026-06-11",
+        "due": "2026-06-11",
+        "est": 3,
+        "proj": "XCFP-27| FY27 | Xero Payroll, Powered by Gusto - US GA Launch ",
+        "th": 0,
+        "wh": 3
       },
       {
         "name": "Stakeholder amends",
@@ -1009,6 +979,15 @@ const MEMBERS = [
         "proj": "XCFP-34 | 2026 | Data Health & Efficiency Campaign",
         "th": 0,
         "wh": 1.5
+      },
+      {
+        "name": "Music / SFX",
+        "start": "2026-06-17",
+        "due": "2026-06-18",
+        "est": 3,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0
       },
       {
         "name": "Final Edit: Video Generation: AI UGC: Native language",
@@ -1560,22 +1539,13 @@ const MEMBERS = [
     "month": 107.1,
     "qualifying": 7,
     "missing": 5,
-    "overdue": 2,
+    "overdue": 1,
     "tasks": [
       {
         "name": "Stakeholder review",
         "due": "2026-06-04",
         "est": 1,
         "proj": "XCF: POD Boards",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
-      {
-        "name": "Final concept amends",
-        "due": "2026-06-05",
-        "est": 5,
-        "proj": "XCFT-1146 Xerocon motion graphics + opening video",
         "th": 0,
         "wh": 0,
         "overdue": true
@@ -2103,7 +2073,7 @@ const MEMBERS = [
         "name": "Canva One page designs",
         "due": "2026-06-05",
         "est": 20,
-        "proj": "XCF: POD Boards",
+        "proj": "XCFT-3195 - Brand Refresh",
         "th": 0,
         "wh": 0,
         "overdue": true
@@ -2113,7 +2083,7 @@ const MEMBERS = [
         "start": "2026-05-25",
         "due": "2026-06-19",
         "est": 8,
-        "proj": "XCF: POD Boards",
+        "proj": "XCFT-3195 - Brand Refresh",
         "th": 0.4,
         "wh": 1.6
       },
@@ -2154,7 +2124,7 @@ const MEMBERS = [
     "week": 0,
     "month": 0,
     "qualifying": 0,
-    "missing": 8,
+    "missing": 9,
     "overdue": 0,
     "tasks": []
   },
@@ -2228,7 +2198,7 @@ const MEMBERS = [
     "month": 22.5,
     "qualifying": 15,
     "missing": 6,
-    "overdue": 5,
+    "overdue": 4,
     "tasks": [
       {
         "name": "PM",
@@ -2262,15 +2232,6 @@ const MEMBERS = [
         "due": "2026-06-05",
         "est": 2,
         "proj": "XCF: POD Boards",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
-      {
-        "name": "2.14 SR - Final Stakeholder Review",
-        "due": "2026-06-08",
-        "est": 2,
-        "proj": "XCFT-1146 Xerocon motion graphics + opening video",
         "th": 0,
         "wh": 0,
         "overdue": true
@@ -2469,7 +2430,7 @@ const MEMBERS = [
     "week": 37.1,
     "month": 62,
     "qualifying": 10,
-    "missing": 29,
+    "missing": 30,
     "overdue": 0,
     "tasks": [
       {
@@ -3034,6 +2995,14 @@ const MISSING_TASKS = [
     "missing": "No estimate"
   },
   {
+    "name": "XCFT-1261 | Xero.com new request",
+    "gid": "1214418832358354",
+    "proj": "XCF | Performance BAU Board",
+    "assignee": "Becky Sharp",
+    "pod": "Campaign Ops",
+    "missing": "No due date"
+  },
+  {
     "name": "HUB ASSETS | UR1457 Trigger branded invoice setup nudge",
     "gid": "1213811737621248",
     "proj": "XCF | Performance BAU Board",
@@ -3060,14 +3029,6 @@ const MISSING_TASKS = [
   {
     "name": "XCFT-760 | Pro-Active Perf Projects",
     "gid": "1213763788547610",
-    "proj": "XCF | Performance BAU Board",
-    "assignee": "Becky Sharp",
-    "pod": "Campaign Ops",
-    "missing": "No due date"
-  },
-  {
-    "name": "XCFT-1261 | Xero.com new request",
-    "gid": "1214418832358354",
     "proj": "XCF | Performance BAU Board",
     "assignee": "Becky Sharp",
     "pod": "Campaign Ops",
@@ -3514,6 +3475,14 @@ const MISSING_TASKS = [
     "missing": "No estimate"
   },
   {
+    "name": "XCFT-5266 - Logo approval on thermos | Agri Partners Surprise & Delight gifting",
+    "gid": "1215579292046641",
+    "proj": "XCF: POD Boards",
+    "assignee": "Logen Stent",
+    "pod": "Campaign Ops",
+    "missing": "No estimate"
+  },
+  {
     "name": "Xerocon Denver Design Merch",
     "gid": "1215445979406292",
     "proj": "XCF: POD Boards",
@@ -3668,6 +3637,14 @@ const MISSING_TASKS = [
   {
     "name": "XCFT-4829 - Generic Xero fabric frame banner",
     "gid": "1215283850351667",
+    "proj": "XCF: Intake The Creative Foundry",
+    "assignee": "Sandeep Garcha",
+    "pod": "Design Studio",
+    "missing": "No estimate"
+  },
+  {
+    "name": "XCFT-5264 - Print design for folders ",
+    "gid": "1215577519655725",
     "proj": "XCF: Intake The Creative Foundry",
     "assignee": "Sandeep Garcha",
     "pod": "Design Studio",
@@ -4269,14 +4246,6 @@ const OVERDUE_TASKS = [
     "due": "2026-06-04"
   },
   {
-    "name": "Final concept amends",
-    "gid": "1215282243844799",
-    "proj": "XCFT-1146 Xerocon motion graphics + opening video",
-    "assignee": "Domenic Iaria",
-    "pod": "AI & Media",
-    "due": "2026-06-05"
-  },
-  {
     "name": "Update Template - Free ACH Bill Payments (US Meta) - Xero Creative Foundry Brief ",
     "gid": "1215315995591260",
     "proj": "XCF: POD Boards",
@@ -4335,7 +4304,7 @@ const OVERDUE_TASKS = [
   {
     "name": "Canva One page designs",
     "gid": "1215192877391229",
-    "proj": "XCF: POD Boards",
+    "proj": "XCFT-3195 - Brand Refresh",
     "assignee": "Laura Fuldseth",
     "pod": "Design",
     "due": "2026-06-05"
@@ -4371,14 +4340,6 @@ const OVERDUE_TASKS = [
     "assignee": "Naomi Lawson",
     "pod": "Campaign Ops",
     "due": "2026-06-05"
-  },
-  {
-    "name": "2.14 SR - Final Stakeholder Review",
-    "gid": "1214605185782315",
-    "proj": "XCFT-1146 Xerocon motion graphics + opening video",
-    "assignee": "Naomi Lawson",
-    "pod": "Campaign Ops",
-    "due": "2026-06-08"
   },
   {
     "name": "Slide design | Xerocon 2026",
@@ -4453,13 +4414,10 @@ let tab='today', openId=null, currentView='capacity';
   document.getElementById('tab-week-date').textContent='→ '+fmtShort(in7);
   document.getElementById('tab-month-date').textContent='→ '+fmtShort(in21);
 
-  const overdueCt=OVERDUE_TASKS.length;
   const missingCt=MISSING_TASKS.length;
   const teamCt=MEMBERS.length;
   document.getElementById('pill-team').textContent=teamCt;
-  document.getElementById('pill-overdue').textContent=overdueCt;
   document.getElementById('pill-missing').textContent=missingCt;
-  document.getElementById('nav-overdue').textContent='Overdue ('+overdueCt+')';
   document.getElementById('nav-missing').textContent='Missing fields ('+missingCt+')';
 
   // top-meta: NZT generation timestamp injected at build time
@@ -4496,7 +4454,6 @@ function showView(v, btn){
   currentView=v;
   if(v==='findresource') renderFindResource();
   if(v==='podsummary') renderPodSummary();
-  if(v==='overdue') renderOverdue();
   if(v==='missing') renderMissing();
 }
 
@@ -4690,30 +4647,6 @@ function renderPodSummary(){
   document.getElementById('ps-body').innerHTML=html;
 }
 
-/* ══════════════ OVERDUE ══════════════ */
-function renderOverdue(){
-  const sorted=[...OVERDUE_TASKS].sort((a,b)=>new Date(a.due)-new Date(b.due));
-  let html='';
-  sorted.forEach(t=>{
-    const days=daysSince(t.due);
-    const b=BRAND[t.pod]||BRAND['Campaign'];
-    const asanaUrl=`https://app.asana.com/0/0/${t.gid}/f`;
-    html+=`
-      <div class="tbl-row no-expand" style="grid-template-columns:2fr 1fr 90px 100px">
-        <div>
-          <a href="${asanaUrl}" target="_blank" rel="noopener" style="font-size:13px;font-weight:500;color:#fff;margin-bottom:2px;text-decoration:none;display:block" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${t.name} ↗</a>
-          <div style="font-size:11px;color:var(--muted)">${t.proj}</div>
-        </div>
-        <div>
-          <div style="font-size:13px;color:#fff;margin-bottom:2px">${t.assignee}</div>
-          <span class="pod-pill" style="background:${b.bg};color:${b.fg}">${t.pod}</span>
-        </div>
-        <div style="font-size:12px;color:var(--muted)">${t.due}</div>
-        <div><span class="days-overdue">${days}d overdue</span></div>
-      </div>`;
-  });
-  document.getElementById('od-body').innerHTML=html||'<div style="padding:16px 10px;font-size:12px;color:var(--muted)">No overdue tasks</div>';
-}
 
 /* ══════════════ MISSING FIELDS ══════════════ */
 function renderMissing(){
