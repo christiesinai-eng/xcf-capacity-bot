@@ -274,8 +274,8 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
 <div id="view-missing" class="view">
   <div class="tbl-wrap">
     <div class="section-title">Missing fields <span>Tasks with no estimated time or no due date — excluded from capacity calculations</span></div>
-    <div class="tbl-head mf-head" style="grid-template-columns:2fr 1fr 110px 110px">
-      <span>Task / Project</span><span>Assignee</span><span>Missing</span><span>POD</span>
+    <div class="tbl-head mf-head" style="grid-template-columns:2fr 1fr 1fr 110px">
+      <span>Task / Project</span><span>Assignee</span><span>Created by</span><span>Missing</span>
     </div>
     <div id="mf-body"></div>
   </div>
@@ -586,7 +586,7 @@ function renderMissing(){
     const b=BRAND[t.pod]||BRAND['Campaign'];
     const asanaUrl=`https://app.asana.com/0/0/${t.gid}/f`;
     html+=`
-      <div class="tbl-row no-expand" style="grid-template-columns:2fr 1fr 110px 110px">
+      <div class="tbl-row no-expand" style="grid-template-columns:2fr 1fr 1fr 110px">
         <div>
           <a href="${asanaUrl}" target="_blank" rel="noopener" style="font-size:13px;font-weight:500;color:#fff;margin-bottom:2px;text-decoration:none;display:block" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${t.name} ↗</a>
           <div style="font-size:11px;color:var(--muted)">${t.proj}</div>
@@ -595,8 +595,8 @@ function renderMissing(){
           <div style="font-size:13px;color:#fff;margin-bottom:2px">${t.assignee}</div>
           <span class="pod-pill" style="background:${b.bg};color:${b.fg}">${t.pod}</span>
         </div>
+        <div style="font-size:13px;color:var(--muted)">${t.createdBy||'—'}</div>
         <div><span class="mf-badge">${t.missing}</span></div>
-        <div><span class="pod-pill" style="background:${b.bg};color:${b.fg}">${t.pod}</span></div>
       </div>`;
   });
   document.getElementById('mf-body').innerHTML=html||'<div style="padding:16px 10px;font-size:12px;color:var(--muted)">No tasks missing fields</div>';

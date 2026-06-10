@@ -35,6 +35,7 @@ async function getTasksForUser(userGid) {
     'completed',
     'due_on',
     'start_on',
+    'created_by.name',
     'memberships.project.name',
     'memberships.project.gid',
     'custom_fields.gid',
@@ -171,6 +172,7 @@ const MISSING_EXCLUDED_MEMBERS = [
   'Becky Sharp',
   'Naomi Lawson',
   'Sherry Choe',
+  'Sandeep Garcha',
 ];
 
 const EXCLUDED_PROJECTS = [
@@ -270,6 +272,7 @@ async function buildMemberData() {
           gid: t.gid,
           proj: projectName,
           assignee: member.name,
+          createdBy: t.created_by?.name ?? '—',
           pod,
           missing: !estimatedHours ? 'No estimate' : 'No due date',
         });
