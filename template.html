@@ -343,8 +343,6 @@ let tab='today', openId=null, currentView='capacity';
 
   const missingCt=MISSING_TASKS.length;
   const teamCt=MEMBERS.length;
-  document.getElementById('pill-team').textContent=teamCt;
-  document.getElementById('pill-missing').textContent=missingCt;
   document.getElementById('nav-missing').textContent='Missing fields ('+missingCt+')';
 
   // top-meta: NZT generation timestamp injected at build time
