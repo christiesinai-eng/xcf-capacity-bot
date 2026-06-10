@@ -162,6 +162,17 @@ const EXCLUDED_MEMBERS = [
   'Quincey Brinker',
 ];
 
+// These members appear on the capacity tab but are excluded from the missing fields tab
+const MISSING_EXCLUDED_MEMBERS = [
+  'Logen Stent',
+  'Quincey Brinker',
+  'Tom Gregson',
+  'Christie Sinai',
+  'Becky Sharp',
+  'Naomi Lawson',
+  'Sherry Choe',
+];
+
 const EXCLUDED_PROJECTS = [
   'XCF: Leave calendar (NOW USE THE NEW WAY)!',
   'XCF: AI Usage (Roadmap Projects & Micro/BAU tasks',
@@ -249,6 +260,9 @@ async function buildMemberData() {
         // Skip noise tasks that are never actionable in this report
         const skipNames = ['Production', 'In Market'];
         if (skipNames.includes(t.name?.trim())) continue;
+
+        // Skip members excluded from the missing fields tab
+        if (MISSING_EXCLUDED_MEMBERS.includes(member.name)) continue;
 
         missingCount++;
         allMissingTasks.push({
