@@ -297,7 +297,7 @@ const BRAND={
   'GM Creative':   {bg:'#0a0c1a',fg:'#8b9abf',bar:'#4a5580',dot:'#4a5580'},
 };
 const PODS=['Performance','Design','Design Studio','Campaign','AI & Media','Campaign Ops','GM Creative'];
-const GENERATED_AT = "10 Jun 2026, 05:49 pm NZT";
+const GENERATED_AT = "10 Jun 2026, 05:51 pm NZT";
 
 const MEMBERS = [
   {
@@ -3920,8 +3920,6 @@ function renderPodSummary(){
         </div>
         <div class="ps-metrics">
           <div class="ps-metric"><div class="mv" style="color:#fff">${totalToday.toFixed(1)}h</div><div class="ml">Today</div></div>
-          <div class="ps-metric"><div class="mv" style="color:${totalMissing>0?'#fbbf24':'#6aeaaa'}">${totalMissing}</div><div class="ml">Missing</div></div>
-          <div class="ps-metric"><div class="mv" style="color:${totalOverdue>0?'#f87171':'#6aeaaa'}">${totalOverdue}</div><div class="ml">Overdue</div></div>
         </div>
         <div class="ps-members">
           ${sorted.map(m=>{
