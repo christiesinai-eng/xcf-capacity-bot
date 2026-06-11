@@ -154,28 +154,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .mf-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:600;background:#2a1f00;color:#fbbf24;border:1px solid #6b4e00}
 
 /* ── PM TEAM ── */
-.pm-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.pm-card-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:14px 16px;border-bottom:1px solid var(--border);background:var(--surface2)}
-.pm-name{font-size:15px;font-weight:700;color:#fff}
-.pm-hours{display:flex;gap:8px;flex-wrap:wrap}
-.pm-h-badge{font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px 9px;white-space:nowrap}
-.pm-h-badge strong{color:#fff;margin-left:4px}
+.pm-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:0}
+.pm-card-hdr{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:14px 16px 10px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.pm-name{font-size:15px;font-weight:700;color:#fff;margin-bottom:8px}
+.pm-cap-bar-wrap{margin-top:4px}
+.pm-cap-label{font-size:10px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+.pm-cap-bar{height:6px;border-radius:3px;background:var(--border);overflow:hidden;width:160px}
+.pm-cap-fill{height:100%;border-radius:3px;transition:width .3s}
+.pm-hours{display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start}
+.pm-h-badge{font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 10px;white-space:nowrap;text-align:center}
+.pm-h-badge .pm-h-label{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.pm-h-badge strong{display:block;font-size:14px;color:#fff;line-height:1}
 .pm-projects-tbl{width:100%;border-collapse:collapse;font-size:12px}
 .pm-projects-tbl th{text-align:left;padding:7px 12px;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--border);font-weight:500}
 .pm-projects-tbl td{padding:7px 12px;border-bottom:.5px solid var(--border);vertical-align:middle}
+.pm-projects-tbl tr.pm-task-row-expand td{padding:0;border-bottom:.5px solid var(--border)}
 .pm-projects-tbl tr:last-child td{border-bottom:none}
 .pm-proj-link{color:#fff;text-decoration:none;font-weight:500;display:block;line-height:1.4}
 .pm-proj-link:hover{text-decoration:underline;color:var(--sky)}
+.pm-expand-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px;padding:2px 4px;border-radius:4px;margin-left:4px}
+.pm-expand-btn:hover{color:var(--sky)}
 .pm-prog-wrap{display:flex;align-items:center;gap:6px}
-.pm-prog-bar{flex:1;height:4px;border-radius:2px;background:var(--border);overflow:hidden;min-width:40px}
-.pm-prog-fill{height:100%;border-radius:2px;background:var(--green)}
-.pm-prog-pct{font-size:11px;color:var(--muted);min-width:30px;text-align:right}
-.pm-tasks-section{padding:10px 12px;border-top:1px solid var(--border)}
-.pm-tasks-label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;margin-bottom:6px}
-.pm-task-row{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:.5px solid var(--border);font-size:11px}
-.pm-task-row:last-child{border-bottom:none}
+.pm-prog-bar{flex:1;height:5px;border-radius:3px;background:var(--border);overflow:hidden;min-width:50px}
+.pm-prog-fill{height:100%;border-radius:3px}
+.pm-prog-pct{font-size:11px;min-width:32px;text-align:right;font-weight:500}
+.pm-tasks-panel{background:#0d1020;border-top:.5px solid var(--border);padding:10px 14px;display:none}
+.pm-tasks-panel.open{display:block}
+.pm-tasks-panel-label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;margin-bottom:6px}
+.pm-task-item{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:.5px solid var(--border);font-size:11px}
+.pm-task-item:last-child{border-bottom:none}
 .pm-task-name{color:var(--txt);flex:1;padding-right:12px;line-height:1.4}
-.pm-task-proj{color:var(--muted);font-size:10px;margin-top:2px}
 .pm-task-hrs{color:var(--muted);text-align:right;white-space:nowrap;line-height:1.8}
 .pm-task-hrs strong{color:#fff}
 
@@ -630,67 +638,106 @@ function renderMissing(){
 }
 
 /* ══════════════ PM TEAM ══════════════ */
+let pmOpenPanels={};
+function togglePMPanel(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  if(el.classList.contains('open')){el.classList.remove('open');}
+  else{el.classList.add('open');}
+}
 function renderPMTeam(){
   const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function fmtDate(s){if(!s)return'—';const d=new Date(s+'T00:00:00');return d.getDate()+' '+months[d.getMonth()]+' '+String(d.getFullYear()).slice(2);}
+  function progColor(pct){if(pct===null)return'var(--muted)';if(pct>=80)return'var(--green)';if(pct>=40)return'#fbbf24';return'#f87171';}
+  function capColor(h){if(h>8)return'#f87171';if(h>=6)return'var(--sky)';if(h>=1)return'#fbbf24';return'var(--green)';}
+  function dueColor(due){
+    if(!due)return'var(--muted)';
+    const d=new Date(due+'T00:00:00'),t=new Date();
+    const diff=Math.ceil((d-t)/86400000);
+    if(diff<0)return'#f87171';
+    if(diff<=7)return'#fbbf24';
+    return'var(--muted)';
+  }
 
   let html='';
-  if(!PM_DATA.length){
-    html='<div style="padding:24px;color:var(--muted);font-size:13px">No PM data available.</div>';
-  }
+  if(!PM_DATA.length){html='<div style="padding:24px;color:var(--muted);font-size:13px">No PM data available.</div>';}
+
   PM_DATA.forEach(pm=>{
-    // Hours badges
-    const badges=`
-      <div class="pm-hours">
-        <span class="pm-h-badge">Today <strong>${pm.today}h</strong></span>
-        <span class="pm-h-badge">7 days <strong>${pm.week}h</strong></span>
-        <span class="pm-h-badge">Month <strong>${pm.month}h</strong></span>
+    const capPct=Math.min(100,(pm.today/8)*100);
+    const capCol=capColor(pm.today);
+
+    // Capacity bar + badges
+    const hdrRight=`
+      <div>
+        <div class="pm-cap-label">Capacity booked</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div class="pm-cap-bar"><div class="pm-cap-fill" style="width:${capPct}%;background:${capCol}"></div></div>
+          <span style="font-size:12px;font-weight:700;color:${capCol}">${pm.today}h today</span>
+        </div>
+        <div class="pm-hours">
+          <span class="pm-h-badge"><span class="pm-h-label">Today</span><strong style="color:${capCol}">${pm.today}h</strong></span>
+          <span class="pm-h-badge"><span class="pm-h-label">7 days</span><strong>${pm.week}h</strong></span>
+          <span class="pm-h-badge"><span class="pm-h-label">Month</span><strong>${pm.month}h</strong></span>
+        </div>
       </div>`;
 
-    // Projects table
+    // Projects rows with nested PM Time Tracking dropdown
     let projRows='';
-    pm.projects.forEach(p=>{
-      const pct=p.pct!==null?p.pct:null;
-      const progHTML=pct!==null
-        ?`<div class="pm-prog-wrap"><div class="pm-prog-bar"><div class="pm-prog-fill" style="width:${pct}%"></div></div><span class="pm-prog-pct">${pct}%</span></div>`
-        :'<span style="color:var(--muted);font-size:11px">—</span>';
-      projRows+=`<tr>
-        <td><a href="${p.url||'#'}" target="_blank" rel="noopener" class="pm-proj-link">${p.name} ↗</a></td>
-        <td>${progHTML}</td>
-        <td style="color:var(--muted);white-space:nowrap">${fmtDate(p.start)}</td>
-        <td style="color:var(--muted);white-space:nowrap">${fmtDate(p.due)}</td>
-      </tr>`;
-    });
+    pm.projects.forEach((p,idx)=>{
+      const panelId='pm-panel-'+pm.name.replace(/\s/g,'_')+'-'+idx;
+      const hasTasks=p.pmTasks&&p.pmTasks.length>0;
 
-    // PM Time Tracking tasks
-    let tasksHTML='';
-    if(pm.tasks&&pm.tasks.length){
-      const taskRows=pm.tasks.map(t=>`
-        <div class="pm-task-row">
-          <div>
-            <div class="pm-task-name">${t.name}</div>
-            <div class="pm-task-proj">${t.proj}</div>
+      // Progress bar
+      const pct=p.pct;
+      const pCol=progColor(pct);
+      const progHTML=pct!==null
+        ?`<div class="pm-prog-wrap"><div class="pm-prog-bar"><div class="pm-prog-fill" style="width:${pct}%;background:${pCol}"></div></div><span class="pm-prog-pct" style="color:${pCol}">${pct}%</span></div>`
+        :'<span style="color:var(--muted);font-size:11px">—</span>';
+
+      const expandBtn=hasTasks
+        ?`<button class="pm-expand-btn" onclick="togglePMPanel('${panelId}')" title="PM Time Tracking tasks">▸ ${p.pmTasks.length} task${p.pmTasks.length!==1?'s':''}</button>`
+        :'';
+
+      projRows+=`<tr>
+        <td>
+          <a href="${p.url||'#'}" target="_blank" rel="noopener" class="pm-proj-link">${p.name} ↗</a>
+          ${expandBtn}
+        </td>
+        <td>${progHTML}</td>
+        <td style="color:var(--muted);white-space:nowrap;font-size:11px">${fmtDate(p.start)}</td>
+        <td style="color:${dueColor(p.due)};white-space:nowrap;font-size:11px;font-weight:${p.due&&new Date(p.due+'T00:00:00')<new Date()?'600':'400'}">${fmtDate(p.due)}</td>
+      </tr>`;
+
+      // Dropdown panel for PM Time Tracking tasks
+      if(hasTasks){
+        const taskItems=p.pmTasks.map(t=>`
+          <div class="pm-task-item">
+            <div class="pm-task-name">${t.name}<div style="font-size:10px;color:var(--muted);margin-top:2px">due ${fmtDate(t.due)}</div></div>
+            <div class="pm-task-hrs">
+              Today <strong>${t.th.toFixed(1)}h</strong><br>
+              7 days <strong>${t.wh.toFixed(1)}h</strong><br>
+              Month <strong>${t.mh.toFixed(1)}h</strong>
+            </div>
+          </div>`).join('');
+        projRows+=`<tr class="pm-task-row-expand"><td colspan="4">
+          <div id="${panelId}" class="pm-tasks-panel">
+            <div class="pm-tasks-panel-label">PM Time Tracking</div>
+            ${taskItems}
           </div>
-          <div class="pm-task-hrs">
-            Today <strong>${t.th.toFixed(1)}h</strong> &nbsp;·&nbsp;
-            7d <strong>${t.wh.toFixed(1)}h</strong> &nbsp;·&nbsp;
-            Month <strong>${t.mh.toFixed(1)}h</strong>
-          </div>
-        </div>`).join('');
-      tasksHTML=`<div class="pm-tasks-section"><div class="pm-tasks-label">PM Time Tracking</div>${taskRows}</div>`;
-    }
+        </td></tr>`;
+      }
+    });
 
     html+=`
       <div class="pm-card">
         <div class="pm-card-hdr">
-          <span class="pm-name">${pm.name}</span>
-          ${badges}
+          <div><span class="pm-name">${pm.name}</span><div style="font-size:11px;color:var(--muted);margin-top:2px">${pm.projects.length} project${pm.projects.length!==1?'s':''}</div></div>
+          ${hdrRight}
         </div>
         <table class="pm-projects-tbl">
-          <thead><tr><th>Project</th><th>Progress</th><th>Start</th><th>Due</th></tr></thead>
+          <thead><tr><th>Project</th><th style="min-width:120px">Progress</th><th>Start</th><th>Due</th></tr></thead>
           <tbody>${projRows}</tbody>
         </table>
-        ${tasksHTML}
       </div>`;
   });
   document.getElementById('pm-body').innerHTML=html;

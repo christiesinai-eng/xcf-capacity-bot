@@ -361,25 +361,25 @@ async function buildMemberData() {
 const PM_PORTFOLIO_GID = '1212248393751048';
 
 const PM_EXCLUDED_OWNERS = [
-  'Christie Sinai',
-  'Ben Hobbs',
-  'Domenic Iaria',
-  'Nadim Malvat',
-  'Sandeep Garcha',
-  'Will Rich',
+  'Christie Sinai', 'Ben Hobbs', 'Domenic Iaria',
+  'Nadim Malvat', 'Sandeep Garcha', 'Will Rich',
 ];
+
+// Projects to hide from specific PMs (substring match on project name)
+const PM_PROJECT_EXCLUSIONS = {
+  'Quincey Brinker': ['XCF: 2027 Goals', 'XCF Creative Development'],
+  'Logen Stent':     ['Design BAU Board', 'Design Studio BAU Board'],
+};
 
 async function buildPMData() {
   const client = asanaClient();
   const estGid = process.env.ASANA_FIELD_GID_ESTIMATED_TIME;
 
   const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Pacific/Auckland' });
-  const in7  = addDays(today, 7);
-  const in21 = addDays(today, 21);
-  // Only check PM Time Tracking in projects active within the last 60 days
+  const in7   = addDays(today, 7);
+  const in21  = addDays(today, 21);
   const cutoffDate = addDays(today, -60);
 
-  // Fetch team members to resolve owner GIDs to names
   const teamMembers = await getWorkspaceMembers();
   const memberByGid = {};
   teamMembers.forEach(m => { memberByGid[m.gid] = m.name; });
@@ -387,12 +387,12 @@ async function buildPMData() {
     teamMembers.filter(m => PM_EXCLUDED_OWNERS.includes(m.name)).map(m => m.gid)
   );
 
-  // Fetch all portfolio items (paginated)
+  // Fetch all portfolio items with completed flag (paginated)
   const allProjects = [];
   let offset = null;
   do {
     const params = {
-      opt_fields: 'name,gid,owner.gid,owner.name,start_on,due_on,permalink_url,completed_task_count,total_task_count',
+      opt_fields: 'name,gid,completed,owner.gid,owner.name,start_on,due_on,permalink_url',
       limit: 100,
     };
     if (offset) params.offset = offset;
@@ -401,44 +401,70 @@ async function buildPMData() {
     offset = resp.data.next_page?.offset ?? null;
   } while (offset);
 
-  // Filter: name starts with X/8/9, has non-excluded owner
+  // Filter: starts with X/8/9, non-excluded owner, NOT completed
   const qualifying = allProjects.filter(p =>
     p.name && /^[X89]/i.test(p.name) &&
-    p.owner?.gid && !excludedGids.has(p.owner.gid)
+    p.owner?.gid && !excludedGids.has(p.owner.gid) &&
+    !p.completed
   );
 
-  // Group by PM owner
+  // Fetch task completion counts for qualifying projects in parallel
+  // (Asana REST API has no summary field — count tasks directly)
+  const taskCountResults = await Promise.all(
+    qualifying.map(p =>
+      client.get('/tasks', {
+        params: { project: p.gid, opt_fields: 'gid,completed', limit: 100 },
+      })
+        .then(r => {
+          const tasks = r.data.data;
+          return { gid: p.gid, done: tasks.filter(t => t.completed).length, total: tasks.length };
+        })
+        .catch(() => ({ gid: p.gid, done: 0, total: 0 }))
+    )
+  );
+  const taskCounts = {};
+  taskCountResults.forEach(r => { taskCounts[r.gid] = r; });
+
+  // Group by PM owner, applying per-PM project exclusions
   const pmMap = {};
   for (const p of qualifying) {
-    const ownerGid = p.owner.gid;
+    const ownerGid  = p.owner.gid;
     const ownerName = memberByGid[ownerGid] || p.owner.name || 'Unknown';
+
+    // Per-PM project name exclusions
+    const exclusions = PM_PROJECT_EXCLUSIONS[ownerName] || [];
+    if (exclusions.some(ex => p.name.includes(ex))) continue;
+
     if (!pmMap[ownerGid]) {
       pmMap[ownerGid] = { name: ownerName, gid: ownerGid, projects: [], tasks: [] };
     }
-    const total     = p.total_task_count     ?? 0;
-    const completed = p.completed_task_count ?? 0;
+
+    const { done, total } = taskCounts[p.gid] || { done: 0, total: 0 };
     pmMap[ownerGid].projects.push({
-      gid:            p.gid,
-      name:           p.name,
-      url:            p.permalink_url,
-      start:          p.start_on  || null,
-      due:            p.due_on    || null,
-      completedTasks: completed,
+      gid:   p.gid,
+      name:  p.name,
+      url:   p.permalink_url,
+      start: p.start_on || null,
+      due:   p.due_on   || null,
+      completedTasks: done,
       totalTasks:     total,
-      pct:            total > 0 ? Math.round((completed / total) * 100) : null,
+      pct:   total > 0 ? Math.round((done / total) * 100) : null,
+      pmTasks: [], // PM Time Tracking tasks live here (nested under project)
     });
   }
 
-  // For each PM, fetch PM Time Tracking tasks from active projects
+  // Sort each PM's projects by due date
   for (const pm of Object.values(pmMap)) {
-    // Sort projects by due date ascending
     pm.projects.sort((a, b) => {
       if (!a.due && !b.due) return 0;
       if (!a.due) return 1;
       if (!b.due) return -1;
       return a.due.localeCompare(b.due);
     });
+  }
 
+  // Fetch PM Time Tracking tasks for active projects, nested under each project
+  for (const pm of Object.values(pmMap)) {
     const activeProjects = pm.projects.filter(p => !p.due || p.due >= cutoffDate);
 
     for (const project of activeProjects) {
@@ -453,7 +479,7 @@ async function buildPMData() {
 
       const taskResp = await client.get(`/sections/${pmSection.gid}/tasks`, {
         params: {
-          opt_fields: `gid,name,completed,due_on,start_on,assignee.gid,custom_fields.gid,custom_fields.number_value`,
+          opt_fields: 'gid,name,completed,due_on,start_on,assignee.gid,custom_fields.gid,custom_fields.number_value',
           limit: 100,
         },
       }).catch(() => ({ data: { data: [] } }));
@@ -468,11 +494,14 @@ async function buildPMData() {
         if (new Date(t.due_on + 'T00:00:00') < new Date(today + 'T00:00:00')) continue;
 
         const startDate = t.start_on || null;
-        const th  = round2(hoursOnDate(est, startDate, t.due_on, today));
-        const wh  = round2(sumHoursOverRange(est, startDate, t.due_on, today, in7));
-        const mh  = round2(sumHoursOverRange(est, startDate, t.due_on, today, in21));
+        const th = round2(hoursOnDate(est, startDate, t.due_on, today));
+        const wh = round2(sumHoursOverRange(est, startDate, t.due_on, today, in7));
+        const mh = round2(sumHoursOverRange(est, startDate, t.due_on, today, in21));
 
-        pm.tasks.push({ name: t.name, proj: project.name, start: startDate, due: t.due_on, est, th, wh, mh });
+        // Nest task under the project
+        project.pmTasks.push({ name: t.name, start: startDate, due: t.due_on, est, th, wh, mh });
+        // Also keep flat list for PM-level totals
+        pm.tasks.push({ th, wh, mh });
       }
     }
 
