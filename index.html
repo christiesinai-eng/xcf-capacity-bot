@@ -153,6 +153,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .mf-row{grid-template-columns:2fr 1fr 100px 100px}
 .mf-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:600;background:#2a1f00;color:#fbbf24;border:1px solid #6b4e00}
 
+/* ── PM TEAM ── */
+.pm-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.pm-card-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:14px 16px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.pm-name{font-size:15px;font-weight:700;color:#fff}
+.pm-hours{display:flex;gap:8px;flex-wrap:wrap}
+.pm-h-badge{font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px 9px;white-space:nowrap}
+.pm-h-badge strong{color:#fff;margin-left:4px}
+.pm-projects-tbl{width:100%;border-collapse:collapse;font-size:12px}
+.pm-projects-tbl th{text-align:left;padding:7px 12px;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--border);font-weight:500}
+.pm-projects-tbl td{padding:7px 12px;border-bottom:.5px solid var(--border);vertical-align:middle}
+.pm-projects-tbl tr:last-child td{border-bottom:none}
+.pm-proj-link{color:#fff;text-decoration:none;font-weight:500;display:block;line-height:1.4}
+.pm-proj-link:hover{text-decoration:underline;color:var(--sky)}
+.pm-prog-wrap{display:flex;align-items:center;gap:6px}
+.pm-prog-bar{flex:1;height:4px;border-radius:2px;background:var(--border);overflow:hidden;min-width:40px}
+.pm-prog-fill{height:100%;border-radius:2px;background:var(--green)}
+.pm-prog-pct{font-size:11px;color:var(--muted);min-width:30px;text-align:right}
+.pm-tasks-section{padding:10px 12px;border-top:1px solid var(--border)}
+.pm-tasks-label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;margin-bottom:6px}
+.pm-task-row{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:.5px solid var(--border);font-size:11px}
+.pm-task-row:last-child{border-bottom:none}
+.pm-task-name{color:var(--txt);flex:1;padding-right:12px;line-height:1.4}
+.pm-task-proj{color:var(--muted);font-size:10px;margin-top:2px}
+.pm-task-hrs{color:var(--muted);text-align:right;white-space:nowrap;line-height:1.8}
+.pm-task-hrs strong{color:#fff}
+
 /* ── FOOTER ── */
 .footer{font-size:10px;color:var(--muted);padding:10px 20px 20px;line-height:1.6;border-top:1px solid var(--border)}
 </style>
@@ -207,6 +233,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
   <button class="nav-btn" onclick="showView('findresource',this)">Find resource</button>
   <button class="nav-btn" onclick="showView('podsummary',this)">POD summary</button>
   <button class="nav-btn" id="nav-missing" onclick="showView('missing',this)">Missing fields (69)</button>
+  <button class="nav-btn" onclick="showView('pmteam',this)">PM Team</button>
 </div>
 
 <!-- ══════════════ VIEW: CAPACITY REPORT ══════════════ -->
@@ -277,6 +304,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
   </div>
 </div>
 
+<!-- ══════════════ VIEW: PM TEAM ══════════════ -->
+<div id="view-pmteam" class="view">
+  <div id="pm-body" style="padding:16px 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(540px,1fr));gap:16px"></div>
+</div>
+
 <div class="footer" id="footer-bar">
   XCF Capacity Report &nbsp;·&nbsp; 19 May 2026 &nbsp;·&nbsp; 446 tasks (all pages) &nbsp;·&nbsp;
   Formula: est time ÷ working days (start→due); no start date = all hours on due date &nbsp;·&nbsp; 8h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation
@@ -293,7 +325,7 @@ const BRAND={
   'GM Creative':   {bg:'#0a0c1a',fg:'#8b9abf',bar:'#4a5580',dot:'#4a5580'},
 };
 const PODS=['Performance','Design','Design Studio','Campaign','AI & Media','Campaign Ops','GM Creative'];
-const GENERATED_AT = "11 Jun 2026, 10:33 am NZT";
+const GENERATED_AT = "11 Jun 2026, 02:46 pm NZT";
 
 const MEMBERS = [
   {
@@ -305,7 +337,7 @@ const MEMBERS = [
     "month": 12,
     "qualifying": 6,
     "missing": 0,
-    "overdue": 8,
+    "overdue": 6,
     "tasks": [
       {
         "name": "Design",
@@ -348,24 +380,6 @@ const MEMBERS = [
         "due": "2026-06-05",
         "est": 2,
         "proj": "XCF: POD Boards",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
-      {
-        "name": "Icons",
-        "due": "2026-06-05",
-        "est": 1,
-        "proj": "XCFP-27| FY27 | Xero Payroll, Powered by Gusto - US GA Launch ",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
-      {
-        "name": "eDM header and body images",
-        "due": "2026-06-05",
-        "est": 2,
-        "proj": "XCFP-27| FY27 | Xero Payroll, Powered by Gusto - US GA Launch ",
         "th": 0,
         "wh": 0,
         "overdue": true
@@ -439,10 +453,10 @@ const MEMBERS = [
     "name": "Aniqah Mitha",
     "pod": "Performance",
     "ooo": false,
-    "today": 5.7,
-    "week": 17,
-    "month": 23.3,
-    "qualifying": 7,
+    "today": 3.7,
+    "week": 13,
+    "month": 19.3,
+    "qualifying": 6,
     "missing": 0,
     "overdue": 2,
     "tasks": [
@@ -463,15 +477,6 @@ const MEMBERS = [
         "th": 0,
         "wh": 0,
         "overdue": true
-      },
-      {
-        "name": "Copy R1 - ANZ | High-Value SB: Audio (x4)",
-        "start": "2026-06-10",
-        "due": "2026-06-12",
-        "est": 6,
-        "proj": "XCF: POD Boards",
-        "th": 2,
-        "wh": 4
       },
       {
         "name": "Copy R1 - XCFT-2983 | ANZ | High-Value SB: Demand Gen (Static/Video)",
@@ -748,6 +753,15 @@ const MEMBERS = [
         "wh": 0.55
       },
       {
+        "name": "AI UGC: Native language",
+        "start": "2026-05-19",
+        "due": "2026-06-19",
+        "est": 15,
+        "proj": "XCF: POD Boards",
+        "th": 0.63,
+        "wh": 2.5
+      },
+      {
         "name": "XCFT-748 | US | Xero Coaches Videos",
         "start": "2026-05-30",
         "due": "2026-06-19",
@@ -764,15 +778,6 @@ const MEMBERS = [
         "proj": "XCF | Performance BAU Board",
         "th": 1.56,
         "wh": 6.25
-      },
-      {
-        "name": "AI UGC: Native language",
-        "start": "2026-05-19",
-        "due": "2026-06-19",
-        "est": 15,
-        "proj": "XCF: POD Boards",
-        "th": 0.63,
-        "wh": 2.5
       },
       {
         "name": "XCFP-339 | [no value] | XCF delivery support | Brand Refreshed Banners for Associations in SG and MY (AB and SB)",
@@ -802,6 +807,15 @@ const MEMBERS = [
         "wh": 0
       },
       {
+        "name": "XCFT-2983 | ANZ | 📈 High-Value SB: Demand Gen (Static/Video)",
+        "start": "2026-05-29",
+        "due": "2026-06-24",
+        "est": 6,
+        "proj": "XCF | Performance BAU Board",
+        "th": 0.32,
+        "wh": 1.26
+      },
+      {
         "name": "XCFT-2999 | ANZ | 🎧 High-Value SB: Audio (x4)",
         "start": "2026-06-24",
         "due": "2026-06-24",
@@ -818,15 +832,6 @@ const MEMBERS = [
         "proj": "XCF | Performance BAU Board",
         "th": 0,
         "wh": 0
-      },
-      {
-        "name": "XCFT-2983 | ANZ | 📈 High-Value SB: Demand Gen (Static/Video)",
-        "start": "2026-05-29",
-        "due": "2026-06-24",
-        "est": 6,
-        "proj": "XCF | Performance BAU Board",
-        "th": 0.32,
-        "wh": 1.26
       },
       {
         "name": "XCFT-1390 | Update Meta Video Template Promo Banners",
@@ -911,17 +916,8 @@ const MEMBERS = [
     "month": 74.7,
     "qualifying": 10,
     "missing": 0,
-    "overdue": 3,
+    "overdue": 2,
     "tasks": [
-      {
-        "name": "BH Ai Video Generation: AI UGC: Business Verticals",
-        "due": "2026-06-05",
-        "est": 36,
-        "proj": "XCF: POD Boards",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
       {
         "name": "CR1 - Creative Review",
         "due": "2026-06-05",
@@ -1729,7 +1725,7 @@ const MEMBERS = [
     "month": 68,
     "qualifying": 32,
     "missing": 2,
-    "overdue": 5,
+    "overdue": 4,
     "tasks": [
       {
         "name": "Update Template - Free ACH Bill Payments (US Meta) - Xero Creative Foundry Brief ",
@@ -1753,15 +1749,6 @@ const MEMBERS = [
         "name": "Design R2: JAX Welcome Emai",
         "due": "2026-06-05",
         "est": 1,
-        "proj": "XCF: POD Boards",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
-      {
-        "name": "Design R1 - Bill Adoption Email",
-        "due": "2026-06-10",
-        "est": 6,
         "proj": "XCF: POD Boards",
         "th": 0,
         "wh": 0,
@@ -2158,22 +2145,13 @@ const MEMBERS = [
     "name": "Laura Fuldseth",
     "pod": "Design",
     "ooo": false,
-    "today": 7.5,
-    "week": 29.9,
-    "month": 62.4,
-    "qualifying": 5,
+    "today": 10.7,
+    "week": 35.6,
+    "month": 68.1,
+    "qualifying": 7,
     "missing": 2,
-    "overdue": 2,
+    "overdue": 1,
     "tasks": [
-      {
-        "name": "Initial design exploration",
-        "due": "2026-06-05",
-        "est": 5,
-        "proj": "XCFP-84 | Modern Practice Playbook",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
       {
         "name": "Canva One page designs",
         "due": "2026-06-05",
@@ -2182,6 +2160,24 @@ const MEMBERS = [
         "th": 0,
         "wh": 0,
         "overdue": true
+      },
+      {
+        "name": "XCFT-4829 - Generic Xero fabric frame banner",
+        "start": "2026-06-11",
+        "due": "2026-06-11",
+        "est": 2,
+        "proj": "XCF: Intake The Creative Foundry",
+        "th": 2,
+        "wh": 2
+      },
+      {
+        "name": "Creative concept refinement based on feedback",
+        "start": "2026-06-11",
+        "due": "2026-06-16",
+        "est": 5,
+        "proj": "XCFP-84 | Modern Practice Playbook",
+        "th": 1.25,
+        "wh": 3.75
       },
       {
         "name": "Sub-brands architecture ",
@@ -2236,21 +2232,11 @@ const MEMBERS = [
     "ooo": false,
     "today": 0,
     "week": 0,
-    "month": 3.2,
-    "qualifying": 1,
+    "month": 0,
+    "qualifying": 0,
     "missing": 0,
     "overdue": 0,
-    "tasks": [
-      {
-        "name": "XCFT-4829 - Generic Xero fabric frame banner",
-        "start": "2026-06-22",
-        "due": "2026-06-26",
-        "est": 4,
-        "proj": "XCF: Intake The Creative Foundry",
-        "th": 0,
-        "wh": 0
-      }
-    ]
+    "tasks": []
   },
   {
     "name": "Michelle Crocker",
@@ -2335,12 +2321,12 @@ const MEMBERS = [
     "name": "Naomi Lawson",
     "pod": "Campaign Ops",
     "ooo": false,
-    "today": 3.7,
-    "week": 10.4,
-    "month": 17.3,
+    "today": 2.7,
+    "week": 9.4,
+    "month": 18.3,
     "qualifying": 14,
     "missing": 0,
-    "overdue": 6,
+    "overdue": 5,
     "tasks": [
       {
         "name": "PM",
@@ -2388,24 +2374,6 @@ const MEMBERS = [
         "overdue": true
       },
       {
-        "name": "PM Time - weekly meeting, recap and follow ups",
-        "due": "2026-06-10",
-        "est": 4,
-        "proj": "XCF: POD Boards",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
-      {
-        "name": "SR1 - Stakeholder Review (PMM & Meg)",
-        "start": "2026-06-11",
-        "due": "2026-06-11",
-        "est": 1,
-        "proj": "XCFP-50 | 2026 | XERO AI - ALWAYS ON GO-TO-MARKET",
-        "th": 1,
-        "wh": 1
-      },
-      {
         "name": "PM",
         "start": "2026-06-10",
         "due": "2026-06-11",
@@ -2413,6 +2381,15 @@ const MEMBERS = [
         "proj": "XCF: POD Boards",
         "th": 2,
         "wh": 4
+      },
+      {
+        "name": "PM",
+        "start": "2026-06-12",
+        "due": "2026-06-12",
+        "est": 2,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0
       },
       {
         "name": "PM",
@@ -2429,15 +2406,6 @@ const MEMBERS = [
         "due": "2026-06-12",
         "est": 1.5,
         "proj": "XCFP-27| FY27 | Xero Payroll, Powered by Gusto - US GA Launch ",
-        "th": 0,
-        "wh": 0
-      },
-      {
-        "name": "3.6 SH - Stakeholder Review",
-        "start": null,
-        "due": "2026-06-12",
-        "est": 2,
-        "proj": "XCFP-84 | Modern Practice Playbook",
         "th": 0,
         "wh": 0
       },
@@ -2476,6 +2444,15 @@ const MEMBERS = [
         "proj": "989350 | 2026 | Xero Partner Advisory Summit",
         "th": 0,
         "wh": 1
+      },
+      {
+        "name": "3.6 SH - Stakeholder Review",
+        "start": null,
+        "due": "2026-06-18",
+        "est": 2,
+        "proj": "XCFP-84 | Modern Practice Playbook",
+        "th": 0,
+        "wh": 0
       },
       {
         "name": "PM",
@@ -2578,9 +2555,9 @@ const MEMBERS = [
     "pod": "Design Studio",
     "ooo": false,
     "today": 13,
-    "week": 42.2,
-    "month": 66.4,
-    "qualifying": 17,
+    "week": 44.6,
+    "month": 71.2,
+    "qualifying": 18,
     "missing": 0,
     "overdue": 0,
     "tasks": [
@@ -2664,6 +2641,15 @@ const MEMBERS = [
         "proj": "XCF: Intake The Creative Foundry",
         "th": 0.17,
         "wh": 0.5
+      },
+      {
+        "name": "One Pager Production - Studio Support ",
+        "start": "2026-06-15",
+        "due": "2026-06-19",
+        "est": 6,
+        "proj": "XCFP-322 | 2026 | Ultra SKU > GA",
+        "th": 0,
+        "wh": 2.4
       },
       {
         "name": "XCFT-5264 - Print design for folders ",
@@ -2877,7 +2863,7 @@ const MEMBERS = [
         "wh": 0
       },
       {
-        "name": "Sherry Choe PM",
+        "name": "Project Management",
         "start": "2026-05-18",
         "due": "2026-07-03",
         "est": 80,
@@ -2908,15 +2894,6 @@ const MEMBERS = [
         "wh": 0.4
       },
       {
-        "name": "Xerocon lanyard design  | Xerocon 2026 | XCF-503 | Xerocon 2026",
-        "start": "2026-06-15",
-        "due": "2026-06-19",
-        "est": 2,
-        "proj": "XCF | Design Studio BAU Board",
-        "th": 0,
-        "wh": 0.8
-      },
-      {
         "name": "XCFT-3088-Review and refinement of staff briefing deck ",
         "start": "2026-06-04",
         "due": "2026-06-19",
@@ -2924,6 +2901,15 @@ const MEMBERS = [
         "proj": "XCFP-14 | 2026 | Xerocon 2026",
         "th": 0.17,
         "wh": 0.67
+      },
+      {
+        "name": "Xerocon lanyard design  | Xerocon 2026 | XCF-503 | Xerocon 2026",
+        "start": "2026-06-15",
+        "due": "2026-06-19",
+        "est": 2,
+        "proj": "XCF | Design Studio BAU Board",
+        "th": 0,
+        "wh": 0.8
       },
       {
         "name": "Slide design | Xerocon 2026",
@@ -2975,7 +2961,7 @@ const MEMBERS = [
     "overdue": 0,
     "tasks": [
       {
-        "name": "Tom Gregson PM",
+        "name": "Project Management",
         "start": "2026-05-25",
         "due": "2026-06-19",
         "est": 10,
@@ -2984,7 +2970,7 @@ const MEMBERS = [
         "wh": 2
       },
       {
-        "name": "Tom Gregson PM",
+        "name": "Project Management",
         "start": "2026-05-25",
         "due": "2026-06-26",
         "est": 70,
@@ -2993,7 +2979,7 @@ const MEMBERS = [
         "wh": 11.2
       },
       {
-        "name": "Tom Gregson PM",
+        "name": "Project Management",
         "start": "2026-05-25",
         "due": "2026-06-26",
         "est": 70,
@@ -3012,7 +2998,7 @@ const MEMBERS = [
     "month": 70.9,
     "qualifying": 4,
     "missing": 0,
-    "overdue": 4,
+    "overdue": 2,
     "tasks": [
       {
         "name": "Video - USA Competitive Messaging | Meta",
@@ -3024,27 +3010,9 @@ const MEMBERS = [
         "overdue": true
       },
       {
-        "name": "WR Ai Video Generation: AI UGC: Business Verticals",
-        "due": "2026-06-05",
-        "est": 25,
-        "proj": "XCF: POD Boards",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
-      {
         "name": "WR: Revisions Still Avatars: AI UGC: Native language",
         "due": "2026-06-10",
         "est": 6,
-        "proj": "XCF: POD Boards",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
-      {
-        "name": "WR Smartly Upload: AI UGC: Business Verticals",
-        "due": "2026-06-10",
-        "est": 18,
         "proj": "XCF: POD Boards",
         "th": 0,
         "wh": 0,
@@ -3351,22 +3319,6 @@ const OVERDUE_TASKS = [
     "due": "2026-06-05"
   },
   {
-    "name": "Icons",
-    "gid": "1213755318666445",
-    "proj": "XCFP-27| FY27 | Xero Payroll, Powered by Gusto - US GA Launch ",
-    "assignee": "Alex Downey",
-    "pod": "Campaign",
-    "due": "2026-06-05"
-  },
-  {
-    "name": "eDM header and body images",
-    "gid": "1214242825384257",
-    "proj": "XCFP-27| FY27 | Xero Payroll, Powered by Gusto - US GA Launch ",
-    "assignee": "Alex Downey",
-    "pod": "Campaign",
-    "due": "2026-06-05"
-  },
-  {
     "name": "Design",
     "gid": "1215446336266579",
     "proj": "XCF: POD Boards",
@@ -3493,14 +3445,6 @@ const OVERDUE_TASKS = [
     "assignee": "Becky Sharp",
     "pod": "Campaign Ops",
     "due": "2026-06-10"
-  },
-  {
-    "name": "BH Ai Video Generation: AI UGC: Business Verticals",
-    "gid": "1214932191974114",
-    "proj": "XCF: POD Boards",
-    "assignee": "Ben Hobbs",
-    "pod": "AI & Media",
-    "due": "2026-06-05"
   },
   {
     "name": "CR1 - Creative Review",
@@ -3695,28 +3639,12 @@ const OVERDUE_TASKS = [
     "due": "2026-06-05"
   },
   {
-    "name": "Design R1 - Bill Adoption Email",
-    "gid": "1215238399535725",
-    "proj": "XCF: POD Boards",
-    "assignee": "Hannah Boekhorst",
-    "pod": "Performance",
-    "due": "2026-06-10"
-  },
-  {
     "name": "Design R1 - Small Business Confidence – Smart Tools - META | TIKTOK",
     "gid": "1215105006421920",
     "proj": "XCF: POD Boards",
     "assignee": "Hannah Boekhorst",
     "pod": "Performance",
     "due": "2026-06-10"
-  },
-  {
-    "name": "Initial design exploration",
-    "gid": "1215354030738493",
-    "proj": "XCFP-84 | Modern Practice Playbook",
-    "assignee": "Laura Fuldseth",
-    "pod": "Design",
-    "due": "2026-06-05"
   },
   {
     "name": "Canva One page designs",
@@ -3767,14 +3695,6 @@ const OVERDUE_TASKS = [
     "due": "2026-06-10"
   },
   {
-    "name": "PM Time - weekly meeting, recap and follow ups",
-    "gid": "1215320170332025",
-    "proj": "XCF: POD Boards",
-    "assignee": "Naomi Lawson",
-    "pod": "Campaign Ops",
-    "due": "2026-06-10"
-  },
-  {
     "name": "Slide design | Xerocon 2026",
     "gid": "1213213477224212",
     "proj": "XCFP-14 | 2026 | Xerocon 2026",
@@ -3799,28 +3719,1057 @@ const OVERDUE_TASKS = [
     "due": "2026-06-04"
   },
   {
-    "name": "WR Ai Video Generation: AI UGC: Business Verticals",
-    "gid": "1215162058247698",
-    "proj": "XCF: POD Boards",
-    "assignee": "Will Rich",
-    "pod": "AI & Media",
-    "due": "2026-06-05"
-  },
-  {
     "name": "WR: Revisions Still Avatars: AI UGC: Native language",
     "gid": "1215362632189905",
     "proj": "XCF: POD Boards",
     "assignee": "Will Rich",
     "pod": "AI & Media",
     "due": "2026-06-10"
+  }
+];
+
+const PM_DATA = [
+  {
+    "name": "Becky Sharp",
+    "gid": "1211157647475793",
+    "projects": [
+      {
+        "gid": "1211932342690980",
+        "name": "XCFT-3188 - Emotional Tax Return - Campaign Launch",
+        "url": "https://app.asana.com/1/41261904390129/project/1211932342690980",
+        "start": "2026-02-12",
+        "due": "2026-05-22",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1211798469922272",
+        "name": "979554 - XPH Phase Launch Assets",
+        "url": "https://app.asana.com/1/41261904390129/project/1211798469922272",
+        "start": "2026-04-29",
+        "due": "2026-06-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213594986761399",
+        "name": "XCFP-307: ITG Sprint 001 ",
+        "url": "https://app.asana.com/1/41261904390129/project/1213594986761399",
+        "start": null,
+        "due": null,
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212446476552313",
+        "name": "XCF | Performance BAU Board",
+        "url": "https://app.asana.com/1/41261904390129/project/1212446476552313",
+        "start": null,
+        "due": null,
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      }
+    ],
+    "tasks": [],
+    "today": 0,
+    "week": 0,
+    "month": 0
   },
   {
-    "name": "WR Smartly Upload: AI UGC: Business Verticals",
-    "gid": "1215162058247708",
-    "proj": "XCF: POD Boards",
-    "assignee": "Will Rich",
-    "pod": "AI & Media",
-    "due": "2026-06-10"
+    "name": "Logen Stent",
+    "gid": "1204783047017630",
+    "projects": [
+      {
+        "gid": "1212851869418228",
+        "name": "XCFT-3198 - Xero Supercharged Sessions",
+        "url": "https://app.asana.com/1/41261904390129/project/1212851869418228",
+        "start": "2026-02-28",
+        "due": "2026-02-28",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213816648269103",
+        "name": "XCFT-377  | 2026 | US Quant testing",
+        "url": "https://app.asana.com/1/41261904390129/project/1213816648269103",
+        "start": "2026-03-20",
+        "due": "2026-04-08",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213258999040816",
+        "name": "XCFP-104 | 2026 | Xerovision FY27",
+        "url": "https://app.asana.com/1/41261904390129/project/1213258999040816",
+        "start": "2026-03-02",
+        "due": "2026-04-15",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212932252717801",
+        "name": "969552 | 2026 | Blue Book",
+        "url": "https://app.asana.com/1/41261904390129/project/1212932252717801",
+        "start": null,
+        "due": "2026-04-27",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212850556114521",
+        "name": "961650 | 2026 | Sydney Office Extension",
+        "url": "https://app.asana.com/1/41261904390129/project/1212850556114521",
+        "start": "2026-03-01",
+        "due": "2026-04-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213737651974116",
+        "name": "XCFP-71 | 2026 | Project Inspire | XCF Support",
+        "url": "https://app.asana.com/1/41261904390129/project/1213737651974116",
+        "start": "2026-04-27",
+        "due": "2026-04-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213816648269250",
+        "name": "XCFP-5 | 2026 | SG60 soundbites",
+        "url": "https://app.asana.com/1/41261904390129/project/1213816648269250",
+        "start": "2026-04-01",
+        "due": "2026-04-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213816648269258",
+        "name": "XCFP-88 | 2026 | US Post Tax Season Events",
+        "url": "https://app.asana.com/1/41261904390129/project/1213816648269258",
+        "start": "2026-04-01",
+        "due": "2026-05-29",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1214062030099645",
+        "name": "XCFP-328 | 2026 | CA Kickstart",
+        "url": "https://app.asana.com/1/41261904390129/project/1214062030099645",
+        "start": "2026-04-01",
+        "due": "2026-06-12",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1215359774998192",
+        "name": "XCFP-542 | Xero Values Launch ",
+        "url": "https://app.asana.com/1/41261904390129/project/1215359774998192",
+        "start": null,
+        "due": "2026-06-19",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1214928877083276",
+        "name": "XCFP-371 | FY27 | Xero Supercharged Sessions",
+        "url": "https://app.asana.com/1/41261904390129/project/1214928877083276",
+        "start": null,
+        "due": "2026-07-03",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1215497940313220",
+        "name": "XCFT-3005 | Global Roadshow Rebrand",
+        "url": "https://app.asana.com/1/41261904390129/project/1215497940313220",
+        "start": null,
+        "due": "2026-07-13",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213816648269262",
+        "name": "XCFP-8 | 2026 | Xero Asia Awards",
+        "url": "https://app.asana.com/1/41261904390129/project/1213816648269262",
+        "start": "2026-04-01",
+        "due": "2026-07-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212446476552317",
+        "name": "XCFP-14 | 2026 | Xerocon 2026",
+        "url": "https://app.asana.com/1/41261904390129/project/1212446476552317",
+        "start": "2026-01-01",
+        "due": "2026-08-31",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213816648269243",
+        "name": "XCFP-17 | 2026 | Know Your Numbers Canva templates",
+        "url": "https://app.asana.com/1/41261904390129/project/1213816648269243",
+        "start": "2026-04-01",
+        "due": "2026-09-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213905491116419",
+        "name": "XCFP-87 | 2026 | Q1 - Q2 Industry Sponsored Events",
+        "url": "https://app.asana.com/1/41261904390129/project/1213905491116419",
+        "start": "2026-04-01",
+        "due": "2026-09-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212932252717779",
+        "name": "913800 | 2026 | Regional Customer Stories | XCF Support",
+        "url": "https://app.asana.com/1/41261904390129/project/1212932252717779",
+        "start": "2026-01-01",
+        "due": "2026-12-31",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212974258656937",
+        "name": "XCF | Design Studio BAU Board",
+        "url": "https://app.asana.com/1/41261904390129/project/1212974258656937",
+        "start": null,
+        "due": null,
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212644837995359",
+        "name": "XCF | Design BAU Board",
+        "url": "https://app.asana.com/1/41261904390129/project/1212644837995359",
+        "start": null,
+        "due": null,
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213816648269237",
+        "name": "XCFP-72 | 2026 | AB Storybook Updates ",
+        "url": "https://app.asana.com/1/41261904390129/project/1213816648269237",
+        "start": null,
+        "due": null,
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213816648269271",
+        "name": "XCFP-28 | 2026 | SB Storybook Updates Q1/Q2",
+        "url": "https://app.asana.com/1/41261904390129/project/1213816648269271",
+        "start": null,
+        "due": null,
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      }
+    ],
+    "tasks": [],
+    "today": 0,
+    "week": 0,
+    "month": 0
+  },
+  {
+    "name": "Naomi Lawson",
+    "gid": "1214038040677324",
+    "projects": [
+      {
+        "gid": "1213816648269215",
+        "name": "XCFP-19 | 2026 | Xero Developer Day",
+        "url": "https://app.asana.com/1/41261904390129/project/1213816648269215",
+        "start": null,
+        "due": "2026-05-19",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212850556114517",
+        "name": "XCFP-81 | 2026 | Annual Report FY26",
+        "url": "https://app.asana.com/1/41261904390129/project/1212850556114517",
+        "start": "2026-06-05",
+        "due": "2026-06-05",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213737651974120",
+        "name": "989350 | 2026 | Xero Partner Advisory Summit",
+        "url": "https://app.asana.com/1/41261904390129/project/1213737651974120",
+        "start": "2026-05-25",
+        "due": "2026-06-16",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213755142401947",
+        "name": "XCFP-27| FY27 | Xero Payroll, Powered by Gusto - US GA Launch ",
+        "url": "https://app.asana.com/1/41261904390129/project/1213755142401947",
+        "start": "2026-06-19",
+        "due": "2026-06-23",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1214603969879455",
+        "name": "XCFT-1146 Xerocon motion graphics + opening video",
+        "url": "https://app.asana.com/1/41261904390129/project/1214603969879455",
+        "start": null,
+        "due": "2026-06-24",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213841171607925",
+        "name": "XCFP-50 | 2026 | XERO AI - ALWAYS ON GO-TO-MARKET",
+        "url": "https://app.asana.com/1/41261904390129/project/1213841171607925",
+        "start": "2026-07-01",
+        "due": "2026-07-01",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213816648269230",
+        "name": "XCFP-83 | 2026 | US and Canada Partner Awards",
+        "url": "https://app.asana.com/1/41261904390129/project/1213816648269230",
+        "start": "2026-07-14",
+        "due": "2026-07-14",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213611543316253",
+        "name": "XCFP-84 | Modern Practice Playbook",
+        "url": "https://app.asana.com/1/41261904390129/project/1213611543316253",
+        "start": "2026-07-22",
+        "due": "2026-07-22",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213816648269223",
+        "name": "XCFP-9 | 2026 | Xero Asia Roadshow",
+        "url": "https://app.asana.com/1/41261904390129/project/1213816648269223",
+        "start": "2026-06-01",
+        "due": "2026-11-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      }
+    ],
+    "tasks": [],
+    "today": 0,
+    "week": 0,
+    "month": 0
+  },
+  {
+    "name": "Quincey Brinker",
+    "gid": "1212672438909404",
+    "projects": [
+      {
+        "gid": "1211700877788996",
+        "name": "969800 - Plaid GTM Campaign",
+        "url": "https://app.asana.com/1/41261904390129/project/1211700877788996",
+        "start": "2025-10-20",
+        "due": "2026-02-13",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1211722194602167",
+        "name": "951850 - 2026 Xero staff tee",
+        "url": "https://app.asana.com/1/41261904390129/project/1211722194602167",
+        "start": "2025-11-03",
+        "due": "2026-02-27",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212674130382064",
+        "name": "XCFT-3193 | Partner Program Revamp ",
+        "url": "https://app.asana.com/1/41261904390129/project/1212674130382064",
+        "start": "2026-02-12",
+        "due": "2026-03-13",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1211841714771742",
+        "name": "978350 - Invoicing + Payments .com Image Refresh",
+        "url": "https://app.asana.com/1/41261904390129/project/1211841714771742",
+        "start": "2025-11-04",
+        "due": "2026-03-20",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1211987519955711",
+        "name": "980101 - AI Video_Creator Style_Ad",
+        "url": "https://app.asana.com/1/41261904390129/project/1211987519955711",
+        "start": "2025-11-18",
+        "due": "2026-04-03",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213752352976681",
+        "name": "XCFP-85 | The LASOI Q426",
+        "url": "https://app.asana.com/1/41261904390129/project/1213752352976681",
+        "start": "2026-03-30",
+        "due": "2026-04-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213725288456308",
+        "name": "XCFP-12 | 2026 | X20",
+        "url": "https://app.asana.com/1/41261904390129/project/1213725288456308",
+        "start": "2026-03-15",
+        "due": "2026-06-05",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213546293196979",
+        "name": "XCFP-322 | 2026 | Ultra SKU > GA",
+        "url": "https://app.asana.com/1/41261904390129/project/1213546293196979",
+        "start": "2026-04-15",
+        "due": "2026-06-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213831485821534",
+        "name": "XCFP-15 | 2026 | JAX Automated Bookkeeping",
+        "url": "https://app.asana.com/1/41261904390129/project/1213831485821534",
+        "start": null,
+        "due": "2026-06-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213612972158988",
+        "name": "XCFP-342: Global Brand Campaign 2026",
+        "url": "https://app.asana.com/1/41261904390129/project/1213612972158988",
+        "start": "2026-05-29",
+        "due": "2026-07-24",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213830922164619",
+        "name": "XCFP-21 | 2026 | FY26 Xero Australia Sustainability Report",
+        "url": "https://app.asana.com/1/41261904390129/project/1213830922164619",
+        "start": "2026-07-31",
+        "due": "2026-07-31",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213725288456300",
+        "name": "XCFP-22 | FY27 | FY26 Xero Limited Modern Slavery Statement",
+        "url": "https://app.asana.com/1/41261904390129/project/1213725288456300",
+        "start": "2026-07-15",
+        "due": "2026-08-14",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213825782612299",
+        "name": "XCFP-65 | 2026 | NZ Rugby Global Partnership Activation",
+        "url": "https://app.asana.com/1/41261904390129/project/1213825782612299",
+        "start": "2026-04-01",
+        "due": "2026-09-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1214568295368899",
+        "name": "XCFP-16 | Xero For Good: Financial confidence AU launch",
+        "url": "https://app.asana.com/1/41261904390129/project/1214568295368899",
+        "start": "2026-08-10",
+        "due": "2026-09-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212873958256223",
+        "name": "XCFT-3196 - Long & Short Of It - Image Request",
+        "url": "https://app.asana.com/1/41261904390129/project/1212873958256223",
+        "start": null,
+        "due": null,
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212797456899374",
+        "name": "985250-Updated one-pager for Xero Analytics",
+        "url": "https://app.asana.com/1/41261904390129/project/1212797456899374",
+        "start": null,
+        "due": null,
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213823200249139",
+        "name": "XCFP-105 | 2026 XCF Creative Ecosystem",
+        "url": "https://app.asana.com/1/41261904390129/project/1213823200249139",
+        "start": null,
+        "due": null,
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212851099876152",
+        "name": "XCF: 2027 Goals",
+        "url": "https://app.asana.com/1/41261904390129/project/1212851099876152",
+        "start": null,
+        "due": null,
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213457699791795",
+        "name": "XCF Creative Development ",
+        "url": "https://app.asana.com/1/41261904390129/project/1213457699791795",
+        "start": null,
+        "due": null,
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      }
+    ],
+    "tasks": [],
+    "today": 0,
+    "week": 0,
+    "month": 0
+  },
+  {
+    "name": "Sherry Choe",
+    "gid": "1214920042573627",
+    "projects": [
+      {
+        "gid": "1212820623088038",
+        "name": "XCFP-300 | 2026 | Brand Refresh",
+        "url": "https://app.asana.com/1/41261904390129/project/1212820623088038",
+        "start": "2026-12-18",
+        "due": "2026-12-18",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      }
+    ],
+    "tasks": [
+      {
+        "name": "Project Management",
+        "proj": "XCFP-300 | 2026 | Brand Refresh",
+        "start": "2026-05-18",
+        "due": "2026-07-03",
+        "est": 80,
+        "th": 2.29,
+        "wh": 9.14,
+        "mh": 27.43
+      }
+    ],
+    "today": 2.3,
+    "week": 9.1,
+    "month": 27.4
+  },
+  {
+    "name": "Tom Gregson",
+    "gid": "1205442966589509",
+    "projects": [
+      {
+        "gid": "1212824643048934",
+        "name": "983850 - Tolley MTD DPS - UK",
+        "url": "https://app.asana.com/1/41261904390129/project/1212824643048934",
+        "start": "2026-01-19",
+        "due": "2026-01-29",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212748885682393",
+        "name": "983700 - Syft guide and ABM promotion - UK partner",
+        "url": "https://app.asana.com/1/41261904390129/project/1212748885682393",
+        "start": "2026-01-12",
+        "due": "2026-02-06",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212975759700079",
+        "name": "986751 - Xero Files product GIFs and statics",
+        "url": "https://app.asana.com/1/41261904390129/project/1212975759700079",
+        "start": "2026-02-09",
+        "due": "2026-02-18",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212849281718293",
+        "name": "982400 - MTD relieve pressure - UK partner",
+        "url": "https://app.asana.com/1/41261904390129/project/1212849281718293",
+        "start": "2026-01-12",
+        "due": "2026-02-27",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213297228962503",
+        "name": "987300 - MTD small business guide amends",
+        "url": "https://app.asana.com/1/41261904390129/project/1213297228962503",
+        "start": "2026-02-20",
+        "due": "2026-02-27",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212797472023558",
+        "name": "983900 - Your Business Supercharged OOH - UK",
+        "url": "https://app.asana.com/1/41261904390129/project/1212797472023558",
+        "start": "2026-02-02",
+        "due": "2026-03-11",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213324405990374",
+        "name": "988950 - UK Syft case study",
+        "url": "https://app.asana.com/1/41261904390129/project/1213324405990374",
+        "start": "2026-03-02",
+        "due": "2026-03-18",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213490455129151",
+        "name": "XCFT-3199  - XCF proactive: YouTube product content concepts ",
+        "url": "https://app.asana.com/1/41261904390129/project/1213490455129151",
+        "start": "2026-03-02",
+        "due": "2026-03-20",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212797547599333",
+        "name": "856450 - MTD for IT - UK",
+        "url": "https://app.asana.com/1/41261904390129/project/1212797547599333",
+        "start": "2026-01-05",
+        "due": "2026-03-27",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1212824643048951",
+        "name": "983250 - Gender Pay Gap report - UK",
+        "url": "https://app.asana.com/1/41261904390129/project/1212824643048951",
+        "start": null,
+        "due": "2026-04-01",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213796273790576",
+        "name": "XCFT-3200 - UK FY27 Kick Off",
+        "url": "https://app.asana.com/1/41261904390129/project/1213796273790576",
+        "start": "2026-04-01",
+        "due": "2026-04-01",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1214302856042420",
+        "name": "XCFT-1042 | 2026 | SB APCT video edit",
+        "url": "https://app.asana.com/1/41261904390129/project/1214302856042420",
+        "start": null,
+        "due": "2026-05-06",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213715541259836",
+        "name": "XCFP-7 | 2026 | Accountex London ",
+        "url": "https://app.asana.com/1/41261904390129/project/1213715541259836",
+        "start": "2026-05-13",
+        "due": "2026-05-14",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1214935886628064",
+        "name": "XCFT-1532 | 2026 | UK MTD Checkatrade DPS",
+        "url": "https://app.asana.com/1/41261904390129/project/1214935886628064",
+        "start": null,
+        "due": "2026-05-28",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1214940511301660",
+        "name": "XCFT-1533 - MTD for landlords guide and landing page",
+        "url": "https://app.asana.com/1/41261904390129/project/1214940511301660",
+        "start": null,
+        "due": "2026-06-03",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1214434593715362",
+        "name": "XCFT-1210 | 2026 | UK Partner Acquisition: MTD IT guide and display",
+        "url": "https://app.asana.com/1/41261904390129/project/1214434593715362",
+        "start": "2026-05-18",
+        "due": "2026-06-12",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213709214768254",
+        "name": "XCFP-77 | 2026 | UK Partnership Tax Compliance Updates",
+        "url": "https://app.asana.com/1/41261904390129/project/1213709214768254",
+        "start": "2026-04-30",
+        "due": "2026-06-26",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213712753478455",
+        "name": "XCFP-60 | 2026 | Director-only Payroll beta",
+        "url": "https://app.asana.com/1/41261904390129/project/1213712753478455",
+        "start": "2026-05-04",
+        "due": "2026-06-26",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213712824194315",
+        "name": "XCFP-56 | 2026 | Smart Document Capture regional activity",
+        "url": "https://app.asana.com/1/41261904390129/project/1213712824194315",
+        "start": "2026-04-06",
+        "due": "2026-06-26",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213712876583576",
+        "name": "XCFP-53 | 2026 | Xero Partner Hub and Workpapers regional amplification",
+        "url": "https://app.asana.com/1/41261904390129/project/1213712876583576",
+        "start": "2026-04-06",
+        "due": "2026-06-26",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213714070998411",
+        "name": "XCFP-35 | 2026 | SB Corporation Tax activity",
+        "url": "https://app.asana.com/1/41261904390129/project/1213714070998411",
+        "start": "2026-04-01",
+        "due": "2026-06-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213714135308674",
+        "name": "XCFP-36 | 2026 | AB Corporation Tax activity",
+        "url": "https://app.asana.com/1/41261904390129/project/1213714135308674",
+        "start": "2026-07-01",
+        "due": "2026-07-01",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213712932136390",
+        "name": "XCFP-57 | 2026 | Regional Payments activity",
+        "url": "https://app.asana.com/1/41261904390129/project/1213712932136390",
+        "start": "2026-05-04",
+        "due": "2026-07-03",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213709038529881",
+        "name": "XCFP-33 | 2026 | MTD AB/SB webinars, AB toolkit and other resource development",
+        "url": "https://app.asana.com/1/41261904390129/project/1213709038529881",
+        "start": "2026-04-01",
+        "due": "2026-07-31",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213714118996711",
+        "name": "XCFP-34 | 2026 | Data Health & Efficiency Campaign",
+        "url": "https://app.asana.com/1/41261904390129/project/1213714118996711",
+        "start": "2026-04-30",
+        "due": "2026-07-31",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213715300265432",
+        "name": "XCFP-55 | 2026 | Thought leadership content amplification",
+        "url": "https://app.asana.com/1/41261904390129/project/1213715300265432",
+        "start": "2026-06-01",
+        "due": "2026-07-31",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213715350555267",
+        "name": "XCFP-54 | 2026 | Customer Stories",
+        "url": "https://app.asana.com/1/41261904390129/project/1213715350555267",
+        "start": "2026-05-18",
+        "due": "2026-07-31",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213709049338642",
+        "name": "XCFP-31 | 2026 | MTD IT Filings campaign",
+        "url": "https://app.asana.com/1/41261904390129/project/1213709049338642",
+        "start": "2026-06-01",
+        "due": "2026-08-07",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213713932361732",
+        "name": "XCFP-51 | 2026 | Total Cost of Ownership Strategic Accounts activity",
+        "url": "https://app.asana.com/1/41261904390129/project/1213713932361732",
+        "start": "2026-05-01",
+        "due": "2026-08-22",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213712822862335",
+        "name": "XCFP-58 | 2026 | World Cup brand refresh / media assets",
+        "url": "https://app.asana.com/1/41261904390129/project/1213712822862335",
+        "start": "2026-06-08",
+        "due": "2026-08-28",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213714069385964",
+        "name": "XCFP-37 | 2026 | SB Smart tools campaign",
+        "url": "https://app.asana.com/1/41261904390129/project/1213714069385964",
+        "start": "2026-05-01",
+        "due": "2026-08-28",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213715496381144",
+        "name": "XCFP-13 | 2026 | Accountex Manchester",
+        "url": "https://app.asana.com/1/41261904390129/project/1213715496381144",
+        "start": "2026-09-15",
+        "due": "2026-09-15",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213714546473110",
+        "name": "XCFP-59 | 2026 | Event: IdeasFest",
+        "url": "https://app.asana.com/1/41261904390129/project/1213714546473110",
+        "start": "2026-09-07",
+        "due": "2026-09-25",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213709134580174",
+        "name": "XCFP-30 | 2026 | MTD IT 'readiness' awareness and Xero consideration campaign",
+        "url": "https://app.asana.com/1/41261904390129/project/1213709134580174",
+        "start": "2026-07-31",
+        "due": "2026-09-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213715530649550",
+        "name": "XCFP-18 | 2026 | Unlock Your Numbers UK program",
+        "url": "https://app.asana.com/1/41261904390129/project/1213715530649550",
+        "start": "2026-04-01",
+        "due": "2026-09-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213709059773649",
+        "name": "XCFP-32 | 2026 | MTD IT Bridging software activity",
+        "url": "https://app.asana.com/1/41261904390129/project/1213709059773649",
+        "start": "2026-08-17",
+        "due": "2026-10-02",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213728029219678",
+        "name": "XCFP-52 | 2026 | Single Platform AB campaign",
+        "url": "https://app.asana.com/1/41261904390129/project/1213728029219678",
+        "start": "2026-07-06",
+        "due": "2026-10-02",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213702136901618",
+        "name": "XCFP-82 | 2026 | Financial Literacy event in Parliament",
+        "url": "https://app.asana.com/1/41261904390129/project/1213702136901618",
+        "start": "2026-10-13",
+        "due": "2026-10-16",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213712608934898",
+        "name": "XCFP-61 | 2026 | Xero Roadshow Promotion",
+        "url": "https://app.asana.com/1/41261904390129/project/1213712608934898",
+        "start": "2026-08-10",
+        "due": "2026-10-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      },
+      {
+        "gid": "1213707201811661",
+        "name": "XCFP-60 | 2026 | Director-only Payroll beta",
+        "url": "https://app.asana.com/1/41261904390129/project/1213707201811661",
+        "start": "2026-06-08",
+        "due": "2026-11-30",
+        "completedTasks": 0,
+        "totalTasks": 0,
+        "pct": null
+      }
+    ],
+    "tasks": [
+      {
+        "name": "Project Management",
+        "proj": "XCFT-1210 | 2026 | UK Partner Acquisition: MTD IT guide and display",
+        "start": "2026-05-25",
+        "due": "2026-06-19",
+        "est": 10,
+        "th": 0.5,
+        "wh": 2,
+        "mh": 3
+      },
+      {
+        "name": "Project Management",
+        "proj": "XCFP-34 | 2026 | Data Health & Efficiency Campaign",
+        "start": "2026-05-25",
+        "due": "2026-06-26",
+        "est": 70,
+        "th": 2.8,
+        "wh": 11.2,
+        "mh": 28
+      },
+      {
+        "name": "Project Management",
+        "proj": "XCFP-37 | 2026 | SB Smart tools campaign",
+        "start": "2026-05-25",
+        "due": "2026-06-26",
+        "est": 70,
+        "th": 2.8,
+        "wh": 11.2,
+        "mh": 28
+      }
+    ],
+    "today": 6.1,
+    "week": 24.4,
+    "month": 59
   }
 ];
 
@@ -3886,6 +4835,7 @@ function showView(v, btn){
   if(v==='findresource') renderFindResource();
   if(v==='podsummary') renderPodSummary();
   if(v==='missing') renderMissing();
+  if(v==='pmteam') renderPMTeam();
 }
 
 /* ── HELPERS ── */
@@ -4098,6 +5048,73 @@ function renderMissing(){
       </div>`;
   });
   document.getElementById('mf-body').innerHTML=html||'<div style="padding:16px 10px;font-size:12px;color:var(--muted)">No tasks missing fields</div>';
+}
+
+/* ══════════════ PM TEAM ══════════════ */
+function renderPMTeam(){
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmtDate(s){if(!s)return'—';const d=new Date(s+'T00:00:00');return d.getDate()+' '+months[d.getMonth()]+' '+String(d.getFullYear()).slice(2);}
+
+  let html='';
+  if(!PM_DATA.length){
+    html='<div style="padding:24px;color:var(--muted);font-size:13px">No PM data available.</div>';
+  }
+  PM_DATA.forEach(pm=>{
+    // Hours badges
+    const badges=`
+      <div class="pm-hours">
+        <span class="pm-h-badge">Today <strong>${pm.today}h</strong></span>
+        <span class="pm-h-badge">7 days <strong>${pm.week}h</strong></span>
+        <span class="pm-h-badge">Month <strong>${pm.month}h</strong></span>
+      </div>`;
+
+    // Projects table
+    let projRows='';
+    pm.projects.forEach(p=>{
+      const pct=p.pct!==null?p.pct:null;
+      const progHTML=pct!==null
+        ?`<div class="pm-prog-wrap"><div class="pm-prog-bar"><div class="pm-prog-fill" style="width:${pct}%"></div></div><span class="pm-prog-pct">${pct}%</span></div>`
+        :'<span style="color:var(--muted);font-size:11px">—</span>';
+      projRows+=`<tr>
+        <td><a href="${p.url||'#'}" target="_blank" rel="noopener" class="pm-proj-link">${p.name} ↗</a></td>
+        <td>${progHTML}</td>
+        <td style="color:var(--muted);white-space:nowrap">${fmtDate(p.start)}</td>
+        <td style="color:var(--muted);white-space:nowrap">${fmtDate(p.due)}</td>
+      </tr>`;
+    });
+
+    // PM Time Tracking tasks
+    let tasksHTML='';
+    if(pm.tasks&&pm.tasks.length){
+      const taskRows=pm.tasks.map(t=>`
+        <div class="pm-task-row">
+          <div>
+            <div class="pm-task-name">${t.name}</div>
+            <div class="pm-task-proj">${t.proj}</div>
+          </div>
+          <div class="pm-task-hrs">
+            Today <strong>${t.th.toFixed(1)}h</strong> &nbsp;·&nbsp;
+            7d <strong>${t.wh.toFixed(1)}h</strong> &nbsp;·&nbsp;
+            Month <strong>${t.mh.toFixed(1)}h</strong>
+          </div>
+        </div>`).join('');
+      tasksHTML=`<div class="pm-tasks-section"><div class="pm-tasks-label">PM Time Tracking</div>${taskRows}</div>`;
+    }
+
+    html+=`
+      <div class="pm-card">
+        <div class="pm-card-hdr">
+          <span class="pm-name">${pm.name}</span>
+          ${badges}
+        </div>
+        <table class="pm-projects-tbl">
+          <thead><tr><th>Project</th><th>Progress</th><th>Start</th><th>Due</th></tr></thead>
+          <tbody>${projRows}</tbody>
+        </table>
+        ${tasksHTML}
+      </div>`;
+  });
+  document.getElementById('pm-body').innerHTML=html;
 }
 
 render();
