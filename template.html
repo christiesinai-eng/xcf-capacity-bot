@@ -153,6 +153,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .mf-row{grid-template-columns:2fr 1fr 100px 100px}
 .mf-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:600;background:#2a1f00;color:#fbbf24;border:1px solid #6b4e00}
 
+/* ── PM TEAM ── */
+.pm-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.pm-card-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:14px 16px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.pm-name{font-size:15px;font-weight:700;color:#fff}
+.pm-hours{display:flex;gap:8px;flex-wrap:wrap}
+.pm-h-badge{font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px 9px;white-space:nowrap}
+.pm-h-badge strong{color:#fff;margin-left:4px}
+.pm-projects-tbl{width:100%;border-collapse:collapse;font-size:12px}
+.pm-projects-tbl th{text-align:left;padding:7px 12px;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--border);font-weight:500}
+.pm-projects-tbl td{padding:7px 12px;border-bottom:.5px solid var(--border);vertical-align:middle}
+.pm-projects-tbl tr:last-child td{border-bottom:none}
+.pm-proj-link{color:#fff;text-decoration:none;font-weight:500;display:block;line-height:1.4}
+.pm-proj-link:hover{text-decoration:underline;color:var(--sky)}
+.pm-prog-wrap{display:flex;align-items:center;gap:6px}
+.pm-prog-bar{flex:1;height:4px;border-radius:2px;background:var(--border);overflow:hidden;min-width:40px}
+.pm-prog-fill{height:100%;border-radius:2px;background:var(--green)}
+.pm-prog-pct{font-size:11px;color:var(--muted);min-width:30px;text-align:right}
+.pm-tasks-section{padding:10px 12px;border-top:1px solid var(--border)}
+.pm-tasks-label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;margin-bottom:6px}
+.pm-task-row{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:.5px solid var(--border);font-size:11px}
+.pm-task-row:last-child{border-bottom:none}
+.pm-task-name{color:var(--txt);flex:1;padding-right:12px;line-height:1.4}
+.pm-task-proj{color:var(--muted);font-size:10px;margin-top:2px}
+.pm-task-hrs{color:var(--muted);text-align:right;white-space:nowrap;line-height:1.8}
+.pm-task-hrs strong{color:#fff}
+
 /* ── FOOTER ── */
 .footer{font-size:10px;color:var(--muted);padding:10px 20px 20px;line-height:1.6;border-top:1px solid var(--border)}
 </style>
@@ -207,6 +233,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
   <button class="nav-btn" onclick="showView('findresource',this)">Find resource</button>
   <button class="nav-btn" onclick="showView('podsummary',this)">POD summary</button>
   <button class="nav-btn" id="nav-missing" onclick="showView('missing',this)">Missing fields (69)</button>
+  <button class="nav-btn" onclick="showView('pmteam',this)">PM Team</button>
 </div>
 
 <!-- ══════════════ VIEW: CAPACITY REPORT ══════════════ -->
@@ -277,6 +304,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
   </div>
 </div>
 
+<!-- ══════════════ VIEW: PM TEAM ══════════════ -->
+<div id="view-pmteam" class="view">
+  <div id="pm-body" style="padding:16px 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(540px,1fr));gap:16px"></div>
+</div>
+
 <div class="footer" id="footer-bar">
   XCF Capacity Report &nbsp;·&nbsp; 19 May 2026 &nbsp;·&nbsp; 446 tasks (all pages) &nbsp;·&nbsp;
   Formula: est time ÷ working days (start→due); no start date = all hours on due date &nbsp;·&nbsp; 8h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation
@@ -317,6 +349,8 @@ const MISSING_TASKS=[
 const OVERDUE_TASKS=[
   {name:"Creative Direction: AB Promo Variation",proj:"XCF: POD Boards",assignee:"Chris Larcombe",pod:"Performance",due:"2026-05-14"}
 ];
+
+const PM_DATA=[];
 
 const TODAY = new Date('2026-05-19');
 
@@ -380,6 +414,7 @@ function showView(v, btn){
   if(v==='findresource') renderFindResource();
   if(v==='podsummary') renderPodSummary();
   if(v==='missing') renderMissing();
+  if(v==='pmteam') renderPMTeam();
 }
 
 /* ── HELPERS ── */
@@ -592,6 +627,73 @@ function renderMissing(){
       </div>`;
   });
   document.getElementById('mf-body').innerHTML=html||'<div style="padding:16px 10px;font-size:12px;color:var(--muted)">No tasks missing fields</div>';
+}
+
+/* ══════════════ PM TEAM ══════════════ */
+function renderPMTeam(){
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmtDate(s){if(!s)return'—';const d=new Date(s+'T00:00:00');return d.getDate()+' '+months[d.getMonth()]+' '+String(d.getFullYear()).slice(2);}
+
+  let html='';
+  if(!PM_DATA.length){
+    html='<div style="padding:24px;color:var(--muted);font-size:13px">No PM data available.</div>';
+  }
+  PM_DATA.forEach(pm=>{
+    // Hours badges
+    const badges=`
+      <div class="pm-hours">
+        <span class="pm-h-badge">Today <strong>${pm.today}h</strong></span>
+        <span class="pm-h-badge">7 days <strong>${pm.week}h</strong></span>
+        <span class="pm-h-badge">Month <strong>${pm.month}h</strong></span>
+      </div>`;
+
+    // Projects table
+    let projRows='';
+    pm.projects.forEach(p=>{
+      const pct=p.pct!==null?p.pct:null;
+      const progHTML=pct!==null
+        ?`<div class="pm-prog-wrap"><div class="pm-prog-bar"><div class="pm-prog-fill" style="width:${pct}%"></div></div><span class="pm-prog-pct">${pct}%</span></div>`
+        :'<span style="color:var(--muted);font-size:11px">—</span>';
+      projRows+=`<tr>
+        <td><a href="${p.url||'#'}" target="_blank" rel="noopener" class="pm-proj-link">${p.name} ↗</a></td>
+        <td>${progHTML}</td>
+        <td style="color:var(--muted);white-space:nowrap">${fmtDate(p.start)}</td>
+        <td style="color:var(--muted);white-space:nowrap">${fmtDate(p.due)}</td>
+      </tr>`;
+    });
+
+    // PM Time Tracking tasks
+    let tasksHTML='';
+    if(pm.tasks&&pm.tasks.length){
+      const taskRows=pm.tasks.map(t=>`
+        <div class="pm-task-row">
+          <div>
+            <div class="pm-task-name">${t.name}</div>
+            <div class="pm-task-proj">${t.proj}</div>
+          </div>
+          <div class="pm-task-hrs">
+            Today <strong>${t.th.toFixed(1)}h</strong> &nbsp;·&nbsp;
+            7d <strong>${t.wh.toFixed(1)}h</strong> &nbsp;·&nbsp;
+            Month <strong>${t.mh.toFixed(1)}h</strong>
+          </div>
+        </div>`).join('');
+      tasksHTML=`<div class="pm-tasks-section"><div class="pm-tasks-label">PM Time Tracking</div>${taskRows}</div>`;
+    }
+
+    html+=`
+      <div class="pm-card">
+        <div class="pm-card-hdr">
+          <span class="pm-name">${pm.name}</span>
+          ${badges}
+        </div>
+        <table class="pm-projects-tbl">
+          <thead><tr><th>Project</th><th>Progress</th><th>Start</th><th>Due</th></tr></thead>
+          <tbody>${projRows}</tbody>
+        </table>
+        ${tasksHTML}
+      </div>`;
+  });
+  document.getElementById('pm-body').innerHTML=html;
 }
 
 render();

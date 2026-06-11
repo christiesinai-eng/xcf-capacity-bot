@@ -355,4 +355,133 @@ async function buildMemberData() {
   return { members, missingTasks: allMissingTasks, overdueTasks: allOverdueTasks, totalTaskCount };
 }
 
-module.exports = { buildMemberData };
+// ─────────────────────────────────────────────────────────────────────────────
+// PM TEAM DATA
+// ─────────────────────────────────────────────────────────────────────────────
+const PM_PORTFOLIO_GID = '1212248393751048';
+
+const PM_EXCLUDED_OWNERS = [
+  'Christie Sinai',
+  'Ben Hobbs',
+  'Domenic Iaria',
+  'Nadim Malvat',
+  'Sandeep Garcha',
+  'Will Rich',
+];
+
+async function buildPMData() {
+  const client = asanaClient();
+  const estGid = process.env.ASANA_FIELD_GID_ESTIMATED_TIME;
+
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Pacific/Auckland' });
+  const in7  = addDays(today, 7);
+  const in21 = addDays(today, 21);
+  // Only check PM Time Tracking in projects active within the last 60 days
+  const cutoffDate = addDays(today, -60);
+
+  // Fetch team members to resolve owner GIDs to names
+  const teamMembers = await getWorkspaceMembers();
+  const memberByGid = {};
+  teamMembers.forEach(m => { memberByGid[m.gid] = m.name; });
+  const excludedGids = new Set(
+    teamMembers.filter(m => PM_EXCLUDED_OWNERS.includes(m.name)).map(m => m.gid)
+  );
+
+  // Fetch all portfolio items (paginated)
+  const allProjects = [];
+  let offset = null;
+  do {
+    const params = {
+      opt_fields: 'name,gid,owner.gid,owner.name,start_on,due_on,permalink_url,completed_task_count,total_task_count',
+      limit: 100,
+    };
+    if (offset) params.offset = offset;
+    const resp = await client.get(`/portfolios/${PM_PORTFOLIO_GID}/items`, { params });
+    allProjects.push(...resp.data.data);
+    offset = resp.data.next_page?.offset ?? null;
+  } while (offset);
+
+  // Filter: name starts with X/8/9, has non-excluded owner
+  const qualifying = allProjects.filter(p =>
+    p.name && /^[X89]/i.test(p.name) &&
+    p.owner?.gid && !excludedGids.has(p.owner.gid)
+  );
+
+  // Group by PM owner
+  const pmMap = {};
+  for (const p of qualifying) {
+    const ownerGid = p.owner.gid;
+    const ownerName = memberByGid[ownerGid] || p.owner.name || 'Unknown';
+    if (!pmMap[ownerGid]) {
+      pmMap[ownerGid] = { name: ownerName, gid: ownerGid, projects: [], tasks: [] };
+    }
+    const total     = p.total_task_count     ?? 0;
+    const completed = p.completed_task_count ?? 0;
+    pmMap[ownerGid].projects.push({
+      gid:            p.gid,
+      name:           p.name,
+      url:            p.permalink_url,
+      start:          p.start_on  || null,
+      due:            p.due_on    || null,
+      completedTasks: completed,
+      totalTasks:     total,
+      pct:            total > 0 ? Math.round((completed / total) * 100) : null,
+    });
+  }
+
+  // For each PM, fetch PM Time Tracking tasks from active projects
+  for (const pm of Object.values(pmMap)) {
+    // Sort projects by due date ascending
+    pm.projects.sort((a, b) => {
+      if (!a.due && !b.due) return 0;
+      if (!a.due) return 1;
+      if (!b.due) return -1;
+      return a.due.localeCompare(b.due);
+    });
+
+    const activeProjects = pm.projects.filter(p => !p.due || p.due >= cutoffDate);
+
+    for (const project of activeProjects) {
+      const sectResp = await client.get(`/projects/${project.gid}/sections`, {
+        params: { opt_fields: 'name,gid' },
+      }).catch(() => ({ data: { data: [] } }));
+
+      const pmSection = sectResp.data.data.find(s =>
+        s.name.toLowerCase().includes('pm time tracking')
+      );
+      if (!pmSection) continue;
+
+      const taskResp = await client.get(`/sections/${pmSection.gid}/tasks`, {
+        params: {
+          opt_fields: `gid,name,completed,due_on,start_on,assignee.gid,custom_fields.gid,custom_fields.number_value`,
+          limit: 100,
+        },
+      }).catch(() => ({ data: { data: [] } }));
+
+      for (const t of taskResp.data.data) {
+        if (t.completed) continue;
+        if (t.assignee?.gid !== pm.gid) continue;
+
+        const estMins = t.custom_fields?.find(f => f.gid === estGid)?.number_value;
+        const est = estMins ? estMins / 60 : null;
+        if (!est || !t.due_on) continue;
+        if (new Date(t.due_on + 'T00:00:00') < new Date(today + 'T00:00:00')) continue;
+
+        const startDate = t.start_on || null;
+        const th  = round2(hoursOnDate(est, startDate, t.due_on, today));
+        const wh  = round2(sumHoursOverRange(est, startDate, t.due_on, today, in7));
+        const mh  = round2(sumHoursOverRange(est, startDate, t.due_on, today, in21));
+
+        pm.tasks.push({ name: t.name, proj: project.name, start: startDate, due: t.due_on, est, th, wh, mh });
+      }
+    }
+
+    pm.today = round1(pm.tasks.reduce((s, t) => s + t.th, 0));
+    pm.week  = round1(pm.tasks.reduce((s, t) => s + t.wh, 0));
+    pm.month = round1(pm.tasks.reduce((s, t) => s + t.mh, 0));
+  }
+
+  return Object.values(pmMap).sort((a, b) => a.name.localeCompare(b.name));
+}
+
+module.exports = { buildMemberData, buildPMData };
