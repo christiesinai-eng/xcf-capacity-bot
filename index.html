@@ -154,28 +154,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .mf-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:600;background:#2a1f00;color:#fbbf24;border:1px solid #6b4e00}
 
 /* ── PM TEAM ── */
-.pm-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.pm-card-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:14px 16px;border-bottom:1px solid var(--border);background:var(--surface2)}
-.pm-name{font-size:15px;font-weight:700;color:#fff}
-.pm-hours{display:flex;gap:8px;flex-wrap:wrap}
-.pm-h-badge{font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px 9px;white-space:nowrap}
-.pm-h-badge strong{color:#fff;margin-left:4px}
+.pm-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:0}
+.pm-card-hdr{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:14px 16px 10px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.pm-name{font-size:15px;font-weight:700;color:#fff;margin-bottom:8px}
+.pm-cap-bar-wrap{margin-top:4px}
+.pm-cap-label{font-size:10px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+.pm-cap-bar{height:6px;border-radius:3px;background:var(--border);overflow:hidden;width:160px}
+.pm-cap-fill{height:100%;border-radius:3px;transition:width .3s}
+.pm-hours{display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start}
+.pm-h-badge{font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 10px;white-space:nowrap;text-align:center}
+.pm-h-badge .pm-h-label{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.pm-h-badge strong{display:block;font-size:14px;color:#fff;line-height:1}
 .pm-projects-tbl{width:100%;border-collapse:collapse;font-size:12px}
 .pm-projects-tbl th{text-align:left;padding:7px 12px;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--border);font-weight:500}
 .pm-projects-tbl td{padding:7px 12px;border-bottom:.5px solid var(--border);vertical-align:middle}
+.pm-projects-tbl tr.pm-task-row-expand td{padding:0;border-bottom:.5px solid var(--border)}
 .pm-projects-tbl tr:last-child td{border-bottom:none}
 .pm-proj-link{color:#fff;text-decoration:none;font-weight:500;display:block;line-height:1.4}
 .pm-proj-link:hover{text-decoration:underline;color:var(--sky)}
+.pm-expand-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px;padding:2px 4px;border-radius:4px;margin-left:4px}
+.pm-expand-btn:hover{color:var(--sky)}
 .pm-prog-wrap{display:flex;align-items:center;gap:6px}
-.pm-prog-bar{flex:1;height:4px;border-radius:2px;background:var(--border);overflow:hidden;min-width:40px}
-.pm-prog-fill{height:100%;border-radius:2px;background:var(--green)}
-.pm-prog-pct{font-size:11px;color:var(--muted);min-width:30px;text-align:right}
-.pm-tasks-section{padding:10px 12px;border-top:1px solid var(--border)}
-.pm-tasks-label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;margin-bottom:6px}
-.pm-task-row{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:.5px solid var(--border);font-size:11px}
-.pm-task-row:last-child{border-bottom:none}
+.pm-prog-bar{flex:1;height:5px;border-radius:3px;background:var(--border);overflow:hidden;min-width:50px}
+.pm-prog-fill{height:100%;border-radius:3px}
+.pm-prog-pct{font-size:11px;min-width:32px;text-align:right;font-weight:500}
+.pm-tasks-panel{background:#0d1020;border-top:.5px solid var(--border);padding:10px 14px;display:none}
+.pm-tasks-panel.open{display:block}
+.pm-tasks-panel-label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;margin-bottom:6px}
+.pm-task-item{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:.5px solid var(--border);font-size:11px}
+.pm-task-item:last-child{border-bottom:none}
 .pm-task-name{color:var(--txt);flex:1;padding-right:12px;line-height:1.4}
-.pm-task-proj{color:var(--muted);font-size:10px;margin-top:2px}
 .pm-task-hrs{color:var(--muted);text-align:right;white-space:nowrap;line-height:1.8}
 .pm-task-hrs strong{color:#fff}
 
@@ -325,7 +333,7 @@ const BRAND={
   'GM Creative':   {bg:'#0a0c1a',fg:'#8b9abf',bar:'#4a5580',dot:'#4a5580'},
 };
 const PODS=['Performance','Design','Design Studio','Campaign','AI & Media','Campaign Ops','GM Creative'];
-const GENERATED_AT = "11 Jun 2026, 02:46 pm NZT";
+const GENERATED_AT = "11 Jun 2026, 03:57 pm NZT";
 
 const MEMBERS = [
   {
@@ -2145,22 +2153,13 @@ const MEMBERS = [
     "name": "Laura Fuldseth",
     "pod": "Design",
     "ooo": false,
-    "today": 10.7,
-    "week": 35.6,
-    "month": 68.1,
+    "today": 11.5,
+    "week": 37.9,
+    "month": 70.4,
     "qualifying": 7,
     "missing": 2,
-    "overdue": 1,
+    "overdue": 0,
     "tasks": [
-      {
-        "name": "Canva One page designs",
-        "due": "2026-06-05",
-        "est": 20,
-        "proj": "XCFT-3195 - Brand Refresh",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
       {
         "name": "XCFT-4829 - Generic Xero fabric frame banner",
         "start": "2026-06-11",
@@ -2174,10 +2173,10 @@ const MEMBERS = [
         "name": "Creative concept refinement based on feedback",
         "start": "2026-06-11",
         "due": "2026-06-16",
-        "est": 5,
+        "est": 8,
         "proj": "XCFP-84 | Modern Practice Playbook",
-        "th": 1.25,
-        "wh": 3.75
+        "th": 2,
+        "wh": 6
       },
       {
         "name": "Sub-brands architecture ",
@@ -3647,14 +3646,6 @@ const OVERDUE_TASKS = [
     "due": "2026-06-10"
   },
   {
-    "name": "Canva One page designs",
-    "gid": "1215192877391229",
-    "proj": "XCFT-3195 - Brand Refresh",
-    "assignee": "Laura Fuldseth",
-    "pod": "Design",
-    "due": "2026-06-05"
-  },
-  {
     "name": "PM",
     "gid": "1215281288835064",
     "proj": "XCF: POD Boards",
@@ -3739,9 +3730,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1211932342690980",
         "start": "2026-02-12",
         "due": "2026-05-22",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 63,
+        "totalTasks": 69,
+        "pct": 91,
+        "pmTasks": []
       },
       {
         "gid": "1211798469922272",
@@ -3749,9 +3741,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1211798469922272",
         "start": "2026-04-29",
         "due": "2026-06-30",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 12,
+        "totalTasks": 33,
+        "pct": 36,
+        "pmTasks": []
       },
       {
         "gid": "1213594986761399",
@@ -3759,9 +3752,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213594986761399",
         "start": null,
         "due": null,
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 6,
+        "totalTasks": 18,
+        "pct": 33,
+        "pmTasks": []
       },
       {
         "gid": "1212446476552313",
@@ -3769,9 +3763,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1212446476552313",
         "start": null,
         "due": null,
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 40,
+        "totalTasks": 100,
+        "pct": 40,
+        "pmTasks": []
       }
     ],
     "tasks": [],
@@ -3784,44 +3779,15 @@ const PM_DATA = [
     "gid": "1204783047017630",
     "projects": [
       {
-        "gid": "1212851869418228",
-        "name": "XCFT-3198 - Xero Supercharged Sessions",
-        "url": "https://app.asana.com/1/41261904390129/project/1212851869418228",
-        "start": "2026-02-28",
-        "due": "2026-02-28",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1213816648269103",
-        "name": "XCFT-377  | 2026 | US Quant testing",
-        "url": "https://app.asana.com/1/41261904390129/project/1213816648269103",
-        "start": "2026-03-20",
-        "due": "2026-04-08",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1213258999040816",
-        "name": "XCFP-104 | 2026 | Xerovision FY27",
-        "url": "https://app.asana.com/1/41261904390129/project/1213258999040816",
-        "start": "2026-03-02",
-        "due": "2026-04-15",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
         "gid": "1212932252717801",
         "name": "969552 | 2026 | Blue Book",
         "url": "https://app.asana.com/1/41261904390129/project/1212932252717801",
         "start": null,
         "due": "2026-04-27",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 1,
+        "totalTasks": 18,
+        "pct": 6,
+        "pmTasks": []
       },
       {
         "gid": "1212850556114521",
@@ -3829,9 +3795,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1212850556114521",
         "start": "2026-03-01",
         "due": "2026-04-30",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 19,
+        "totalTasks": 22,
+        "pct": 86,
+        "pmTasks": []
       },
       {
         "gid": "1213737651974116",
@@ -3839,19 +3806,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213737651974116",
         "start": "2026-04-27",
         "due": "2026-04-30",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1213816648269250",
-        "name": "XCFP-5 | 2026 | SG60 soundbites",
-        "url": "https://app.asana.com/1/41261904390129/project/1213816648269250",
-        "start": "2026-04-01",
-        "due": "2026-04-30",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 2,
+        "totalTasks": 8,
+        "pct": 25,
+        "pmTasks": []
       },
       {
         "gid": "1213816648269258",
@@ -3859,9 +3817,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213816648269258",
         "start": "2026-04-01",
         "due": "2026-05-29",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 4,
+        "totalTasks": 9,
+        "pct": 44,
+        "pmTasks": []
       },
       {
         "gid": "1214062030099645",
@@ -3869,9 +3828,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1214062030099645",
         "start": "2026-04-01",
         "due": "2026-06-12",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 5,
+        "totalTasks": 11,
+        "pct": 45,
+        "pmTasks": []
       },
       {
         "gid": "1215359774998192",
@@ -3879,9 +3839,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1215359774998192",
         "start": null,
         "due": "2026-06-19",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 4,
+        "totalTasks": 34,
+        "pct": 12,
+        "pmTasks": []
       },
       {
         "gid": "1214928877083276",
@@ -3889,9 +3850,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1214928877083276",
         "start": null,
         "due": "2026-07-03",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 2,
+        "totalTasks": 18,
+        "pct": 11,
+        "pmTasks": []
       },
       {
         "gid": "1215497940313220",
@@ -3900,18 +3862,9 @@ const PM_DATA = [
         "start": null,
         "due": "2026-07-13",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1213816648269262",
-        "name": "XCFP-8 | 2026 | Xero Asia Awards",
-        "url": "https://app.asana.com/1/41261904390129/project/1213816648269262",
-        "start": "2026-04-01",
-        "due": "2026-07-30",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 33,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1212446476552317",
@@ -3919,9 +3872,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1212446476552317",
         "start": "2026-01-01",
         "due": "2026-08-31",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 48,
+        "totalTasks": 74,
+        "pct": 65,
+        "pmTasks": []
       },
       {
         "gid": "1213816648269243",
@@ -3930,8 +3884,9 @@ const PM_DATA = [
         "start": "2026-04-01",
         "due": "2026-09-30",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 15,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213905491116419",
@@ -3939,9 +3894,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213905491116419",
         "start": "2026-04-01",
         "due": "2026-09-30",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 7,
+        "totalTasks": 12,
+        "pct": 58,
+        "pmTasks": []
       },
       {
         "gid": "1212932252717779",
@@ -3949,29 +3905,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1212932252717779",
         "start": "2026-01-01",
         "due": "2026-12-31",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1212974258656937",
-        "name": "XCF | Design Studio BAU Board",
-        "url": "https://app.asana.com/1/41261904390129/project/1212974258656937",
-        "start": null,
-        "due": null,
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1212644837995359",
-        "name": "XCF | Design BAU Board",
-        "url": "https://app.asana.com/1/41261904390129/project/1212644837995359",
-        "start": null,
-        "due": null,
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 3,
+        "totalTasks": 3,
+        "pct": 100,
+        "pmTasks": []
       },
       {
         "gid": "1213816648269237",
@@ -3980,8 +3917,9 @@ const PM_DATA = [
         "start": null,
         "due": null,
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 15,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213816648269271",
@@ -3990,8 +3928,9 @@ const PM_DATA = [
         "start": null,
         "due": null,
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 15,
+        "pct": 0,
+        "pmTasks": []
       }
     ],
     "tasks": [],
@@ -4004,34 +3943,15 @@ const PM_DATA = [
     "gid": "1214038040677324",
     "projects": [
       {
-        "gid": "1213816648269215",
-        "name": "XCFP-19 | 2026 | Xero Developer Day",
-        "url": "https://app.asana.com/1/41261904390129/project/1213816648269215",
-        "start": null,
-        "due": "2026-05-19",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1212850556114517",
-        "name": "XCFP-81 | 2026 | Annual Report FY26",
-        "url": "https://app.asana.com/1/41261904390129/project/1212850556114517",
-        "start": "2026-06-05",
-        "due": "2026-06-05",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
         "gid": "1213737651974120",
         "name": "989350 | 2026 | Xero Partner Advisory Summit",
         "url": "https://app.asana.com/1/41261904390129/project/1213737651974120",
         "start": "2026-05-25",
         "due": "2026-06-16",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 33,
+        "totalTasks": 50,
+        "pct": 66,
+        "pmTasks": []
       },
       {
         "gid": "1213755142401947",
@@ -4039,9 +3959,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213755142401947",
         "start": "2026-06-19",
         "due": "2026-06-23",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 27,
+        "totalTasks": 59,
+        "pct": 46,
+        "pmTasks": []
       },
       {
         "gid": "1214603969879455",
@@ -4049,9 +3970,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1214603969879455",
         "start": null,
         "due": "2026-06-24",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 22,
+        "totalTasks": 43,
+        "pct": 51,
+        "pmTasks": []
       },
       {
         "gid": "1213841171607925",
@@ -4059,9 +3981,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213841171607925",
         "start": "2026-07-01",
         "due": "2026-07-01",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 29,
+        "totalTasks": 46,
+        "pct": 63,
+        "pmTasks": []
       },
       {
         "gid": "1213816648269230",
@@ -4069,9 +3992,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213816648269230",
         "start": "2026-07-14",
         "due": "2026-07-14",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 6,
+        "totalTasks": 26,
+        "pct": 23,
+        "pmTasks": []
       },
       {
         "gid": "1213611543316253",
@@ -4079,9 +4003,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213611543316253",
         "start": "2026-07-22",
         "due": "2026-07-22",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 7,
+        "totalTasks": 48,
+        "pct": 15,
+        "pmTasks": []
       },
       {
         "gid": "1213816648269223",
@@ -4089,9 +4014,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213816648269223",
         "start": "2026-06-01",
         "due": "2026-11-30",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 2,
+        "totalTasks": 4,
+        "pct": 50,
+        "pmTasks": []
       }
     ],
     "tasks": [],
@@ -4104,64 +4030,15 @@ const PM_DATA = [
     "gid": "1212672438909404",
     "projects": [
       {
-        "gid": "1211700877788996",
-        "name": "969800 - Plaid GTM Campaign",
-        "url": "https://app.asana.com/1/41261904390129/project/1211700877788996",
-        "start": "2025-10-20",
-        "due": "2026-02-13",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1211722194602167",
-        "name": "951850 - 2026 Xero staff tee",
-        "url": "https://app.asana.com/1/41261904390129/project/1211722194602167",
-        "start": "2025-11-03",
-        "due": "2026-02-27",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
         "gid": "1212674130382064",
         "name": "XCFT-3193 | Partner Program Revamp ",
         "url": "https://app.asana.com/1/41261904390129/project/1212674130382064",
         "start": "2026-02-12",
         "due": "2026-03-13",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1211841714771742",
-        "name": "978350 - Invoicing + Payments .com Image Refresh",
-        "url": "https://app.asana.com/1/41261904390129/project/1211841714771742",
-        "start": "2025-11-04",
-        "due": "2026-03-20",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1211987519955711",
-        "name": "980101 - AI Video_Creator Style_Ad",
-        "url": "https://app.asana.com/1/41261904390129/project/1211987519955711",
-        "start": "2025-11-18",
-        "due": "2026-04-03",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1213752352976681",
-        "name": "XCFP-85 | The LASOI Q426",
-        "url": "https://app.asana.com/1/41261904390129/project/1213752352976681",
-        "start": "2026-03-30",
-        "due": "2026-04-30",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 30,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213725288456308",
@@ -4170,8 +4047,9 @@ const PM_DATA = [
         "start": "2026-03-15",
         "due": "2026-06-05",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 50,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213546293196979",
@@ -4179,9 +4057,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213546293196979",
         "start": "2026-04-15",
         "due": "2026-06-30",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 14,
+        "totalTasks": 34,
+        "pct": 41,
+        "pmTasks": []
       },
       {
         "gid": "1213831485821534",
@@ -4190,8 +4069,9 @@ const PM_DATA = [
         "start": null,
         "due": "2026-06-30",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 33,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213612972158988",
@@ -4199,9 +4079,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213612972158988",
         "start": "2026-05-29",
         "due": "2026-07-24",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 11,
+        "totalTasks": 21,
+        "pct": 52,
+        "pmTasks": []
       },
       {
         "gid": "1213830922164619",
@@ -4210,8 +4091,9 @@ const PM_DATA = [
         "start": "2026-07-31",
         "due": "2026-07-31",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 33,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213725288456300",
@@ -4220,8 +4102,9 @@ const PM_DATA = [
         "start": "2026-07-15",
         "due": "2026-08-14",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 50,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213825782612299",
@@ -4230,8 +4113,9 @@ const PM_DATA = [
         "start": "2026-04-01",
         "due": "2026-09-30",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 50,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1214568295368899",
@@ -4239,29 +4123,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1214568295368899",
         "start": "2026-08-10",
         "due": "2026-09-30",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1212873958256223",
-        "name": "XCFT-3196 - Long & Short Of It - Image Request",
-        "url": "https://app.asana.com/1/41261904390129/project/1212873958256223",
-        "start": null,
-        "due": null,
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1212797456899374",
-        "name": "985250-Updated one-pager for Xero Analytics",
-        "url": "https://app.asana.com/1/41261904390129/project/1212797456899374",
-        "start": null,
-        "due": null,
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 9,
+        "totalTasks": 29,
+        "pct": 31,
+        "pmTasks": []
       },
       {
         "gid": "1213823200249139",
@@ -4269,29 +4134,10 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213823200249139",
         "start": null,
         "due": null,
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1212851099876152",
-        "name": "XCF: 2027 Goals",
-        "url": "https://app.asana.com/1/41261904390129/project/1212851099876152",
-        "start": null,
-        "due": null,
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1213457699791795",
-        "name": "XCF Creative Development ",
-        "url": "https://app.asana.com/1/41261904390129/project/1213457699791795",
-        "start": null,
-        "due": null,
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 3,
+        "totalTasks": 15,
+        "pct": 20,
+        "pmTasks": []
       }
     ],
     "tasks": [],
@@ -4309,18 +4155,24 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1212820623088038",
         "start": "2026-12-18",
         "due": "2026-12-18",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 19,
+        "totalTasks": 100,
+        "pct": 19,
+        "pmTasks": [
+          {
+            "name": "Project Management",
+            "start": "2026-05-18",
+            "due": "2026-07-03",
+            "est": 80,
+            "th": 2.29,
+            "wh": 9.14,
+            "mh": 27.43
+          }
+        ]
       }
     ],
     "tasks": [
       {
-        "name": "Project Management",
-        "proj": "XCFP-300 | 2026 | Brand Refresh",
-        "start": "2026-05-18",
-        "due": "2026-07-03",
-        "est": 80,
         "th": 2.29,
         "wh": 9.14,
         "mh": 27.43
@@ -4335,164 +4187,25 @@ const PM_DATA = [
     "gid": "1205442966589509",
     "projects": [
       {
-        "gid": "1212824643048934",
-        "name": "983850 - Tolley MTD DPS - UK",
-        "url": "https://app.asana.com/1/41261904390129/project/1212824643048934",
-        "start": "2026-01-19",
-        "due": "2026-01-29",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1212748885682393",
-        "name": "983700 - Syft guide and ABM promotion - UK partner",
-        "url": "https://app.asana.com/1/41261904390129/project/1212748885682393",
-        "start": "2026-01-12",
-        "due": "2026-02-06",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1212975759700079",
-        "name": "986751 - Xero Files product GIFs and statics",
-        "url": "https://app.asana.com/1/41261904390129/project/1212975759700079",
-        "start": "2026-02-09",
-        "due": "2026-02-18",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1212849281718293",
-        "name": "982400 - MTD relieve pressure - UK partner",
-        "url": "https://app.asana.com/1/41261904390129/project/1212849281718293",
-        "start": "2026-01-12",
-        "due": "2026-02-27",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1213297228962503",
-        "name": "987300 - MTD small business guide amends",
-        "url": "https://app.asana.com/1/41261904390129/project/1213297228962503",
-        "start": "2026-02-20",
-        "due": "2026-02-27",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1212797472023558",
-        "name": "983900 - Your Business Supercharged OOH - UK",
-        "url": "https://app.asana.com/1/41261904390129/project/1212797472023558",
-        "start": "2026-02-02",
-        "due": "2026-03-11",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1213324405990374",
-        "name": "988950 - UK Syft case study",
-        "url": "https://app.asana.com/1/41261904390129/project/1213324405990374",
-        "start": "2026-03-02",
-        "due": "2026-03-18",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1213490455129151",
-        "name": "XCFT-3199  - XCF proactive: YouTube product content concepts ",
-        "url": "https://app.asana.com/1/41261904390129/project/1213490455129151",
-        "start": "2026-03-02",
-        "due": "2026-03-20",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1212797547599333",
-        "name": "856450 - MTD for IT - UK",
-        "url": "https://app.asana.com/1/41261904390129/project/1212797547599333",
-        "start": "2026-01-05",
-        "due": "2026-03-27",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1212824643048951",
-        "name": "983250 - Gender Pay Gap report - UK",
-        "url": "https://app.asana.com/1/41261904390129/project/1212824643048951",
-        "start": null,
-        "due": "2026-04-01",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1213796273790576",
-        "name": "XCFT-3200 - UK FY27 Kick Off",
-        "url": "https://app.asana.com/1/41261904390129/project/1213796273790576",
-        "start": "2026-04-01",
-        "due": "2026-04-01",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1214302856042420",
-        "name": "XCFT-1042 | 2026 | SB APCT video edit",
-        "url": "https://app.asana.com/1/41261904390129/project/1214302856042420",
-        "start": null,
-        "due": "2026-05-06",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1213715541259836",
-        "name": "XCFP-7 | 2026 | Accountex London ",
-        "url": "https://app.asana.com/1/41261904390129/project/1213715541259836",
-        "start": "2026-05-13",
-        "due": "2026-05-14",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1214935886628064",
-        "name": "XCFT-1532 | 2026 | UK MTD Checkatrade DPS",
-        "url": "https://app.asana.com/1/41261904390129/project/1214935886628064",
-        "start": null,
-        "due": "2026-05-28",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
-        "gid": "1214940511301660",
-        "name": "XCFT-1533 - MTD for landlords guide and landing page",
-        "url": "https://app.asana.com/1/41261904390129/project/1214940511301660",
-        "start": null,
-        "due": "2026-06-03",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
-      },
-      {
         "gid": "1214434593715362",
         "name": "XCFT-1210 | 2026 | UK Partner Acquisition: MTD IT guide and display",
         "url": "https://app.asana.com/1/41261904390129/project/1214434593715362",
         "start": "2026-05-18",
         "due": "2026-06-12",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 13,
+        "totalTasks": 15,
+        "pct": 87,
+        "pmTasks": [
+          {
+            "name": "Project Management",
+            "start": "2026-05-25",
+            "due": "2026-06-19",
+            "est": 10,
+            "th": 0.5,
+            "wh": 2,
+            "mh": 3
+          }
+        ]
       },
       {
         "gid": "1213709214768254",
@@ -4501,8 +4214,9 @@ const PM_DATA = [
         "start": "2026-04-30",
         "due": "2026-06-26",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 15,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213712753478455",
@@ -4511,8 +4225,9 @@ const PM_DATA = [
         "start": "2026-05-04",
         "due": "2026-06-26",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 15,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213712824194315",
@@ -4521,8 +4236,9 @@ const PM_DATA = [
         "start": "2026-04-06",
         "due": "2026-06-26",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 33,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213712876583576",
@@ -4531,8 +4247,9 @@ const PM_DATA = [
         "start": "2026-04-06",
         "due": "2026-06-26",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 33,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213714070998411",
@@ -4541,8 +4258,9 @@ const PM_DATA = [
         "start": "2026-04-01",
         "due": "2026-06-30",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 15,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213714135308674",
@@ -4551,8 +4269,9 @@ const PM_DATA = [
         "start": "2026-07-01",
         "due": "2026-07-01",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 33,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213712932136390",
@@ -4561,8 +4280,9 @@ const PM_DATA = [
         "start": "2026-05-04",
         "due": "2026-07-03",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 15,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213709038529881",
@@ -4571,8 +4291,9 @@ const PM_DATA = [
         "start": "2026-04-01",
         "due": "2026-07-31",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 15,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213714118996711",
@@ -4580,9 +4301,20 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213714118996711",
         "start": "2026-04-30",
         "due": "2026-07-31",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 26,
+        "totalTasks": 37,
+        "pct": 70,
+        "pmTasks": [
+          {
+            "name": "Project Management",
+            "start": "2026-05-25",
+            "due": "2026-06-26",
+            "est": 70,
+            "th": 2.8,
+            "wh": 11.2,
+            "mh": 28
+          }
+        ]
       },
       {
         "gid": "1213715300265432",
@@ -4591,8 +4323,9 @@ const PM_DATA = [
         "start": "2026-06-01",
         "due": "2026-07-31",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 15,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213715350555267",
@@ -4601,8 +4334,9 @@ const PM_DATA = [
         "start": "2026-05-18",
         "due": "2026-07-31",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 33,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213709049338642",
@@ -4611,8 +4345,9 @@ const PM_DATA = [
         "start": "2026-06-01",
         "due": "2026-08-07",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 15,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213713932361732",
@@ -4621,8 +4356,9 @@ const PM_DATA = [
         "start": "2026-05-01",
         "due": "2026-08-22",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 33,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213712822862335",
@@ -4631,8 +4367,9 @@ const PM_DATA = [
         "start": "2026-06-08",
         "due": "2026-08-28",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 50,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213714069385964",
@@ -4640,9 +4377,20 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213714069385964",
         "start": "2026-05-01",
         "due": "2026-08-28",
-        "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "completedTasks": 39,
+        "totalTasks": 53,
+        "pct": 74,
+        "pmTasks": [
+          {
+            "name": "Project Management",
+            "start": "2026-05-25",
+            "due": "2026-06-26",
+            "est": 70,
+            "th": 2.8,
+            "wh": 11.2,
+            "mh": 28
+          }
+        ]
       },
       {
         "gid": "1213715496381144",
@@ -4651,8 +4399,9 @@ const PM_DATA = [
         "start": "2026-09-15",
         "due": "2026-09-15",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 15,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213714546473110",
@@ -4661,8 +4410,9 @@ const PM_DATA = [
         "start": "2026-09-07",
         "due": "2026-09-25",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 33,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213709134580174",
@@ -4671,8 +4421,9 @@ const PM_DATA = [
         "start": "2026-07-31",
         "due": "2026-09-30",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 50,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213715530649550",
@@ -4681,8 +4432,9 @@ const PM_DATA = [
         "start": "2026-04-01",
         "due": "2026-09-30",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 15,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213709059773649",
@@ -4691,8 +4443,9 @@ const PM_DATA = [
         "start": "2026-08-17",
         "due": "2026-10-02",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 15,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213728029219678",
@@ -4701,8 +4454,9 @@ const PM_DATA = [
         "start": "2026-07-06",
         "due": "2026-10-02",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 50,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213702136901618",
@@ -4711,8 +4465,9 @@ const PM_DATA = [
         "start": "2026-10-13",
         "due": "2026-10-16",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 50,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213712608934898",
@@ -4721,8 +4476,9 @@ const PM_DATA = [
         "start": "2026-08-10",
         "due": "2026-10-30",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 15,
+        "pct": 0,
+        "pmTasks": []
       },
       {
         "gid": "1213707201811661",
@@ -4731,37 +4487,23 @@ const PM_DATA = [
         "start": "2026-06-08",
         "due": "2026-11-30",
         "completedTasks": 0,
-        "totalTasks": 0,
-        "pct": null
+        "totalTasks": 15,
+        "pct": 0,
+        "pmTasks": []
       }
     ],
     "tasks": [
       {
-        "name": "Project Management",
-        "proj": "XCFT-1210 | 2026 | UK Partner Acquisition: MTD IT guide and display",
-        "start": "2026-05-25",
-        "due": "2026-06-19",
-        "est": 10,
         "th": 0.5,
         "wh": 2,
         "mh": 3
       },
       {
-        "name": "Project Management",
-        "proj": "XCFP-34 | 2026 | Data Health & Efficiency Campaign",
-        "start": "2026-05-25",
-        "due": "2026-06-26",
-        "est": 70,
         "th": 2.8,
         "wh": 11.2,
         "mh": 28
       },
       {
-        "name": "Project Management",
-        "proj": "XCFP-37 | 2026 | SB Smart tools campaign",
-        "start": "2026-05-25",
-        "due": "2026-06-26",
-        "est": 70,
         "th": 2.8,
         "wh": 11.2,
         "mh": 28
@@ -5051,67 +4793,106 @@ function renderMissing(){
 }
 
 /* ══════════════ PM TEAM ══════════════ */
+let pmOpenPanels={};
+function togglePMPanel(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  if(el.classList.contains('open')){el.classList.remove('open');}
+  else{el.classList.add('open');}
+}
 function renderPMTeam(){
   const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function fmtDate(s){if(!s)return'—';const d=new Date(s+'T00:00:00');return d.getDate()+' '+months[d.getMonth()]+' '+String(d.getFullYear()).slice(2);}
+  function progColor(pct){if(pct===null)return'var(--muted)';if(pct>=80)return'var(--green)';if(pct>=40)return'#fbbf24';return'#f87171';}
+  function capColor(h){if(h>8)return'#f87171';if(h>=6)return'var(--sky)';if(h>=1)return'#fbbf24';return'var(--green)';}
+  function dueColor(due){
+    if(!due)return'var(--muted)';
+    const d=new Date(due+'T00:00:00'),t=new Date();
+    const diff=Math.ceil((d-t)/86400000);
+    if(diff<0)return'#f87171';
+    if(diff<=7)return'#fbbf24';
+    return'var(--muted)';
+  }
 
   let html='';
-  if(!PM_DATA.length){
-    html='<div style="padding:24px;color:var(--muted);font-size:13px">No PM data available.</div>';
-  }
+  if(!PM_DATA.length){html='<div style="padding:24px;color:var(--muted);font-size:13px">No PM data available.</div>';}
+
   PM_DATA.forEach(pm=>{
-    // Hours badges
-    const badges=`
-      <div class="pm-hours">
-        <span class="pm-h-badge">Today <strong>${pm.today}h</strong></span>
-        <span class="pm-h-badge">7 days <strong>${pm.week}h</strong></span>
-        <span class="pm-h-badge">Month <strong>${pm.month}h</strong></span>
+    const capPct=Math.min(100,(pm.today/8)*100);
+    const capCol=capColor(pm.today);
+
+    // Capacity bar + badges
+    const hdrRight=`
+      <div>
+        <div class="pm-cap-label">Capacity booked</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div class="pm-cap-bar"><div class="pm-cap-fill" style="width:${capPct}%;background:${capCol}"></div></div>
+          <span style="font-size:12px;font-weight:700;color:${capCol}">${pm.today}h today</span>
+        </div>
+        <div class="pm-hours">
+          <span class="pm-h-badge"><span class="pm-h-label">Today</span><strong style="color:${capCol}">${pm.today}h</strong></span>
+          <span class="pm-h-badge"><span class="pm-h-label">7 days</span><strong>${pm.week}h</strong></span>
+          <span class="pm-h-badge"><span class="pm-h-label">Month</span><strong>${pm.month}h</strong></span>
+        </div>
       </div>`;
 
-    // Projects table
+    // Projects rows with nested PM Time Tracking dropdown
     let projRows='';
-    pm.projects.forEach(p=>{
-      const pct=p.pct!==null?p.pct:null;
-      const progHTML=pct!==null
-        ?`<div class="pm-prog-wrap"><div class="pm-prog-bar"><div class="pm-prog-fill" style="width:${pct}%"></div></div><span class="pm-prog-pct">${pct}%</span></div>`
-        :'<span style="color:var(--muted);font-size:11px">—</span>';
-      projRows+=`<tr>
-        <td><a href="${p.url||'#'}" target="_blank" rel="noopener" class="pm-proj-link">${p.name} ↗</a></td>
-        <td>${progHTML}</td>
-        <td style="color:var(--muted);white-space:nowrap">${fmtDate(p.start)}</td>
-        <td style="color:var(--muted);white-space:nowrap">${fmtDate(p.due)}</td>
-      </tr>`;
-    });
+    pm.projects.forEach((p,idx)=>{
+      const panelId='pm-panel-'+pm.name.replace(/\s/g,'_')+'-'+idx;
+      const hasTasks=p.pmTasks&&p.pmTasks.length>0;
 
-    // PM Time Tracking tasks
-    let tasksHTML='';
-    if(pm.tasks&&pm.tasks.length){
-      const taskRows=pm.tasks.map(t=>`
-        <div class="pm-task-row">
-          <div>
-            <div class="pm-task-name">${t.name}</div>
-            <div class="pm-task-proj">${t.proj}</div>
+      // Progress bar
+      const pct=p.pct;
+      const pCol=progColor(pct);
+      const progHTML=pct!==null
+        ?`<div class="pm-prog-wrap"><div class="pm-prog-bar"><div class="pm-prog-fill" style="width:${pct}%;background:${pCol}"></div></div><span class="pm-prog-pct" style="color:${pCol}">${pct}%</span></div>`
+        :'<span style="color:var(--muted);font-size:11px">—</span>';
+
+      const expandBtn=hasTasks
+        ?`<button class="pm-expand-btn" onclick="togglePMPanel('${panelId}')" title="PM Time Tracking tasks">▸ ${p.pmTasks.length} task${p.pmTasks.length!==1?'s':''}</button>`
+        :'';
+
+      projRows+=`<tr>
+        <td>
+          <a href="${p.url||'#'}" target="_blank" rel="noopener" class="pm-proj-link">${p.name} ↗</a>
+          ${expandBtn}
+        </td>
+        <td>${progHTML}</td>
+        <td style="color:var(--muted);white-space:nowrap;font-size:11px">${fmtDate(p.start)}</td>
+        <td style="color:${dueColor(p.due)};white-space:nowrap;font-size:11px;font-weight:${p.due&&new Date(p.due+'T00:00:00')<new Date()?'600':'400'}">${fmtDate(p.due)}</td>
+      </tr>`;
+
+      // Dropdown panel for PM Time Tracking tasks
+      if(hasTasks){
+        const taskItems=p.pmTasks.map(t=>`
+          <div class="pm-task-item">
+            <div class="pm-task-name">${t.name}<div style="font-size:10px;color:var(--muted);margin-top:2px">due ${fmtDate(t.due)}</div></div>
+            <div class="pm-task-hrs">
+              Today <strong>${t.th.toFixed(1)}h</strong><br>
+              7 days <strong>${t.wh.toFixed(1)}h</strong><br>
+              Month <strong>${t.mh.toFixed(1)}h</strong>
+            </div>
+          </div>`).join('');
+        projRows+=`<tr class="pm-task-row-expand"><td colspan="4">
+          <div id="${panelId}" class="pm-tasks-panel">
+            <div class="pm-tasks-panel-label">PM Time Tracking</div>
+            ${taskItems}
           </div>
-          <div class="pm-task-hrs">
-            Today <strong>${t.th.toFixed(1)}h</strong> &nbsp;·&nbsp;
-            7d <strong>${t.wh.toFixed(1)}h</strong> &nbsp;·&nbsp;
-            Month <strong>${t.mh.toFixed(1)}h</strong>
-          </div>
-        </div>`).join('');
-      tasksHTML=`<div class="pm-tasks-section"><div class="pm-tasks-label">PM Time Tracking</div>${taskRows}</div>`;
-    }
+        </td></tr>`;
+      }
+    });
 
     html+=`
       <div class="pm-card">
         <div class="pm-card-hdr">
-          <span class="pm-name">${pm.name}</span>
-          ${badges}
+          <div><span class="pm-name">${pm.name}</span><div style="font-size:11px;color:var(--muted);margin-top:2px">${pm.projects.length} project${pm.projects.length!==1?'s':''}</div></div>
+          ${hdrRight}
         </div>
         <table class="pm-projects-tbl">
-          <thead><tr><th>Project</th><th>Progress</th><th>Start</th><th>Due</th></tr></thead>
+          <thead><tr><th>Project</th><th style="min-width:120px">Progress</th><th>Start</th><th>Due</th></tr></thead>
           <tbody>${projRows}</tbody>
         </table>
-        ${tasksHTML}
       </div>`;
   });
   document.getElementById('pm-body').innerHTML=html;
