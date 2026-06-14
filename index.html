@@ -333,7 +333,7 @@ const BRAND={
   'GM Creative':   {bg:'#0a0c1a',fg:'#8b9abf',bar:'#4a5580',dot:'#4a5580'},
 };
 const PODS=['Performance','Design','Design Studio','Campaign','AI & Media','Campaign Ops','GM Creative'];
-const GENERATED_AT = "15 Jun 2026, 08:50 am NZT";
+const GENERATED_AT = "15 Jun 2026, 09:13 am NZT";
 
 const MEMBERS = [
   {
@@ -1217,7 +1217,7 @@ const MEMBERS = [
     "week": 29.9,
     "month": 53.3,
     "qualifying": 9,
-    "missing": 1,
+    "missing": 0,
     "overdue": 1,
     "tasks": [
       {
@@ -2837,26 +2837,8 @@ const MEMBERS = [
     "month": 65.3,
     "qualifying": 5,
     "missing": 0,
-    "overdue": 2,
+    "overdue": 0,
     "tasks": [
-      {
-        "name": "Video - USA Competitive Messaging | Meta",
-        "due": "2026-06-04",
-        "est": 26,
-        "proj": "XCF: POD Boards",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
-      {
-        "name": "WR: Revisions Still Avatars: AI UGC: Native language",
-        "due": "2026-06-10",
-        "est": 6,
-        "proj": "XCF: POD Boards",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
       {
         "name": "WR Video Generation: AI UGC: Native language",
         "start": "2026-06-11",
@@ -2932,15 +2914,6 @@ const MISSING_TASKS = [
     "assignee": "Brad Holland",
     "createdBy": "Becky Sharp",
     "pod": "Performance",
-    "missing": "No due date"
-  },
-  {
-    "name": "Update Xero logo for Gift box | XCF-189",
-    "gid": "1213322493108351",
-    "proj": "XCF | Design Studio BAU Board",
-    "assignee": "Chiko Kurniawan",
-    "createdBy": "Christie Sinai",
-    "pod": "Design Studio",
     "missing": "No due date"
   },
   {
@@ -3418,22 +3391,6 @@ const OVERDUE_TASKS = [
     "assignee": "Naomi Lawson",
     "pod": "Campaign Ops",
     "due": "2026-06-12"
-  },
-  {
-    "name": "Video - USA Competitive Messaging | Meta",
-    "gid": "1214569346801413",
-    "proj": "XCF: POD Boards",
-    "assignee": "Will Rich",
-    "pod": "AI & Media",
-    "due": "2026-06-04"
-  },
-  {
-    "name": "WR: Revisions Still Avatars: AI UGC: Native language",
-    "gid": "1215362632189905",
-    "proj": "XCF: POD Boards",
-    "assignee": "Will Rich",
-    "pod": "AI & Media",
-    "due": "2026-06-10"
   }
 ];
 
@@ -4567,7 +4524,7 @@ function renderPMTeam(){
   const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function fmtDate(s){if(!s)return'—';const d=new Date(s+'T00:00:00');return d.getDate()+' '+months[d.getMonth()]+' '+String(d.getFullYear()).slice(2);}
   function progColor(pct){if(pct===null)return'var(--muted)';if(pct>=80)return'var(--green)';if(pct>=40)return'#fbbf24';return'#f87171';}
-  function capColor(h){if(h>8)return'#f87171';if(h>=6)return'var(--sky)';if(h>=1)return'#fbbf24';return'var(--green)';}
+  function capColor(h){if(h>6)return'#f87171';if(h>=4)return'var(--sky)';if(h>=1)return'#fbbf24';return'var(--green)';}
   function dueColor(due){
     if(!due)return'var(--muted)';
     const d=new Date(due+'T00:00:00'),t=new Date();
@@ -4581,7 +4538,7 @@ function renderPMTeam(){
   if(!PM_DATA.length){html='<div style="padding:24px;color:var(--muted);font-size:13px">No PM data available.</div>';}
 
   PM_DATA.forEach(pm=>{
-    const capPct=Math.min(100,(pm.today/8)*100);
+    const capPct=Math.min(100,(pm.today/6)*100);
     const capCol=capColor(pm.today);
 
     // Capacity bar + badges
