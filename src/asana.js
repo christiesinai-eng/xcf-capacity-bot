@@ -304,6 +304,13 @@ async function buildMemberData() {
         const creatorGid = t.created_by?.gid;
         if (creatorGid && !teamGids.has(creatorGid)) continue;
 
+        // Skip tasks with On Hold or Backlog status
+        const SKIP_STATUSES = ['on hold', 'backlog'];
+        const taskStatus = t.custom_fields
+          ?.map(f => f.enum_value?.name ?? f.display_value ?? '')
+          .find(v => v && SKIP_STATUSES.includes(v.toLowerCase()));
+        if (taskStatus) continue;
+
         missingCount++;
         allMissingTasks.push({
           name: t.name,
