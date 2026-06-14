@@ -649,7 +649,7 @@ function renderPMTeam(){
   const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function fmtDate(s){if(!s)return'—';const d=new Date(s+'T00:00:00');return d.getDate()+' '+months[d.getMonth()]+' '+String(d.getFullYear()).slice(2);}
   function progColor(pct){if(pct===null)return'var(--muted)';if(pct>=80)return'var(--green)';if(pct>=40)return'#fbbf24';return'#f87171';}
-  function capColor(h){if(h>8)return'#f87171';if(h>=6)return'var(--sky)';if(h>=1)return'#fbbf24';return'var(--green)';}
+  function capColor(h){if(h>6)return'#f87171';if(h>=4)return'var(--sky)';if(h>=1)return'#fbbf24';return'var(--green)';}
   function dueColor(due){
     if(!due)return'var(--muted)';
     const d=new Date(due+'T00:00:00'),t=new Date();
@@ -663,7 +663,7 @@ function renderPMTeam(){
   if(!PM_DATA.length){html='<div style="padding:24px;color:var(--muted);font-size:13px">No PM data available.</div>';}
 
   PM_DATA.forEach(pm=>{
-    const capPct=Math.min(100,(pm.today/8)*100);
+    const capPct=Math.min(100,(pm.today/6)*100);
     const capCol=capColor(pm.today);
 
     // Capacity bar + badges
