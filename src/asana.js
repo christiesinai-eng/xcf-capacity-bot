@@ -71,6 +71,7 @@ async function getTasksForUser(userGid) {
     'memberships.project.name',
     'memberships.project.gid',
     'custom_fields.gid',
+    'custom_fields.name',
     'custom_fields.number_value',
     'custom_fields.enum_value.name',
     'custom_fields.display_value',
@@ -304,12 +305,11 @@ async function buildMemberData() {
         const creatorGid = t.created_by?.gid;
         if (creatorGid && !teamGids.has(creatorGid)) continue;
 
-        // Skip tasks with On Hold or Backlog status
+        // Skip tasks with On Hold or Backlog status (checks the "Status" custom field)
         const SKIP_STATUSES = ['on hold', 'backlog'];
-        const taskStatus = t.custom_fields
-          ?.map(f => f.enum_value?.name ?? f.display_value ?? '')
-          .find(v => v && SKIP_STATUSES.includes(v.toLowerCase()));
-        if (taskStatus) continue;
+        const statusField = t.custom_fields?.find(f => f.name?.toLowerCase().includes('status'));
+        const statusValue = (statusField?.enum_value?.name ?? statusField?.display_value ?? '').toLowerCase();
+        if (SKIP_STATUSES.includes(statusValue)) continue;
 
         missingCount++;
         allMissingTasks.push({
