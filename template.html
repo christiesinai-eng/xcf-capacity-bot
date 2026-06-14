@@ -319,7 +319,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
 
 <div class="footer" id="footer-bar">
   XCF Capacity Report &nbsp;·&nbsp; 19 May 2026 &nbsp;·&nbsp; 446 tasks (all pages) &nbsp;·&nbsp;
-  Formula: est time ÷ working days (start→due); no start date = all hours on due date &nbsp;·&nbsp; 8h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation
+  Formula: est time ÷ working days (start→due); no start date = all hours on due date &nbsp;·&nbsp; 6h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation
 </div>
 
 <script>
@@ -400,7 +400,7 @@ let tab='today', openId=null, currentView='capacity';
   const footer=document.getElementById('footer-bar');
   if(footer){
     const total=MEMBERS.reduce((s,m)=>s+(m.qualifying||0)+(m.missing||0)+(m.overdue||0),0);
-    footer.innerHTML='XCF Capacity Report &nbsp;·&nbsp; Updated: '+GENERATED_AT+' &nbsp;·&nbsp; '+total+' tasks (all pages) &nbsp;·&nbsp; Formula: est time &divide; working days (start&rarr;due); no start date = all hours on due date &nbsp;·&nbsp; 8h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation';
+    footer.innerHTML='XCF Capacity Report &nbsp;·&nbsp; Updated: '+GENERATED_AT+' &nbsp;·&nbsp; '+total+' tasks (all pages) &nbsp;·&nbsp; Formula: est time &divide; working days (start&rarr;due); no start date = all hours on due date &nbsp;·&nbsp; 6h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation';
   }
 
   // capacity table header date label
