@@ -2,11 +2,42 @@ const axios = require('axios');
 
 const BASE_URL = 'https://app.asana.com/api/1.0';
 
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
 function asanaClient() {
-  return axios.create({
+  const client = axios.create({
     baseURL: BASE_URL,
     headers: { Authorization: `Bearer ${process.env.ASANA_TOKEN}` },
   });
+
+  // Automatically retry on 429 (rate limit) up to 3 times, honouring Retry-After
+  client.interceptors.response.use(null, async (err) => {
+    const config = err.config;
+    if (!config) return Promise.reject(err);
+    config.__retryCount = config.__retryCount || 0;
+    if (err.response?.status === 429 && config.__retryCount < 3) {
+      config.__retryCount++;
+      const retryAfter = parseInt(err.response.headers['retry-after'] || '10', 10);
+      console.log(`[Asana] 429 rate limit — waiting ${retryAfter}s before retry ${config.__retryCount}/3`);
+      await sleep(retryAfter * 1000);
+      return client(config);
+    }
+    return Promise.reject(err);
+  });
+
+  return client;
+}
+
+// Run async tasks in batches to avoid hitting Asana's burst rate limit
+async function batchedMap(items, fn, batchSize = 5, delayMs = 500) {
+  const results = [];
+  for (let i = 0; i < items.length; i += batchSize) {
+    const batch = items.slice(i, i + batchSize);
+    const batchResults = await Promise.all(batch.map(fn));
+    results.push(...batchResults);
+    if (i + batchSize < items.length) await sleep(delayMs);
+  }
+  return results;
 }
 
 async function getWorkspaceMembers() {
@@ -408,10 +439,11 @@ async function buildPMData() {
     !p.completed
   );
 
-  // Fetch task completion counts for qualifying projects in parallel
+  // Fetch task completion counts in batches to avoid Asana 429 rate limits
   // (Asana REST API has no summary field — count tasks directly)
-  const taskCountResults = await Promise.all(
-    qualifying.map(p =>
+  const taskCountResults = await batchedMap(
+    qualifying,
+    p =>
       client.get('/tasks', {
         params: { project: p.gid, opt_fields: 'gid,completed', limit: 100 },
       })
@@ -419,8 +451,9 @@ async function buildPMData() {
           const tasks = r.data.data;
           return { gid: p.gid, done: tasks.filter(t => t.completed).length, total: tasks.length };
         })
-        .catch(() => ({ gid: p.gid, done: 0, total: 0 }))
-    )
+        .catch(() => ({ gid: p.gid, done: 0, total: 0 })),
+    5,   // 5 requests at a time
+    500  // 500ms between batches
   );
   const taskCounts = {};
   taskCountResults.forEach(r => { taskCounts[r.gid] = r; });
