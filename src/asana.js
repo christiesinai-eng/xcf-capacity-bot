@@ -400,7 +400,7 @@ const PM_PORTFOLIO_GID = '1212248393751048';
 
 const PM_EXCLUDED_OWNERS = [
   'Christie Sinai', 'Ben Hobbs', 'Domenic Iaria',
-  'Nadim Malvat', 'Sandeep Garcha', 'Will Rich',
+  'Nadim Malvat', 'Sandeep Garcha', 'Will Rich', 'Ali Berg',
 ];
 
 // Projects to hide from specific PMs (substring match on project name)
