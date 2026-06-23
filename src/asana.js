@@ -558,6 +558,10 @@ async function buildPMData() {
 // ─────────────────────────────────────────────────────────────────────────────
 const STATUS_FIELD_GID = '1211986892220398';
 const SCOPE_FAA_STATUSES = ['FAA', 'Completed FAA', 'Scope Creep', 'Completed Scope Creep'];
+const SC_EXCLUDED_CREATORS = ['Christie Sinai'];
+const SC_EXCLUDED_PROJECTS = [
+  'XCF: Cost per asset + Asset counter (Roadmap Projects & Micro/BAU tasks)',
+];
 
 async function buildScopeCreepData() {
   const client = asanaClient();
@@ -566,6 +570,7 @@ async function buildScopeCreepData() {
   const optFields = [
     'gid', 'name', 'completed', 'permalink_url',
     'assignee.name',
+    'created_by.name',
     'memberships.project.name', 'memberships.project.gid',
     'parent.name', 'parent.gid', 'parent.permalink_url',
     'custom_fields.gid', 'custom_fields.number_value',
@@ -603,11 +608,23 @@ async function buildScopeCreepData() {
       const status = statusField?.enum_value?.name;
       if (!status || !SCOPE_FAA_STATUSES.includes(status)) continue;
 
+      // Skip tasks created by excluded creators
+      if (SC_EXCLUDED_CREATORS.includes(t.created_by?.name)) continue;
+
+      // Find qualifying projects (XCF-relevant, not reporting-only)
+      const allProjNames = t.memberships?.map(m => m.project?.name).filter(Boolean) ?? [];
+      const qualifyingProjs = t.memberships?.filter(m =>
+        m.project?.name &&
+        /^[X89]/i.test(m.project.name) &&
+        !SC_EXCLUDED_PROJECTS.some(ex => m.project.name.startsWith(ex))
+      ) ?? [];
+      // Skip if task only lives in excluded projects
+      if (allProjNames.length > 0 && qualifyingProjs.length === 0) continue;
+
       seenGids.add(t.gid);
 
       const estMins = t.custom_fields?.find(f => f.gid === estGid)?.number_value;
-      const xcfProj = t.memberships?.find(m => m.project?.name && /^[X89]/i.test(m.project.name));
-      const proj = xcfProj?.project;
+      const proj = qualifyingProjs[0]?.project ?? null;
 
       results.push({
         name: t.name,
