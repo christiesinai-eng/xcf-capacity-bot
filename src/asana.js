@@ -553,4 +553,84 @@ async function buildPMData() {
   return Object.values(pmMap).sort((a, b) => a.name.localeCompare(b.name));
 }
 
-module.exports = { buildMemberData, buildPMData };
+// ─────────────────────────────────────────────────────────────────────────────
+// SCOPE CREEP & FAA DATA
+// ─────────────────────────────────────────────────────────────────────────────
+const STATUS_FIELD_GID = '1211986892220398';
+const SCOPE_FAA_STATUSES = ['FAA', 'Completed FAA', 'Scope Creep', 'Completed Scope Creep'];
+
+async function buildScopeCreepData() {
+  const client = asanaClient();
+  const estGid = process.env.ASANA_FIELD_GID_ESTIMATED_TIME;
+
+  // Fetch Status (XCF) field to get enum option GIDs
+  const fieldResp = await client.get(`/custom_fields/${STATUS_FIELD_GID}`, {
+    params: { opt_fields: 'enum_options.gid,enum_options.name' },
+  }).catch(() => null);
+  if (!fieldResp) return [];
+
+  const enumOptions = fieldResp.data.data.enum_options || [];
+  const targetOptions = enumOptions.filter(o => SCOPE_FAA_STATUSES.includes(o.name));
+  if (!targetOptions.length) return [];
+
+  const optionGidStr = targetOptions.map(o => o.gid).join(',');
+
+  // Search workspace for tasks with these status values (paginated, batched)
+  const allTasks = [];
+  let offset = null;
+  do {
+    const params = {
+      opt_fields: [
+        'gid', 'name', 'completed', 'permalink_url',
+        'assignee.name',
+        'memberships.project.name', 'memberships.project.gid',
+        'parent.name', 'parent.gid', 'parent.permalink_url',
+        'custom_fields.gid', 'custom_fields.number_value',
+        'custom_fields.enum_value.name',
+      ].join(','),
+      limit: 100,
+    };
+    params[`custom_fields.${STATUS_FIELD_GID}.enum_value.any`] = optionGidStr;
+    if (offset) params.offset = offset;
+
+    const resp = await client.get(
+      `/workspaces/${process.env.ASANA_WORKSPACE_GID}/tasks/search`, { params }
+    ).catch(() => null);
+    if (!resp) break;
+
+    allTasks.push(...resp.data.data);
+    offset = resp.data.next_page?.offset ?? null;
+  } while (offset);
+
+  return allTasks
+    .filter(t => {
+      // Only include tasks from XCF-relevant projects (starts X/8/9)
+      const projNames = t.memberships?.map(m => m.project?.name).filter(Boolean) ?? [];
+      if (!projNames.length) return true;
+      return projNames.some(p => /^[X89]/i.test(p));
+    })
+    .map(t => {
+      const estMins = t.custom_fields?.find(f => f.gid === estGid)?.number_value;
+      const statusField = t.custom_fields?.find(f => f.gid === STATUS_FIELD_GID);
+      const status = statusField?.enum_value?.name ?? null;
+
+      const xcfProj = t.memberships?.find(m => m.project?.name && /^[X89]/i.test(m.project.name));
+      const proj = xcfProj?.project;
+
+      return {
+        name: t.name,
+        url: t.permalink_url,
+        status,
+        estHours: estMins ? round2(estMins / 60) : null,
+        assignee: t.assignee?.name ?? '—',
+        completed: t.completed ?? false,
+        project: proj?.name ?? null,
+        projectUrl: proj?.gid ? `https://app.asana.com/0/${proj.gid}/list` : null,
+        parent: t.parent?.name ?? null,
+        parentUrl: t.parent?.permalink_url ?? null,
+      };
+    })
+    .filter(t => t.status);
+}
+
+module.exports = { buildMemberData, buildPMData, buildScopeCreepData };

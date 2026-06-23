@@ -1,17 +1,18 @@
 require('dotenv').config();
 const cron = require('node-cron');
-const { buildMemberData, buildPMData } = require('./asana');
+const { buildMemberData, buildPMData, buildScopeCreepData } = require('./asana');
 const { saveReport } = require('./report');
 
 async function runReport() {
   console.log(`[${new Date().toISOString()}] Running XCF capacity report...`);
 
-  const [capacityData, pmData] = await Promise.all([
+  const [capacityData, pmData, scopeCreepData] = await Promise.all([
     buildMemberData(),
     buildPMData(),
+    buildScopeCreepData(),
   ]);
 
-  saveReport({ ...capacityData, pmData });
+  saveReport({ ...capacityData, pmData, scopeCreepData });
 
   console.log(`[${new Date().toISOString()}] Done.`);
 }

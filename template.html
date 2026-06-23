@@ -242,6 +242,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
   <button class="nav-btn" onclick="showView('podsummary',this)">POD summary</button>
   <button class="nav-btn" id="nav-missing" onclick="showView('missing',this)">Missing fields (69)</button>
   <button class="nav-btn" onclick="showView('pmteam',this)">PM Team</button>
+  <button class="nav-btn" onclick="showView('scopecreep',this)">Scope Creep &amp; FAA</button>
 </div>
 
 <!-- ══════════════ VIEW: CAPACITY REPORT ══════════════ -->
@@ -317,6 +318,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
   <div id="pm-body" style="padding:16px 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(540px,1fr));gap:16px"></div>
 </div>
 
+<!-- ══════════════ VIEW: SCOPE CREEP & FAA ══════════════ -->
+<div id="view-scopecreep" class="view">
+  <div id="sc-body" style="padding:16px 20px"></div>
+</div>
+
 <div class="footer" id="footer-bar">
   XCF Capacity Report &nbsp;·&nbsp; 19 May 2026 &nbsp;·&nbsp; 446 tasks (all pages) &nbsp;·&nbsp;
   Formula: est time ÷ working days (start→due); no start date = all hours on due date &nbsp;·&nbsp; 6h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation
@@ -359,6 +365,8 @@ const OVERDUE_TASKS=[
 ];
 
 const PM_DATA=[];
+
+const SCOPE_CREEP_DATA=[];
 
 const TODAY = new Date('2026-05-19');
 
@@ -423,6 +431,7 @@ function showView(v, btn){
   if(v==='podsummary') renderPodSummary();
   if(v==='missing') renderMissing();
   if(v==='pmteam') renderPMTeam();
+  if(v==='scopecreep') renderScopeCreep();
 }
 
 /* ── HELPERS ── */
@@ -741,6 +750,106 @@ function renderPMTeam(){
       </div>`;
   });
   document.getElementById('pm-body').innerHTML=html;
+}
+
+function renderScopeCreep(){
+  const el=document.getElementById('sc-body');
+  if(!el) return;
+  if(el.dataset.rendered) return;
+  el.dataset.rendered='1';
+
+  if(!SCOPE_CREEP_DATA.length){
+    el.innerHTML='<div style="padding:24px;color:var(--muted);font-size:13px">No Scope Creep or FAA tasks found.</div>';
+    return;
+  }
+
+  const sc=SCOPE_CREEP_DATA.filter(t=>t.status==='Scope Creep');
+  const scDone=SCOPE_CREEP_DATA.filter(t=>t.status==='Completed Scope Creep');
+  const faa=SCOPE_CREEP_DATA.filter(t=>t.status==='FAA');
+  const faaDone=SCOPE_CREEP_DATA.filter(t=>t.status==='Completed FAA');
+
+  function sumHours(arr){return arr.reduce((s,t)=>s+(t.estHours||0),0);}
+  function fmtH(h){return h?Math.round(h*10)/10+'h':'—';}
+
+  const scTotal=sumHours([...sc,...scDone]);
+  const faaTotal=sumHours([...faa,...faaDone]);
+
+  // Status badge styles
+  const badgeStyle={
+    'Scope Creep':          'background:#fef2f2;color:#dc2626;border:1px solid #fca5a5',
+    'Completed Scope Creep':'background:#f0fdf4;color:#16a34a;border:1px solid #86efac',
+    'FAA':                  'background:#fffbeb;color:#d97706;border:1px solid #fcd34d',
+    'Completed FAA':        'background:#f0fdf4;color:#16a34a;border:1px solid #86efac',
+  };
+
+  function badge(status){
+    const s=badgeStyle[status]||'';
+    return `<span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap;${s}">${status}</span>`;
+  }
+
+  function link(text,url){
+    if(!url||!text) return text||'—';
+    return `<a href="${url}" target="_blank" style="color:var(--sky);text-decoration:none">${text} <span style="font-size:10px">↗</span></a>`;
+  }
+
+  // Dashboard
+  let html=`
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px">
+      <div style="font-size:12px;font-weight:600;color:#dc2626;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Scope Creep</div>
+      <div style="font-size:32px;font-weight:800;color:var(--text)">${sc.length+scDone.length} <span style="font-size:16px;font-weight:400;color:var(--muted)">tasks</span></div>
+      <div style="font-size:20px;font-weight:700;color:var(--text);margin-top:4px">${fmtH(scTotal)} <span style="font-size:13px;font-weight:400;color:var(--muted)">estimated</span></div>
+      <div style="margin-top:12px;font-size:12px;color:var(--muted);display:flex;gap:16px">
+        <span><span style="color:#dc2626;font-weight:600">${sc.length}</span> active</span>
+        <span><span style="color:#16a34a;font-weight:600">${scDone.length}</span> completed</span>
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px">
+      <div style="font-size:12px;font-weight:600;color:#d97706;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Feedback After Approval</div>
+      <div style="font-size:32px;font-weight:800;color:var(--text)">${faa.length+faaDone.length} <span style="font-size:16px;font-weight:400;color:var(--muted)">tasks</span></div>
+      <div style="font-size:20px;font-weight:700;color:var(--text);margin-top:4px">${fmtH(faaTotal)} <span style="font-size:13px;font-weight:400;color:var(--muted)">estimated</span></div>
+      <div style="margin-top:12px;font-size:12px;color:var(--muted);display:flex;gap:16px">
+        <span><span style="color:#d97706;font-weight:600">${faa.length}</span> active</span>
+        <span><span style="color:#16a34a;font-weight:600">${faaDone.length}</span> completed</span>
+      </div>
+    </div>
+  </div>`;
+
+  // Table
+  const order={'Scope Creep':0,'FAA':1,'Completed Scope Creep':2,'Completed FAA':3};
+  const sorted=[...SCOPE_CREEP_DATA].sort((a,b)=>(order[a.status]??9)-(order[b.status]??9));
+
+  html+=`
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden">
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead>
+        <tr style="background:var(--bg);border-bottom:1px solid var(--border)">
+          <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;width:160px">Status</th>
+          <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Task</th>
+          <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Project / Parent</th>
+          <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Assignee</th>
+          <th style="padding:10px 14px;text-align:right;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Est.</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+  sorted.forEach((t,i)=>{
+    const bg=i%2===0?'':'background:rgba(255,255,255,.02)';
+    const projCell=t.parent
+      ? link(t.parent, t.parentUrl)+(t.project?`<br><span style="font-size:11px;color:var(--muted)">${link(t.project,t.projectUrl)}</span>`:'')
+      : (t.project ? link(t.project, t.projectUrl) : '—');
+    html+=`
+        <tr style="${bg};border-bottom:1px solid var(--border)">
+          <td style="padding:10px 14px">${badge(t.status)}</td>
+          <td style="padding:10px 14px;color:var(--text)">${link(t.name,t.url)}</td>
+          <td style="padding:10px 14px;color:var(--text)">${projCell}</td>
+          <td style="padding:10px 14px;color:var(--muted)">${t.assignee}</td>
+          <td style="padding:10px 14px;text-align:right;color:var(--text);font-weight:600">${t.estHours?t.estHours+'h':'—'}</td>
+        </tr>`;
+  });
+
+  html+=`</tbody></table></div>`;
+  el.innerHTML=html;
 }
 
 render();

@@ -30,7 +30,7 @@ function replaceString(html, name, value) {
   return updated;
 }
 
-function generateReport({ members, missingTasks, overdueTasks, pmData }) {
+function generateReport({ members, missingTasks, overdueTasks, pmData, scopeCreepData }) {
   if (!fs.existsSync(TEMPLATE_PATH)) {
     throw new Error(`HTML template not found at ${TEMPLATE_PATH}`);
   }
@@ -48,6 +48,7 @@ function generateReport({ members, missingTasks, overdueTasks, pmData }) {
   html = replaceArray(html, 'MISSING_TASKS', missingTasks);
   html = replaceArray(html, 'OVERDUE_TASKS', overdueTasks);
   html = replaceArray(html, 'PM_DATA', pmData || []);
+  html = replaceArray(html, 'SCOPE_CREEP_DATA', scopeCreepData || []);
   html = replaceString(html, 'GENERATED_AT', generatedAt);
   return html;
 }
