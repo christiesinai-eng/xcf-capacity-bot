@@ -206,6 +206,7 @@ const MISSING_EXCLUDED_MEMBERS = [
   'Naomi Lawson',
   'Sherry Choe',
   'Sandeep Garcha',
+  'mikeohall@me.com',
 ];
 
 const EXCLUDED_PROJECTS = [
