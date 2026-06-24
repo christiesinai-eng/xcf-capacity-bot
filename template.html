@@ -339,6 +339,8 @@ const BRAND={
   'GM Creative':   {bg:'#0a0c1a',fg:'#8b9abf',bar:'#4a5580',dot:'#4a5580'},
 };
 const PODS=['Performance','Design','Design Studio','Campaign','AI & Media','Campaign Ops','GM Creative'];
+const MEMBER_CAPACITY={'Chris Bull':4.5,'James Blow':4.5};
+function memberCap(name){return MEMBER_CAPACITY[name]||6;}
 const GENERATED_AT = "—";
 
 const MEMBERS=[
@@ -435,13 +437,16 @@ function showView(v, btn){
 }
 
 /* ── HELPERS ── */
-function statusChip(h,t){
-  if(t==='today'){if(h>8)return{cls:'chip-over',label:'Over capacity'};if(h>=6)return{cls:'chip-over',label:'Over capacity'};if(h>=1)return{cls:'chip-under',label:'Under capacity'};return{cls:'chip-avail',label:'Available'};}
-  if(t==='week'){if(h>=40)return{cls:'chip-over',label:'Over capacity'};if(h>=20)return{cls:'chip-under',label:'Under capacity'};return{cls:'chip-avail',label:'Available'};}
-  if(h>=100)return{cls:'chip-over',label:'Over capacity'};if(h>=40)return{cls:'chip-under',label:'Under capacity'};return{cls:'chip-avail',label:'Available'};
+function statusChip(h,t,cap){
+  cap=cap||6;
+  const wCap=cap*5,mCap=cap*21;
+  if(t==='today'){if(h>=cap)return{cls:'chip-over',label:'Over capacity'};if(h>=1)return{cls:'chip-under',label:'Under capacity'};return{cls:'chip-avail',label:'Available'};}
+  if(t==='week'){if(h>=wCap)return{cls:'chip-over',label:'Over capacity'};if(h>=wCap*0.5)return{cls:'chip-under',label:'Under capacity'};return{cls:'chip-avail',label:'Available'};}
+  if(h>=mCap)return{cls:'chip-over',label:'Over capacity'};if(h>=mCap*0.5)return{cls:'chip-under',label:'Under capacity'};return{cls:'chip-avail',label:'Available'};
 }
-function barCol(h,t,bar){
-  if(t==='today'){if(h>8)return'#ef4444';if(h>=6)return'#ef4444';if(h>=3)return'#f59e0b';return bar;}
+function barCol(h,t,bar,cap){
+  cap=cap||6;
+  if(t==='today'){if(h>=cap)return'#ef4444';if(h>=cap*0.5)return'#f59e0b';return bar;}
   return bar;
 }
 function availColor(pct){
@@ -459,31 +464,32 @@ function setTab(t,btn){
 }
 
 function render(){
-  const key=tab, maxH=key==='today'?8:key==='week'?40:160;
+  const key=tab;
   const dlabels=window._dlabels||{today:'Today',week:'Next 7 days',month:'Next month'};
   document.getElementById('tbl-date').innerHTML=dlabels[key]+' <span>Click row to expand tasks</span>';
   const creative=MEMBERS.filter(m=>!['Campaign Ops','GM Creative'].includes(m.pod));
   let over=0,at=0,under=0,avail=0;
   creative.forEach(m=>{
     if(m.ooo)return;
-    const h=m[key];
-    if(key==='today'){if(h>8)over++;else if(h>=6)at++;else if(h>=1)under++;else avail++;}
-    else if(key==='week'){if(h>40)over++;else if(h>=30)at++;else if(h>=10)under++;else avail++;}
-    else{if(h>160)over++;else if(h>=100)at++;else if(h>=40)under++;else avail++;}
+    const h=m[key],cap=memberCap(m.name);
+    const sc=statusChip(h,key,cap);
+    if(sc.cls==='chip-over')over++;else if(sc.cls==='chip-under')under++;else avail++;
   });
-  const bsub=key==='today'?['>8h','6–8h','1–5.9h','0h']:key==='week'?['>40h','30–40h','10–29h','<10h']:['>160h','100–160h','40–99h','<40h'];
+  const bsub=key==='today'?['≥cap','1–cap','0h']:key==='week'?['≥cap','½–cap','<½cap']:['≥cap','½–cap','<½cap'];
   document.getElementById('buckets').innerHTML=`
-    <div class="bucket over"><div class="bv">${over}</div><div class="bl">Over capacity</div><div class="bs">${bsub[0]}</div></div>
-    <div class="bucket at"><div class="bv">${at}</div><div class="bl">At capacity</div><div class="bs">${bsub[1]}</div></div>
-    <div class="bucket under"><div class="bv">${under}</div><div class="bl">Under capacity</div><div class="bs">${bsub[2]}</div></div>
-    <div class="bucket avail"><div class="bv">${avail}</div><div class="bl">Available</div><div class="bs">${bsub[3]}</div></div>`;
+    <div class="bucket over"><div class="bv">${over}</div><div class="bl">Over capacity</div><div class="bs">≥ daily cap</div></div>
+    <div class="bucket at"><div class="bv">${at}</div><div class="bl">At capacity</div><div class="bs">—</div></div>
+    <div class="bucket under"><div class="bv">${under}</div><div class="bl">Under capacity</div><div class="bs">1h → cap</div></div>
+    <div class="bucket avail"><div class="bv">${avail}</div><div class="bl">Available</div><div class="bs">0h</div></div>`;
   const sorted=[...MEMBERS].sort((a,b)=>b[key]-a[key]);
   let html='';
   sorted.forEach(m=>{
     const h=m[key],b=BRAND[m.pod]||BRAND['Campaign'];
+    const cap=memberCap(m.name);
+    const maxH=key==='today'?cap:key==='week'?cap*5:cap*21;
     const pct=Math.min(100,(h/maxH)*100);
-    const bc=barCol(h,key,b.bar);
-    const sc=m.ooo?{cls:'chip-ooo',label:'Out of Office'}:statusChip(h,key);
+    const bc=barCol(h,key,b.bar,cap);
+    const sc=m.ooo?{cls:'chip-ooo',label:'Out of Office'}:statusChip(h,key,cap);
     const id='x-'+m.name.replace(/[\s&]/g,'-');
     const first=m.tasks[0];
     const tasksHtml=first
@@ -521,7 +527,6 @@ function tog(id){
 function renderFindResource(){
   const range=document.getElementById('fr-range').value;
   const podFilter=document.getElementById('fr-pod').value;
-  const maxH=range==='today'?8:range==='week'?40:160;
   const podsToShow=podFilter==='all'?PODS:[podFilter];
   let html='';
   podsToShow.forEach(pod=>{
@@ -550,9 +555,11 @@ function renderFindResource(){
           </div>
           ${sorted.map(m=>{
             const h=m[range];
+            const cap=memberCap(m.name);
+            const maxH=range==='today'?cap:range==='week'?cap*5:cap*21;
             const used=Math.min(100,(h/maxH)*100);
             const free=100-used;
-            const sc=m.ooo?{cls:'chip-ooo',label:'Out of Office'}:statusChip(h,range);
+            const sc=m.ooo?{cls:'chip-ooo',label:'Out of Office'}:statusChip(h,range,cap);
             const fc=availColor(used);
             return `<div class="fr-member-row">
               <div class="r-name">${m.name}</div>
@@ -603,8 +610,8 @@ function renderPodSummary(){
         </div>
         <div class="ps-members">
           ${sorted.map(m=>{
-            const pct=Math.min(100,(m.today/8)*100);
-            const bc=barCol(m.today,'today',b.bar);
+            const pct=Math.min(100,(m.today/memberCap(m.name))*100);
+            const bc=barCol(m.today,'today',b.bar,memberCap(m.name));
             if(m.ooo) return `<div class="ps-member-line">
               <span class="ps-member-name">${m.name}</span>
               <div class="ps-mini-bar"></div>
