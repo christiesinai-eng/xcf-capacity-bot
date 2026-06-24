@@ -610,7 +610,8 @@ function renderPodSummary(){
         </div>
         <div class="ps-members">
           ${sorted.map(m=>{
-            const pct=Math.min(100,(m.today/memberCap(m.name))*100);
+            const rawPct=(m.today/memberCap(m.name))*100;
+            const barPct=Math.min(100,rawPct);
             const bc=barCol(m.today,'today',b.bar,memberCap(m.name));
             if(m.ooo) return `<div class="ps-member-line">
               <span class="ps-member-name">${m.name}</span>
@@ -619,8 +620,8 @@ function renderPodSummary(){
             </div>`;
             return `<div class="ps-member-line">
               <span class="ps-member-name">${m.name}</span>
-              <div class="ps-mini-bar"><div class="ps-mini-fill" style="width:${pct.toFixed(1)}%;background:${bc}"></div></div>
-              <span class="ps-member-hrs">${m.today.toFixed(1)}h <span style="color:var(--muted);font-size:10px">(${pct.toFixed(0)}%)</span></span>
+              <div class="ps-mini-bar"><div class="ps-mini-fill" style="width:${barPct.toFixed(1)}%;background:${bc}"></div></div>
+              <span class="ps-member-hrs">${m.today.toFixed(1)}h <span style="color:var(--muted);font-size:10px">(${rawPct.toFixed(0)}%)</span></span>
             </div>`;
           }).join('')}
         </div>
