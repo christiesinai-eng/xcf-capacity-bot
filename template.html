@@ -7,15 +7,6 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh}
-#pw-overlay{position:fixed;inset:0;background:#0f1117;z-index:9999;display:flex;align-items:center;justify-content:center}
-#pw-box{background:#1a1d27;border:1px solid #2a2f45;border-radius:12px;padding:40px;width:340px;text-align:center}
-#pw-box h2{font-size:18px;font-weight:600;color:#fff;margin-bottom:6px}
-#pw-box p{font-size:13px;color:#8b91ad;margin-bottom:24px}
-#pw-input{width:100%;padding:10px 14px;background:#0f1117;border:1px solid #2a2f45;border-radius:8px;color:#fff;font-size:15px;text-align:center;outline:none;margin-bottom:12px}
-#pw-input:focus{border-color:#1f65d6}
-#pw-btn{width:100%;padding:10px;background:#1f65d6;border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer}
-#pw-btn:hover{background:#1755b8}
-#pw-error{font-size:12px;color:#f87171;margin-top:10px;display:none}
 :root{
   --mid:#000856;--blue:#1f65d6;--sky:#3eccff;--yellow:#FDCC08;--purple:#a78bfa;
   --green:#6aeaaa;--ops:#CF89FE;--surface:#1a1d27;--surface2:#22263a;
@@ -192,34 +183,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </style>
 </head>
 <body>
-<div id="pw-overlay">
-  <div id="pw-box">
-    <h2>XCF Capacity Report</h2>
-    <p>Enter the password to view this report</p>
-    <input id="pw-input" type="password" placeholder="Password" autofocus />
-    <button id="pw-btn" onclick="checkPw()">View Report</button>
-    <div id="pw-error">Incorrect password. Please try again.</div>
-  </div>
-</div>
-<script>
-(function(){
-  if(sessionStorage.getItem('xcf-auth')==='1'){
-    document.getElementById('pw-overlay').style.display='none';
-  }
-})();
-function checkPw(){
-  const val=document.getElementById('pw-input').value;
-  if(val==='Capacity'){
-    sessionStorage.setItem('xcf-auth','1');
-    document.getElementById('pw-overlay').style.display='none';
-  } else {
-    document.getElementById('pw-error').style.display='block';
-    document.getElementById('pw-input').value='';
-    document.getElementById('pw-input').focus();
-  }
-}
-document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
-</script>
 
 <!-- TOP BAR -->
 <div class="top-bar">
