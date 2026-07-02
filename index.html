@@ -7,15 +7,6 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh}
-#pw-overlay{position:fixed;inset:0;background:#0f1117;z-index:9999;display:flex;align-items:center;justify-content:center}
-#pw-box{background:#1a1d27;border:1px solid #2a2f45;border-radius:12px;padding:40px;width:340px;text-align:center}
-#pw-box h2{font-size:18px;font-weight:600;color:#fff;margin-bottom:6px}
-#pw-box p{font-size:13px;color:#8b91ad;margin-bottom:24px}
-#pw-input{width:100%;padding:10px 14px;background:#0f1117;border:1px solid #2a2f45;border-radius:8px;color:#fff;font-size:15px;text-align:center;outline:none;margin-bottom:12px}
-#pw-input:focus{border-color:#1f65d6}
-#pw-btn{width:100%;padding:10px;background:#1f65d6;border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer}
-#pw-btn:hover{background:#1755b8}
-#pw-error{font-size:12px;color:#f87171;margin-top:10px;display:none}
 :root{
   --mid:#000856;--blue:#1f65d6;--sky:#3eccff;--yellow:#FDCC08;--purple:#a78bfa;
   --green:#6aeaaa;--ops:#CF89FE;--surface:#1a1d27;--surface2:#22263a;
@@ -192,34 +183,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </style>
 </head>
 <body>
-<div id="pw-overlay">
-  <div id="pw-box">
-    <h2>XCF Capacity Report</h2>
-    <p>Enter the password to view this report</p>
-    <input id="pw-input" type="password" placeholder="Password" autofocus />
-    <button id="pw-btn" onclick="checkPw()">View Report</button>
-    <div id="pw-error">Incorrect password. Please try again.</div>
-  </div>
-</div>
-<script>
-(function(){
-  if(sessionStorage.getItem('xcf-auth')==='1'){
-    document.getElementById('pw-overlay').style.display='none';
-  }
-})();
-function checkPw(){
-  const val=document.getElementById('pw-input').value;
-  if(val==='Capacity'){
-    sessionStorage.setItem('xcf-auth','1');
-    document.getElementById('pw-overlay').style.display='none';
-  } else {
-    document.getElementById('pw-error').style.display='block';
-    document.getElementById('pw-input').value='';
-    document.getElementById('pw-input').focus();
-  }
-}
-document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
-</script>
 
 <!-- TOP BAR -->
 <div class="top-bar">
@@ -341,7 +304,7 @@ const BRAND={
 const PODS=['Performance','Design','Design Studio','Campaign','AI & Media','Campaign Ops','GM Creative'];
 const MEMBER_CAPACITY={'Chris Bull':4.5,'Blair Williams':4.5};
 function memberCap(name){return MEMBER_CAPACITY[name]||6;}
-const GENERATED_AT = "2 Jul 2026, 08:03 am NZT";
+const GENERATED_AT = "2 Jul 2026, 03:11 pm NZT";
 
 const MEMBERS = [
   {
@@ -360,9 +323,9 @@ const MEMBERS = [
     "name": "Becky Sharp",
     "pod": "Campaign Ops",
     "ooo": false,
-    "today": 2.3,
-    "week": 7.3,
-    "month": 8.8,
+    "today": 1.9,
+    "week": 4.5,
+    "month": 6,
     "qualifying": 10,
     "missing": 0,
     "overdue": 14,
@@ -467,18 +430,18 @@ const MEMBERS = [
         "overdue": true
       },
       {
-        "name": "XCFT-5467 | Video Resizing",
+        "name": "XCFT-463 | Ai UGC Briefs For Agency",
         "due": "2026-06-26",
-        "est": 1,
+        "est": 9,
         "proj": "XCF: POD Boards",
         "th": 0,
         "wh": 0,
         "overdue": true
       },
       {
-        "name": "XCFT-463 | Ai UGC Briefs For Agency",
+        "name": "XCFT-5467 | Video Resizing",
         "due": "2026-06-26",
-        "est": 9,
+        "est": 1,
         "proj": "XCF: POD Boards",
         "th": 0,
         "wh": 0,
@@ -512,22 +475,13 @@ const MEMBERS = [
         "wh": 1.92
       },
       {
-        "name": "XCFT-2999 | ANZ | 🎧 High-Value SB: Audio (x4)",
-        "start": "2026-06-24",
-        "due": "2026-07-03",
-        "est": 5,
-        "proj": "XCF | Performance BAU Board",
-        "th": 0.63,
-        "wh": 1.25
-      },
-      {
         "name": "XCFT-1261 | Xero.com new request",
         "start": null,
         "due": "2026-07-03",
         "est": 2,
         "proj": "XCF | Performance BAU Board",
         "th": 0,
-        "wh": 2
+        "wh": 0
       },
       {
         "name": "XCFT-1390 | Update Meta Video Template Promo Banners",
@@ -539,13 +493,22 @@ const MEMBERS = [
         "wh": 0.25
       },
       {
+        "name": "XCFT-2999 | ANZ | 🎧 High-Value SB: Audio (x4)",
+        "start": "2026-06-10",
+        "due": "2026-07-10",
+        "est": 5,
+        "proj": "XCF | Performance BAU Board",
+        "th": 0.22,
+        "wh": 0.87
+      },
+      {
         "name": "XCFT-2282 | Small Business Confidence – Smart Tools - META | TIKTOK",
         "start": "2026-06-01",
         "due": "2026-07-17",
         "est": 6,
         "proj": "XCF: POD Boards",
         "th": 0.17,
-        "wh": 1.03
+        "wh": 0.69
       },
       {
         "name": "XCFT-1394 | Xero Lite - ROW Launch - Apple Search Ads Template Resize",
@@ -590,8 +553,8 @@ const MEMBERS = [
     "pod": "AI & Media",
     "ooo": false,
     "today": 5.8,
-    "week": 35,
-    "month": 35,
+    "week": 17.5,
+    "month": 29.2,
     "qualifying": 1,
     "missing": 2,
     "overdue": 0,
@@ -603,7 +566,7 @@ const MEMBERS = [
         "est": 35,
         "proj": "XCF: POD Boards",
         "th": 5.83,
-        "wh": 35
+        "wh": 17.5
       }
     ]
   },
@@ -612,7 +575,7 @@ const MEMBERS = [
     "pod": "Campaign",
     "ooo": false,
     "today": 1.5,
-    "week": 7.3,
+    "week": 5.8,
     "month": 7.3,
     "qualifying": 1,
     "missing": 1,
@@ -643,7 +606,7 @@ const MEMBERS = [
         "est": 16,
         "proj": "XCFP-570 XCFP-570 | LASOI - Q1 - July Launch",
         "th": 1.45,
-        "wh": 7.27
+        "wh": 5.82
       }
     ]
   },
@@ -655,7 +618,7 @@ const MEMBERS = [
     "week": 1.1,
     "month": 1.1,
     "qualifying": 1,
-    "missing": 0,
+    "missing": 1,
     "overdue": 11,
     "tasks": [
       {
@@ -773,7 +736,7 @@ const MEMBERS = [
     "pod": "Performance",
     "ooo": false,
     "today": 0.8,
-    "week": 3.4,
+    "week": 2.8,
     "month": 3.4,
     "qualifying": 2,
     "missing": 0,
@@ -822,7 +785,7 @@ const MEMBERS = [
         "est": 4,
         "proj": "XCF: POD Boards",
         "th": 0.57,
-        "wh": 2.86
+        "wh": 2.29
       }
     ]
   },
@@ -832,7 +795,7 @@ const MEMBERS = [
     "ooo": false,
     "today": 1.1,
     "week": 2.3,
-    "month": 12.7,
+    "month": 7.3,
     "qualifying": 10,
     "missing": 2,
     "overdue": 3,
@@ -992,8 +955,8 @@ const MEMBERS = [
     "pod": "Design Studio",
     "ooo": false,
     "today": 1.7,
-    "week": 9.1,
-    "month": 41.7,
+    "week": 6.8,
+    "month": 30.7,
     "qualifying": 7,
     "missing": 0,
     "overdue": 4,
@@ -1003,6 +966,15 @@ const MEMBERS = [
         "due": "2026-06-19",
         "est": 18,
         "proj": "979554 - XPH Phase Launch Assets",
+        "th": 0,
+        "wh": 0,
+        "overdue": true
+      },
+      {
+        "name": "Xerocon Denver Design Merch",
+        "due": "2026-06-29",
+        "est": 3,
+        "proj": "XCF: POD Boards",
         "th": 0,
         "wh": 0,
         "overdue": true
@@ -1026,22 +998,13 @@ const MEMBERS = [
         "overdue": true
       },
       {
-        "name": "Xerocon Denver Design Merch",
-        "due": "2026-06-29",
-        "est": 3,
-        "proj": "XCF: POD Boards",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
-      {
         "name": "XCFT-5876 - New USA Sales Pitch Decks - Design Updates",
         "start": "2026-06-29",
         "due": "2026-07-08",
         "est": 9,
         "proj": "XCF: Intake The Creative Foundry",
         "th": 1.13,
-        "wh": 5.63
+        "wh": 4.5
       },
       {
         "name": "3.3 ANZ Roadshow - Prospectus",
@@ -1086,7 +1049,7 @@ const MEMBERS = [
         "est": 15,
         "proj": "XCFP-371 | FY27 | Xero Supercharged Sessions",
         "th": 0.58,
-        "wh": 3.46
+        "wh": 2.31
       },
       {
         "name": "3.2 ANZ Roadshow - Exhibitor Manual",
@@ -1103,9 +1066,9 @@ const MEMBERS = [
     "name": "Dan Elliott",
     "pod": "Design",
     "ooo": false,
-    "today": 1.8,
-    "week": 4.6,
-    "month": 12.6,
+    "today": 1.7,
+    "week": 4.9,
+    "month": 9.5,
     "qualifying": 8,
     "missing": 0,
     "overdue": 2,
@@ -1127,15 +1090,6 @@ const MEMBERS = [
         "th": 0,
         "wh": 0,
         "overdue": true
-      },
-      {
-        "name": "3.3 Physical assets for post announcement",
-        "start": "2026-06-23",
-        "due": "2026-07-03",
-        "est": 4,
-        "proj": "XCFP-542 | Xero Values Launch ",
-        "th": 0.44,
-        "wh": 0.89
       },
       {
         "name": "XCFT-5249 - XFG: FF educational asset update",
@@ -1183,6 +1137,15 @@ const MEMBERS = [
         "wh": 1
       },
       {
+        "name": "3.3 Physical assets for post announcement",
+        "start": "2026-06-23",
+        "due": "2026-07-10",
+        "est": 4,
+        "proj": "XCFP-542 | Xero Values Launch ",
+        "th": 0.29,
+        "wh": 1.14
+      },
+      {
         "name": "3.4 ANZ Roadshow - Slide deck template",
         "start": null,
         "due": "2026-07-31",
@@ -1207,11 +1170,11 @@ const MEMBERS = [
     "pod": "AI & Media",
     "ooo": false,
     "today": 3.8,
-    "week": 22.9,
-    "month": 26.7,
+    "week": 15.3,
+    "month": 22.9,
     "qualifying": 2,
     "missing": 0,
-    "overdue": 5,
+    "overdue": 4,
     "tasks": [
       {
         "name": "Stakeholder review",
@@ -1227,15 +1190,6 @@ const MEMBERS = [
         "due": "2026-06-16",
         "est": 1,
         "proj": "XCF: POD Boards",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
-      {
-        "name": "Revisions ",
-        "due": "2026-07-01",
-        "est": 6,
-        "proj": "XCFT-1146 Xerocon motion graphics + opening video",
         "th": 0,
         "wh": 0,
         "overdue": true
@@ -1265,7 +1219,7 @@ const MEMBERS = [
         "est": 20,
         "proj": "XCF: POD Boards",
         "th": 1.82,
-        "wh": 10.91
+        "wh": 7.27
       },
       {
         "name": "DI Video - UK | Xero Files & Smart Data Capture Videos: ITG Creative Brief",
@@ -1274,7 +1228,7 @@ const MEMBERS = [
         "est": 20,
         "proj": "XCF: POD Boards",
         "th": 2,
-        "wh": 12
+        "wh": 8
       }
     ]
   },
@@ -1284,10 +1238,10 @@ const MEMBERS = [
     "ooo": false,
     "today": 6.3,
     "week": 9.5,
-    "month": 18.5,
+    "month": 15,
     "qualifying": 6,
     "missing": 0,
-    "overdue": 14,
+    "overdue": 12,
     "tasks": [
       {
         "name": "R2 Smartly Template Update with Copy | XCF-555",
@@ -1356,24 +1310,6 @@ const MEMBERS = [
         "name": "Design: Analytics image updates ",
         "due": "2026-06-26",
         "est": 2,
-        "proj": "XCF: POD Boards",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
-      {
-        "name": "Design R1 - Melio, Smartly Templates",
-        "due": "2026-06-30",
-        "est": 6,
-        "proj": "XCF: POD Boards",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
-      {
-        "name": "Design R1 - ANZ | High-Value SB banner",
-        "due": "2026-06-30",
-        "est": 6,
         "proj": "XCF: POD Boards",
         "th": 0,
         "wh": 0,
@@ -1536,10 +1472,10 @@ const MEMBERS = [
     "name": "Laura Fuldseth",
     "pod": "Design",
     "ooo": false,
-    "today": 1.5,
-    "week": 3,
-    "month": 44,
-    "qualifying": 6,
+    "today": 0.2,
+    "week": 1.7,
+    "month": 35.5,
+    "qualifying": 5,
     "missing": 0,
     "overdue": 1,
     "tasks": [
@@ -1553,24 +1489,6 @@ const MEMBERS = [
         "overdue": true
       },
       {
-        "name": "4.2 Review of templates",
-        "start": "2026-07-02",
-        "due": "2026-07-02",
-        "est": 1,
-        "proj": "XCFP-582 | FY27 | Canva template refresh",
-        "th": 1,
-        "wh": 1
-      },
-      {
-        "name": "Melbourne lectern logo placement",
-        "start": "2026-06-30",
-        "due": "2026-07-03",
-        "est": 2,
-        "proj": "XCF | Design Studio BAU Board",
-        "th": 0.5,
-        "wh": 1
-      },
-      {
         "name": "Swim Duck Swim: One-pager briefing",
         "start": "2026-07-06",
         "due": "2026-07-06",
@@ -1581,8 +1499,8 @@ const MEMBERS = [
       },
       {
         "name": "Layout in development",
-        "start": "2026-07-14",
-        "due": "2026-07-20",
+        "start": "2026-07-09",
+        "due": "2026-07-15",
         "est": 25,
         "proj": "XCFP-84 | Modern Practice Playbook",
         "th": 0,
@@ -1596,6 +1514,15 @@ const MEMBERS = [
         "proj": "",
         "th": 0,
         "wh": 0
+      },
+      {
+        "name": "XFG: FF Brand reviews",
+        "start": "2026-07-02",
+        "due": "2026-07-31",
+        "est": 5,
+        "proj": "XCF: POD Boards",
+        "th": 0.23,
+        "wh": 0.68
       },
       {
         "name": "Slide design | Xerocon 2026",
@@ -1613,9 +1540,9 @@ const MEMBERS = [
     "pod": "Campaign Ops",
     "ooo": false,
     "today": 5.1,
-    "week": 31.6,
-    "month": 82.6,
-    "qualifying": 7,
+    "week": 21.4,
+    "month": 62.2,
+    "qualifying": 8,
     "missing": 0,
     "overdue": 0,
     "tasks": [
@@ -1635,7 +1562,7 @@ const MEMBERS = [
         "est": 10,
         "proj": "XCFP-515 | BGL design support ",
         "th": 0.42,
-        "wh": 2.5
+        "wh": 1.67
       },
       {
         "name": "Project Management",
@@ -1644,7 +1571,16 @@ const MEMBERS = [
         "est": 40,
         "proj": "XCFT-3005 | Global Roadshow Rebrand",
         "th": 1.05,
-        "wh": 6.32
+        "wh": 4.21
+      },
+      {
+        "name": "XCFP-567 | Xero For Good: Financial fitness – research report oversight",
+        "start": null,
+        "due": "2026-08-13",
+        "est": 2,
+        "proj": "XCFP-16 | Xero For Good: Financial confidence AU launch",
+        "th": 0,
+        "wh": 0
       },
       {
         "name": "1. Project Management",
@@ -1653,7 +1589,7 @@ const MEMBERS = [
         "est": 30,
         "proj": "XCFP-790 | FY27 | AGM",
         "th": 0.61,
-        "wh": 3.67
+        "wh": 2.45
       },
       {
         "name": "1. Project Management",
@@ -1662,7 +1598,7 @@ const MEMBERS = [
         "est": 50,
         "proj": "XCF: POD Boards",
         "th": 1.02,
-        "wh": 6.12
+        "wh": 4.08
       },
       {
         "name": "Project Management",
@@ -1671,7 +1607,7 @@ const MEMBERS = [
         "est": 20,
         "proj": "XCFP-371 | FY27 | Xero Supercharged Sessions",
         "th": 0.36,
-        "wh": 2.14
+        "wh": 1.43
       },
       {
         "name": "Project Management",
@@ -1680,7 +1616,7 @@ const MEMBERS = [
         "est": 100,
         "proj": "XCFP-14 | 2026 | Xerocon 2026",
         "th": 1.64,
-        "wh": 9.84
+        "wh": 6.56
       }
     ]
   },
@@ -1690,7 +1626,7 @@ const MEMBERS = [
     "ooo": false,
     "today": 6,
     "week": 12,
-    "month": 20,
+    "month": 16,
     "qualifying": 2,
     "missing": 0,
     "overdue": 4,
@@ -1768,11 +1704,11 @@ const MEMBERS = [
     "pod": "Campaign Ops",
     "ooo": false,
     "today": 1.3,
-    "week": 8.2,
-    "month": 19.9,
+    "week": 5.2,
+    "month": 15.2,
     "qualifying": 6,
     "missing": 0,
-    "overdue": 12,
+    "overdue": 10,
     "tasks": [
       {
         "name": "PM",
@@ -1856,24 +1792,6 @@ const MEMBERS = [
         "overdue": true
       },
       {
-        "name": "3.6 SH - Stakeholder Review",
-        "due": "2026-06-25",
-        "est": 2,
-        "proj": "XCFP-84 | Modern Practice Playbook",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
-      {
-        "name": "SR2 - Marketing Video",
-        "due": "2026-06-26",
-        "est": 1.5,
-        "proj": "XCFP-27| FY27 | Xero Payroll, Powered by Gusto - US GA Launch ",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
-      {
         "name": "Project Management",
         "due": "2026-07-01",
         "est": 35,
@@ -1889,7 +1807,7 @@ const MEMBERS = [
         "est": 0.5,
         "proj": "XCFP-84 | Modern Practice Playbook",
         "th": 0.05,
-        "wh": 0.05
+        "wh": 0.1
       },
       {
         "name": "Photography - MY 1: ",
@@ -1898,7 +1816,7 @@ const MEMBERS = [
         "est": 0.5,
         "proj": "XCF: POD Boards",
         "th": 0,
-        "wh": 0.5
+        "wh": 0
       },
       {
         "name": "Photography - London 2: StriveX",
@@ -1907,7 +1825,7 @@ const MEMBERS = [
         "est": 0.5,
         "proj": "XCF: POD Boards",
         "th": 0.05,
-        "wh": 0.23
+        "wh": 0.18
       },
       {
         "name": "XCFT-4935 | Xero Accounting App - JAX chat: Hero assets",
@@ -1916,7 +1834,7 @@ const MEMBERS = [
         "est": 10,
         "proj": "XCFT-4935 - Xero Accounting App - JAX chat - new assets",
         "th": 0.48,
-        "wh": 2.86
+        "wh": 1.9
       },
       {
         "name": "1. Project Management",
@@ -1925,7 +1843,7 @@ const MEMBERS = [
         "est": 5,
         "proj": "XCFT-4935 - Xero Accounting App - JAX chat - new assets",
         "th": 0.17,
-        "wh": 1.03
+        "wh": 0.69
       },
       {
         "name": "1. Project Management",
@@ -1934,7 +1852,7 @@ const MEMBERS = [
         "est": 60,
         "proj": "XCFP-84 | Modern Practice Playbook",
         "th": 0.59,
-        "wh": 3.53
+        "wh": 2.35
       }
     ]
   },
@@ -1964,12 +1882,12 @@ const MEMBERS = [
     "name": "Sandeep Garcha",
     "pod": "Design Studio",
     "ooo": false,
-    "today": 7.4,
-    "week": 18,
-    "month": 30.5,
-    "qualifying": 9,
+    "today": 7.6,
+    "week": 17.5,
+    "month": 25.1,
+    "qualifying": 15,
     "missing": 0,
-    "overdue": 3,
+    "overdue": 2,
     "tasks": [
       {
         "name": "XCFT-1578 - Global Terms of Use Update",
@@ -1990,22 +1908,22 @@ const MEMBERS = [
         "overdue": true
       },
       {
-        "name": "XCFT-5357 - Micro request:Co-branded stand up banner for Bakers Delight ",
-        "due": "2026-07-01",
-        "est": 3,
-        "proj": "XCF: Intake The Creative Foundry",
-        "th": 0,
-        "wh": 0,
-        "overdue": true
-      },
-      {
         "name": "Xero Leadership Summit - Jomablue assets",
         "start": "2026-06-22",
         "due": "2026-07-02",
         "est": 2,
         "proj": "XCF: POD Boards",
         "th": 0.22,
-        "wh": 0.22
+        "wh": 0.44
+      },
+      {
+        "name": "Backing card QR code for XCDEN26 agenda",
+        "start": "2026-07-02",
+        "due": "2026-07-03",
+        "est": 0.5,
+        "proj": "XCF: POD Boards",
+        "th": 0.25,
+        "wh": 0.25
       },
       {
         "name": "2.1 Hero assets",
@@ -2033,6 +1951,24 @@ const MEMBERS = [
         "proj": "XCF: POD Boards",
         "th": 1,
         "wh": 2
+      },
+      {
+        "name": "Updated hero image for AU mircrosite",
+        "start": "2026-07-07",
+        "due": "2026-07-08",
+        "est": 0.5,
+        "proj": "XCF | Design Studio BAU Board",
+        "th": 0,
+        "wh": 0.25
+      },
+      {
+        "name": "Humanitix website assets",
+        "start": "2026-07-07",
+        "due": "2026-07-08",
+        "est": 1,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0.5
       },
       {
         "name": "3.4 BGL - Sticker design update",
@@ -2071,13 +2007,40 @@ const MEMBERS = [
         "wh": 0
       },
       {
+        "name": "Signage and banners for Parliament House event",
+        "start": null,
+        "due": "2026-07-27",
+        "est": 2,
+        "proj": "XCF | Design Studio BAU Board",
+        "th": 0,
+        "wh": 0
+      },
+      {
+        "name": "Digital banner for office screen take-over",
+        "start": "2026-07-27",
+        "due": "2026-07-31",
+        "est": 1,
+        "proj": "XCF: POD Boards",
+        "th": 0,
+        "wh": 0
+      },
+      {
+        "name": "XCFP-560 | [AU] Workpapers > classic sunset",
+        "start": null,
+        "due": "2026-08-01",
+        "est": 1,
+        "proj": "XCF | Design Studio BAU Board",
+        "th": 0,
+        "wh": 0
+      },
+      {
         "name": "Managing Xerocon requests",
         "start": "2025-10-01",
         "due": "2026-08-14",
         "est": 195,
         "proj": "XCFP-14 | 2026 | Xerocon 2026",
         "th": 0.86,
-        "wh": 5.13
+        "wh": 3.42
       }
     ]
   },
@@ -2086,8 +2049,8 @@ const MEMBERS = [
     "pod": "Campaign Ops",
     "ooo": false,
     "today": 2.7,
-    "week": 16.3,
-    "month": 33.2,
+    "week": 10.9,
+    "month": 26.4,
     "qualifying": 3,
     "missing": 0,
     "overdue": 0,
@@ -2099,7 +2062,7 @@ const MEMBERS = [
         "est": 30,
         "proj": "XCF: POD Boards",
         "th": 1.03,
-        "wh": 6.21
+        "wh": 4.14
       },
       {
         "name": "Project Management",
@@ -2108,7 +2071,7 @@ const MEMBERS = [
         "est": 20,
         "proj": "XCFP-579 | FY27 Q2 | SB Storybook Updates > Q2",
         "th": 0.87,
-        "wh": 5.22
+        "wh": 3.48
       },
       {
         "name": "Project Management",
@@ -2117,7 +2080,7 @@ const MEMBERS = [
         "est": 80,
         "proj": "XCFP-300 | 2026 | Brand Refresh",
         "th": 0.82,
-        "wh": 4.9
+        "wh": 3.27
       }
     ]
   },
@@ -2126,8 +2089,8 @@ const MEMBERS = [
     "pod": "Design Studio",
     "ooo": false,
     "today": 1.1,
-    "week": 1.9,
-    "month": 11.9,
+    "week": 2.1,
+    "month": 7.1,
     "qualifying": 3,
     "missing": 0,
     "overdue": 1,
@@ -2148,7 +2111,7 @@ const MEMBERS = [
         "est": 1,
         "proj": "XCF: Intake The Creative Foundry",
         "th": 0.25,
-        "wh": 0.25
+        "wh": 0.5
       },
       {
         "name": "XCFT-5546 - XFG: FF one-pager for government stakeholders",
@@ -2178,7 +2141,7 @@ const MEMBERS = [
     "week": 0,
     "month": 0,
     "qualifying": 0,
-    "missing": 0,
+    "missing": 1,
     "overdue": 0,
     "tasks": []
   },
@@ -2187,7 +2150,7 @@ const MEMBERS = [
     "pod": "Campaign Ops",
     "ooo": false,
     "today": 6.3,
-    "week": 13.7,
+    "week": 13.3,
     "month": 13.7,
     "qualifying": 4,
     "missing": 0,
@@ -2236,7 +2199,7 @@ const MEMBERS = [
         "est": 1,
         "proj": "XCF | Design Studio BAU Board",
         "th": 0,
-        "wh": 1
+        "wh": 0.67
       }
     ]
   },
@@ -2245,8 +2208,8 @@ const MEMBERS = [
     "pod": "AI & Media",
     "ooo": false,
     "today": 6,
-    "week": 36,
-    "month": 42,
+    "week": 24,
+    "month": 36,
     "qualifying": 2,
     "missing": 0,
     "overdue": 1,
@@ -2267,7 +2230,7 @@ const MEMBERS = [
         "est": 30,
         "proj": "XCF: POD Boards",
         "th": 3,
-        "wh": 18
+        "wh": 12
       },
       {
         "name": "WR Video - UK | Xero Files & Smart Data Capture Videos: ITG Creative Brief",
@@ -2276,7 +2239,7 @@ const MEMBERS = [
         "est": 30,
         "proj": "XCF: POD Boards",
         "th": 3,
-        "wh": 18
+        "wh": 12
       }
     ]
   }
@@ -2311,6 +2274,15 @@ const MISSING_TASKS = [
     "missing": "No estimate"
   },
   {
+    "name": "CW 3.1 Develop 1-2 creative concepts",
+    "gid": "1216228116400019",
+    "proj": "XCF: POD Boards",
+    "assignee": "Brad Donovan",
+    "createdBy": "Becky Sharp",
+    "pod": "Campaign",
+    "missing": "No estimate"
+  },
+  {
     "name": "US&CA Partner Awards: Assets Rollout",
     "gid": "1215162800814110",
     "proj": "XCFP-83 | 2026 | US and Canada Partner Awards",
@@ -2333,6 +2305,15 @@ const MISSING_TASKS = [
     "gid": "1216102799433207",
     "proj": "",
     "assignee": "James Blow",
+    "createdBy": "Becky Sharp",
+    "pod": "Campaign",
+    "missing": "No estimate"
+  },
+  {
+    "name": "AD 3.1 Develop 1-2 creative concepts",
+    "gid": "1216228116400018",
+    "proj": "",
+    "assignee": "Søren Birk",
     "createdBy": "Becky Sharp",
     "pod": "Campaign",
     "missing": "No estimate"
@@ -2429,16 +2410,16 @@ const OVERDUE_TASKS = [
     "due": "2026-06-24"
   },
   {
-    "name": "XCFT-5467 | Video Resizing",
-    "gid": "1215751951624329",
+    "name": "XCFT-463 | Ai UGC Briefs For Agency",
+    "gid": "1213616538853937",
     "proj": "XCF: POD Boards",
     "assignee": "Becky Sharp",
     "pod": "Campaign Ops",
     "due": "2026-06-26"
   },
   {
-    "name": "XCFT-463 | Ai UGC Briefs For Agency",
-    "gid": "1213616538853937",
+    "name": "XCFT-5467 | Video Resizing",
+    "gid": "1215751951624329",
     "proj": "XCF: POD Boards",
     "assignee": "Becky Sharp",
     "pod": "Campaign Ops",
@@ -2629,6 +2610,14 @@ const OVERDUE_TASKS = [
     "due": "2026-06-19"
   },
   {
+    "name": "Xerocon Denver Design Merch",
+    "gid": "1215445979406292",
+    "proj": "XCF: POD Boards",
+    "assignee": "Ciaran Carroll",
+    "pod": "Design Studio",
+    "due": "2026-06-29"
+  },
+  {
     "name": "One Pager Production - Studio Support ",
     "gid": "1215575167238945",
     "proj": "XCFP-322 | 2026 | Ultra SKU > GA",
@@ -2640,14 +2629,6 @@ const OVERDUE_TASKS = [
     "name": "XCFT-1552 - Enterprise pop up banner and tablecloth ",
     "gid": "1214953983999250",
     "proj": "XCF: Intake The Creative Foundry",
-    "assignee": "Ciaran Carroll",
-    "pod": "Design Studio",
-    "due": "2026-06-29"
-  },
-  {
-    "name": "Xerocon Denver Design Merch",
-    "gid": "1215445979406292",
-    "proj": "XCF: POD Boards",
     "assignee": "Ciaran Carroll",
     "pod": "Design Studio",
     "due": "2026-06-29"
@@ -2683,14 +2664,6 @@ const OVERDUE_TASKS = [
     "assignee": "Domenic Iaria",
     "pod": "AI & Media",
     "due": "2026-06-16"
-  },
-  {
-    "name": "Revisions ",
-    "gid": "1216145194215465",
-    "proj": "XCFT-1146 Xerocon motion graphics + opening video",
-    "assignee": "Domenic Iaria",
-    "pod": "AI & Media",
-    "due": "2026-07-01"
   },
   {
     "name": "2.2 Redesign | JAX UI  | XCF: AIM | Xero Website | Animation | XCF-464",
@@ -2771,22 +2744,6 @@ const OVERDUE_TASKS = [
     "assignee": "Hannah Boekhorst",
     "pod": "Performance",
     "due": "2026-06-26"
-  },
-  {
-    "name": "Design R1 - Melio, Smartly Templates",
-    "gid": "1215953155912618",
-    "proj": "XCF: POD Boards",
-    "assignee": "Hannah Boekhorst",
-    "pod": "Performance",
-    "due": "2026-06-30"
-  },
-  {
-    "name": "Design R1 - ANZ | High-Value SB banner",
-    "gid": "1215238399535649",
-    "proj": "XCF: POD Boards",
-    "assignee": "Hannah Boekhorst",
-    "pod": "Performance",
-    "due": "2026-06-30"
   },
   {
     "name": "Update Template - Update Meta Video Template Promo Banners",
@@ -2941,22 +2898,6 @@ const OVERDUE_TASKS = [
     "due": "2026-06-25"
   },
   {
-    "name": "3.6 SH - Stakeholder Review",
-    "gid": "1213611848731266",
-    "proj": "XCFP-84 | Modern Practice Playbook",
-    "assignee": "Naomi Lawson",
-    "pod": "Campaign Ops",
-    "due": "2026-06-25"
-  },
-  {
-    "name": "SR2 - Marketing Video",
-    "gid": "1214632594624401",
-    "proj": "XCFP-27| FY27 | Xero Payroll, Powered by Gusto - US GA Launch ",
-    "assignee": "Naomi Lawson",
-    "pod": "Campaign Ops",
-    "due": "2026-06-26"
-  },
-  {
     "name": "Project Management",
     "gid": "1215617744337419",
     "proj": "XCFP-50 | 2026 | XERO AI - ALWAYS ON GO-TO-MARKET",
@@ -2987,14 +2928,6 @@ const OVERDUE_TASKS = [
     "assignee": "Sandeep Garcha",
     "pod": "Design Studio",
     "due": "2026-06-30"
-  },
-  {
-    "name": "XCFT-5357 - Micro request:Co-branded stand up banner for Bakers Delight ",
-    "gid": "1215654217602903",
-    "proj": "XCF: Intake The Creative Foundry",
-    "assignee": "Sandeep Garcha",
-    "pod": "Design Studio",
-    "due": "2026-07-01"
   },
   {
     "name": "PDF checklist template | XCF-432",
@@ -3077,9 +3010,9 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1212446476552313",
         "start": null,
         "due": null,
-        "completedTasks": 58,
+        "completedTasks": 57,
         "totalTasks": 100,
-        "pct": 58,
+        "pct": 57,
         "pmTasks": []
       }
     ],
@@ -3119,8 +3052,8 @@ const PM_DATA = [
             "due": "2026-07-23",
             "est": 10,
             "th": 0.42,
-            "wh": 2.5,
-            "mh": 6.67
+            "wh": 1.67,
+            "mh": 5
           }
         ]
       },
@@ -3151,8 +3084,8 @@ const PM_DATA = [
             "due": "2026-08-27",
             "est": 30,
             "th": 0.61,
-            "wh": 3.67,
-            "mh": 9.8
+            "wh": 2.45,
+            "mh": 7.35
           }
         ]
       },
@@ -3162,9 +3095,9 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1215959241949250",
         "start": "2026-06-24",
         "due": "2026-08-28",
-        "completedTasks": 4,
+        "completedTasks": 5,
         "totalTasks": 17,
-        "pct": 24,
+        "pct": 29,
         "pmTasks": [
           {
             "name": "1. Project Management",
@@ -3172,8 +3105,8 @@ const PM_DATA = [
             "due": "2026-08-31",
             "est": 50,
             "th": 1.02,
-            "wh": 6.12,
-            "mh": 16.33
+            "wh": 4.08,
+            "mh": 12.24
           }
         ]
       },
@@ -3193,8 +3126,8 @@ const PM_DATA = [
             "due": "2026-08-31",
             "est": 100,
             "th": 1.64,
-            "wh": 9.84,
-            "mh": 26.23
+            "wh": 6.56,
+            "mh": 19.67
           }
         ]
       },
@@ -3214,8 +3147,8 @@ const PM_DATA = [
             "due": "2026-08-31",
             "est": 20,
             "th": 0.36,
-            "wh": 2.14,
-            "mh": 5.71
+            "wh": 1.43,
+            "mh": 4.29
           }
         ]
       },
@@ -3235,8 +3168,8 @@ const PM_DATA = [
             "due": "2026-07-31",
             "est": 40,
             "th": 1.05,
-            "wh": 6.32,
-            "mh": 16.84
+            "wh": 4.21,
+            "mh": 12.63
           }
         ]
       },
@@ -3277,38 +3210,38 @@ const PM_DATA = [
     "tasks": [
       {
         "th": 0.42,
-        "wh": 2.5,
-        "mh": 6.67
+        "wh": 1.67,
+        "mh": 5
       },
       {
         "th": 0.61,
-        "wh": 3.67,
-        "mh": 9.8
+        "wh": 2.45,
+        "mh": 7.35
       },
       {
         "th": 1.02,
-        "wh": 6.12,
-        "mh": 16.33
+        "wh": 4.08,
+        "mh": 12.24
       },
       {
         "th": 1.64,
-        "wh": 9.84,
-        "mh": 26.23
+        "wh": 6.56,
+        "mh": 19.67
       },
       {
         "th": 0.36,
-        "wh": 2.14,
-        "mh": 5.71
+        "wh": 1.43,
+        "mh": 4.29
       },
       {
         "th": 1.05,
-        "wh": 6.32,
-        "mh": 16.84
+        "wh": 4.21,
+        "mh": 12.63
       }
     ],
     "today": 5.1,
-    "week": 30.6,
-    "month": 81.6
+    "week": 20.4,
+    "month": 61.2
   },
   {
     "name": "Naomi Lawson",
@@ -3320,9 +3253,9 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213755142401947",
         "start": "2026-06-19",
         "due": "2026-06-23",
-        "completedTasks": 36,
+        "completedTasks": 37,
         "totalTasks": 61,
-        "pct": 59,
+        "pct": 61,
         "pmTasks": []
       },
       {
@@ -3331,9 +3264,9 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1214603969879455",
         "start": null,
         "due": "2026-06-24",
-        "completedTasks": 40,
+        "completedTasks": 41,
         "totalTasks": 46,
-        "pct": 87,
+        "pct": 89,
         "pmTasks": []
       },
       {
@@ -3342,9 +3275,9 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213841171607925",
         "start": "2026-07-01",
         "due": "2026-07-01",
-        "completedTasks": 38,
+        "completedTasks": 39,
         "totalTasks": 52,
-        "pct": 73,
+        "pct": 75,
         "pmTasks": []
       },
       {
@@ -3364,9 +3297,9 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213611543316253",
         "start": "2026-07-22",
         "due": "2026-07-22",
-        "completedTasks": 12,
+        "completedTasks": 15,
         "totalTasks": 91,
-        "pct": 13,
+        "pct": 16,
         "pmTasks": [
           {
             "name": "1. Project Management",
@@ -3374,8 +3307,8 @@ const PM_DATA = [
             "due": "2026-10-27",
             "est": 60,
             "th": 0.59,
-            "wh": 3.53,
-            "mh": 9.41
+            "wh": 2.35,
+            "mh": 7.06
           }
         ]
       },
@@ -3395,8 +3328,8 @@ const PM_DATA = [
             "due": "2026-07-22",
             "est": 5,
             "th": 0.17,
-            "wh": 1.03,
-            "mh": 2.59
+            "wh": 0.69,
+            "mh": 2.07
           }
         ]
       }
@@ -3404,18 +3337,18 @@ const PM_DATA = [
     "tasks": [
       {
         "th": 0.59,
-        "wh": 3.53,
-        "mh": 9.41
+        "wh": 2.35,
+        "mh": 7.06
       },
       {
         "th": 0.17,
-        "wh": 1.03,
-        "mh": 2.59
+        "wh": 0.69,
+        "mh": 2.07
       }
     ],
     "today": 0.8,
-    "week": 4.6,
-    "month": 12
+    "week": 3,
+    "month": 9.1
   },
   {
     "name": "Quincey Brinker",
@@ -3492,8 +3425,8 @@ const PM_DATA = [
         "url": "https://app.asana.com/1/41261904390129/project/1213612972158988",
         "start": "2026-05-29",
         "due": "2026-07-24",
-        "completedTasks": 19,
-        "totalTasks": 35,
+        "completedTasks": 20,
+        "totalTasks": 37,
         "pct": 54,
         "pmTasks": [
           {
@@ -3502,8 +3435,8 @@ const PM_DATA = [
             "due": "2026-08-31",
             "est": 500,
             "th": 5.75,
-            "wh": 34.48,
-            "mh": 91.95
+            "wh": 22.99,
+            "mh": 68.97
           }
         ]
       },
@@ -3547,8 +3480,8 @@ const PM_DATA = [
         "start": "2026-08-10",
         "due": "2026-09-30",
         "completedTasks": 11,
-        "totalTasks": 22,
-        "pct": 50,
+        "totalTasks": 23,
+        "pct": 48,
         "pmTasks": []
       },
       {
@@ -3571,13 +3504,13 @@ const PM_DATA = [
       },
       {
         "th": 5.75,
-        "wh": 34.48,
-        "mh": 91.95
+        "wh": 22.99,
+        "mh": 68.97
       }
     ],
     "today": 6.3,
-    "week": 35.5,
-    "month": 93
+    "week": 24,
+    "month": 70
   },
   {
     "name": "Sherry Choe",
@@ -3599,8 +3532,8 @@ const PM_DATA = [
             "due": "2026-09-30",
             "est": 80,
             "th": 0.82,
-            "wh": 4.9,
-            "mh": 13.06
+            "wh": 3.27,
+            "mh": 9.8
           }
         ]
       }
@@ -3608,13 +3541,13 @@ const PM_DATA = [
     "tasks": [
       {
         "th": 0.82,
-        "wh": 4.9,
-        "mh": 13.06
+        "wh": 3.27,
+        "mh": 9.8
       }
     ],
     "today": 0.8,
-    "week": 4.9,
-    "month": 13.1
+    "week": 3.3,
+    "month": 9.8
   },
   {
     "name": "Tom Gregson",
@@ -4182,7 +4115,8 @@ function renderPodSummary(){
         </div>
         <div class="ps-members">
           ${sorted.map(m=>{
-            const pct=Math.min(100,(m.today/memberCap(m.name))*100);
+            const rawPct=(m.today/memberCap(m.name))*100;
+            const barPct=Math.min(100,rawPct);
             const bc=barCol(m.today,'today',b.bar,memberCap(m.name));
             if(m.ooo) return `<div class="ps-member-line">
               <span class="ps-member-name">${m.name}</span>
@@ -4191,8 +4125,8 @@ function renderPodSummary(){
             </div>`;
             return `<div class="ps-member-line">
               <span class="ps-member-name">${m.name}</span>
-              <div class="ps-mini-bar"><div class="ps-mini-fill" style="width:${pct.toFixed(1)}%;background:${bc}"></div></div>
-              <span class="ps-member-hrs">${m.today.toFixed(1)}h <span style="color:var(--muted);font-size:10px">(${pct.toFixed(0)}%)</span></span>
+              <div class="ps-mini-bar"><div class="ps-mini-fill" style="width:${barPct.toFixed(1)}%;background:${bc}"></div></div>
+              <span class="ps-member-hrs">${m.today.toFixed(1)}h <span style="color:var(--muted);font-size:10px">(${rawPct.toFixed(0)}%)</span></span>
             </div>`;
           }).join('')}
         </div>
