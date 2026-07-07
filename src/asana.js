@@ -194,6 +194,7 @@ const EXCLUDED_MEMBERS = [
   'Ben Smith',
   'Ali Berg',
   'Quincey Brinker',
+  'James Blow',
 ];
 
 // These members appear on the capacity tab but are excluded from the missing fields tab
@@ -207,6 +208,7 @@ const MISSING_EXCLUDED_MEMBERS = [
   'Sherry Choe',
   'Sandeep Garcha',
   'mikeohall@me.com',
+  'James Blow',
 ];
 
 const EXCLUDED_PROJECTS = [
