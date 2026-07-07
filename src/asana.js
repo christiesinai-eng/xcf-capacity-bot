@@ -46,7 +46,7 @@ async function getWorkspaceMembers() {
   let offset = null;
 
   do {
-    const params = { opt_fields: 'name,email,gid', limit: 100 };
+    const params = { opt_fields: 'name,email,gid,vacation_dates', limit: 100 };
     if (offset) params.offset = offset;
     const resp = await client.get(`/teams/${process.env.ASANA_TEAM_GID}/users`, { params });
     users.push(...resp.data.data);
@@ -249,7 +249,15 @@ async function buildMemberData() {
     const memberTasks = [];
     let missingCount = 0;
     let overdueCount = 0;
-    let isOoo = false;
+    // Check Asana's native vacation/away status
+    const todayDate = new Date(today + 'T00:00:00');
+    let isOoo = (() => {
+      const vd = member.vacation_dates;
+      if (!vd?.start_on || !vd?.end_on) return false;
+      const start = new Date(vd.start_on + 'T00:00:00');
+      const end = new Date(vd.end_on + 'T00:00:00');
+      return todayDate >= start && todayDate <= end;
+    })();
     const seenGids = new Set();
 
     for (const t of incomplete) {
@@ -273,7 +281,6 @@ async function buildMemberData() {
           t.name && t.name.toUpperCase().includes('OOO') && dueDate) {
         const oooStart = new Date((startDate || dueDate) + 'T00:00:00');
         const oooEnd = new Date(dueDate + 'T00:00:00');
-        const todayDate = new Date(today + 'T00:00:00');
         if (todayDate >= oooStart && todayDate <= oooEnd) isOoo = true;
       }
 
