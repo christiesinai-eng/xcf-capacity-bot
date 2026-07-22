@@ -198,6 +198,7 @@ tr.expand-row td{background:rgba(255,255,255,.03);padding:14px 22px;border-botto
     <span class="dot"></span> Export generated: <strong id="meta-generated">—</strong>
     <span class="dot"></span> <span id="meta-rowcount">—</span> contracts loaded
     <span class="dot"></span> Quarters: Xero fiscal year (Apr–Mar), grouped by contract start date
+    <span class="dot"></span> <strong style="color:var(--sky)">Showing contracts starting 1 Jan 2026 onwards</strong>
   </div>
   <div class="upload-note" id="upload-note" style="display:none"></div>
 </header>
@@ -215,6 +216,7 @@ tr.expand-row td{background:rgba(255,255,255,.03);padding:14px 22px;border-botto
     <strong>Confirmed spend</strong> totals (in the cards and breakdown tables) only include contracts in <code>ACCEPTED</code> or <code>COMPLETED</code> state — draft, offered and revoked contracts are excluded from spend but still counted in contract totals.
     Figures are shown <strong>per currency, not converted</strong> — this sheet has contracts in AUD, GBP, USD and NZD. The "Total (NZD equiv.)" box uses manually-set approximate FX rates (editable via "Edit FX rates") — not live market rates.
     The <strong>Contract / Work</strong> column is matched from the freelancer invoice tracker (PO spreadsheet) by contractor name + cost centre + closest date — it's a best-effort match, not a guaranteed one. Hover the dot next to a match to see what it was matched against; a blank <code>—</code> means no matching invoice line was found.
+    This dashboard only includes contracts with a <strong>start date on or after 1 Jan 2026</strong> — anything starting earlier is excluded from every count, total and table on this page.
   </div>
 </div>
 
@@ -476,6 +478,8 @@ function fmtDate(s){
   return d.getDate()+' '+MONTH_NAMES[d.getMonth()]+' '+d.getFullYear();
 }
 
+const DATA_CUTOFF_DATE='2026-01-01';
+
 function buildRows(csvText){
   const table=parseCSV(csvText);
   if(!table.length) return [];
@@ -487,6 +491,8 @@ function buildRows(csvText){
     const cells=table[i];
     if(!cells || cells.every(c=>c==='' )) continue;
     const get=k=>idx[k]!==undefined?(cells[idx[k]]||'').trim():'';
+    const rowStartDate=get('startDate');
+    if(rowStartDate && rowStartDate<DATA_CUTOFF_DATE) continue;
     const r={
       clientName:get('clientName'), hirerName:get('hirerName')||'—', contractorName:get('contractorName')||'—',
       discipline:get('discipline')||'—', seniority:get('seniority'), dateOffered:get('dateOffered'),
