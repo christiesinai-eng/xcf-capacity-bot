@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Creative Foundry · Freelancer Contracts Report</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh}
+:root{
+  --mid:#000856;--blue:#1F65D6;--sky:#3ECCFF;--yellow:#FDCC08;--pink:#FF719B;--purple:#CF89FE;--green:#6AEAAA;
+  --cream:#F2F1EE;--grey:#CBCAC9;
+  --surface:#1a1d27;--surface2:#22263a;--border:#2a2f45;--txt:#e8eaf0;--muted:#8b91ad;--red:#ef4444;
+}
+
+/* ── BRAND LOCKUP ── */
+.brand-lockup{background:#000;padding:18px 24px 16px;text-align:center;border-bottom:3px solid var(--sky)}
+.brand-the{font-size:11px;font-weight:800;letter-spacing:.25em;color:#fff;margin-bottom:2px}
+.brand-main{font-family:'Arial Narrow',Impact,'Helvetica Neue',sans-serif;font-weight:900;font-size:30px;letter-spacing:.01em;color:#fff;text-transform:uppercase;line-height:1}
+.brand-xero{font-weight:800;font-size:19px;color:var(--sky);letter-spacing:.01em;margin-top:6px}
+
+/* ── TOP BAR ── */
+.top-bar{background:#0f1117;border-bottom:1px solid var(--border);padding:16px 24px 0}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.top-title{font-size:22px;font-weight:700;color:#fff;letter-spacing:-.02em}
+.top-subtitle{font-size:13px;font-weight:400;color:var(--muted);margin-left:2px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{font-size:12px;font-weight:600;padding:8px 14px;border-radius:7px;border:1px solid var(--border);cursor:pointer;background:var(--surface);color:var(--txt);transition:all .15s}
+.btn:hover{background:var(--surface2);border-color:var(--sky)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{background:#184fab}
+.top-meta{font-size:11px;color:var(--muted);margin-top:8px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:8px}
+.top-meta .dot{width:3px;height:3px;border-radius:50%;background:var(--muted);display:inline-block;opacity:.5}
+.upload-note{font-size:11px;color:var(--green);margin-top:2px}
+
+/* ── METHOD NOTE ── */
+.method-panel{margin:0 24px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.method-hdr{padding:10px 14px;font-size:12px;font-weight:600;color:var(--sky);cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none}
+.method-hdr .chev{transition:transform .2s;font-size:10px;color:var(--muted)}
+.method-hdr.open .chev{transform:rotate(90deg)}
+.method-body{display:none;padding:0 14px 14px;font-size:12px;color:var(--muted);line-height:1.6}
+.method-body.open{display:block}
+.method-body code{background:var(--surface2);padding:1px 5px;border-radius:4px;color:var(--sky);font-size:11px}
+
+/* ── NAV ── */
+.nav-bar{display:flex;gap:8px;padding:12px 24px;background:#0f1117;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.nav-btn{font-size:12px;font-weight:500;padding:7px 16px;border-radius:6px;border:1px solid var(--border);cursor:pointer;background:var(--surface);color:var(--txt);transition:all .15s;white-space:nowrap}
+.nav-btn.active{background:#fff;color:#0f1117;border-color:#fff}
+.nav-btn:hover:not(.active){background:var(--surface2)}
+
+/* ── VIEWS ── */
+.view{display:none;padding:0 0 30px}
+.view.active{display:block}
+
+/* ── STAT CARDS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 24px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.stat-card .sv{font-size:24px;font-weight:800;color:#fff;line-height:1}
+.stat-card .sl{font-size:11px;color:var(--muted);margin-top:6px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.stat-card.accent .sv{color:var(--sky)}
+.stat-card.green .sv{color:var(--green)}
+.stat-card.yellow .sv{color:var(--yellow)}
+.currency-line{font-size:13px;font-weight:700;color:#fff;margin-top:4px}
+.currency-line span{color:var(--muted);font-weight:400;font-size:11px;margin-right:4px}
+
+/* ── SECTION ── */
+.section{margin:22px 24px}
+.section-hdr{font-size:14px;font-weight:700;color:#fff;margin-bottom:10px;display:flex;justify-content:space-between;align-items:baseline}
+.section-hdr span{font-size:11px;color:var(--muted);font-weight:400}
+.card-table{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+table.data{width:100%;border-collapse:collapse;font-size:12.5px}
+table.data th{text-align:left;padding:9px 12px;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--border);font-weight:600;background:var(--surface2);white-space:nowrap}
+table.data td{padding:9px 12px;border-bottom:.5px solid var(--border);vertical-align:middle;color:var(--txt)}
+table.data tr:last-child td{border-bottom:none}
+table.data tr:hover td{background:rgba(255,255,255,.02)}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.quarter-current{background:rgba(62,204,255,.08)}
+
+/* ── CHIPS ── */
+.chip{display:inline-flex;align-items:center;padding:3px 9px;border-radius:10px;font-size:10.5px;font-weight:600;white-space:nowrap;border:1px solid transparent}
+.chip-completed{background:#062318;color:var(--green);border-color:#0f5233}
+.chip-accepted{background:#0d1a2e;color:var(--sky);border-color:#1e3a6e}
+.chip-offered{background:#2a2200;color:var(--yellow);border-color:#6b4e00}
+.chip-draft{background:#22263a;color:var(--grey);border-color:var(--border)}
+.chip-revoked{background:#33101d;color:var(--pink);border-color:#6b2a41}
+.state-chips{display:flex;gap:8px;flex-wrap:wrap}
+.state-chip-card{flex:1;min-width:120px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;text-align:center}
+.state-chip-card .scv{font-size:22px;font-weight:800}
+.state-chip-card .scl{font-size:10.5px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.04em}
+
+/* ── FILTER BAR (contracts) ── */
+.fc-controls{display:flex;gap:10px;padding:14px 24px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.fc-controls label{font-size:11px;color:var(--muted);margin-right:4px}
+.fc-select,.fc-input{background:var(--surface2);color:var(--txt);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-size:12px;cursor:pointer;outline:none}
+.fc-input{cursor:text;min-width:180px}
+.fc-select:focus,.fc-input:focus{border-color:var(--sky)}
+.fc-count{font-size:11px;color:var(--muted);margin-left:auto}
+
+/* ── CONTRACTS TABLE ── */
+.contracts-wrap{margin:14px 24px}
+th.sortable{cursor:pointer;user-select:none}
+th.sortable:hover{color:#fff}
+th.sortable .arrow{font-size:9px;margin-left:3px;color:var(--sky)}
+tr.contract-row{cursor:pointer}
+tr.expand-row{display:none}
+tr.expand-row.open{display:table-row}
+tr.expand-row td{background:#0d1020;padding:12px 20px;border-bottom:.5px solid var(--border)}
+.expand-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px 20px}
+.expand-item .ei-label{font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:2px}
+.expand-item .ei-val{font-size:12px;color:var(--txt)}
+.est-cost{font-weight:700;color:#fff}
+.rate-unit-tag{font-size:9.5px;color:var(--muted);text-transform:uppercase}
+
+/* ── FOOTER ── */
+.footer{font-size:10px;color:var(--muted);padding:14px 24px 24px;line-height:1.6;border-top:1px solid var(--border);margin-top:10px}
+
+@media (max-width:900px){
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .brand-main{font-size:24px}
+}
+</style>
+</head>
+<body>
+
+<!-- BRAND LOCKUP -->
+<div class="brand-lockup">
+  <div class="brand-the">THE</div>
+  <div class="brand-main">Creative Foundry</div>
+  <div class="brand-xero">xero</div>
+</div>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-row">
+    <div><span class="top-title">Freelancer Contracts <span class="top-subtitle">· YunoJuno report</span></span></div>
+    <div class="toolbar">
+      <input type="file" id="csv-upload" accept=".csv" style="display:none">
+      <button class="btn" onclick="document.getElementById('csv-upload').click()">↑ Upload new export</button>
+      <button class="btn primary" id="download-btn">⬇ Download updated report</button>
+    </div>
+  </div>
+  <div class="top-meta">
+    Export file: <strong style="color:#fff" id="meta-filename">—</strong>
+    <span class="dot"></span> Export generated: <strong style="color:#fff" id="meta-generated">—</strong>
+    <span class="dot"></span> <span id="meta-rowcount">—</span> contracts loaded
+    <span class="dot"></span> Quarters: Xero fiscal year (Apr–Mar), grouped by contract start date
+  </div>
+  <div class="upload-note" id="upload-note" style="display:none"></div>
+</div>
+
+<!-- METHOD NOTE -->
+<div class="method-panel">
+  <div class="method-hdr" id="method-hdr" onclick="toggleMethod()"><span class="chev">▶</span> How spend is calculated</div>
+  <div class="method-body" id="method-body">
+    Contracts don't carry a single "total value" — they carry a rate + a rate unit. Totals shown here are <strong>estimates</strong>, not invoiced amounts:
+    <ul style="margin:6px 0 6px 18px">
+      <li><code>DAY</code> rate → rate × business days (Mon–Fri) between contract start and end date.</li>
+      <li><code>HOUR</code> rate → rate × business days × hours/day (8h for FULL_TIME, 4h for PART_TIME).</li>
+      <li><code>PROJECT</code> / <code>MILESTONE</code> rate → used as-is (already a total, not multiplied).</li>
+    </ul>
+    <strong>Confirmed spend</strong> totals (in the cards and breakdown tables) only include contracts in <code>ACCEPTED</code> or <code>COMPLETED</code> state — draft, offered and revoked contracts are excluded from spend but still counted in contract totals.
+    Figures are shown <strong>per currency, not converted</strong> — this sheet has contracts in AUD, GBP, USD and NZD with no FX conversion applied.
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-bar">
+  <button class="nav-btn active" onclick="showView('summary',this)">Summary</button>
+  <button class="nav-btn" onclick="showView('contracts',this)">Contracts</button>
+</div>
+
+<!-- ══════════════ VIEW: SUMMARY ══════════════ -->
+<div id="view-summary" class="view active">
+
+  <div class="stat-grid" id="stat-grid"></div>
+
+  <div class="section">
+    <div class="section-hdr">Contract status</div>
+    <div class="state-chips" id="state-chips"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-hdr">Spend by quarter <span id="current-quarter-label"></span></div>
+    <div class="card-table"><table class="data" id="quarter-table"></table></div>
+  </div>
+
+  <div class="section">
+    <div class="section-hdr">Spend by business unit</div>
+    <div class="card-table"><table class="data" id="bu-table"></table></div>
+  </div>
+
+  <div class="section">
+    <div class="section-hdr">Spend by discipline</div>
+    <div class="card-table"><table class="data" id="discipline-table"></table></div>
+  </div>
+
+  <div class="section">
+    <div class="section-hdr">Top hirers <span>by number of contracts</span></div>
+    <div class="card-table"><table class="data" id="hirer-table"></table></div>
+  </div>
+
+</div>
+
+<!-- ══════════════ VIEW: CONTRACTS ══════════════ -->
+<div id="view-contracts" class="view">
+  <div class="fc-controls">
+    <div><label>Quarter</label><select class="fc-select" id="f-quarter"><option value="all">All quarters</option></select></div>
+    <div><label>State</label><select class="fc-select" id="f-state"><option value="all">All states</option></select></div>
+    <div><label>Business unit</label><select class="fc-select" id="f-bu"><option value="all">All units</option></select></div>
+    <div><label>Discipline</label><select class="fc-select" id="f-discipline"><option value="all">All disciplines</option></select></div>
+    <input class="fc-input" id="f-search" placeholder="Search hirer, contractor, cost centre…">
+    <span class="fc-count" id="fc-count"></span>
+  </div>
+  <div class="contracts-wrap">
+    <div class="card-table" style="overflow-x:auto">
+      <table class="data" id="contracts-table">
+        <thead>
+          <tr>
+            <th class="sortable" data-sort="hirerName">Hirer Name</th>
+            <th class="sortable" data-sort="contractorName">Contractor Name</th>
+            <th>Discipline</th>
+            <th class="sortable" data-sort="startDate">Start Date</th>
+            <th class="sortable" data-sort="endDate">End Date</th>
+            <th>Rate Unit</th>
+            <th>Currency</th>
+            <th class="sortable num" data-sort="rate">Rate</th>
+            <th>Business Unit</th>
+            <th>Contract State</th>
+            <th>Cost Centre</th>
+            <th class="sortable num" data-sort="estCost">Est. Total Cost</th>
+            <th>Quarter</th>
+          </tr>
+        </thead>
+        <tbody id="contracts-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="footer" id="footer-bar"></div>
+
+<script>
+/* ══════════════ EMBEDDED SOURCE DATA (this week's export) ══════════════ */
+const RAW_CSV_B64 = "Q2xpZW50IE5hbWUsSGlyZXIgTmFtZSxDb250cmFjdG9yIE5hbWUsRGlzY2lwbGluZSxTZW5pb3JpdHksRGF0ZSBPZmZlcmVkLERhdGUgQWNjZXB0ZWQsQ29udHJhY3QgU3RhcnQgRGF0ZSxDb250cmFjdCBFbmQgRGF0ZSxXb3JrIFRpbWUgVHlwZSxSYXRlIFVuaXQsQ3VycmVuY3ksUmF0ZSxOb3RpY2UgUGVyaW9kLEJ1c2luZXNzIFVuaXQsQ29udHJhY3QgU3RhdGUsQ29zdCBDZW50cmUNClhlcm8sQ2xhcmUgUmFsc3RvbixKYW1lcyBCbG93LENSRUFUSVZFLFNFTklPUiwyMDI1LTA5LTI5LDIwMjUtMTAtMDEsMjAyNS0xMC0wMSwyMDI1LTEyLTE5LEZVTExfVElNRSxEQVksR0JQLDI1MC4wMCwxMCxYQ0YsQ09NUExFVEVELA0KWGVybyxDbGFyZSBSYWxzdG9uLEdyYWhhbSBDb253YXksREVTSUdORVIsU0VOSU9SLDIwMjUtMTAtMDgsMjAyNS0xMC0wOCwyMDI1LTEwLTEzLDIwMjUtMTAtMjQsRlVMTF9USU1FLERBWSxHQlAsNDAwLjAwLDAsWENGLENPTVBMRVRFRCwxNzczDQpYZXJvLENsYXJlIFJhbHN0b24sTXVkIEdpZGFsbCxQUk9KRUNUIE1BTkFHRVIsU0VOSU9SLDIwMjUtMTAtMTUsMjAyNS0xMC0xNiwyMDI1LTEwLTIzLDIwMjUtMTItMTksRlVMTF9USU1FLERBWSxHQlAsNDE1LjAwLDEwLFhDRixDT01QTEVURUQsMTc3Mw0KWGVybyxDbGFyZSBSYWxzdG9uLE11ZCBHaWRhbGwsUFJPSkVDVCBNQU5BR0VSLFNFTklPUiwyMDI1LTEwLTMxLDIwMjUtMTAtMzEsMjAyNS0xMC0zMSwyMDI1LTExLTI4LEZVTExfVElNRSxQUk9KRUNULEFVRCw0MzA2MC4wMCwwLEdsb2JhbCBQcm9kdWN0IE1hcmtldGluZyxDT01QTEVURUQsMzIyMSBQTSAtIFNCQQ0KWGVybyxDaHJpc3RpZSBTaW5haSxHcmFoYW0gQ29ud2F5LERFU0lHTkVSLFNFTklPUiwyMDI1LTEyLTAyLDIwMjUtMTItMDIsMjAyNS0xMi0wMSwyMDI1LTEyLTAzLEZVTExfVElNRSxEQVksR0JQLDQwMC4wMCwwLFVLIE1hcmtldGluZyxDT01QTEVURUQsNjA2MCBVSyBNYXJrZXRpbmcgLSBCcmFuZCAmIFNCDQpYZXJvLENocmlzdGllIFNpbmFpLE11ZCBHaWRhbGwsUFJPSkVDVCBNQU5BR0VSLExFQUQsMjAyNS0xMi0wMywyMDI1LTEyLTA0LDIwMjUtMTItMDEsMjAyNi0wMS0xMixGVUxMX1RJTUUsUFJPSkVDVCxBVUQsMzg1MDAuMDAsMCxOQSBNYXJrZXRpbmcsQ09NUExFVEVELDcwMzIgVVMgTWFya2V0aW5nIC0gUGFydG5lcg0KWGVybyxDaHJpc3RpZSBTaW5haSxHcmFoYW0gQ29ud2F5LERFU0lHTkVSLFNFTklPUiwsLDIwMjYtMDEtMTMsMjAyNi0wMS0yMSxGVUxMX1RJTUUsREFZLEdCUCwxMC4wMCwwLEFOWiBNYXJrZXRpbmcsRFJBRlRfU0FWRUQsdGJjDQpYZXJvLENocmlzdGllIFNpbmFpLE5hdGFsaWUgV2VpIEppYSBMZWUsREVTSUdORVIsU0VOSU9SLDIwMjYtMDMtMTYsMjAyNi0wMy0yMCwyMDI2LTAzLTExLDIwMjYtMDMtMzEsRlVMTF9USU1FLFBST0pFQ1QsQVVELDIwMjYzLjQ5LDAsWENGLENPTVBMRVRFRCwzMjE1IERlc2lnbiAtIFJlc2VhcmNoICYgRXhwDQpYZXJvLENocmlzdGllIFNpbmFpLFJhY2ggSnVwcCxERVNJR05FUixTRU5JT1IsMjAyNi0wNS0xOSwyMDI2LTA1LTI4LDIwMjYtMDYtMDEsMjAyNi0wNy0zMSxQQVJUX1RJTUUsUFJPSkVDVCxOWkQsMTEwMDAuMDAsMCxHbG9iYWwgQ29tbXVuaWNhdGlvbnMsQUNDRVBURUQsNDU2MCBBVSBDb21tdW5pY2F0aW9ucw0KWGVybyxDaHJpc3RpZSBTaW5haSxOYXRhbGllIFdlaSBKaWEgTGVlLERFU0lHTkVSLFNFTklPUiwyMDI2LTA2LTE1LDIwMjYtMDYtMTcsMjAyNi0wNi0xNSwyMDI2LTA3LTIyLFBBUlRfVElNRSxNSUxFU1RPTkUsQVVELDkzODAuMDAsMCxYZXJvY29uLEFDQ0VQVEVELDMyMTANClhlcm8sQ2hyaXN0aWUgU2luYWksTmF0YWxpZSBXZWkgSmlhIExlZSxERVNJR05FUixTRU5JT1IsLCwyMDI2LTA3LTE1LDIwMjYtMDgtMDQsRlVMTF9USU1FLERBWSxBVUQsMTA1MC4wMCwwLFhDRixEUkFGVF9TQVZFRCwxNzczIFRoZSBDcmVhdGl2ZSBGb3VuZHJ5DQpYZXJvLEJlY2t5IFNoYXJwLEFsZXhhbmRyYSBOZWwsQ1JFQVRJVkUsLDIwMjYtMDItMTIsMjAyNi0wMi0xNCwyMDI2LTAxLTI3LDIwMjYtMDItMTMsUEFSVF9USU1FLFBST0pFQ1QsQVVELDY2NTAuMDAsMCxQZXJmb3JtYW5jZSBNYXJrZXRpbmcsQ09NUExFVEVELDE3NzQgSHViIOKAkyBNZWRpYQ0KWGVybyxCZWNreSBTaGFycCxNaWNoYWVsIEhhbGwsREVTSUdORVIsTUlEV0VJR0hULDIwMjYtMDItMjcsMjAyNi0wMi0yNywyMDI2LTAyLTI0LDIwMjYtMDMtMjAsUEFSVF9USU1FLERBWSxVU0QsMTA0MC4wMCwwLFhDRixDT01QTEVURUQsMTc3MyBIdWINClhlcm8sQmVja3kgU2hhcnAsQWxleGFuZHJhIE5lbCxDUkVBVElWRSxNSURXRUlHSFQsMjAyNi0wMy0wOCwyMDI2LTAzLTA4LDIwMjYtMDItMjcsMjAyNi0wMy0xMyxQQVJUX1RJTUUsREFZLEFVRCw5NTAuMDAsMCxYQ0YsQ09NUExFVEVELEh1YiAxNzczDQpYZXJvLEJlY2t5IFNoYXJwLEFsZXhhbmRyYSBOZWwsQ1JFQVRJVkUsLDIwMjYtMDQtMzAsMjAyNi0wNC0zMCwyMDI2LTA0LTIyLDIwMjYtMDQtMzAsUEFSVF9USU1FLFBST0pFQ1QsQVVELDE5MDAuMDAsMCxQZXJmb3JtYW5jZSBNYXJrZXRpbmcsQ09NUExFVEVELDE3NzMgSHViDQpYZXJvLEJlY2t5IFNoYXJwLEt5bGllIEhlLENSRUFUSVZFLFNFTklPUiwyMDI2LTA2LTE4LDIwMjYtMDYtMTksMjAyNi0wNi0xMiwyMDI2LTA2LTE4LFBBUlRfVElNRSxQUk9KRUNULEFVRCwzMjAwLjAwLDAsUGVyZm9ybWFuY2UgTWFya2V0aW5nLENPTVBMRVRFRCwxNzczIFRoZSBDcmVhdGl2ZSBGb3VuZHJ5DQpYZXJvLEJlY2t5IFNoYXJwLEt5bGllIEhlLENSRUFUSVZFLFNFTklPUiwyMDI2LTA3LTAzLDIwMjYtMDctMDQsMjAyNi0wNi0xMiwyMDI2LTA2LTE4LFBBUlRfVElNRSxQUk9KRUNULE5aRCwzMjAwLjAwLDAsUGVyZm9ybWFuY2UgTWFya2V0aW5nLENPTVBMRVRFRCwxNzczIFRoZSBDcmVhdGl2ZSBGb3VuZHJ5DQpYZXJvLEJlY2t5IFNoYXJwLExhdXJhIE1vd2F0LERFU0lHTkVSLExFQUQsMjAyNi0wNy0wOCwsMjAyNi0wNy0wOCwyMDI2LTA4LTE0LFBBUlRfVElNRSxEQVksQVVELDc1MC4wMCwwLEN1c3RvbWVyIEVuZ2FnZW1lbnQsT0ZGRVJFRCwxNzczIFRoZSBDcmVhdGl2ZSBGb3VuZHJ5DQpYZXJvLExvZ2VuIFN0ZW50LE5hdGFsaWUgV2VpIEppYSBMZWUsREVTSUdORVIsU0VOSU9SLDIwMjYtMDEtMjAsMjAyNi0wMS0yMSwyMDI2LTAxLTE2LDIwMjYtMDItMTksUEFSVF9USU1FLFBST0pFQ1QsQVVELDEyNDAwLjAwLDAsQU5aIE1hcmtldGluZyxDT01QTEVURUQsMTc3MyBIdWINClhlcm8sTG9nZW4gU3RlbnQsSGlyb2FraSBUZXJhb2thLERFU0lHTkVSLFNFTklPUiwyMDI2LTAxLTE1LCwyMDI2LTAxLTMwLDIwMjYtMDItMjgsUEFSVF9USU1FLFBST0pFQ1QsTlpELDEwMDAwLjAwLDAsQU5aIE1hcmtldGluZyxSRVZPS0VELDE3NzMgSHViDQpYZXJvLExvZ2VuIFN0ZW50LEhpcm9ha2kgVGVyYW9rYSxERVNJR05FUixTRU5JT1IsMjAyNi0wMi0wNCwyMDI2LTAyLTA1LDIwMjYtMDItMDIsMjAyNi0wMi0yOCxQQVJUX1RJTUUsUFJPSkVDVCxOWkQsMTIwMDAuMDAsMCxBTlogTWFya2V0aW5nLENPTVBMRVRFRCwxNzczIEh1Yg0KWGVybyxMb2dlbiBTdGVudCxLZWFuZSBDaGFuLERFU0lHTkVSLFNFTklPUiwyMDI2LTAzLTE2LDIwMjYtMDMtMTYsMjAyNi0wMy0wNiwyMDI2LTAzLTEzLFBBUlRfVElNRSxQUk9KRUNULE5aRCwxNzAwLjAwLDAsR2xvYmFsIFdYLENPTVBMRVRFRCwyNTA0IE9yZ2FuaXNhdGlvbmFsIERldmVsb3BtZW50DQpYZXJvLExvZ2VuIFN0ZW50LEhpcm9ha2kgVGVyYW9rYSxERVNJR05FUixTRU5JT1IsMjAyNi0wMy0yMywyMDI2LTAzLTIzLDIwMjYtMDMtMTYsMjAyNi0wNC0xNSxQQVJUX1RJTUUsUFJPSkVDVCxOWkQsNTYwMC4wMCwwLEdsb2JhbCBXWCxDT01QTEVURUQsMjUwNCBPcmdhbmlzYXRpb25hbCBEZXZlbG9wbWVudA0KWGVybyxMb2dlbiBTdGVudCxLZWFuZSBDaGFuLERFU0lHTkVSLFNFTklPUiwyMDI2LTA2LTIyLDIwMjYtMDYtMjIsMjAyNi0wNi0wNCwyMDI2LTA2LTA5LFBBUlRfVElNRSxQUk9KRUNULE5aRCwxMTkwLjAwLDAsQU5aIE1hcmtldGluZyxDT01QTEVURUQsNDMzMCBBTlogTWFya2V0aW5nDQpYZXJvLExvZ2VuIFN0ZW50LFJlYmVjY2EgRmxpbnQsREVTSUdORVIsU0VOSU9SLDIwMjYtMDctMjEsLDIwMjYtMDctMTcsMjAyNi0wNy0zMSxQQVJUX1RJTUUsUFJPSkVDVCxBVUQsMTIwMDAuMDAsMCxYQ0YsT0ZGRVJFRCwxNzczIENyZWF0aXZlIEZvdW5kcnkNClhlcm8sUXVpbmNleSBCcmlua2VyLEphbWVzIEJsb3csQ1JFQVRJVkUsU0VOSU9SLDIwMjUtMTEtMTIsMjAyNS0xMS0xNCwyMDI1LTExLTAzLDIwMjUtMTItMTksRlVMTF9USU1FLERBWSxBVUQsNTAwLjAwLDEwLFhDRixDT01QTEVURUQsMTc3MyBIdWINClhlcm8sUXVpbmNleSBCcmlua2VyLE11ZCBHaWRhbGwsUFJPSkVDVCBNQU5BR0VSLFNFTklPUiwyMDI1LTEwLTMxLDIwMjUtMTEtMDEsMjAyNS0xMS0wMywyMDI1LTEyLTE5LEZVTExfVElNRSxEQVksQVVELDg1MC4wMCwxMCxYQ0YsQ09NUExFVEVELDE3NzMgSHViDQpYZXJvLFF1aW5jZXkgQnJpbmtlcixNdWQgR2lkYWxsLFBST0pFQ1QgTUFOQUdFUixTRU5JT1IsMjAyNS0xMi0xNSwyMDI1LTEyLTE1LDIwMjUtMTItMjAsMjAyNi0wMS0xOSxGVUxMX1RJTUUsREFZLEFVRCw4NTAuMDAsMTAsWENGLENPTVBMRVRFRCwxNzczIEh1Yg0KWGVybyxRdWluY2V5IEJyaW5rZXIsSmFtZXMgQmxvdyxDUkVBVElWRSxTRU5JT1IsMjAyNS0xMi0xOCwyMDI1LTEyLTE5LDIwMjUtMTItMjAsMjAyNi0wMS0xNixGVUxMX1RJTUUsREFZLEFVRCw1MDAuMDAsMTAsWENGLENPTVBMRVRFRCwxNzczIEh1Yg0KWGVybyxRdWluY2V5IEJyaW5rZXIsTXVkIEdpZGFsbCxQUk9KRUNUIE1BTkFHRVIsU0VOSU9SLDIwMjUtMTItMTcsMjAyNS0xMi0xOCwyMDI2LTAxLTIwLDIwMjYtMDItMjcsRlVMTF9USU1FLERBWSxBVUQsODUwLjAwLDEwLFhDRixDT01QTEVURUQsMTc3MyBIdWINClhlcm8sUXVpbmNleSBCcmlua2VyLEphbWVzIEJsb3csQ1JFQVRJVkUsU0VOSU9SLDIwMjYtMDEtMDgsMjAyNi0wMS0xMiwyMDI2LTAxLTE3LDIwMjYtMDItMjgsRlVMTF9USU1FLERBWSxBVUQsNTAwLjAwLDEwLFhDRixDT01QTEVURUQsMTc3MyBIdWINClhlcm8sUXVpbmNleSBCcmlua2VyLEdhYnJpZWwgQnVycm93LENSRUFUSVZFLFNFTklPUiwyMDI2LTAxLTI0LDIwMjYtMDEtMjYsMjAyNS0xMi0xOSwyMDI2LTAxLTA1LFBBUlRfVElNRSxQUk9KRUNULEdCUCwxMjAwLjAwLDAsR2xvYmFsIE1hcmtldGluZyAtIEJyYW5kLENPTVBMRVRFRCwxNzcwDQpYZXJvLFF1aW5jZXkgQnJpbmtlcixDbGFpcmUgTmVsc29uLEZJTE0gJiBNT1RJT04sLCwsMjAyNi0wMS0yMywyMDI2LTAyLTEzLEZVTExfVElNRSxQUk9KRUNULEFVRCwxNDQ0MC4wMCwxNCxHbG9iYWwgTWFya2V0aW5nIC0gQnJhbmQsRFJBRlRfU0FWRUQsMTc3MA0KWGVybyxRdWluY2V5IEJyaW5rZXIsQWxleGFuZHJhIE5lbCxDUkVBVElWRSxTRU5JT1IsLCwyMDI2LTAxLTE5LDIwMjYtMDItMjcsUEFSVF9USU1FLERBWSxBVUQsOTUwLjAwLDUsWENGLERSQUZUX1NBVkVELHRoZSBIdWINClhlcm8sUXVpbmNleSBCcmlua2VyLE5hdGFsaWUgV2VpIEppYSBMZWUsREVTSUdORVIsU0VOSU9SLDIwMjYtMDItMjUsMjAyNi0wMi0yNSwyMDI2LTAyLTI0LDIwMjYtMDMtMjcsUEFSVF9USU1FLFBST0pFQ1QsQVVELDE5NDAwLjAwLDAsR2xvYmFsIFdYLENPTVBMRVRFRCwxMTYxIEFVIFdYIC0gU3lkbmV5DQpYZXJvLFF1aW5jZXkgQnJpbmtlcixKYW1lcyBCbG93LENSRUFUSVZFLFNFTklPUiwyMDI2LTAyLTI1LDIwMjYtMDItMjcsMjAyNi0wMy0wMSwyMDI2LTA1LTAzLEZVTExfVElNRSxEQVksQVVELDUwMC4wMCwxMCxYQ0YsQ09NUExFVEVELDE3NzMgSHViDQpYZXJvLFF1aW5jZXkgQnJpbmtlcixOYXRhbGllIFdlaSBKaWEgTGVlLERFU0lHTkVSLFNFTklPUiwyMDI2LTA0LTAyLDIwMjYtMDQtMDIsMjAyNi0wMy0yOCwyMDI2LTA0LTI0LFBBUlRfVElNRSxQUk9KRUNULEFVRCwxOTQwMC4wMCwwLEdsb2JhbCBXWCxDT01QTEVURUQsMTE2MSBBVSBXWCAtIFN5ZG5leQ0KWGVybyxRdWluY2V5IEJyaW5rZXIsTmFvbWkgTGF3c29uLFBST0pFQ1QgTUFOQUdFUixTRU5JT1IsMjAyNi0wNC0wOCwyMDI2LTA0LTA5LDIwMjYtMDQtMTMsMjAyNi0wOC0yOSxGVUxMX1RJTUUsREFZLEFVRCwxMTAwLjAwLDMwLFhDRixBQ0NFUFRFRCwxNzczDQpYZXJvLFF1aW5jZXkgQnJpbmtlcixOYXRhbGllIFdlaSBKaWEgTGVlLERFU0lHTkVSLFNFTklPUiwyMDI2LTA0LTE2LDIwMjYtMDQtMTYsMjAyNi0wNC0xMywyMDI2LTA1LTE1LFBBUlRfVElNRSxIT1VSLEFVRCwxNDAuMDAsMCxHbG9iYWwgQ29tbXVuaWNhdGlvbnMsQ09NUExFVEVELDE3NzkgQ29ycG9yYXRlIEhRIENvbW1zDQpYZXJvLFF1aW5jZXkgQnJpbmtlcixSZW5lZSBDaGluLENSRUFUSVZFLFNFTklPUiwyMDI2LTA0LTEwLDIwMjYtMDQtMTUsMjAyNi0wNC0xMywyMDI2LTA1LTE1LEZVTExfVElNRSxQUk9KRUNULE5aRCwxNDAwMC4wMCwxNCxYQ0YsQ09NUExFVEVELDE3NzANClhlcm8sUXVpbmNleSBCcmlua2VyLE5hdGFsaWUgV2VpIEppYSBMZWUsREVTSUdORVIsU0VOSU9SLDIwMjYtMDQtMjcsMjAyNi0wNC0yNywyMDI2LTA0LTI1LDIwMjYtMDQtMzAsUEFSVF9USU1FLFBST0pFQ1QsQVVELDE5NDAwLjAwLDAsR2xvYmFsIFdYLENPTVBMRVRFRCwxMTYxIEFVIFdYIC0gU3lkbmV5DQpYZXJvLFF1aW5jZXkgQnJpbmtlcixKYW1lcyBCbG93LENSRUFUSVZFLFNFTklPUiwyMDI2LTA0LTI3LDIwMjYtMDQtMzAsMjAyNi0wNS0wNCwyMDI2LTA1LTMwLEZVTExfVElNRSxEQVksQVVELDUwMC4wMCwxMCxYQ0YsQ09NUExFVEVELDE3NzMgSHViDQpYZXJvLFF1aW5jZXkgQnJpbmtlcixOYXRhbGllIFdlaSBKaWEgTGVlLERFU0lHTkVSLFNFTklPUiwyMDI2LTA1LTAxLDIwMjYtMDUtMDMsMjAyNi0wNS0wMSwyMDI2LTA1LTA4LFBBUlRfVElNRSxQUk9KRUNULEFVRCwxOTQwMC4wMCwwLEdsb2JhbCBXWCxDT01QTEVURUQsMTE2MSBBVSBXWCAtIFN5ZG5leQ0KWGVybyxRdWluY2V5IEJyaW5rZXIsU2hlcnJ5IENob2UsUFJPSkVDVCBNQU5BR0VSLCwyMDI2LTA1LTE2LDIwMjYtMDUtMTgsMjAyNi0wNS0xOCwyMDI2LTExLTE0LEZVTExfVElNRSxEQVksVVNELDY4MC4wMCwwLFhDRixBQ0NFUFRFRCwxNzczDQpYZXJvLFF1aW5jZXkgQnJpbmtlcixOYXRhbGllIFdlaSBKaWEgTGVlLERFU0lHTkVSLFNFTklPUiwyMDI2LTA1LTE4LDIwMjYtMDUtMTgsMjAyNi0wNS0xOCwyMDI2LTA2LTE0LEZVTExfVElNRSxEQVksQVVELDEwNTAuMDAsMTAsWENGLENPTVBMRVRFRCwxNzczDQpYZXJvLFF1aW5jZXkgQnJpbmtlcixKYW1lcyBCbG93LENSRUFUSVZFLFNFTklPUiwyMDI2LTA1LTE4LDIwMjYtMDUtMTksMjAyNi0wNS0zMSwyMDI2LTA2LTI3LEZVTExfVElNRSxEQVksQVVELDUwMC4wMCwxMCxYQ0YsQ09NUExFVEVELDE3NzMgSHViDQpYZXJvLFF1aW5jZXkgQnJpbmtlcixOaWNvbGUgV3UsQ1JFQVRJVkUsLDIwMjYtMDYtMDksMjAyNi0wNi0xNSwyMDI2LTA2LTA5LDIwMjYtMDctMDQsRlVMTF9USU1FLERBWSxBVUQsNDc3LjAwLDEwLFhDRixDT01QTEVURUQsMTc3Mw0KWGVybyxRdWluY2V5IEJyaW5rZXIsUmVuZWUgQ2hpbixDUkVBVElWRSxTRU5JT1IsMjAyNi0wNi0xMSwyMDI2LTA2LTExLDIwMjYtMDYtMTEsMjAyNi0wNi0xOSxGVUxMX1RJTUUsUFJPSkVDVCxOWkQsMTUwMC4wMCwwLFhDRixDT01QTEVURUQsMTc3MA0KWGVybyxRdWluY2V5IEJyaW5rZXIsTmF0YWxpZSBXZWkgSmlhIExlZSxERVNJR05FUixTRU5JT1IsMjAyNi0wNi0xOSwyMDI2LTA2LTIxLDIwMjYtMDYtMjIsMjAyNi0wNy0wNCxGVUxMX1RJTUUsREFZLEFVRCwxMDUwLjAwLDEwLFhDRixDT01QTEVURUQsMTc3MA0KWGVybyxRdWluY2V5IEJyaW5rZXIsU29yZW4gQmlyayxDUkVBVElWRSwsLCwyMDI2LTA2LTIyLDIwMjYtMDgtMjksRlVMTF9USU1FLERBWSxBVUQsODk2LjAwLDEwLFhDRixEUkFGVF9TQVZFRCwxNzczDQpYZXJvLFF1aW5jZXkgQnJpbmtlcixTb3JlbiBCaXJrLENSRUFUSVZFLCwyMDI2LTA2LTE5LDIwMjYtMDYtMjIsMjAyNi0wNi0yMiwyMDI2LTA4LTI5LEZVTExfVElNRSxEQVksQVVELDg5Ni4wMCwxMCxYQ0YsQUNDRVBURUQsMTc3Mw0KWGVybyxRdWluY2V5IEJyaW5rZXIsSmFtZXMgQmxvdyxDUkVBVElWRSxTRU5JT1IsMjAyNi0wNi0yNCwyMDI2LTA3LTAyLDIwMjYtMDYtMjgsMjAyNi0wNy0wNixGVUxMX1RJTUUsREFZLEFVRCw1MDAuMDAsMTAsWENGLENPTVBMRVRFRCwxNzczIEh1Yg0KWGVybyxRdWluY2V5IEJyaW5rZXIsTmljb2xlIFd1LENSRUFUSVZFLCwyMDI2LTA3LTEwLDIwMjYtMDctMTEsMjAyNi0wNy0wNSwyMDI2LTA4LTAxLEZVTExfVElNRSxEQVksQVVELDQ3Ny4wMCwxMCxYQ0YsQUNDRVBURUQsMTc3Mw0KWGVybyxUb20gR3JlZ3NvbixHcmFoYW0gQ29ud2F5LERFU0lHTkVSLFNFTklPUiwyMDI2LTA1LTI2LDIwMjYtMDUtMjYsMjAyNi0wNS0yNywyMDI2LTA2LTEyLEZVTExfVElNRSxEQVksR0JQLDQwMC4wMCwwLFVLIE1hcmtldGluZyxDT01QTEVURUQsMTc3MyBUaGUgQ3JlYXRpdmUgRm91bmRyeQ0KWGVybyxUb20gR3JlZ3NvbixBbGV4YW5kcmEgTmVsLENSRUFUSVZFLFNFTklPUiwyMDI2LTA2LTExLDIwMjYtMDYtMTIsMjAyNi0wNi0xMCwyMDI2LTA2LTE2LFBBUlRfVElNRSxEQVksQVVELDk2MC4wMCwwLFVLIE1hcmtldGluZyxDT01QTEVURUQsNjA5MCBVSyBNYXJrZXRpbmcgLSBQYXJ0bmVyDQpYZXJvLFNvcGhpZSBMYW1lbGwsUmVlcyBSYXksRklMTSAmIE1PVElPTiwsMjAyNi0wNi0yMiwyMDI2LTA2LTIzLDIwMjYtMDYtMjksMjAyNi0xMC0xMSxQQVJUX1RJTUUsREFZLEFVRCw5MDAuMDAsNyxDb250ZW50IE1hcmtldGluZyxBQ0NFUFRFRCwyNzcyIENvbnRlbnQgLSBTbWFsbCBCdXNpbmVzcw0KWGVybyxTb3BoaWUgTGFtZWxsLEphbWkgS25hdXAsTUFSS0VUSU5HLCwyMDI2LTA2LTI4LDIwMjYtMDYtMjksMjAyNi0wNi0zMCwyMDI2LTA4LTMwLFBBUlRfVElNRSxIT1VSLFVTRCwxNTAuMDAsMCxDb250ZW50IE1hcmtldGluZyxBQ0NFUFRFRCwyNzcyIENvbnRlbnQgLSBTbWFsbCBCdXNpbmVzcw0KWGVybyxTb3BoaWUgTGFtZWxsLEphbWkgS25hdXAsTUFSS0VUSU5HLCwsLDIwMjYtMDYtMjUsMjAyNi0wOC0yNyxQQVJUX1RJTUUsSE9VUixVU0QsMTUwLjAwLDAsQ29udGVudCBNYXJrZXRpbmcsRFJBRlRfU0FWRUQsMjc3MiBDb250ZW50IC0gU21hbGwgQnVzaW5lc3MNCg==";
+let CURRENT_FILENAME = "hirer_contracts_dxp_cmrvajz870000uowpdw730epz_20260721233653.csv";
+
+function b64ToUtf8(b64){ return decodeURIComponent(escape(atob(b64))); }
+function utf8ToB64(str){ return btoa(unescape(encodeURIComponent(str))); }
+
+let CURRENT_CSV_TEXT = b64ToUtf8(RAW_CSV_B64);
+let ROWS = [];
+
+/* ══════════════ CSV PARSING ══════════════ */
+function parseCSV(text){
+  const rows=[];
+  let row=[],field='',inQuotes=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(inQuotes){
+      if(c==='"'){ if(text[i+1]==='"'){field+='"';i++;} else inQuotes=false; }
+      else field+=c;
+    } else {
+      if(c==='"') inQuotes=true;
+      else if(c===','){row.push(field);field='';}
+      else if(c==='\r'){ /* skip */ }
+      else if(c==='\n'){row.push(field);rows.push(row);row=[];field='';}
+      else field+=c;
+    }
+  }
+  if(field.length||row.length){row.push(field);rows.push(row);}
+  return rows.filter(r=>!(r.length===1&&r[0]===''));
+}
+
+const HEADER_MAP={
+  'client name':'clientName','hirer name':'hirerName','contractor name':'contractorName',
+  'discipline':'discipline','seniority':'seniority','date offered':'dateOffered','date accepted':'dateAccepted',
+  'contract start date':'startDate','contract end date':'endDate','work time type':'workTimeType',
+  'rate unit':'rateUnit','currency':'currency','rate':'rate','notice period':'noticePeriod',
+  'business unit':'businessUnit','contract state':'contractState','cost centre':'costCentre'
+};
+
+function businessDaysBetween(startStr,endStr){
+  if(!startStr||!endStr) return 0;
+  const start=new Date(startStr+'T00:00:00'), end=new Date(endStr+'T00:00:00');
+  if(isNaN(start)||isNaN(end)||end<start) return 0;
+  let count=0; const cur=new Date(start);
+  while(cur<=end){ const dow=cur.getDay(); if(dow!==0&&dow!==6) count++; cur.setDate(cur.getDate()+1); }
+  return count;
+}
+
+function estimateCost(r){
+  const rate=parseFloat(r.rate)||0;
+  const unit=(r.rateUnit||'').toUpperCase();
+  const days=businessDaysBetween(r.startDate,r.endDate);
+  if(unit==='DAY') return rate*days;
+  if(unit==='HOUR'){ const hrsPerDay=r.workTimeType==='PART_TIME'?4:8; return rate*hrsPerDay*days; }
+  return rate; // PROJECT / MILESTONE / unknown — rate is already the total
+}
+
+const MONTH_NAMES=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function fiscalQuarterInfo(date){
+  const y=date.getFullYear(), m=date.getMonth();
+  const fy = m>=3 ? y+1 : y;
+  let qNum,qStartMonth;
+  if(m>=3&&m<=5){qNum=1;qStartMonth=3;}
+  else if(m>=6&&m<=8){qNum=2;qStartMonth=6;}
+  else if(m>=9&&m<=11){qNum=3;qStartMonth=9;}
+  else {qNum=4;qStartMonth=0;}
+  const qEndMonth=qStartMonth+2;
+  const rangeLabel=MONTH_NAMES[qStartMonth]+' '+y+' – '+MONTH_NAMES[qEndMonth]+' '+y;
+  const label='FY'+String(fy).slice(-2)+' Q'+qNum;
+  return {label,rangeLabel,sortKey:fy*10+qNum};
+}
+
+const CONTRACT_STATE_META={
+  COMPLETED:{label:'Completed',chip:'chip-completed'},
+  ACCEPTED:{label:'Accepted',chip:'chip-accepted'},
+  OFFERED:{label:'Offered',chip:'chip-offered'},
+  DRAFT_SAVED:{label:'Draft',chip:'chip-draft'},
+  REVOKED:{label:'Revoked',chip:'chip-revoked'}
+};
+const CURRENCY_SYMBOL={AUD:'A$',GBP:'£',USD:'US$',NZD:'NZ$'};
+function formatMoney(amount,currency){
+  const sym=CURRENCY_SYMBOL[currency]||(currency+' ');
+  return sym+amount.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function fmtDate(s){
+  if(!s) return '—';
+  const d=new Date(s+'T00:00:00');
+  if(isNaN(d)) return s;
+  return d.getDate()+' '+MONTH_NAMES[d.getMonth()]+' '+d.getFullYear();
+}
+
+function buildRows(csvText){
+  const table=parseCSV(csvText);
+  if(!table.length) return [];
+  const header=table[0].map(h=>h.trim().toLowerCase());
+  const idx={};
+  header.forEach((h,i)=>{ if(HEADER_MAP[h]) idx[HEADER_MAP[h]]=i; });
+  const out=[];
+  for(let i=1;i<table.length;i++){
+    const cells=table[i];
+    if(!cells || cells.every(c=>c==='' )) continue;
+    const get=k=>idx[k]!==undefined?(cells[idx[k]]||'').trim():'';
+    const r={
+      clientName:get('clientName'), hirerName:get('hirerName')||'—', contractorName:get('contractorName')||'—',
+      discipline:get('discipline')||'—', seniority:get('seniority'), dateOffered:get('dateOffered'),
+      dateAccepted:get('dateAccepted'), startDate:get('startDate'), endDate:get('endDate'),
+      workTimeType:get('workTimeType'), rateUnit:get('rateUnit')||'—', currency:get('currency')||'—',
+      rate:get('rate'), noticePeriod:get('noticePeriod'), businessUnit:get('businessUnit')||'—',
+      contractState:get('contractState')||'—', costCentre:get('costCentre')||'—'
+    };
+    r.estCost=estimateCost(r);
+    r.businessDays=businessDaysBetween(r.startDate,r.endDate);
+    if(r.startDate){
+      const d=new Date(r.startDate+'T00:00:00');
+      r.quarter=!isNaN(d)?fiscalQuarterInfo(d):null;
+    } else r.quarter=null;
+    out.push(r);
+  }
+  return out;
+}
+
+function extractExportTimestamp(filename){
+  const m=filename.match(/_(\d{8})(\d{6})\.csv$/i);
+  if(!m) return null;
+  const y=m[1].slice(0,4),mo=m[1].slice(4,6),da=m[1].slice(6,8);
+  const hh=m[2].slice(0,2),mi=m[2].slice(2,4);
+  const d=new Date(y+'-'+mo+'-'+da+'T'+hh+':'+mi+':00');
+  if(isNaN(d)) return null;
+  return d.getDate()+' '+MONTH_NAMES[d.getMonth()]+' '+d.getFullYear()+', '+hh+':'+mi;
+}
+
+const TODAY=new Date();
+
+/* ══════════════ RENDER: SUMMARY ══════════════ */
+function isConfirmed(r){ return r.contractState==='ACCEPTED'||r.contractState==='COMPLETED'; }
+
+function sumByCurrency(rows){
+  const out={};
+  rows.forEach(r=>{ if(!isConfirmed(r)) return; out[r.currency]=(out[r.currency]||0)+r.estCost; });
+  return out;
+}
+function currencyLinesHTML(map){
+  const keys=Object.keys(map).filter(k=>map[k]>0.005).sort();
+  if(!keys.length) return '<span style="color:var(--muted);font-size:12px">—</span>';
+  return keys.map(k=>'<div class="currency-line"><span>'+k+'</span>'+formatMoney(map[k],k)+'</div>').join('');
+}
+
+function renderStats(){
+  const total=ROWS.length;
+  const completed=ROWS.filter(r=>r.contractState==='COMPLETED').length;
+  const currentlyActive=ROWS.filter(r=>{
+    if(r.contractState!=='ACCEPTED') return false;
+    if(!r.startDate||!r.endDate) return false;
+    const s=new Date(r.startDate+'T00:00:00'), e=new Date(r.endDate+'T00:00:00');
+    return TODAY>=s&&TODAY<=e;
+  }).length;
+  const spend=sumByCurrency(ROWS);
+  document.getElementById('stat-grid').innerHTML=`
+    <div class="stat-card"><div class="sv">${total}</div><div class="sl">Total contracts</div></div>
+    <div class="stat-card accent"><div class="sv">${currentlyActive}</div><div class="sl">Currently active</div></div>
+    <div class="stat-card green"><div class="sv">${completed}</div><div class="sl">Completed</div></div>
+    <div class="stat-card yellow"><div class="sl" style="margin-top:0;margin-bottom:4px">Confirmed spend (accepted + completed)</div>${currencyLinesHTML(spend)}</div>`;
+}
+
+function renderStateChips(){
+  const order=['COMPLETED','ACCEPTED','OFFERED','DRAFT_SAVED','REVOKED'];
+  const counts={};
+  ROWS.forEach(r=>{ counts[r.contractState]=(counts[r.contractState]||0)+1; });
+  let html='';
+  order.forEach(st=>{
+    const meta=CONTRACT_STATE_META[st];
+    const c=counts[st]||0;
+    html+=`<div class="state-chip-card"><div class="scv"><span class="chip ${meta.chip}">${meta.label}</span></div><div class="scl">${c} contract${c!==1?'s':''}</div></div>`;
+  });
+  document.getElementById('state-chips').innerHTML=html;
+}
+
+function renderQuarterTable(){
+  const groups={};
+  ROWS.forEach(r=>{
+    if(!r.quarter) return;
+    const key=r.quarter.label;
+    if(!groups[key]) groups[key]={label:key,range:r.quarter.rangeLabel,sortKey:r.quarter.sortKey,count:0,spend:{}};
+    groups[key].count++;
+    if(isConfirmed(r)) groups[key].spend[r.currency]=(groups[key].spend[r.currency]||0)+r.estCost;
+  });
+  const list=Object.values(groups).sort((a,b)=>a.sortKey-b.sortKey);
+  const curQ=fiscalQuarterInfo(TODAY);
+  document.getElementById('current-quarter-label').textContent=`Current: ${curQ.label} (${curQ.rangeLabel})`;
+  let html='<thead><tr><th>Quarter</th><th>Period</th><th class="num">Contracts</th><th>Confirmed spend</th></tr></thead><tbody>';
+  if(!list.length){ html+='<tr><td colspan="4" style="color:var(--muted)">No dated contracts</td></tr>'; }
+  list.forEach(g=>{
+    const isCur=g.label===curQ.label;
+    html+=`<tr class="${isCur?'quarter-current':''}"><td style="font-weight:600;color:#fff">${g.label}${isCur?' <span style="color:var(--sky);font-size:10px">● current</span>':''}</td><td style="color:var(--muted)">${g.range}</td><td class="num">${g.count}</td><td>${currencyLinesHTML(g.spend)}</td></tr>`;
+  });
+  html+='</tbody>';
+  document.getElementById('quarter-table').innerHTML=html;
+}
+
+function renderGroupTable(elId,keyFn,labelHeader){
+  const groups={};
+  ROWS.forEach(r=>{
+    const key=keyFn(r)||'—';
+    if(!groups[key]) groups[key]={count:0,spend:{}};
+    groups[key].count++;
+    if(isConfirmed(r)) groups[key].spend[r.currency]=(groups[key].spend[r.currency]||0)+r.estCost;
+  });
+  const list=Object.entries(groups).sort((a,b)=>b[1].count-a[1].count);
+  let html=`<thead><tr><th>${labelHeader}</th><th class="num">Contracts</th><th>Confirmed spend</th></tr></thead><tbody>`;
+  if(!list.length){ html+='<tr><td colspan="3" style="color:var(--muted)">No data</td></tr>'; }
+  list.forEach(([key,g])=>{
+    html+=`<tr><td style="color:#fff">${key}</td><td class="num">${g.count}</td><td>${currencyLinesHTML(g.spend)}</td></tr>`;
+  });
+  html+='</tbody>';
+  document.getElementById(elId).innerHTML=html;
+}
+
+function renderSummary(){
+  renderStats();
+  renderStateChips();
+  renderQuarterTable();
+  renderGroupTable('bu-table', r=>r.businessUnit, 'Business Unit');
+  renderGroupTable('discipline-table', r=>r.discipline, 'Discipline');
+  renderGroupTable('hirer-table', r=>r.hirerName, 'Hirer');
+}
+
+/* ══════════════ RENDER: CONTRACTS ══════════════ */
+let sortField='startDate', sortDir=-1;
+
+function populateFilters(){
+  const quarters=[...new Set(ROWS.filter(r=>r.quarter).map(r=>r.quarter.label))].sort((a,b)=>{
+    const ra=ROWS.find(r=>r.quarter&&r.quarter.label===a).quarter.sortKey;
+    const rb=ROWS.find(r=>r.quarter&&r.quarter.label===b).quarter.sortKey;
+    return ra-rb;
+  });
+  const states=[...new Set(ROWS.map(r=>r.contractState))].filter(Boolean);
+  const bus=[...new Set(ROWS.map(r=>r.businessUnit))].filter(Boolean).sort();
+  const disciplines=[...new Set(ROWS.map(r=>r.discipline))].filter(Boolean).sort();
+
+  const fq=document.getElementById('f-quarter');
+  fq.innerHTML='<option value="all">All quarters</option>'+quarters.map(q=>`<option value="${q}">${q}</option>`).join('');
+  const fs=document.getElementById('f-state');
+  fs.innerHTML='<option value="all">All states</option>'+states.map(s=>`<option value="${s}">${(CONTRACT_STATE_META[s]||{label:s}).label}</option>`).join('');
+  const fb=document.getElementById('f-bu');
+  fb.innerHTML='<option value="all">All units</option>'+bus.map(b=>`<option value="${b}">${b}</option>`).join('');
+  const fd=document.getElementById('f-discipline');
+  fd.innerHTML='<option value="all">All disciplines</option>'+disciplines.map(d=>`<option value="${d}">${d}</option>`).join('');
+}
+
+function filteredRows(){
+  const q=document.getElementById('f-quarter').value;
+  const st=document.getElementById('f-state').value;
+  const bu=document.getElementById('f-bu').value;
+  const disc=document.getElementById('f-discipline').value;
+  const search=document.getElementById('f-search').value.trim().toLowerCase();
+  return ROWS.filter(r=>{
+    if(q!=='all' && (!r.quarter||r.quarter.label!==q)) return false;
+    if(st!=='all' && r.contractState!==st) return false;
+    if(bu!=='all' && r.businessUnit!==bu) return false;
+    if(disc!=='all' && r.discipline!==disc) return false;
+    if(search){
+      const hay=(r.hirerName+' '+r.contractorName+' '+r.costCentre+' '+r.businessUnit).toLowerCase();
+      if(!hay.includes(search)) return false;
+    }
+    return true;
+  });
+}
+
+function sortRows(rows){
+  const f=sortField;
+  return [...rows].sort((a,b)=>{
+    let av=a[f],bv=b[f];
+    if(f==='startDate'||f==='endDate'){ av=av?new Date(av):new Date(0); bv=bv?new Date(bv):new Date(0); }
+    if(f==='rate'||f==='estCost'){ av=parseFloat(av)||0; bv=parseFloat(bv)||0; }
+    if(av<bv) return -1*sortDir;
+    if(av>bv) return 1*sortDir;
+    return 0;
+  });
+}
+
+let openExpandId=null;
+function toggleExpand(id){
+  const el=document.getElementById(id);
+  if(!el) return;
+  if(openExpandId && openExpandId!==id){ const p=document.getElementById(openExpandId); if(p) p.classList.remove('open'); }
+  const was=el.classList.contains('open');
+  el.classList.toggle('open',!was);
+  openExpandId=was?null:id;
+}
+
+function renderContracts(){
+  const rows=sortRows(filteredRows());
+  document.getElementById('fc-count').textContent=rows.length+' of '+ROWS.length+' contracts';
+  let html='';
+  rows.forEach((r,i)=>{
+    const stMeta=CONTRACT_STATE_META[r.contractState]||{label:r.contractState,chip:'chip-draft'};
+    const id='exp-'+i;
+    html+=`
+      <tr class="contract-row" onclick="toggleExpand('${id}')">
+        <td>${r.hirerName}</td>
+        <td>${r.contractorName}</td>
+        <td>${r.discipline}</td>
+        <td>${fmtDate(r.startDate)}</td>
+        <td>${fmtDate(r.endDate)}</td>
+        <td><span class="rate-unit-tag">${r.rateUnit}</span></td>
+        <td>${r.currency}</td>
+        <td class="num">${(parseFloat(r.rate)||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
+        <td>${r.businessUnit}</td>
+        <td><span class="chip ${stMeta.chip}">${stMeta.label}</span></td>
+        <td>${r.costCentre}</td>
+        <td class="num est-cost">${formatMoney(r.estCost,r.currency)}</td>
+        <td>${r.quarter?r.quarter.label:'—'}</td>
+      </tr>
+      <tr class="expand-row" id="${id}">
+        <td colspan="13">
+          <div class="expand-grid">
+            <div class="expand-item"><div class="ei-label">Client</div><div class="ei-val">${r.clientName||'—'}</div></div>
+            <div class="expand-item"><div class="ei-label">Seniority</div><div class="ei-val">${r.seniority||'—'}</div></div>
+            <div class="expand-item"><div class="ei-label">Work time type</div><div class="ei-val">${r.workTimeType||'—'}</div></div>
+            <div class="expand-item"><div class="ei-label">Date offered</div><div class="ei-val">${fmtDate(r.dateOffered)}</div></div>
+            <div class="expand-item"><div class="ei-label">Date accepted</div><div class="ei-val">${fmtDate(r.dateAccepted)}</div></div>
+            <div class="expand-item"><div class="ei-label">Notice period</div><div class="ei-val">${r.noticePeriod?r.noticePeriod+' days':'—'}</div></div>
+            <div class="expand-item"><div class="ei-label">Business days in range</div><div class="ei-val">${r.businessDays}</div></div>
+          </div>
+        </td>
+      </tr>`;
+  });
+  document.getElementById('contracts-tbody').innerHTML=html||'<tr><td colspan="13" style="color:var(--muted);padding:20px">No contracts match these filters</td></tr>';
+  document.querySelectorAll('th.sortable .arrow').forEach(a=>a.remove());
+  document.querySelectorAll('th.sortable').forEach(th=>{
+    if(th.dataset.sort===sortField) th.innerHTML+=' <span class="arrow">'+(sortDir===1?'▲':'▼')+'</span>';
+  });
+}
+
+document.querySelectorAll('th.sortable').forEach(th=>{
+  th.addEventListener('click',()=>{
+    const f=th.dataset.sort;
+    if(sortField===f) sortDir*=-1; else { sortField=f; sortDir=1; }
+    renderContracts();
+  });
+});
+['f-quarter','f-state','f-bu','f-discipline'].forEach(id=>document.getElementById(id).addEventListener('change',renderContracts));
+document.getElementById('f-search').addEventListener('input',renderContracts);
+
+/* ══════════════ NAV / METHOD PANEL ══════════════ */
+function showView(v,btn){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  btn.classList.add('active');
+}
+function toggleMethod(){
+  document.getElementById('method-hdr').classList.toggle('open');
+  document.getElementById('method-body').classList.toggle('open');
+}
+
+/* ══════════════ META / FOOTER ══════════════ */
+function renderMeta(){
+  document.getElementById('meta-filename').textContent=CURRENT_FILENAME;
+  const ts=extractExportTimestamp(CURRENT_FILENAME);
+  document.getElementById('meta-generated').textContent=ts||'—';
+  document.getElementById('meta-rowcount').textContent=ROWS.length;
+  document.getElementById('footer-bar').innerHTML=
+    'The Creative Foundry &nbsp;·&nbsp; Freelancer Contracts Report (YunoJuno) &nbsp;·&nbsp; '+ROWS.length+' contracts &nbsp;·&nbsp; '+
+    'Spend estimated from rate &times; business days (DAY/HOUR) or rate-as-total (PROJECT/MILESTONE); no FX conversion applied &nbsp;·&nbsp; '+
+    'Fiscal quarters: Apr&ndash;Mar, grouped by contract start date';
+}
+
+/* ══════════════ UPLOAD / DOWNLOAD ══════════════ */
+document.getElementById('csv-upload').addEventListener('change',function(e){
+  const file=e.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    CURRENT_CSV_TEXT=ev.target.result;
+    CURRENT_FILENAME=file.name;
+    ROWS=buildRows(CURRENT_CSV_TEXT);
+    populateFilters();
+    renderMeta();
+    renderSummary();
+    renderContracts();
+    const note=document.getElementById('upload-note');
+    note.style.display='block';
+    note.textContent='New export loaded from "'+file.name+'" ('+ROWS.length+' contracts). Click "Download updated report" to save a shareable copy, then redeploy it.';
+  };
+  reader.readAsText(file);
+});
+
+document.getElementById('download-btn').addEventListener('click', async function(){
+  try{
+    const res=await fetch(location.href,{cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    let html=await res.text();
+    const newB64=utf8ToB64(CURRENT_CSV_TEXT);
+    html=html.replace(/const RAW_CSV_B64\s*=\s*"[^"]*";/, 'const RAW_CSV_B64 = "'+newB64+'";');
+    html=html.replace(/let CURRENT_FILENAME\s*=\s*"[^"]*";/, 'let CURRENT_FILENAME = "'+CURRENT_FILENAME.replace(/"/g,'\\"')+'";');
+    const blob=new Blob([html],{type:'text/html'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    const d=new Date();
+    const pad=n=>String(n).padStart(2,'0');
+    a.href=url;
+    a.download='yunojuno-contracts-report-'+d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'.html';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }catch(err){
+    alert('Could not regenerate the file — this only works when the report is opened from a server (e.g. the hosted xero.dev link), not a local double-clicked file.\\n\\n'+err.message);
+  }
+});
+
+/* ══════════════ INIT ══════════════ */
+ROWS=buildRows(CURRENT_CSV_TEXT);
+populateFilters();
+renderMeta();
+renderSummary();
+renderContracts();
+</script>
+</body>
+</html>
