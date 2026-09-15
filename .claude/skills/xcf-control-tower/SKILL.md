@@ -1,0 +1,239 @@
+---
+name: xcf-control-tower
+description: >
+  Guides Claude through building, maintaining, and extending the XCF Capacity Control Tower — 
+  the XCF team's daily HTML dashboard at https://xcf-capacity-report.dashboard.xero.dev.
+  Use this skill whenever someone asks to: rebuild the capacity report, add a new tab, 
+  change which Asana portfolio or custom field is used, update who appears on a tab, 
+  fix data discrepancies, update OOO dates, refresh and redeploy, or understand how 
+  any part of the control tower works. This is the single source of truth for the entire 
+  dashboard — its architecture, config values, prompts, and maintenance workflows.
+---
+
+# XCF Capacity Control Tower
+
+The XCF Capacity Control Tower is a daily HTML dashboard for The Creative Foundry (XCF) team
+at Xero. It pulls live data from Asana and Slack, injects it into a self-rendering HTML template,
+and deploys to an internal Xero dashboard URL via the Xero Deploy MCP tool.
+
+**Live URL:** https://xcf-capacity-report.dashboard.xero.dev (Xero VPN required)
+**Repo:** `/Users/christie.sinai/Documents/xcf-capacity-bot/` (private, internal)
+**Deploy command:**
+```
+node src/index.js --once
+```
+Then deploy the generated file via `mcp__Xero_Deploy__deploy_app`.
+
+---
+
+## Architecture Overview
+
+```
+src/index.js           — orchestrator: runs all data builders in parallel, calls saveReport
+src/asana.js           — all Asana API calls (7 data builders)
+src/slackUpdates.js    — Slack PM updates fetcher + cache
+src/report.js          — injects data arrays into template.html, writes reports/xcf-report-YYYY-MM-DD.html
+template.html          — self-rendering single-file dashboard (all JS/CSS inline)
+slack-pm-updates-cache.json — persists Slack data + manually-added executive summaries
+reports/               — generated daily HTML files
+```
+
+**Data flow:** `src/index.js` calls 7 async builders in parallel → `src/report.js` injects
+them into `template.html` as named JS arrays (`MEMBERS`, `PM_DATA`, `OOO_DATA`, etc.) →
+writes `reports/xcf-report-YYYY-MM-DD.html` → deploy that file.
+
+**Key env vars (in `.env`):**
+- `ASANA_WORKSPACE_GID=41261904390129`
+- `ASANA_TEAM_GID=1211868948534506` — "The Creative Foundry" (34 members)
+- `ASANA_FIELD_GID_ESTIMATED_TIME=1203387567618671` — stored in **minutes**, divide by 60
+- `SLACK_TOKEN=xoxb-...` — needs `groups:history` + `users:read` scopes
+- `ASANA_POD_MAP` — JSON string mapping member GID → POD name
+
+---
+
+## Key Asana GIDs (as of Sep 2026)
+
+| Purpose | GID |
+|---|---|
+| PM portfolio (XCF \| Projects) | `1217210785824637` |
+| Project type (XCF) custom field | `1217575429570978` |
+| Estimated time field | `1203387567618671` |
+| Design BAU board | `1212644837995359` |
+| Performance BAU board | `1212446476552313` |
+| Leave project | `LEAVE_PROJECT_GID` (in .env) |
+| Slack PM updates channel | `C0B3YCKT0JV` |
+
+**Project type values:** `Roadmap` / `Micro (BAU)` / `XCF initiative`
+
+---
+
+## Dashboard Tabs
+
+### 1. Capacity Tab
+**Data builder:** `buildMemberData()` in `src/asana.js`
+**Source:** All tasks assigned to each team member across the workspace (by user GID)
+**Shows:** Hours today / 7-day / 21-day per person, POD grouping
+**Key decisions:**
+- Estimated time field is in minutes → divide by 60 for hours
+- `EXCLUDED_MEMBERS` list keeps admin/non-creative people off the tab
+- `CAPACITY_GAP_MEMBERS` set (in template.html) marks members whose Asana hours are known to gap
+- Placeholder tasks excluded by name filter: `/placeholder/i`
+
+### 2. POD Summary Tab
+**Data:** Derived from the same `MEMBERS` array as Capacity
+**Shows:** Rollup by POD with total hours
+
+### 3. Missing Fields Tab
+**Data:** `missingTasks` from `buildMemberData()`
+**Shows:** Tasks with no estimated time or no due date
+**Excluded:** Members in `MISSING_EXCLUDED_MEMBERS` (PMs and some seniors)
+
+### 4. Scope Creep Tab
+**Data builder:** `buildScopeCreepData()` in `src/asana.js`
+**Source:** Tasks where actual hours significantly exceed estimated
+
+### 5. OOO Tab
+**Data builder:** `buildOOOData()` in `src/asana.js`
+**Sources (in priority order):**
+1. `MANUAL_OOO` entries (highest priority — overrides both other sources)
+2. Asana `vacation_dates` on user profiles
+3. Leave backup project tasks
+**Key:** Members in `MANUAL_OOO` are skipped in both source 2 and source 3 (prevents duplicate entries)
+
+### 6. Project Forecaster Tab
+**Data builder:** `buildRoadmapData()` in `src/asana.js`
+**Source:** XCF | Projects portfolio, filtered to `projectType === 'Roadmap'`
+**Shows:** Gantt-style timeline with Production / In Market / Project Brief Due bars
+**Key bug (fixed Sep 2026):** `rtTODAY` must be `new Date()` — never hardcode a date here
+
+### 7. PM Team Tab
+**Data builder:** `buildPMData()` in `src/asana.js`
+**Source:** XCF | Projects portfolio
+**Shows only:** Quincey Brinker, Sherry Choe, Deepak Aujla, Logen Stent, Naomi Lawson, Becky Sharp, Tom Gregson
+**Sections:** Roadmap (blue #6C8EF5) / Micros BAU (teal #4CAF8A) / XCF Initiative (amber #F5A623)
+**Each section:** Collapsible with chevron toggle; counts shown as header badges
+
+### 8. PM Project Updates Tab
+**Data builder:** `buildPMUpdatesData()` in `src/slackUpdates.js`
+**Source:** `#xcf-pm-weekly-updates` Slack channel, last 12 weeks
+**AI summaries:** Stored manually in `slack-pm-updates-cache.json` under `executiveSummary` key per week
+**Format:** Week grouped by Monday, labelled by Friday of that week
+
+### 9. BAU Tab (Design + Performance)
+**Data builder:** `buildBAUData()` in `src/asana.js`
+**Source:** Design BAU board + Performance BAU board
+
+---
+
+## How to Deploy
+
+1. Run the build:
+   ```
+   node src/index.js --once
+   ```
+2. Deploy via Xero Deploy MCP:
+   - `team: creative-foundry`
+   - `app_name: xcf-capacity-report`
+   - `index_html_path: reports/xcf-report-YYYY-MM-DD.html`
+   - `auth_mode: okta`
+3. Approve the Okta prompt at the URL shown
+4. Wait ~5-7 minutes for the scan to complete — poll `get_status` to confirm
+
+---
+
+## Common Maintenance Tasks
+
+### Refresh and redeploy with today's data
+```
+node src/index.js --once
+```
+Then deploy the new `reports/xcf-report-YYYY-MM-DD.html`.
+
+### Add/remove a person from the Capacity tab
+- To **exclude** someone: add their exact Asana name to `EXCLUDED_MEMBERS` in `src/asana.js`
+- To **re-include** someone: remove from `EXCLUDED_MEMBERS`
+
+### Update who appears on the PM Team tab
+Edit `PM_ALLOWED_MEMBERS` array in `src/asana.js`.
+
+### Add or correct an OOO entry
+Add to `MANUAL_OOO` in `src/asana.js`:
+```js
+{ name: 'First Last', start: 'YYYY-MM-DD', end: 'YYYY-MM-DD' }
+```
+This takes priority over Asana vacation_dates and leave project tasks for that person.
+
+### Add an AI summary for a PM updates week
+1. Open `slack-pm-updates-cache.json`
+2. Find the week entry by `weekStart` (Monday date, YYYY-MM-DD format)
+3. Add an `executiveSummary` field with markdown content (see existing entries for format)
+4. Rebuild and redeploy
+
+### Change which Asana portfolio feeds a tab
+Update the relevant `*_GID` constant in `src/asana.js`:
+- PM portfolio / Project Forecaster: `PM_PORTFOLIO_GID`
+- BAU boards: `BAU_BOARDS` array
+
+### Change project type filtering on PM Team or Forecaster
+The `PROJECT_TYPE_FIELD_GID` (`1217575429570978`) reads the "Project type (XCF)" custom field.
+Values: `Roadmap`, `Micro (BAU)`, `XCF initiative`
+
+---
+
+## The Prompts That Built This
+
+These are the exact prompts used to build and evolve each part of the dashboard.
+You can use these as a starting point when making similar changes.
+
+**Asana restructuring (point data to new portfolios):**
+> "I've made some big changes in Asana. Check [tab list], refresh and deploy the report."
+
+**Fix capacity discrepancies:**
+> "Steph is showing 9.9 in the report but 3.9 in Asana. Ciaran is 8.6 vs 2.6. Can you investigate?"
+> *(Root cause was placeholder tasks — fixed by filtering `/placeholder/i` task names)*
+
+**Split PM Team tab into sections:**
+> "Split the PMs work with a rollup: Roadmap Projects (heading) / Micros BAU (heading) / XCF Initiative (heading) — based on the Project type (XCF) custom field"
+
+**Make section headings collapsible with colour:**
+> "Make the headings bigger and add a colour so they stand out. Make them a dropdown so they can be rolled up. In the top squares next to today etc. add Micro, roadmap etc and how many jobs there are for that particular PM."
+
+**Filter Project Forecaster to Roadmap only:**
+> "Please update the Project Forecaster tab ONLY. Only pull projects from XCF | Projects and only include any project with Roadmap selected as the Project type."
+
+**Fix stat box counts (hardcoded date bug):**
+> "The boxes at the top say there are 0 In Market which is not true. Can you check and fix?"
+> *(Fix: change `const rtTODAY=new Date('hardcoded-date')` → `const rtTODAY=(()=>{const d=new Date();d.setHours(0,0,0,0);return d;})();`)*
+
+**Update OOO dates:**
+> "Christie's out of office is now starting on the 16th [September] to the 4th October. Update the OOO tab."
+
+**Remove a departed team member:**
+> "[Name] has left the business. Please remove their name from all tabs in the report."
+
+**Add an executive summary for a weekly update:**
+> "On the PM Project updates tab please pull in the latest updates from [date]."
+> *(Read the messages from the cache, generate a summary in the existing format, write it to the cache, rebuild)*
+
+---
+
+## Troubleshooting
+
+**Report shows wrong hours / discrepancies with Asana:**
+- Check for placeholder tasks (tasks named like "Placeholder studio hours") — these should be excluded by the `/placeholder/i` filter
+- Check `EXCLUDED_MEMBERS` — someone may have been removed who shouldn't be
+- Verify `ASANA_FIELD_GID_ESTIMATED_TIME` is correct and values are in minutes
+
+**OOO tab shows duplicate entries for someone:**
+- Add them to `MANUAL_OOO` — this suppresses both the Asana vacation_dates AND leave project sources
+
+**Project Forecaster "In Market" count shows 0:**
+- Check that `rtTODAY` in `template.html` is `new Date()` not a hardcoded date string
+
+**Deploy fails (status: failed):**
+- Usually transient — try deploying again
+- Check file size: `ls -lh reports/xcf-report-YYYY-MM-DD.html` (should be under 1MB)
+
+**Build hangs (ECONNRESET on Asana calls):**
+- This is a known intermittent issue in `getTasksForUser` — retry the build
+- If it fails 3 times in a row, wait and try again later (VPN/proxy timeout issue)
