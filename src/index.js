@@ -4,11 +4,12 @@ const { buildMemberData, buildPMData, buildScopeCreepData, buildOOOData, buildRo
 const { saveReport } = require('./report');
 const { buildPMUpdatesData } = require('./slackUpdates');
 const { buildRequestsData } = require('./requestTiming');
+const { buildRegionalData } = require('./regionalRequests');
 
 async function runReport() {
   console.log(`[${new Date().toISOString()}] Running XCF capacity report...`);
 
-  const [capacityData, pmData, scopeCreepData, oooData, roadmapData, bauData, pmUpdatesData, requestsData] = await Promise.all([
+  const [capacityData, pmData, scopeCreepData, oooData, roadmapData, bauData, pmUpdatesData, requestsData, regionalData] = await Promise.all([
     buildMemberData(),
     buildPMData(),
     buildScopeCreepData(),
@@ -20,9 +21,13 @@ async function runReport() {
       console.warn('[Requests] builder failed, tab will be empty:', err.message);
       return [];
     }),
+    buildRegionalData().catch((err) => {
+      console.warn('[Regional] builder failed, tab will be empty:', err.message);
+      return null;
+    }),
   ]);
 
-  saveReport({ ...capacityData, pmData, scopeCreepData, oooData, pmUpdatesData, roadmapData, bauData, requestsData });
+  saveReport({ ...capacityData, pmData, scopeCreepData, oooData, pmUpdatesData, roadmapData, bauData, requestsData, regionalData });
 
   console.log(`[${new Date().toISOString()}] Done.`);
 }

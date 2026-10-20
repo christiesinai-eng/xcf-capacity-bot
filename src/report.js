@@ -115,7 +115,7 @@ function stripCommentUrls(text) {
     .trim();
 }
 
-function generateReport({ members, missingTasks, overdueTasks, pmData, scopeCreepData, oooData, pmUpdatesData, roadmapData, bauData, requestsData }) {
+function generateReport({ members, missingTasks, overdueTasks, pmData, scopeCreepData, oooData, pmUpdatesData, roadmapData, bauData, requestsData, regionalData }) {
   if (!fs.existsSync(TEMPLATE_PATH)) {
     throw new Error(`HTML template not found at ${TEMPLATE_PATH}`);
   }
@@ -149,6 +149,9 @@ function generateReport({ members, missingTasks, overdueTasks, pmData, scopeCree
     summaryHtml: r.summary ? mdToHtml(r.summary) : null,
   }));
   html = replaceArray(html, 'REQUESTS_DATA', requestsWithHtml);
+  // Placeholder is an array literal but the payload is an object — replaceArray
+  // only cares about the declaration shape it is replacing.
+  html = replaceArray(html, 'REGIONAL_DATA', regionalData || {});
   html = replaceString(html, 'GENERATED_AT', generatedAt);
   return html;
 }
