@@ -1246,14 +1246,16 @@
       "name": "XCF-18696 | Meta | AU/NZ | SMB | Ultimate Plan | Statics, Rd 2",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219674477255681": {
       "code": "XCF-18689",
       "name": "XCF-18689 | Meta| Brief | UAE | eInvoicing | VAT | Mandate",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219674018109087": {
       "code": "XCF-18682",
@@ -1266,7 +1268,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219669728708328": {
       "code": "XCF-18651",
@@ -1284,7 +1287,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219659012358831": {
       "code": "XCF-18642",
@@ -1302,14 +1306,16 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219658120269207": {
       "code": "XCF-18635",
       "name": "XCF-18635 | UK | SB | Refreshed Smart Document Capture ads",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219628538605471": {
       "code": "XCF-18536",
@@ -1322,21 +1328,24 @@
         }
       ],
       "summary": "Fast. An automated flag linked it to the parent Know Your Numbers roadmap project.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1219607134768003": {
       "code": "XCF-18470",
       "name": "XCF-18470 | UK | LCE - Payments Radio Creative",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219600575789442": {
       "code": "XCF-18463",
       "name": "XCF-18463 | NZ | HVSB Digital Audio",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219605441721029": {
       "code": "XCF-18456",
@@ -1349,21 +1358,24 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219605439802073": {
       "code": "XCF-18449",
       "name": "XCF-18449 | UK | Smart Tools free-form",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219607131603016": {
       "code": "XCF-18441",
       "name": "XCF-18441 | UK | MTD evergreen refresh",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219598730326092": {
       "code": "XCF-18435",
@@ -1376,7 +1388,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219605406552948": {
       "code": "XCF-18426",
@@ -1389,14 +1402,16 @@
         }
       ],
       "summary": "Routed directly to a named designer. No blockers.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1219590261759794": {
       "code": "XCF-18418",
       "name": "XCF-18418 | US | Updated SB Cashflow Ads, Meta",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219589634414549": {
       "code": "XCF-18411",
@@ -1409,7 +1424,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219530593885652": {
       "code": "XCF-18249",
@@ -1422,21 +1438,24 @@
         }
       ],
       "summary": "Straightforward. Routed to the studio on a short deadline.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1219481561069642": {
       "code": "XCF-18152",
       "name": "XCF-18152 | Review design POV slides for external presentation",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219467920394159": {
       "code": "XCF-18126",
       "name": "XCF-18126 | Meta | Melio | Managing International Payments statics",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219453160829260": {
       "code": "XCF-18122",
@@ -1464,7 +1483,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219452955895693": {
       "code": "XCF-18118",
@@ -1482,7 +1502,8 @@
         }
       ],
       "summary": "Fast — routed and assigned the same day.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1219432393487625": {
       "code": "XCF-18086",
@@ -1500,7 +1521,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219432177116010": {
       "code": "XCF-18049",
@@ -1513,7 +1535,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219429695821149": {
       "code": "XCF-18042",
@@ -1536,14 +1559,16 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219399483827248": {
       "code": "XCF-18029",
       "name": "XCF-18029 | Bridget Snelling Keynote - Vega Conference NZ",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219395688185860": {
       "code": "XCF-18020",
@@ -1556,7 +1581,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219344951557869": {
       "code": "XCF-17942",
@@ -1574,7 +1600,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219294614410236": {
       "code": "XCF-17869",
@@ -1607,7 +1634,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219294337197872": {
       "code": "XCF-17862",
@@ -1645,7 +1673,8 @@
         }
       ],
       "summary": "Short clarification on what the IPC asset needed, then delivered.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1219294336511174": {
       "code": "XCF-17855",
@@ -1663,7 +1692,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219294273209570": {
       "code": "XCF-17848",
@@ -1706,14 +1736,16 @@
         }
       ],
       "summary": "**Go-live pulled forward mid-flight.** Landed in the wrong place, needed access, then the date moved up a week and the team prioritised it.",
-      "cause": "Requester-side"
+      "cause": "Requester-side",
+      "causedAt": "2026-10-20"
     },
     "1219291029707435": {
       "code": "XCF-17810",
       "name": "XCF-17810 | Recruiting Event - Rush Assets",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219290874337430": {
       "code": "XCF-17803",
@@ -1751,14 +1783,16 @@
         }
       ],
       "summary": "Access request, then a quick clarification on placement before handover to the AI & Media team.",
-      "cause": "Access & permissions"
+      "cause": "Access & permissions",
+      "causedAt": "2026-10-20"
     },
     "1219290467357341": {
       "code": "XCF-17794",
       "name": "XCF-17794 | Xero x Gemini integration assets ",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219234457707714": {
       "code": "XCF-17643",
@@ -1776,7 +1810,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219229555896870": {
       "code": "XCF-17639",
@@ -1794,14 +1829,16 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219198862643095": {
       "code": "XCF-17562",
       "name": "XCF-17562 | ICB Summit Presentation Slides",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219196558096552": {
       "code": "XCF-17507",
@@ -1819,7 +1856,8 @@
         }
       ],
       "summary": "Routed to the studio the same day. An automated flag noted an earlier Canva template job.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1219195198065173": {
       "code": "XCF-17498",
@@ -1832,42 +1870,48 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219160274779106": {
       "code": "XCF-17431",
       "name": "XCF-17431 | XCF-17431 |  Performance Pod Reporting",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219160283255379": {
       "code": "XCF-17404",
       "name": "XCF-17404 |  Web Refresh ",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219160274312373": {
       "code": "XCF-17385",
       "name": "XCF-17385 | Design assistance for Ross Tucker presentation",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219097320153231": {
       "code": "XCF-17319",
       "name": "XCF-17319 | [ON HOLD] SU1575 - First app login push notifications",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219097370549250": {
       "code": "XCF-17312",
       "name": "XCF-17312 | [ON HOLD] SU1574 - Invoicing: JAX welcome series iteration",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219097160118414": {
       "code": "XCF-17305",
@@ -1900,7 +1944,8 @@
         }
       ],
       "summary": "**Blocked on access** — the copy doc, then an expired video link — before design could begin.",
-      "cause": "Access & permissions"
+      "cause": "Access & permissions",
+      "causedAt": "2026-10-20"
     },
     "1219094074159186": {
       "code": "XCF-17237",
@@ -1913,7 +1958,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219093908677972": {
       "code": "XCF-17230",
@@ -1926,7 +1972,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219093874227120": {
       "code": "XCF-17223",
@@ -1944,7 +1991,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219093873968513": {
       "code": "XCF-17216",
@@ -1957,7 +2005,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219093667707775": {
       "code": "XCF-17209",
@@ -1970,14 +2019,16 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219089838567563": {
       "code": "XCF-17149",
       "name": "XCF-17149 | Updated MSFT assets for upcoming PR announcement",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219089341430664": {
       "code": "XCF-17144",
@@ -1995,21 +2046,24 @@
         }
       ],
       "summary": "**Blocked on missing information.** XCF had asked for more detail and was waiting on a reply when the requester chased on 8 Oct.",
-      "cause": "Brief & scoping"
+      "cause": "Brief & scoping",
+      "causedAt": "2026-10-20"
     },
     "1219085664259033": {
       "code": "XCF-17139",
       "name": "XCF-17139 | Updating PPT to event template",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219050673873043": {
       "code": "XCF-17094",
       "name": "XCF-17094 | Blog thumbnail/header image",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219044115615620": {
       "code": "XCF-17084",
@@ -2027,21 +2081,24 @@
         }
       ],
       "summary": "**Withdrawn.** Waiting on the refreshed cashflow concept due 19 Oct; the requester then said support was no longer needed.",
-      "cause": "Requester-side"
+      "cause": "Requester-side",
+      "causedAt": "2026-10-20"
     },
     "1219016090508790": {
       "code": "XCF-17078",
       "name": "XCF-17078 | QR code request for the modern practice playbook",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219014356942170": {
       "code": "XCF-17072",
       "name": "XCF-17072 | Pull up Banner",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1219014313158356": {
       "code": "XCF-17068",
@@ -2054,14 +2111,16 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218974144099392": {
       "code": "XCF-16970",
       "name": "XCF-16970 | AU Treasury Consultation Submission",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218969553307537": {
       "code": "XCF-16950",
@@ -2084,7 +2143,8 @@
         }
       ],
       "summary": "Straightforward delivery, with a coordination note against a related GIF request.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1218968049958477": {
       "code": "XCF-16731",
@@ -2137,14 +2197,16 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218967159014062": {
       "code": "XCF-16721",
       "name": "XCF-16721 | Xero banner artwork - urgent",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218948141969703": {
       "code": "XCF-16464",
@@ -2157,14 +2219,16 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218914659740126": {
       "code": "XCF-16407",
       "name": "XCF-16407 | Update sales PDF's with new NZ pricing changes ",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218885064890208": {
       "code": "XCF-16399",
@@ -2232,7 +2296,8 @@
         }
       ],
       "summary": "**Deliberately sequenced** behind XCF-16392, which had to be approved before storyboards could be built.",
-      "cause": "Capacity queue"
+      "cause": "Capacity queue",
+      "causedAt": "2026-10-20"
     },
     "1218883098232884": {
       "code": "XCF-16392",
@@ -2305,7 +2370,8 @@
         }
       ],
       "summary": "Active creative cycle: options presented, claims wording checked, copy through review.",
-      "cause": "Creative iteration"
+      "cause": "Creative iteration",
+      "causedAt": "2026-10-20"
     },
     "1218855595843410": {
       "code": "XCF-16384",
@@ -2363,14 +2429,16 @@
         }
       ],
       "summary": "**Routing question first** — which POD owned it — then it entered the weekly prioritisation cycle.",
-      "cause": "Capacity queue"
+      "cause": "Capacity queue",
+      "causedAt": "2026-10-20"
     },
     "1218853800423271": {
       "code": "XCF-16379",
       "name": "XCF-16379 | Okta tile image for XFG portal",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218851875089531": {
       "code": "XCF-16374",
@@ -2388,7 +2456,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218849693609966": {
       "code": "XCF-16323",
@@ -2411,14 +2480,16 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218848435396342": {
       "code": "XCF-16318",
       "name": "XCF-16318 | Candidate one-pager template",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218815982748171": {
       "code": "XCF-16312",
@@ -2491,7 +2562,8 @@
         }
       ],
       "summary": "**Misrouted.** Two people named Jenna were confused in Asana, so it sat with the wrong owner before the right requester picked it up.",
-      "cause": "Misrouted"
+      "cause": "Misrouted",
+      "causedAt": "2026-10-20"
     },
     "1218806165752341": {
       "code": "XCF-15604",
@@ -2564,7 +2636,8 @@
         }
       ],
       "summary": "**Queued behind US Switch, then blocked on Melio-side access.** Repeated requests for asset and image permissions from the partner.",
-      "cause": "Access & permissions"
+      "cause": "Access & permissions",
+      "causedAt": "2026-10-20"
     },
     "1218781917021584": {
       "code": "XCF-15594",
@@ -2582,14 +2655,16 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218778252905943": {
       "code": "XCF-15585",
       "name": "XCF-15585 | QR code for Next Gen UK Payroll beta",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218771112505896": {
       "code": "XCF-15550",
@@ -2602,7 +2677,8 @@
         }
       ],
       "summary": "Fast. Automated flag only, pointing at related QR code tasks.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1218771080396044": {
       "code": "XCF-15545",
@@ -2615,35 +2691,40 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218770483597359": {
       "code": "XCF-15540",
       "name": "XCF-15540 | 1 page custom flyer creation for partner",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218768713878690": {
       "code": "XCF-15536",
       "name": "XCF-15536 | Updating Xero branding on Stripe's side",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218760805056183": {
       "code": "XCF-14661",
       "name": "XCF Business Review Deck",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218736233745928": {
       "code": "XCF-14646",
       "name": "XCF-14646 | Update to \"Understanding e-Invoicing for Malaysia: A guide to getting started\"",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218728059773530": {
       "code": "XCF-14518",
@@ -2661,56 +2742,64 @@
         }
       ],
       "summary": "Requester chased with the experiment already scheduled live; adding a photographic element made the design harder than expected.",
-      "cause": "Creative iteration"
+      "cause": "Creative iteration",
+      "causedAt": "2026-10-20"
     },
     "1218727593588454": {
       "code": "XCF-14516",
       "name": "XCF-14516 | Sprint | 9th - 13th Nov",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218727593588451": {
       "code": "XCF-14515",
       "name": "XCF-14515 | Sprint | 2nd - 6th Nov",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218727593588448": {
       "code": "XCF-14514",
       "name": "XCF-14514 | Sprint | 26th - 30th Oct",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218727593588445": {
       "code": "XCF-14513",
       "name": "XCF-14513 | Sprint | 19th - 23rd Oct",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218727593588442": {
       "code": "XCF-14512",
       "name": "XCF-14512 | Sprint | 12th - 16 Oct",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218727593588439": {
       "code": "XCF-14511",
       "name": "XCF-14511 | Sprint | 5th - 9th Oct",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218727593588436": {
       "code": "XCF-14510",
       "name": "XCF-14510 | Sprint | 28th Sep - 2nd Oct",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218691875562027": {
       "code": "XCF-14477",
@@ -2733,7 +2822,8 @@
         }
       ],
       "summary": "**Picked up immediately.** The only discussion was reconciling three conflicting launch dates in the request.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1218689017325211": {
       "code": "XCF-14461",
@@ -2766,7 +2856,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218687870832359": {
       "code": "XCF-14456",
@@ -2784,7 +2875,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218615654687689": {
       "code": "XCF-14443",
@@ -2837,7 +2929,8 @@
         }
       ],
       "summary": "**Capacity queue.** Explicitly held while US Switch took priority that week.",
-      "cause": "Capacity queue"
+      "cause": "Capacity queue",
+      "causedAt": "2026-10-20"
     },
     "1218615585622898": {
       "code": "XCF-14439",
@@ -2925,14 +3018,16 @@
         }
       ],
       "summary": "**Queued behind US Switch** until capacity freed up, then delivered to the 12 Oct deadline.",
-      "cause": "Capacity queue"
+      "cause": "Capacity queue",
+      "causedAt": "2026-10-20"
     },
     "1218610164117965": {
       "code": "XCF-14419",
       "name": "XCF-14419 | Review 1-pager copy",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218609705922114": {
       "code": "XCF-14415",
@@ -2950,21 +3045,24 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218602999657228": {
       "code": "XCF-14402",
       "name": "XCF-14402 | Xero Learning Partner Logo",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218574926274109": {
       "code": "XCF-14396",
       "name": "XCF-14396 | Update to existing Syft Analytics document",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218570527076671": {
       "code": "XCF-14379",
@@ -2977,14 +3075,16 @@
         }
       ],
       "summary": "No human discussion recorded — only an automated flag pointing at an earlier \"This is Xero\" deck redesign.",
-      "cause": "Unexplained"
+      "cause": "Unexplained",
+      "causedAt": "2026-10-20"
     },
     "1218525568292354": {
       "code": "XCF-14283",
       "name": "XCF-14283 | Briana Watkins-Kasel",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218502394903715": {
       "code": "XCF-14178",
@@ -2997,14 +3097,16 @@
         }
       ],
       "summary": "No discussion recorded — the only comment is an empty mention.",
-      "cause": "Unexplained"
+      "cause": "Unexplained",
+      "causedAt": "2026-10-20"
     },
     "1218490233727240": {
       "code": "XCF-14140",
       "name": "XCF-14140 | Interim Report FY27",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218487790595325": {
       "code": "XCF-14138",
@@ -3022,21 +3124,24 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218483483003051": {
       "code": "XCF-14131",
       "name": "XCFT-600 v2 | GL | Programmatic Audio AI Ads",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218490234646100": {
       "code": "XCF-14120",
       "name": "XCF-14120 | Logo Review WX",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218475064180516": {
       "code": "XCF-14037",
@@ -3089,7 +3194,8 @@
         }
       ],
       "summary": "**Long clarification loop.** Four rounds of questions across three weeks to establish what was being updated and which team owned it. Requester also asked to push it out three weeks.",
-      "cause": "Brief & scoping"
+      "cause": "Brief & scoping",
+      "causedAt": "2026-10-20"
     },
     "1218475061545624": {
       "code": "XCF-14029",
@@ -3152,7 +3258,8 @@
         }
       ],
       "summary": "Same Reddit concept cycle as XCF-14022 — sizes and routes settled across several review rounds.",
-      "cause": "Creative iteration"
+      "cause": "Creative iteration",
+      "causedAt": "2026-10-20"
     },
     "1218473611008922": {
       "code": "XCF-14022",
@@ -3200,7 +3307,8 @@
         }
       ],
       "summary": "**Concept-led work, not waiting.** Routes presented, reviewed in a WIP, then refined and resized.",
-      "cause": "Creative iteration"
+      "cause": "Creative iteration",
+      "causedAt": "2026-10-20"
     },
     "1218471045704282": {
       "code": "XCF-14015",
@@ -3233,7 +3341,8 @@
         }
       ],
       "summary": "In video triage initially, then delivered in batches ahead of the stated goal.",
-      "cause": "Capacity queue"
+      "cause": "Capacity queue",
+      "causedAt": "2026-10-20"
     },
     "1218470004054727": {
       "code": "XCF-14008",
@@ -3271,7 +3380,8 @@
         }
       ],
       "summary": "Sat in video-team triage awaiting a timeline, then moved fast once picked up — delivered within days of starting.",
-      "cause": "Capacity queue"
+      "cause": "Capacity queue",
+      "causedAt": "2026-10-20"
     },
     "1218447732532058": {
       "code": "XCF-14004",
@@ -3289,49 +3399,56 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218416937662839": {
       "code": "XCF-13844",
       "name": "XCF-13844 | Social asset",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218411618962652": {
       "code": "XCF-13842",
       "name": "XCF-13842 | [no value] | XCF delivery support | ZA: Roadshow 2027 registration campaign",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218383138574504": {
       "code": "XCF-13800",
       "name": "XCF-13800 | Illustration image",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218382738234301": {
       "code": "XCF-13796",
       "name": "XCF-13796 | Illustrations",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218379718550669": {
       "code": "XCF-13783",
       "name": "XCF-13783 | Landing page copy",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218378594430693": {
       "code": "XCF-13779",
       "name": "XCF-13779 | Landing page copy",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218367268660504": {
       "code": "XCF-13774",
@@ -3344,7 +3461,8 @@
         }
       ],
       "summary": "Fastest in the set. Automated flag linked it to a prior swag request from the same requester.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1218350428654354": {
       "code": "XCF-13769",
@@ -3362,7 +3480,8 @@
         }
       ],
       "summary": "Fast. Requester flagged changes coming the following week; an automated check noted a related guide.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1218344138545215": {
       "code": "XCF-13703",
@@ -3375,7 +3494,8 @@
         }
       ],
       "summary": "No human discussion recorded — only an automated flag that it may overlap an existing Hackathon creative request.",
-      "cause": "Unexplained"
+      "cause": "Unexplained",
+      "causedAt": "2026-10-20"
     },
     "1218344188773381": {
       "code": "XCF-13698",
@@ -3393,7 +3513,8 @@
         }
       ],
       "summary": "Already routed and sitting in stakeholder review when queried.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1218328580526504": {
       "code": "XCF-13688",
@@ -3411,7 +3532,8 @@
         }
       ],
       "summary": "Flagged as a possible duplicate of the Ireland request; requester confirmed IE and ZA are separate markets with identical deliverables.",
-      "cause": "Brief & scoping"
+      "cause": "Brief & scoping",
+      "causedAt": "2026-10-20"
     },
     "1218328182783597": {
       "code": "XCF-13684",
@@ -3454,21 +3576,24 @@
         }
       ],
       "summary": "Scope discussion — whether to film new video in Ireland or template the existing quotes — resolved quickly.",
-      "cause": "Brief & scoping"
+      "cause": "Brief & scoping",
+      "causedAt": "2026-10-20"
     },
     "1218309727203958": {
       "code": "XCF-13648",
       "name": "XCF-13648 | [no value] | XCF delivery support | Xerocon Melbourne 2027",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218306390936185": {
       "code": "XCF-13631",
       "name": "[no value] | [no value] | XCF delivery support | FY28 NZ XPAS event",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218306385297522": {
       "code": "XCF-13626",
@@ -3486,28 +3611,32 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218304523303251": {
       "code": "XCF-13613",
       "name": "XCF-13613 | XCF Slack emojis",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218306352894050": {
       "code": "XCF-13591",
       "name": "XCF-13591 | SSC Linked In tile",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218306343046919": {
       "code": "XCF-13584",
       "name": "XCF-13584 | Holiday store swag promo",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218301401635702": {
       "code": "XCF-13579",
@@ -3520,7 +3649,8 @@
         }
       ],
       "summary": "No human discussion recorded — only an automated flag against a previous co-branded banner job.",
-      "cause": "Unexplained"
+      "cause": "Unexplained",
+      "causedAt": "2026-10-20"
     },
     "1218286278545643": {
       "code": "XCF-13574",
@@ -3628,7 +3758,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218252126129315": {
       "code": "XCF-13564",
@@ -3641,49 +3772,56 @@
         }
       ],
       "summary": "No blocker recorded. Converted and assigned on 8 Sep with no discussion beyond the handover note.",
-      "cause": "Unexplained"
+      "cause": "Unexplained",
+      "causedAt": "2026-10-20"
     },
     "1218213791826507": {
       "code": "XCF-12076",
       "name": "XCF-12076 | Blog header image: Xero x Anthropic, Xerocon US",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218207733628585": {
       "code": "XCF-11710",
       "name": "XCF-11710 | Canva XCF approvals",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218207733628576": {
       "code": "XCF-11705",
       "name": "XCF-11705 | Sprint | 31st - 4th Sep",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218207733628567": {
       "code": "XCF-11700",
       "name": "XCF - 11700 | Sprint | 7th - 11th Sep",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218207962551413": {
       "code": "XCF-11692",
       "name": "XCF-11687 | Sprint | 14th - 18th September",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218207962551399": {
       "code": "XCF-11687",
       "name": "XCF-11692 | Sprint | 21st - 25th September",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218170817279172": {
       "code": "XCF-10865",
@@ -3696,7 +3834,8 @@
         }
       ],
       "summary": "Single request comment with a fixed 9 Sep comms deadline. No back-and-forth.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1218138586922005": {
       "code": "XCF-10771",
@@ -3714,7 +3853,8 @@
         }
       ],
       "summary": "**Blocked on inputs that never arrived.** Waiting on event photography; resolved once the requester confirmed generic imagery was acceptable.",
-      "cause": "Requester-side"
+      "cause": "Requester-side",
+      "causedAt": "2026-10-20"
     },
     "1218135957033848": {
       "code": "XCF-10733",
@@ -3757,7 +3897,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218128089210086": {
       "code": "XCF-10682",
@@ -3780,7 +3921,8 @@
         }
       ],
       "summary": "**Queued behind Roadshow work.** Scope was agreed the same day; the requester chased on 7 Sep before it moved.",
-      "cause": "Capacity queue"
+      "cause": "Capacity queue",
+      "causedAt": "2026-10-20"
     },
     "1218113925952836": {
       "code": "XCF-10681",
@@ -3808,7 +3950,8 @@
         }
       ],
       "summary": "**Incomplete brief.** Two rounds of questions on channels and specs before the requester supplied usage context on 8 Sep.",
-      "cause": "Brief & scoping"
+      "cause": "Brief & scoping",
+      "causedAt": "2026-10-20"
     },
     "1218122998453238": {
       "code": "XCF-10680",
@@ -3826,7 +3969,8 @@
         }
       ],
       "summary": "Clean routing, no blockers — assigned to the studio for the following sprint.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1218078610220722": {
       "code": "XCF-10648",
@@ -3844,7 +3988,8 @@
         }
       ],
       "summary": "**Waiting on access, not capacity.** Assigned to Logen on day one, but he needed access to the requester’s source sheet and the handover stalled there.",
-      "cause": "Access & permissions"
+      "cause": "Access & permissions",
+      "causedAt": "2026-10-20"
     },
     "1218078262167491": {
       "code": "XCF-10647",
@@ -3862,7 +4007,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1218067536923828": {
       "code": "XCF-10616",
@@ -4000,7 +4146,8 @@
         }
       ],
       "summary": "Deck access needed first, then a long but productive thread agreeing which merch items to refresh.",
-      "cause": "Access & permissions"
+      "cause": "Access & permissions",
+      "causedAt": "2026-10-20"
     },
     "1218038063760973": {
       "code": "XCF-10598",
@@ -4048,7 +4195,8 @@
         }
       ],
       "summary": "**Active throughout.** Time went on pinning down exactly which rows changed, then locating the working InDesign files. Delivered 4 Sep.",
-      "cause": "Creative iteration"
+      "cause": "Creative iteration",
+      "causedAt": "2026-10-20"
     },
     "1218003783601972": {
       "code": "XCF-10565",
@@ -4206,7 +4354,8 @@
         }
       ],
       "summary": "**Long creative iteration** — 30 comments reconciling brief versions, then several rounds on copy and design direction.",
-      "cause": "Creative iteration"
+      "cause": "Creative iteration",
+      "causedAt": "2026-10-20"
     },
     "1217998532518195": {
       "code": "XCF-10543",
@@ -4254,7 +4403,8 @@
         }
       ],
       "summary": "**Held for regional feedback** that changed the headlines. Resumed once updated messaging came back.",
-      "cause": "Approval cycle"
+      "cause": "Approval cycle",
+      "causedAt": "2026-10-20"
     },
     "1217996809406601": {
       "code": "XCF-10533",
@@ -4317,7 +4467,8 @@
         }
       ],
       "summary": "**Stakeholder approval cycle.** Copy went to region, the owner went on leave, cover had to re-request document access, then another feedback round followed.",
-      "cause": "Approval cycle"
+      "cause": "Approval cycle",
+      "causedAt": "2026-10-20"
     },
     "1217996047123477": {
       "code": "XCF-10530",
@@ -4330,7 +4481,8 @@
         }
       ],
       "summary": "Booked straight into the following week’s sprint. No blockers.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1217902343187988": {
       "code": "XCF-10447",
@@ -4403,7 +4555,8 @@
         }
       ],
       "summary": "**Stalled twice.** First on Google Slides edit access, then a round of design feedback sat unactioned for two weeks — Logen acknowledged the miss on 24 Sep.",
-      "cause": "Dropped"
+      "cause": "Dropped",
+      "causedAt": "2026-10-20"
     },
     "1217896257579749": {
       "code": "XCF-10437",
@@ -4456,7 +4609,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1217896144286131": {
       "code": "XCF-10434",
@@ -4479,14 +4633,16 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1217860240731094": {
       "code": "XCF-10395",
       "name": "XCF-10395 - New video intro and outro",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1217836028174143": {
       "code": "XCF-10378",
@@ -4529,7 +4685,8 @@
         }
       ],
       "summary": "Scheduled into the following week’s sprint as agreed. A wrong template link added one extra round.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1217767652827495": {
       "code": "XCF-10364",
@@ -4577,7 +4734,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1217779616964205": {
       "code": "XCF-10348",
@@ -4610,14 +4768,16 @@
         }
       ],
       "summary": "**Date renegotiated upfront.** XCF flagged the Canva rebuild would not make the Monday driver; the requester accepted end of the following week.",
-      "cause": "No blocker"
+      "cause": "No blocker",
+      "causedAt": "2026-10-20"
     },
     "1217769045611792": {
       "code": "XCF-10342",
       "name": "XCF-10342 | AIM Motion R1 - SB | AB - AI MODULAR Video Creative Brief",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1217772702375842": {
       "code": "XCF-10337",
@@ -4665,7 +4825,8 @@
         }
       ],
       "summary": "**Access first, then a date reset.** Stalled on document access, then the 3 Sep driver was declined as unachievable and the requester moved their launch.",
-      "cause": "Access & permissions"
+      "cause": "Access & permissions",
+      "causedAt": "2026-10-20"
     },
     "1217695742491717": {
       "code": "XCF-10091",
@@ -4758,7 +4919,8 @@
         }
       ],
       "summary": "**Ambiguous brief, then external dependency.** Three exchanges to establish what \"email sign off artwork\" meant, after which delivery depended on the brand refresh rollout and IT — outside XCF’s control.",
-      "cause": "Brief & scoping"
+      "cause": "Brief & scoping",
+      "causedAt": "2026-10-20"
     },
     "1217674186640058": {
       "code": "XCF-10082",
@@ -4801,7 +4963,8 @@
         }
       ],
       "summary": "**Blocked on content-owner approval.** Pete asked repeatedly whether permission existed to reuse the Xerocon decks; it had not been obtained.",
-      "cause": "Approval cycle"
+      "cause": "Approval cycle",
+      "causedAt": "2026-10-20"
     },
     "1217632873618639": {
       "code": "XCF-10041",
@@ -4834,7 +4997,8 @@
         }
       ],
       "summary": "**Not an XCF delay.** Deliberately placed On Hold because Product & Engineering pushed the underlying release. Requester confirmed a new date of 12 Oct.",
-      "cause": "Requester-side"
+      "cause": "Requester-side",
+      "causedAt": "2026-10-20"
     },
     "1217625917069232": {
       "code": "XCF-10026",
@@ -4847,7 +5011,8 @@
         }
       ],
       "summary": "**Incomplete brief.** Could not kick off until the brief was finished and approved by the stakeholder.",
-      "cause": "Brief & scoping"
+      "cause": "Brief & scoping",
+      "causedAt": "2026-10-20"
     },
     "1217448989669529": {
       "code": "XCF-9873",
@@ -4960,7 +5125,8 @@
         }
       ],
       "summary": "**Kick-off blocked by the calendar, then rescoped.** The kick-off had to wait for Xerocon and the leadership summit; the call then cut scope from 84 variants to 7 videos.",
-      "cause": "Brief & scoping"
+      "cause": "Brief & scoping",
+      "causedAt": "2026-10-20"
     },
     "1217447997440488": {
       "code": "XCF-9865",
@@ -5038,14 +5204,16 @@
         }
       ],
       "summary": "**Rerouted, then waiting on product files.** Passed to AI & Media, who needed product Figma files; design direction also shifted away from product GIFs mid-flight.",
-      "cause": "Access & permissions"
+      "cause": "Access & permissions",
+      "causedAt": "2026-10-20"
     },
     "1217363848610916": {
       "code": "XCF-9761",
       "name": "XCF-9761 - Xero/Melio Co-branded Visual Assets",
       "comments": [],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1217333575043907": {
       "code": "XCF-9750",
@@ -5063,7 +5231,8 @@
         }
       ],
       "summary": "**Arrived unbriefed.** Quincey had to establish where the screens appeared and what action they drove before anything could start.",
-      "cause": "Brief & scoping"
+      "cause": "Brief & scoping",
+      "causedAt": "2026-10-20"
     },
     "1217320290089434": {
       "code": "XCF-9744",
@@ -5086,7 +5255,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1217319357714971": {
       "code": "XCF-9742",
@@ -5119,7 +5289,8 @@
         }
       ],
       "summary": "**Requester-side delay.** XCF engaged within a week, then the requester was travelling and took two weeks to reply. Scope also grew from assets to a full logo needing internal brand feedback.",
-      "cause": "Requester-side"
+      "cause": "Requester-side",
+      "causedAt": "2026-10-20"
     },
     "1217312738377162": {
       "code": "XCF-9725",
@@ -5177,7 +5348,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1217266773836326": {
       "code": "XCF-9598",
@@ -5195,7 +5367,8 @@
         }
       ],
       "summary": "Routed and assigned within a day, then no further discussion recorded. The thread does not explain the wait.",
-      "cause": "Unexplained"
+      "cause": "Unexplained",
+      "causedAt": "2026-10-20"
     },
     "1217209763378137": {
       "code": "XCF-9498",
@@ -5298,7 +5471,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1217180912246449": {
       "code": "XCF-9414",
@@ -5321,7 +5495,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1217107505402166": {
       "code": "XCF-9221",
@@ -5514,7 +5689,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     },
     "1216951170275692": {
       "code": "XCF-8977",
@@ -5552,7 +5728,8 @@
         }
       ],
       "summary": null,
-      "cause": null
+      "cause": null,
+      "causedAt": null
     }
   }
 }

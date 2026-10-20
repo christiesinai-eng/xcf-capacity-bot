@@ -903,6 +903,19 @@ function rqFmtDur(h){
   return'<span class="rq-dur" style="color:'+col+'">'+txt+'</span>';
 }
 const RQ_TYPE_COL={'Roadmap':'#6C8EF5','Micro (BAU)':'#4CAF8A','XCF initiative':'#F5A623','Unset':'#8b9abf'};
+function rqShortDate(iso){
+  if(!iso)return'';
+  return new Date(iso+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'});
+}
+// Causes are assigned by hand, so the panel says how old that reading is. A single
+// date when they were all tagged together, a range once they have been topped up.
+function rqCauseStamp(rows){
+  const ds=[...new Set(rows.map(r=>r.causedAt).filter(Boolean))].sort();
+  if(!ds.length)return'';
+  return ds.length===1
+    ? ' · tagged '+rqShortDate(ds[0])
+    : ' · tagged '+rqShortDate(ds[0])+'–'+rqShortDate(ds[ds.length-1]);
+}
 function rqMedian(arr){
   if(!arr.length)return null;
   const s=arr.slice().sort((a,b)=>a-b);
@@ -961,7 +974,7 @@ function renderRequests(){
   document.getElementById('rq-breakdowns').innerHTML=
     rqBreakdown('Median wait by quarter',r=>r.quarter,quarters)+
     rqBreakdown('Median wait by project type',r=>r.projectType,['Roadmap','Micro (BAU)','XCF initiative','Unset'])+
-    (caused.length?rqBreakdown('Median wait by cause — '+caused.length+' classified',r=>r.cause,CAUSE_ORDER,caused):'');
+    (caused.length?rqBreakdown('Median wait by cause — '+caused.length+' classified'+rqCauseStamp(caused),r=>r.cause,CAUSE_ORDER,caused):'');
 
   const measured=REQUESTS_DATA.filter(r=>r.durationHours!==null&&r.durationHours!==undefined);
   const sorted=measured.map(r=>r.durationHours).sort((a,b)=>a-b);
@@ -1029,7 +1042,8 @@ function renderRequests(){
       const CAUSE_COL={'Access & permissions':'#F5A623','Brief & scoping':'#CF89FE','Capacity queue':'#3eccff',
         'Approval cycle':'#FDCC08','Requester-side':'#FF719B','Creative iteration':'#6AEAAA',
         'Misrouted':'#FF719B','Dropped':'#FF719B','No blocker':'#8b9abf','Unexplained':'#8b9abf'};
-      const tag=r.cause?'<div style="margin-bottom:4px"><span class="rq-type" style="color:'+(CAUSE_COL[r.cause]||'var(--muted)')+';border-color:'+(CAUSE_COL[r.cause]||'var(--muted)')+'">'+r.cause+'</span></div>':'';
+      const tag=r.cause?'<div style="margin-bottom:4px"><span class="rq-type" style="color:'+(CAUSE_COL[r.cause]||'var(--muted)')+';border-color:'+(CAUSE_COL[r.cause]||'var(--muted)')+'">'+r.cause+'</span>'+
+        (r.causedAt?'<span style="font-size:9.5px;color:var(--muted);margin-left:6px" title="Cause assigned on this date — reviewed by hand, not auto-updated">'+rqShortDate(r.causedAt)+'</span>':'')+'</div>':'';
       let why;
       if(r.summaryHtml)why=tag+r.summaryHtml;
       else if(r.durationHours===null||r.durationHours===undefined)why='<span class="rq-none">No linked project marked On Track</span>';

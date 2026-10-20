@@ -266,6 +266,7 @@ async function buildRequestsData() {
       summary: priorReq.summary || null,
       // Hand-assigned delay cause; see the skill for the taxonomy.
       cause: priorReq.cause || null,
+      causedAt: priorReq.causedAt || null,
     };
   });
 
@@ -281,6 +282,7 @@ async function buildRequestsData() {
       comments: r.comments,
       summary: r.summary,
       cause: r.cause,
+      causedAt: r.causedAt,
     };
   }
   try { fs.writeFileSync(CACHE_PATH, JSON.stringify(nextCache, null, 2)); }
