@@ -130,30 +130,48 @@ writes `reports/xcf-report-YYYY-MM-DD.html` → deploy that file.
 ### 9. Request Cycle Time Tab
 **Data builder:** `buildRequestsData()` in `src/requestTiming.js`
 **Source:** XCF | Requests (`1215906401561993`) + XCF | Projects portfolio
-**Measures:** Request `created_at` → the linked project's first **On Track** status update
+**Measures:** Request `created_at` → whichever of these the linked project hits first:
+1. its first **On Track** status update (`project_statuses` entry with `color: green`)
+2. its **`Status (XCF)` set to In Progress** (`enum_custom_field_changed` in project stories)
+
 **Shows:** Coverage box, median wait broken down by fiscal quarter and project type,
-then a filterable table with an AI-written explanation of each wait.
+then a filterable table (sortable by duration) with a written explanation of each wait.
+The "Work started" column labels which of the two signals fired.
 
-**Why On Track and not `Status (XCF) = In Progress`:**
-The original ask was to measure to `Status (XCF) = In Progress`. Two things ruled that out:
-- On *request tasks* that value is never used — 0 of 100 sampled requests ever hit it.
-- On *projects* it is used (131 at last count), but Asana exposes **no change history for a
-  project's custom fields**. There is no project equivalent of `/tasks/{gid}/stories`, and
-  `/workspaces/{gid}/audit_log_events` returns `403 — Auth token must belong to service
-  account`. So the moment a project became In Progress is simply not retrievable.
+**Projects DO have an activity log — don't repeat this mistake.** An earlier version of
+this skill claimed a project's custom-field history was unobtainable, reasoning from
+`/workspaces/{gid}/audit_log_events` returning `403 — Auth token must belong to service
+account`. That inference was wrong and the endpoint was never tested. **`/projects/{gid}/stories`
+exists** and records `enum_custom_field_changed` with timestamps, exactly like tasks:
 
-The project's first `color: green` status update is the only dated "work started" signal
-available, so that is what the tab measures.
+```
+/projects/1213702136901618/stories
+  → 2026-09-06T11:14  enum_custom_field_changed  Status (XCF)  →  In Progress
+```
+
+Adding that signal took coverage from 48 to 94 of 411 requests. In Progress is the
+**stronger** of the two, dating 59 requests against On Track's 35. When reaching for
+project history, test `/projects/{gid}/stories` before concluding anything is unavailable.
+
+**`Status (XCF) = In Progress` is a PROJECT value, not a request one.** On request tasks it
+is never used — 0 of 100 sampled. Requests only ever move New Request → Hero Awareness /
+Additional Information / Cancelled / Complete. Read it off the project.
 
 **Request → project linking is name-based and lossy.** Asana keeps no relationship once a
 task is converted to a project. The join is the `XCF-####` code appearing in both names.
 Of 428 projects: 254 use `XCF-####` (matchable), 94 use `XCFP-###`, 49 use `XCFT-###`,
 31 have no code. Roughly 40% can never be matched.
 
-**Coverage is deliberately prominent.** Only ~48 of ~412 requests have a measurable cycle.
-The coverage box at the top of the tab states this in plain numbers so the medians are
-never read as covering everything. It is an adoption metric — it rises as the team posts
-project status updates.
+**Coverage is deliberately prominent.** Only ~94 of ~411 requests have a measurable cycle.
+The coverage box at the top of the tab states this in plain numbers, split by which signal
+dated each one, so the medians are never read as covering everything. It is an adoption
+metric — it rises as the team posts project status updates and sets Status (XCF).
+
+**Caching note:** the cached project entry is keyed on `startedAt`. If you add or change a
+start signal, clear `cache.projects` (keep `cache.requests` — the summaries live there) so
+every project is re-evaluated. The staleness check is `startedAt === undefined`, not a
+truthiness test, so a genuine "no start date" result stays cached rather than refetching
+forever.
 
 **Comment summaries** live in `request-timing-cache.json` under `requests[gid].summary`,
 hand-written (see "Regenerate the request summaries" below). The builder preserves them
