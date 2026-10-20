@@ -135,7 +135,24 @@ async function buildRegionalData() {
   }
   out.unrecognised.sort((a, b) => a.raw.localeCompare(b.raw));
 
+  // Project type was made mandatory at intake in Sep 2026, so the unset rows are a
+  // historical backlog rather than an ongoing gap. Tracking completion by month lets
+  // the tab say that from the data instead of hardcoding the claim.
+  const byMonth = {};
+  for (const x of live) {
+    const k = x.created_at.slice(0, 7);
+    byMonth[k] = byMonth[k] || { n: 0, set: 0 };
+    byMonth[k].n++;
+    if (enumV(x, F.type)) byMonth[k].set++;
+  }
+  const typeCompletion = Object.keys(byMonth).sort().map(month => ({
+    month,
+    n: byMonth[month].n,
+    pct: Math.round(byMonth[month].set / byMonth[month].n * 100),
+  }));
+
   out.meta = {
+    typeCompletion,
     totalInWindow: live.length,
     cancelledExcluded: tasks.filter(t =>
       t.created_at && QUARTERS.includes(fiscalQuarter(t.created_at)) && enumV(t, F.status) === 'Cancelled').length,

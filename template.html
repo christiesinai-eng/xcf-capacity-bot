@@ -1128,6 +1128,11 @@ function renderRequests(){
 // regions could not be told apart. Bars label each row directly, need no legend,
 // and stay readable whether there are 6 categories or 20.
 const RG_MAX_ROWS=10;
+function rgMonthName(ym){
+  if(!ym)return'';
+  const [y,m]=ym.split('-');
+  return new Date(Date.UTC(+y,+m-1,1)).toLocaleDateString('en-GB',{month:'short',year:'2-digit',timeZone:'UTC'});
+}
 function rgEscape(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function rgPanel(p){
   if(!p.rows.length){
@@ -1196,9 +1201,20 @@ function renderRegional(){
   }
   body.innerHTML=h;
 
+  // The unset rows are a legacy backlog, not a live problem — Project type became
+  // mandatory at intake in Sep 2026. Say so from the monthly trend rather than
+  // letting the raw count read as an ongoing gap.
+  let typeNote='';
+  const tc=m.typeCompletion||[];
+  if(m.typeUnset&&tc.length){
+    const last=tc[tc.length-1], first=tc[0];
+    typeNote='<strong>'+m.typeUnset+' of '+m.totalInWindow+' requests have no Project type set</strong>, so they appear in neither the Roadmap nor Micro (BAU) charts. '+
+      'These are nearly all older requests: completion has gone from '+first.pct+'% in '+rgMonthName(first.month)+
+      ' to <strong>'+last.pct+'% in '+rgMonthName(last.month)+'</strong> since Project type became mandatory at intake, so recent quarters are close to complete. ';
+  }
   document.getElementById('rg-note').innerHTML=
     'Requests are counted by submission date. A request tagged with several regions counts once per region, so region totals exceed the request count. '+
-    (m.typeUnset?'<strong>'+m.typeUnset+' of '+m.totalInWindow+' requests have no Project type set</strong> and so appear in neither the Roadmap nor Micro (BAU) charts. ':'')+
+    typeNote+
     'Shown as bars rather than pies: a pie separates categories by colour alone, which stops working past about three slices — bars label each row directly and stay readable at any count.';
 }
 
