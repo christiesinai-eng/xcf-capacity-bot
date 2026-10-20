@@ -5,6 +5,7 @@ const { asanaClient, batchedMap } = require('./asana');
 const REQUESTS_PROJECT_GID = '1215906401561993'; // XCF | Requests
 const PM_PORTFOLIO_GID = '1217210785824637';     // XCF | Projects
 const STATUS_FIELD_GID = '1211986892220398';     // Status (XCF)
+const IN_PROGRESS_GID = '1211986892220400';      // Status (XCF) → "In Progress"
 const XCF_CODE_FIELD_GID = '1213726159416934';   // "XCF" text field, e.g. XCF-18696
 const PODS_FIELD_GID = '1211165589636938';       // PODS (XCF)
 const REQUESTER_FIELD_GID = '1218344624492289';  // Requester (XCF)
@@ -74,17 +75,44 @@ async function paginate(client, url, params) {
   return out;
 }
 
-async function fetchProjectOnTrack(client, projectGid) {
-  const ups = await paginate(client, `/projects/${projectGid}/project_statuses`, {
-    opt_fields: 'gid,created_at,color,title',
-  });
-  // Oldest-last from Asana, so walk ascending to find the FIRST time it went green.
+// "Work started" has two independent signals and either can come first:
+//   1. the project posting an On Track (green) status update
+//   2. the project's Status (XCF) field being set to In Progress
+// Projects do expose an activity log at /projects/{gid}/stories — which records
+// custom-field changes with timestamps — so both are datable and we take the earlier.
+async function fetchProjectStart(client, projectGid) {
+  const [ups, stories] = await Promise.all([
+    paginate(client, `/projects/${projectGid}/project_statuses`, {
+      opt_fields: 'gid,created_at,color,title',
+    }).catch(() => []),
+    paginate(client, `/projects/${projectGid}/stories`, {
+      opt_fields: 'created_at,resource_subtype,custom_field.gid,new_enum_value.gid',
+      sort_ascending: true,
+    }).catch(() => []),
+  ]);
+
   const asc = ups.slice().sort((a, b) => a.created_at.localeCompare(b.created_at));
   const green = asc.find(u => u.color === ON_TRACK_COLOR);
+  const firstOnTrackAt = green ? green.created_at : null;
+
+  const ip = stories.find(s =>
+    s.resource_subtype === 'enum_custom_field_changed' &&
+    s.custom_field?.gid === STATUS_FIELD_GID &&
+    s.new_enum_value?.gid === IN_PROGRESS_GID
+  );
+  const firstInProgressAt = ip ? ip.created_at : null;
+
+  const candidates = [firstOnTrackAt, firstInProgressAt].filter(Boolean).sort();
+  const startedAt = candidates[0] || null;
+
   return {
-    firstOnTrackAt: green ? green.created_at : null,
+    firstOnTrackAt,
+    firstInProgressAt,
+    startedAt,
+    startedBy: startedAt
+      ? (startedAt === firstInProgressAt ? 'In Progress' : 'On Track')
+      : null,
     firstStatusAt: asc.length ? asc[0].created_at : null,
-    statusCount: asc.length,
   };
 }
 
@@ -167,15 +195,25 @@ async function buildRequestsData() {
   const projectsToFetch = matched
     .map(m => m.project)
     .filter((p, i, arr) => arr.findIndex(x => x.gid === p.gid) === i)
-    .filter(p => !cache.projects[p.gid]?.firstOnTrackAt);
+    .filter(p => cache.projects[p.gid]?.startedAt === undefined);
 
   const projectTiming = {};
-  let pFail = 0;
+  const pErrs = {};
+  // Two endpoints per project, so this is the heaviest part of the build. Smaller
+  // batches with a longer gap keep it under Asana's burst limit; a failure here must
+  // stay uncached so the next run retries rather than freezing in a wrong answer.
   await batchedMap(projectsToFetch, async (p) => {
-    try { projectTiming[p.gid] = await fetchProjectOnTrack(client, p.gid); }
-    catch (err) { pFail++; }
-  }, 5, 300);
-  if (pFail) console.warn(`[Requests] ${pFail} project status lookups failed`);
+    try { projectTiming[p.gid] = await fetchProjectStart(client, p.gid); }
+    catch (err) {
+      const key = `${err.response?.status || 'ERR'} ${err.response?.data?.errors?.[0]?.message || err.message}`.slice(0, 80);
+      pErrs[key] = (pErrs[key] || 0) + 1;
+    }
+  }, 3, 600);
+  const pFail = Object.values(pErrs).reduce((a, b) => a + b, 0);
+  if (pFail) {
+    console.warn(`[Requests] ${pFail}/${projectsToFetch.length} project lookups failed:`);
+    Object.entries(pErrs).forEach(([k, v]) => console.warn(`           x${v}  ${k}`));
+  }
 
   // Comments are only worth fetching for rows that have a measurable cycle.
   const commentsToFetch = matched.filter(m => !cache.requests[m.request.gid]?.comments);
@@ -197,7 +235,7 @@ async function buildRequestsData() {
     const comments = freshComments[r.gid] || priorReq.comments || [];
 
     const submittedAt = r.created_at;
-    const onTrackAt = timing.firstOnTrackAt || null;
+    const onTrackAt = timing.startedAt || null;
     const durationHours = onTrackAt
       ? Math.round(((new Date(onTrackAt) - new Date(submittedAt)) / 3600000) * 10) / 10
       : null;
@@ -221,6 +259,7 @@ async function buildRequestsData() {
       projectStatus: m ? enumValue(m.project, STATUS_FIELD_GID) : null,
       submittedAt,
       onTrackAt,
+      startedBy: timing.startedBy || null,
       durationHours,
       commentCount: comments.length,
       comments,

@@ -1,889 +1,1243 @@
 {
   "projects": {
-    "1219675656462298": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
     "1219674283071380": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1219675469580121": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
-    "1219658987035455": {
+    "1219675656462298": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1219669571402190": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
-    "1219600496766949": {
+    "1219658987035455": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1219609925088309": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1219628085912745": {
-      "firstOnTrackAt": "2026-10-19T23:13:33.057Z",
-      "firstStatusAt": "2026-10-19T23:13:33.057Z",
-      "statusCount": 1
-    },
-    "1219609925882014": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1219658120344920": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1219609925882014": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1219600496766949": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1219628085912745": {
+      "firstOnTrackAt": "2026-10-19T23:13:33.057Z",
+      "firstInProgressAt": "2026-10-19T23:13:43.027Z",
+      "startedAt": "2026-10-19T23:13:33.057Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-10-19T23:13:33.057Z"
     },
     "1219605440328248": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
-    "1219599443571155": {
-      "firstOnTrackAt": "2026-10-19T04:10:00.834Z",
-      "firstStatusAt": "2026-10-19T04:10:00.834Z",
-      "statusCount": 1
-    },
-    "1219598730744089": {
+    "1219609925088309": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1219607131636928": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1219599443571155": {
+      "firstOnTrackAt": "2026-10-19T04:10:00.834Z",
+      "firstInProgressAt": "2026-10-19T04:10:13.602Z",
+      "startedAt": "2026-10-19T04:10:00.834Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-10-19T04:10:00.834Z"
+    },
+    "1219598730744089": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1219590261991090": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1219589615927396": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1219467920598195": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1219530647329863": {
       "firstOnTrackAt": "2026-10-18T23:24:58.756Z",
-      "firstStatusAt": "2026-10-18T23:24:58.756Z",
-      "statusCount": 1
+      "firstInProgressAt": "2026-10-18T23:25:23.751Z",
+      "startedAt": "2026-10-18T23:24:58.756Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-10-18T23:24:58.756Z"
+    },
+    "1219589615927396": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1219481576718241": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-10-14T07:25:23.818Z",
-      "statusCount": 1
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-10-14T07:25:23.818Z"
     },
-    "1219453218574136": {
+    "1219467920598195": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-10-20T00:47:12.050Z",
-      "statusCount": 1
-    },
-    "1219432258156962": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1219453040861082": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-10-15T14:57:54.619Z",
-      "statusCount": 1
+      "firstInProgressAt": "2026-10-13T20:42:27.290Z",
+      "startedAt": "2026-10-13T20:42:27.290Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-10-15T14:57:54.619Z"
+    },
+    "1219453218574136": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-10-20T00:47:12.050Z"
     },
     "1219429641687483": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1219432258156962": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1219432325349228": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1219399410870775": {
-      "firstOnTrackAt": "2026-10-13T02:26:27.932Z",
-      "firstStatusAt": "2026-10-13T02:26:27.932Z",
-      "statusCount": 1
-    },
-    "1219294439234574": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1219395958995126": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1219294685543005": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1219294438465618": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1219345030360555": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-10-11T22:15:32.321Z",
-      "statusCount": 1
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-10-11T22:15:32.321Z"
     },
-    "1219291029768102": {
+    "1219399410870775": {
+      "firstOnTrackAt": "2026-10-13T02:26:27.932Z",
+      "firstInProgressAt": null,
+      "startedAt": "2026-10-13T02:26:27.932Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-10-13T02:26:27.932Z"
+    },
+    "1219294438465618": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-10-08T22:09:00.632Z",
-      "statusCount": 1
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
-    "1219294161307720": {
+    "1219294439234574": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-10-12T23:04:14.878Z",
+      "startedAt": "2026-10-12T23:04:14.878Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
-    "1219234457768277": {
+    "1219294685543005": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-10-06T18:23:50.421Z",
-      "statusCount": 1
-    },
-    "1219290570560554": {
-      "firstOnTrackAt": "2026-10-08T03:07:14.565Z",
-      "firstStatusAt": "2026-10-08T03:07:14.565Z",
-      "statusCount": 2
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1219290839515085": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-10-13T03:32:12.246Z",
+      "startedAt": "2026-10-13T03:32:12.246Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
-    "1219195238588044": {
+    "1219291029768102": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-10-12T00:00:28.067Z",
-      "statusCount": 1
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-10-08T22:09:00.632Z"
     },
-    "1219160539679512": {
+    "1219294161307720": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-10-12T23:08:50.238Z",
+      "startedAt": "2026-10-12T23:08:50.238Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
-    "1219196449398884": {
-      "firstOnTrackAt": "2026-10-09T02:22:06.710Z",
-      "firstStatusAt": "2026-10-09T02:22:06.710Z",
-      "statusCount": 1
+    "1219234457768277": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-10-06T18:23:50.421Z"
     },
-    "1219436171721676": {
-      "firstOnTrackAt": "2026-10-13T03:59:50.031Z",
-      "firstStatusAt": "2026-10-13T03:59:50.031Z",
-      "statusCount": 1
+    "1219290570560554": {
+      "firstOnTrackAt": "2026-10-08T03:07:14.565Z",
+      "firstInProgressAt": "2026-10-08T22:46:39.502Z",
+      "startedAt": "2026-10-08T03:07:14.565Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-10-08T03:07:14.565Z"
     },
     "1219229581909345": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-10-07T20:55:31.841Z",
-      "statusCount": 1
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-10-07T20:55:31.841Z"
     },
-    "1219160274779102": {
+    "1219195238588044": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-10-12T00:00:28.067Z"
     },
-    "1219097477031844": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+    "1219196449398884": {
+      "firstOnTrackAt": "2026-10-09T02:22:06.710Z",
+      "firstInProgressAt": "2026-10-09T02:22:18.264Z",
+      "startedAt": "2026-10-09T02:22:06.710Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-10-09T02:22:06.710Z"
     },
-    "1219097247703190": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+    "1219436171721676": {
+      "firstOnTrackAt": "2026-10-13T03:59:50.031Z",
+      "firstInProgressAt": "2026-10-18T23:00:48.173Z",
+      "startedAt": "2026-10-13T03:59:50.031Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-10-13T03:59:50.031Z"
     },
-    "1219097541115249": {
+    "1219160539679512": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-10-08T03:36:21.834Z",
+      "startedAt": "2026-10-08T03:36:21.834Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
     "1219250515564896": {
       "firstOnTrackAt": "2026-10-07T05:24:16.652Z",
-      "firstStatusAt": "2026-10-07T05:24:16.652Z",
-      "statusCount": 2
+      "firstInProgressAt": "2026-10-07T05:19:29.050Z",
+      "startedAt": "2026-10-07T05:19:29.050Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-10-07T05:24:16.652Z"
     },
-    "1219094074193092": {
+    "1219160274779102": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-10-08T03:36:16.372Z",
+      "startedAt": "2026-10-08T03:36:16.372Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
-    "1219093742957254": {
+    "1219097477031844": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1219097541115249": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1219097247703190": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-10-13T03:32:10.037Z",
+      "startedAt": "2026-10-13T03:32:10.037Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
     "1219093743402576": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1219094074193092": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1219093742957254": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1219104161106925": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1219093873637548": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1219085779536537": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1219089747341738": {
       "firstOnTrackAt": "2026-10-06T04:06:04.390Z",
-      "firstStatusAt": "2026-10-06T04:06:04.390Z",
-      "statusCount": 1
+      "firstInProgressAt": "2026-10-06T04:06:14.399Z",
+      "startedAt": "2026-10-06T04:06:04.390Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-10-06T04:06:04.390Z"
     },
-    "1219089313130238": {
-      "firstOnTrackAt": "2026-10-14T00:57:11.128Z",
-      "firstStatusAt": "2026-10-14T00:57:11.128Z",
-      "statusCount": 2
-    },
-    "1219044102313587": {
+    "1219093873637548": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1219050867527478": {
       "firstOnTrackAt": "2026-10-02T03:10:48.969Z",
-      "firstStatusAt": "2026-10-02T03:10:48.969Z",
-      "statusCount": 2
+      "firstInProgressAt": "2026-10-06T23:14:48.172Z",
+      "startedAt": "2026-10-02T03:10:48.969Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-10-02T03:10:48.969Z"
+    },
+    "1219089313130238": {
+      "firstOnTrackAt": "2026-10-14T00:57:11.128Z",
+      "firstInProgressAt": "2026-10-14T00:57:29.527Z",
+      "startedAt": "2026-10-14T00:57:11.128Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-10-14T00:57:11.128Z"
+    },
+    "1219085779536537": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1219016210216867": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-30T23:55:05.506Z",
-      "statusCount": 1
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-30T23:55:05.506Z"
     },
-    "1218969563299634": {
+    "1219044102313587": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1219014073122449": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-30T23:59:14.642Z",
-      "statusCount": 1
-    },
-    "1218974098394076": {
-      "firstOnTrackAt": "2026-09-30T01:23:06.185Z",
-      "firstStatusAt": "2026-09-30T01:23:06.185Z",
-      "statusCount": 2
+      "firstInProgressAt": "2026-10-08T00:15:47.435Z",
+      "startedAt": "2026-10-08T00:15:47.435Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
     "1219014357098560": {
       "firstOnTrackAt": "2026-10-02T03:05:52.493Z",
-      "firstStatusAt": "2026-10-02T03:05:52.493Z",
-      "statusCount": 2
+      "firstInProgressAt": "2026-10-05T22:23:12.852Z",
+      "startedAt": "2026-10-02T03:05:52.493Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-10-02T03:05:52.493Z"
+    },
+    "1218969563299634": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-10-06T03:39:14.372Z",
+      "startedAt": "2026-10-06T03:39:14.372Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
+    },
+    "1218974098394076": {
+      "firstOnTrackAt": "2026-09-30T01:23:06.185Z",
+      "firstInProgressAt": "2026-09-30T01:23:23.835Z",
+      "startedAt": "2026-09-30T01:23:06.185Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-30T01:23:06.185Z"
+    },
+    "1219014073122449": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-30T23:59:14.642Z"
     },
     "1218967136107454": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-30T01:28:18.130Z",
-      "statusCount": 1
-    },
-    "1218885114102275": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-30T01:28:18.130Z"
     },
     "1218968052651522": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218914383939147": {
-      "firstOnTrackAt": "2026-09-28T02:57:12.432Z",
-      "firstStatusAt": "2026-09-28T02:57:12.432Z",
-      "statusCount": 2
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1218948405312785": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-28T23:19:54.047Z",
-      "statusCount": 1
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-28T23:19:54.047Z"
     },
-    "1218852025531371": {
+    "1218885114102275": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-10-06T03:35:07.891Z",
+      "startedAt": "2026-10-06T03:35:07.891Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
-    "1218853610373875": {
-      "firstOnTrackAt": "2026-09-30T01:50:05.659Z",
-      "firstStatusAt": "2026-09-30T01:50:05.659Z",
-      "statusCount": 2
+    "1218914383939147": {
+      "firstOnTrackAt": "2026-09-28T02:57:12.432Z",
+      "firstInProgressAt": "2026-09-28T02:57:26.491Z",
+      "startedAt": "2026-09-28T02:57:12.432Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-28T02:57:12.432Z"
     },
     "1218883098393785": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-10-06T03:35:05.416Z",
+      "startedAt": "2026-10-06T03:35:05.416Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
     "1218855596028434": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-10-09T01:28:31.424Z",
+      "startedAt": "2026-10-09T01:28:31.424Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
-    "1218849670425809": {
+    "1218852025531371": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218853610373875": {
+      "firstOnTrackAt": "2026-09-30T01:50:05.659Z",
+      "firstInProgressAt": "2026-09-30T01:50:17.342Z",
+      "startedAt": "2026-09-30T01:50:05.659Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-30T01:50:05.659Z"
     },
     "1218848593975275": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-30T01:15:33.678Z",
-      "statusCount": 1
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-30T01:15:33.678Z"
     },
-    "1218778253002887": {
+    "1218849670425809": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-23T23:32:54.419Z",
-      "statusCount": 1
-    },
-    "1218806075158474": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218781952424545": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1218815759946021": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-10-13T03:32:07.297Z",
+      "startedAt": "2026-10-13T03:32:07.297Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
-    "1218771777229755": {
-      "firstOnTrackAt": "2026-10-11T22:56:17.229Z",
-      "firstStatusAt": "2026-10-11T22:56:17.229Z",
-      "statusCount": 1
-    },
-    "1218760805056188": {
+    "1218806075158474": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-10-06T03:39:22.601Z",
+      "startedAt": "2026-10-06T03:39:22.601Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
-    "1218768713916120": {
-      "firstOnTrackAt": "2026-09-30T02:05:05.413Z",
-      "firstStatusAt": "2026-09-30T02:05:05.413Z",
-      "statusCount": 2
-    },
-    "1218770900403415": {
+    "1218781952424545": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-23T23:35:44.732Z",
-      "statusCount": 1
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218778253002887": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-23T23:32:54.419Z"
     },
     "1218771082005045": {
       "firstOnTrackAt": "2026-09-23T23:41:00.024Z",
-      "firstStatusAt": "2026-09-23T23:41:00.024Z",
-      "statusCount": 2
+      "firstInProgressAt": "2026-09-27T23:44:17.521Z",
+      "startedAt": "2026-09-23T23:41:00.024Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-23T23:41:00.024Z"
     },
-    "1218727593588512": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+    "1218771777229755": {
+      "firstOnTrackAt": "2026-10-11T22:56:17.229Z",
+      "firstInProgressAt": "2026-10-11T22:56:27.312Z",
+      "startedAt": "2026-10-11T22:56:17.229Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-10-11T22:56:17.229Z"
     },
-    "1218727593588516": {
+    "1218770900403415": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218727874930126": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-23T23:35:44.732Z"
     },
     "1218736233871218": {
       "firstOnTrackAt": "2026-09-23T23:17:49.261Z",
-      "firstStatusAt": "2026-09-23T23:17:49.261Z",
-      "statusCount": 2
+      "firstInProgressAt": "2026-09-23T23:19:24.338Z",
+      "startedAt": "2026-09-23T23:17:49.261Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-23T23:17:49.261Z"
+    },
+    "1218760805056188": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218768713916120": {
+      "firstOnTrackAt": "2026-09-30T02:05:05.413Z",
+      "firstInProgressAt": "2026-10-07T00:05:22.812Z",
+      "startedAt": "2026-09-30T02:05:05.413Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-30T02:05:05.413Z"
+    },
+    "1218727874930126": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-10-06T03:39:47.509Z",
+      "startedAt": "2026-10-06T03:39:47.509Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
+    },
+    "1218727593588512": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-09-22T04:24:15.534Z",
+      "startedAt": "2026-09-22T04:24:15.534Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
+    },
+    "1218727593588516": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-09-22T04:24:15.551Z",
+      "startedAt": "2026-09-22T04:24:15.551Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
     "1218727593588508": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218700497176554": {
-      "firstOnTrackAt": "2026-09-22T04:43:34.176Z",
-      "firstStatusAt": "2026-09-22T04:43:34.176Z",
-      "statusCount": 2
-    },
-    "1218727593588504": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218727593588473": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": "2026-10-12T22:23:11.219Z",
-      "statusCount": 1
+      "firstInProgressAt": "2026-09-22T04:24:15.536Z",
+      "startedAt": "2026-09-22T04:24:15.536Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
     "1218727593588500": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-09-22T04:24:15.524Z",
+      "startedAt": "2026-09-22T04:24:15.524Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
+    },
+    "1218727593588504": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-09-22T04:24:15.554Z",
+      "startedAt": "2026-09-22T04:24:15.554Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
+    },
+    "1218700497176554": {
+      "firstOnTrackAt": "2026-09-22T04:43:34.176Z",
+      "firstInProgressAt": "2026-09-22T04:40:45.713Z",
+      "startedAt": "2026-09-22T04:40:45.713Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-22T04:43:34.176Z"
     },
     "1218727593588496": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-10-13T03:17:09.180Z",
-      "statusCount": 1
+      "firstInProgressAt": "2026-09-22T04:24:15.554Z",
+      "startedAt": "2026-09-22T04:24:15.554Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-10-13T03:17:09.180Z"
+    },
+    "1218727593588473": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-09-22T04:17:22.939Z",
+      "startedAt": "2026-09-22T04:17:22.939Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-10-12T22:23:11.219Z"
     },
     "1218689017352863": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1218687871208462": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-10-12T23:10:00.344Z",
-      "statusCount": 1
-    },
-    "1218615503181331": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-10-12T23:10:00.344Z"
     },
     "1218615504740810": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218610237203433": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218616162195473": {
-      "firstOnTrackAt": "2026-09-20T23:13:00.840Z",
-      "firstStatusAt": "2026-09-20T23:13:00.840Z",
-      "statusCount": 2
-    },
-    "1218570458910548": {
-      "firstOnTrackAt": "2026-09-21T00:40:41.998Z",
-      "firstStatusAt": "2026-09-21T00:40:41.998Z",
-      "statusCount": 2
+      "firstInProgressAt": "2026-10-08T21:54:23.179Z",
+      "startedAt": "2026-10-08T21:54:23.179Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
     "1218609682195312": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-25T18:41:00.370Z",
-      "statusCount": 1
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-25T18:41:00.370Z"
+    },
+    "1218610237203433": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218615503181331": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-10-08T21:54:19.267Z",
+      "startedAt": "2026-10-08T21:54:19.267Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
+    },
+    "1218616162195473": {
+      "firstOnTrackAt": "2026-09-20T23:13:00.840Z",
+      "firstInProgressAt": "2026-09-20T23:37:16.520Z",
+      "startedAt": "2026-09-20T23:13:00.840Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-20T23:13:00.840Z"
+    },
+    "1218570458910548": {
+      "firstOnTrackAt": "2026-09-21T00:40:41.998Z",
+      "firstInProgressAt": "2026-09-21T00:41:06.169Z",
+      "startedAt": "2026-09-21T00:40:41.998Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-21T00:40:41.998Z"
     },
     "1218575206668994": {
       "firstOnTrackAt": "2026-09-21T01:01:47.958Z",
-      "firstStatusAt": "2026-09-21T01:01:47.958Z",
-      "statusCount": 2
+      "firstInProgressAt": "2026-09-21T00:40:53.946Z",
+      "startedAt": "2026-09-21T00:40:53.946Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-21T01:01:47.958Z"
     },
     "1218525552197140": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-22T02:35:42.836Z",
-      "statusCount": 1
-    },
-    "1218486554805785": {
-      "firstOnTrackAt": "2026-09-16T23:23:54.307Z",
-      "firstStatusAt": "2026-09-16T23:23:54.307Z",
-      "statusCount": 2
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-22T02:35:42.836Z"
     },
     "1218490233727249": {
       "firstOnTrackAt": "2026-09-15T06:10:14.167Z",
-      "firstStatusAt": "2026-09-15T06:10:14.167Z",
-      "statusCount": 1
+      "firstInProgressAt": "2026-09-15T06:10:51.961Z",
+      "startedAt": "2026-09-15T06:10:14.167Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-15T06:10:14.167Z"
     },
-    "1218567797532195": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1219250105426412": {
-      "firstOnTrackAt": "2026-10-08T02:31:39.889Z",
-      "firstStatusAt": "2026-10-08T02:31:39.889Z",
-      "statusCount": 1
+    "1218486554805785": {
+      "firstOnTrackAt": "2026-09-16T23:23:54.307Z",
+      "firstInProgressAt": "2026-09-16T23:26:33.448Z",
+      "startedAt": "2026-09-16T23:23:54.307Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-16T23:23:54.307Z"
     },
     "1218483339855672": {
       "firstOnTrackAt": "2026-09-21T00:15:54.849Z",
-      "firstStatusAt": "2026-09-21T00:15:54.849Z",
-      "statusCount": 2
+      "firstInProgressAt": "2026-09-21T00:16:12.364Z",
+      "startedAt": "2026-09-21T00:15:54.849Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-21T00:15:54.849Z"
     },
-    "1218487642888447": {
+    "1219250105426412": {
+      "firstOnTrackAt": "2026-10-08T02:31:39.889Z",
+      "firstInProgressAt": "2026-10-08T02:31:53.278Z",
+      "startedAt": "2026-10-08T02:31:39.889Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-10-08T02:31:39.889Z"
+    },
+    "1218567797532195": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1218471221267059": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218470313512327": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-09-30T21:51:41.989Z",
+      "startedAt": "2026-09-30T21:51:41.989Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
     "1218480207369481": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-09-30T21:51:47.148Z",
+      "startedAt": "2026-09-30T21:51:47.148Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
-    "1218463271541804": {
+    "1218487642888447": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-14T19:17:40.261Z",
-      "statusCount": 1
-    },
-    "1218379768822733": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218773439937521": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218383044585069": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-23T02:03:46.036Z",
-      "statusCount": 1
-    },
-    "1218383138594557": {
-      "firstOnTrackAt": "2026-09-24T03:53:33.874Z",
-      "firstStatusAt": "2026-09-24T00:12:39.255Z",
-      "statusCount": 3
+      "firstInProgressAt": "2026-09-30T21:51:53.179Z",
+      "startedAt": "2026-09-30T21:51:53.179Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
     "1218416827710983": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-13T23:25:37.023Z",
-      "statusCount": 1
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-13T23:25:37.023Z"
     },
-    "1218378501186965": {
+    "1218463271541804": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-14T19:17:40.261Z"
+    },
+    "1218470313512327": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-09-30T21:51:28.314Z",
+      "startedAt": "2026-09-30T21:51:28.314Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
+    },
+    "1218383044585069": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-23T02:03:46.036Z"
+    },
+    "1218773439937521": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218383138594557": {
+      "firstOnTrackAt": "2026-09-24T03:53:33.874Z",
+      "firstInProgressAt": "2026-09-24T03:40:25.087Z",
+      "startedAt": "2026-09-24T03:40:25.087Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-24T00:12:39.255Z"
     },
     "1218367510251831": {
       "firstOnTrackAt": "2026-09-11T01:21:21.249Z",
-      "firstStatusAt": "2026-09-11T01:21:21.249Z",
-      "statusCount": 2
+      "firstInProgressAt": "2026-09-11T01:21:29.514Z",
+      "startedAt": "2026-09-11T01:21:21.249Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-11T01:21:21.249Z"
+    },
+    "1218379768822733": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218378501186965": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1218344138714178": {
       "firstOnTrackAt": "2026-09-20T23:54:23.442Z",
-      "firstStatusAt": "2026-09-20T23:54:23.442Z",
-      "statusCount": 2
+      "firstInProgressAt": "2026-09-20T23:54:39.154Z",
+      "startedAt": "2026-09-20T23:54:23.442Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-20T23:54:23.442Z"
     },
     "1218350706556295": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-18T12:16:13.614Z",
-      "statusCount": 1
+      "firstInProgressAt": "2026-09-11T00:25:57.161Z",
+      "startedAt": "2026-09-11T00:25:57.161Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-18T12:16:13.614Z"
     },
     "1218344192411823": {
       "firstOnTrackAt": "2026-09-11T04:31:07.119Z",
-      "firstStatusAt": "2026-09-11T04:31:07.119Z",
-      "statusCount": 2
-    },
-    "1218328298509759": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": "2026-10-15T14:58:39.595Z",
-      "statusCount": 1
-    },
-    "1218328500388777": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": "2026-10-15T14:58:46.298Z",
-      "statusCount": 1
+      "firstInProgressAt": "2026-09-14T23:35:26.426Z",
+      "startedAt": "2026-09-11T04:31:07.119Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-11T04:31:07.119Z"
     },
     "1218345580459377": {
       "firstOnTrackAt": "2026-09-10T02:38:04.000Z",
-      "firstStatusAt": "2026-09-10T02:38:04.000Z",
-      "statusCount": 1
+      "firstInProgressAt": "2026-09-10T02:37:30.527Z",
+      "startedAt": "2026-09-10T02:37:30.527Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-10T02:38:04.000Z"
     },
-    "1219007493237821": {
+    "1218328500388777": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-30T04:59:59.550Z",
-      "statusCount": 1
+      "firstInProgressAt": "2026-09-13T18:50:38.156Z",
+      "startedAt": "2026-09-13T18:50:38.156Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-10-15T14:58:46.298Z"
+    },
+    "1218328298509759": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-09-13T18:50:33.348Z",
+      "startedAt": "2026-09-13T18:50:33.348Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-10-15T14:58:39.595Z"
     },
     "1218773439937548": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1219007493237821": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-30T04:59:59.550Z"
     },
     "1218299260189309": {
       "firstOnTrackAt": "2026-09-24T06:35:07.058Z",
-      "firstStatusAt": "2026-09-24T06:35:07.058Z",
-      "statusCount": 2
-    },
-    "1218286418186452": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218301401959028": {
-      "firstOnTrackAt": "2026-09-16T00:15:06.031Z",
-      "firstStatusAt": "2026-09-16T00:15:06.031Z",
-      "statusCount": 2
-    },
-    "1218304494110168": {
-      "firstOnTrackAt": "2026-09-22T07:02:34.801Z",
-      "firstStatusAt": "2026-09-22T07:02:34.801Z",
-      "statusCount": 1
+      "firstInProgressAt": "2026-09-24T06:35:17.861Z",
+      "startedAt": "2026-09-24T06:35:07.058Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-24T06:35:07.058Z"
     },
     "1218306352977095": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-09T05:44:00.818Z",
-      "statusCount": 1
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-09T05:44:00.818Z"
     },
-    "1218208563024166": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+    "1218301401959028": {
+      "firstOnTrackAt": "2026-09-16T00:15:06.031Z",
+      "firstInProgressAt": "2026-09-16T00:15:21.355Z",
+      "startedAt": "2026-09-16T00:15:06.031Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-16T00:15:06.031Z"
     },
-    "1218483815942695": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218213871893289": {
-      "firstOnTrackAt": "2026-09-11T01:06:01.598Z",
-      "firstStatusAt": "2026-09-10T00:08:25.745Z",
-      "statusCount": 3
+    "1218304494110168": {
+      "firstOnTrackAt": "2026-09-22T07:02:34.801Z",
+      "firstInProgressAt": "2026-09-22T06:56:14.472Z",
+      "startedAt": "2026-09-22T06:56:14.472Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-22T07:02:34.801Z"
     },
     "1218252023574097": {
       "firstOnTrackAt": "2026-09-22T04:52:05.851Z",
-      "firstStatusAt": "2026-09-22T02:44:24.183Z",
-      "statusCount": 3
+      "firstInProgressAt": "2026-09-11T04:00:13.612Z",
+      "startedAt": "2026-09-11T04:00:13.612Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-22T02:44:24.183Z"
+    },
+    "1218286418186452": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218213871893289": {
+      "firstOnTrackAt": "2026-09-11T01:06:01.598Z",
+      "firstInProgressAt": "2026-09-07T03:10:46.279Z",
+      "startedAt": "2026-09-07T03:10:46.279Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-10T00:08:25.745Z"
+    },
+    "1218483815942695": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218208563024166": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1218208563024158": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-10T02:51:23.021Z",
-      "statusCount": 1
-    },
-    "1218208563024048": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218208563024044": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-10T02:51:23.021Z"
     },
     "1218208563024128": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218208563024124": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1218208563024061": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-09-23T19:55:55.616Z",
+      "startedAt": "2026-09-23T19:55:55.616Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
+    },
+    "1218208563024124": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1218208563024052": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-09-23T18:51:13.500Z",
+      "startedAt": "2026-09-23T18:51:13.500Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
-    "1218434747109149": {
-      "firstOnTrackAt": "2026-09-15T03:49:31.710Z",
-      "firstStatusAt": "2026-09-15T03:49:31.710Z",
-      "statusCount": 1
-    },
-    "1218208563024028": {
+    "1218208563024044": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-09-23T18:50:57.169Z",
+      "startedAt": "2026-09-23T18:50:57.169Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
+    },
+    "1218208563024048": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-09-23T18:51:04.587Z",
+      "startedAt": "2026-09-23T18:51:04.587Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
     "1218207733628592": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
-    "1218207733628581": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-17T02:35:17.917Z",
-      "statusCount": 1
+    "1218434747109149": {
+      "firstOnTrackAt": "2026-09-15T03:49:31.710Z",
+      "firstInProgressAt": "2026-09-15T03:49:01.940Z",
+      "startedAt": "2026-09-15T03:49:01.940Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-15T03:49:31.710Z"
     },
-    "1218207508101357": {
+    "1218208563024028": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-09-23T18:50:41.765Z",
+      "startedAt": "2026-09-23T18:50:41.765Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
     "1218207733628572": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-21T00:17:38.089Z",
-      "statusCount": 1
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-21T00:17:38.089Z"
+    },
+    "1218207733628581": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-17T02:35:17.917Z"
     },
     "1218207733628563": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-23T23:42:04.364Z",
-      "statusCount": 1
-    },
-    "1218227270337842": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-22T04:58:35.951Z",
-      "statusCount": 1
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-23T23:42:04.364Z"
     },
     "1218207962551405": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-10-05T22:23:45.809Z",
-      "statusCount": 1
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-10-05T22:23:45.809Z"
     },
-    "1218207508101397": {
-      "firstOnTrackAt": "2026-10-14T00:57:45.098Z",
-      "firstStatusAt": "2026-10-14T00:57:45.098Z",
-      "statusCount": 1
+    "1218207508101357": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218227270337842": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-22T04:58:35.951Z"
     },
     "1218207350935404": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1218207417067667": {
       "firstOnTrackAt": "2026-09-23T23:28:29.841Z",
-      "firstStatusAt": "2026-09-23T23:28:29.841Z",
-      "statusCount": 2
+      "firstInProgressAt": "2026-09-15T23:28:42.773Z",
+      "startedAt": "2026-09-15T23:28:42.773Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-23T23:28:29.841Z"
+    },
+    "1218207508101397": {
+      "firstOnTrackAt": "2026-10-14T00:57:45.098Z",
+      "firstInProgressAt": "2026-09-28T06:20:02.169Z",
+      "startedAt": "2026-09-28T06:20:02.169Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-10-14T00:57:45.098Z"
     },
     "1218207625467134": {
       "firstOnTrackAt": "2026-09-11T04:13:12.780Z",
-      "firstStatusAt": "2026-09-11T04:13:12.780Z",
-      "statusCount": 4
+      "firstInProgressAt": "2026-09-15T23:28:27.772Z",
+      "startedAt": "2026-09-11T04:13:12.780Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-11T04:13:12.780Z"
     },
     "1218207505676363": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-07T00:29:04.997Z",
-      "statusCount": 1
-    },
-    "1218207368759365": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-07T02:51:01.341Z",
-      "statusCount": 1
-    },
-    "1218207505676349": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218207272555926": {
-      "firstOnTrackAt": "2026-09-09T05:41:21.253Z",
-      "firstStatusAt": "2026-09-09T05:41:21.253Z",
-      "statusCount": 2
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-07T00:29:04.997Z"
     },
     "1218207370379917": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218207368759365": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-09-06T05:15:59.843Z",
+      "startedAt": "2026-09-06T05:15:59.843Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-07T02:51:01.341Z"
     },
     "1218207120008635": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-09-06T05:10:30.683Z",
+      "startedAt": "2026-09-06T05:10:30.683Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
-    "1218207143894553": {
-      "firstOnTrackAt": "2026-09-07T04:12:28.944Z",
-      "firstStatusAt": "2026-09-07T04:12:28.944Z",
-      "statusCount": 1
-    },
-    "1218226868583615": {
+    "1218207505676349": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-07T03:05:27.549Z",
-      "statusCount": 1
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218207272555926": {
+      "firstOnTrackAt": "2026-09-09T05:41:21.253Z",
+      "firstInProgressAt": "2026-09-07T02:44:37.188Z",
+      "startedAt": "2026-09-07T02:44:37.188Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-09T05:41:21.253Z"
     },
     "1218207172338420": {
       "firstOnTrackAt": "2026-09-07T03:00:34.923Z",
-      "firstStatusAt": "2026-09-07T03:00:34.923Z",
-      "statusCount": 2
+      "firstInProgressAt": "2026-09-07T03:01:00.086Z",
+      "startedAt": "2026-09-07T03:00:34.923Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-07T03:00:34.923Z"
     },
     "1218226868581181": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-14T23:40:47.522Z",
-      "statusCount": 1
+      "firstInProgressAt": "2026-09-07T03:59:38.760Z",
+      "startedAt": "2026-09-07T03:59:38.760Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-14T23:40:47.522Z"
+    },
+    "1218207143894553": {
+      "firstOnTrackAt": "2026-09-07T04:12:28.944Z",
+      "firstInProgressAt": "2026-09-07T04:12:41.682Z",
+      "startedAt": "2026-09-07T04:12:28.944Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-07T04:12:28.944Z"
     },
     "1218226868581141": {
       "firstOnTrackAt": "2026-09-24T00:38:13.623Z",
-      "firstStatusAt": "2026-09-07T04:11:07.000Z",
-      "statusCount": 4
+      "firstInProgressAt": "2026-09-24T00:43:11.836Z",
+      "startedAt": "2026-09-24T00:38:13.623Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-07T04:11:07.000Z"
+    },
+    "1218226868583615": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-09-07T03:03:45.476Z",
+      "startedAt": "2026-09-07T03:03:45.476Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-07T03:05:27.549Z"
     },
     "1218226868592088": {
       "firstOnTrackAt": "2026-09-07T04:10:07.899Z",
-      "firstStatusAt": "2026-09-07T04:10:07.899Z",
-      "statusCount": 2
-    },
-    "1218206738852485": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-09-07T04:10:13.281Z",
+      "startedAt": "2026-09-07T04:10:07.899Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-07T04:10:07.899Z"
     },
     "1218206912583525": {
       "firstOnTrackAt": "2026-09-07T03:19:51.986Z",
-      "firstStatusAt": "2026-09-07T03:19:51.986Z",
-      "statusCount": 2
-    },
-    "1218206801881960": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-10T00:02:42.280Z",
-      "statusCount": 1
+      "firstInProgressAt": "2026-09-07T02:47:18.855Z",
+      "startedAt": "2026-09-07T02:47:18.855Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-07T03:19:51.986Z"
     },
     "1218206738852555": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218206738850207": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
     },
     "1218206801881982": {
       "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-21T23:46:30.979Z",
-      "statusCount": 1
+      "firstInProgressAt": "2026-09-07T23:24:04.290Z",
+      "startedAt": "2026-09-07T23:24:04.290Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-21T23:46:30.979Z"
+    },
+    "1218206738852485": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218206801881960": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-09-07T03:29:38.239Z",
+      "startedAt": "2026-09-07T03:29:38.239Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-10T00:02:42.280Z"
     },
     "1218206738843718": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
-    },
-    "1218206669199743": {
-      "firstOnTrackAt": null,
-      "firstStatusAt": "2026-09-07T04:33:15.835Z",
-      "statusCount": 1
+      "firstInProgressAt": "2026-09-24T22:47:44.418Z",
+      "startedAt": "2026-09-24T22:47:44.418Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
     "1218206801882045": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218206669199743": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-09-07T04:14:56.871Z",
+      "startedAt": "2026-09-07T04:14:56.871Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-07T04:33:15.835Z"
     },
     "1218206738852710": {
       "firstOnTrackAt": "2026-09-07T22:54:43.164Z",
-      "firstStatusAt": "2026-09-07T22:54:43.164Z",
-      "statusCount": 2
+      "firstInProgressAt": "2026-09-07T22:54:52.181Z",
+      "startedAt": "2026-09-07T22:54:43.164Z",
+      "startedBy": "On Track",
+      "firstStatusAt": "2026-09-07T22:54:43.164Z"
+    },
+    "1218206738850207": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-09-06T09:55:34.364Z",
+      "startedAt": "2026-09-06T09:55:34.364Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     },
     "1218206738852460": {
       "firstOnTrackAt": null,
-      "firstStatusAt": null,
-      "statusCount": 0
+      "firstInProgressAt": "2026-09-06T03:51:28.003Z",
+      "startedAt": "2026-09-06T03:51:28.003Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
     }
   },
   "requests": {

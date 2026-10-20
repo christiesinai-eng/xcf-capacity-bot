@@ -757,7 +757,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="rq-hdr">
     <div>
       <div class="rq-hdr-title">Request Cycle Time</div>
-      <div class="rq-hdr-sub">XCF | Requests submission → linked project marked On Track · last 90 days</div>
+      <div class="rq-hdr-sub">XCF | Requests submission → linked project marked On Track or In Progress, whichever first · last 90 days</div>
     </div>
     <div class="rq-stats" id="rq-stats"></div>
   </div>
@@ -970,6 +970,8 @@ function renderRequests(){
   const total=REQUESTS_DATA.length;
   const pct=total?Math.round(measured.length/total*100):0;
   const matchedCount=REQUESTS_DATA.filter(r=>r.matched).length;
+  const byOnTrack=measured.filter(r=>r.startedBy==='On Track').length;
+  const byInProgress=measured.filter(r=>r.startedBy==='In Progress').length;
   document.getElementById('rq-coverage').innerHTML=
     '<div class="rq-cov-top">'+
       '<div><div class="rq-cov-l">Measurement coverage</div>'+
@@ -977,9 +979,10 @@ function renderRequests(){
       '<div style="text-align:right"><div class="rq-cov-l">Tracked</div><div class="rq-cov-pct">'+pct+'%</div></div>'+
     '</div>'+
     '<div class="rq-cov-track"><div class="rq-cov-fill" style="width:'+Math.max(pct,1)+'%"></div></div>'+
-    '<div class="rq-cov-note">A request becomes measurable once it is linked to a project <strong>and</strong> that project receives an On Track status update. '+
-      matchedCount+' of '+total+' are linked to a project; '+measured.length+' of those have an On Track date. '+
-      'Expect this to climb as the team adopts posting project status updates — the medians below describe only the '+measured.length+' tracked requests.</div>';
+    '<div class="rq-cov-note">A request becomes measurable once it is linked to a project <strong>and</strong> that project either posts an '+
+      '<span style="color:#6C8EF5">On Track</span> status update or has <span style="color:#4CAF8A">Status (XCF)</span> set to In Progress — whichever happens first. '+
+      matchedCount+' of '+total+' are linked to a project; '+measured.length+' of those have a start date ('+byOnTrack+' via On Track, '+byInProgress+' via In Progress). '+
+      'Expect this to climb as the team adopts both practices — the medians below describe only the '+measured.length+' tracked requests.</div>';
 
   const q=(document.getElementById('rq-search').value||'').toLowerCase().trim();
   const onlyMeasured=document.getElementById('rq-only-measured').checked;
@@ -1009,7 +1012,7 @@ function renderRequests(){
     tbl.innerHTML='<tr><td><div class="rq-empty">No requests match this filter.</div></td></tr>';
   }else{
     let h='<thead><tr>'+
-      '<th>Request</th><th>Quarter</th><th>Type</th><th>POD</th><th>Submitted</th><th>Marked On Track</th><th>Duration</th><th>Why</th>'+
+      '<th>Request</th><th>Quarter</th><th>Type</th><th>POD</th><th>Submitted</th><th>Work started</th><th>Duration</th><th>Why</th>'+
       '</tr></thead><tbody>';
     rows.forEach(r=>{
       const pod=r.pod?'<span class="rq-pill" style="color:var(--sky);border-color:var(--sky)">'+r.pod+'</span>':'<span class="rq-none">—</span>';
@@ -1031,7 +1034,9 @@ function renderRequests(){
         '<td>'+(r.projectType?'<span class="rq-type" style="color:'+(RQ_TYPE_COL[r.projectType]||'var(--muted)')+';border-color:'+(RQ_TYPE_COL[r.projectType]||'var(--muted)')+'">'+r.projectType+'</span>':'<span class="rq-none">—</span>')+'</td>'+
         '<td>'+pod+'</td>'+
         '<td>'+rqFmtWhen(r.submittedAt)+'</td>'+
-        '<td>'+(r.onTrackAt?rqFmtWhen(r.onTrackAt):'<span class="rq-none">—</span>')+'</td>'+
+        '<td>'+(r.onTrackAt
+          ? rqFmtWhen(r.onTrackAt)+'<span style="font-size:9.5px;color:'+(r.startedBy==='In Progress'?'#4CAF8A':'#6C8EF5')+'">'+(r.startedBy||'')+'</span>'
+          : '<span class="rq-none">—</span>')+'</td>'+
         '<td>'+rqFmtDur(r.durationHours)+'</td>'+
         '<td class="rq-sum">'+why+'</td>'+
       '</tr>';
