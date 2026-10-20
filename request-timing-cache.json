@@ -1245,13 +1245,15 @@
       "code": "XCF-18696",
       "name": "XCF-18696 | Meta | AU/NZ | SMB | Ultimate Plan | Statics, Rd 2",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219674477255681": {
       "code": "XCF-18689",
       "name": "XCF-18689 | Meta| Brief | UAE | eInvoicing | VAT | Mandate",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219674018109087": {
       "code": "XCF-18682",
@@ -1263,7 +1265,8 @@
           "text": "A related request has been identified that may require coordination:\n\nCompleted Task: XCF-14461 | Switch campaign - social media video cutdowns\nhttps://app.asana.com/0/0/1218689017325211\nThis task was completed on Oct 9 2026 and involved creating social media video cutdowns for the Switch campaign in AU/NZ regions.\n\nIn-Progress Task: XCF-14443 | Meta | AUNZ | Switch Cohort2\nhttps://app.asana.com/0/0/1218615654687689\nThis task is currently in progress and involves Meta creative (design/copy) for the Switch campaign in AU/NZ regions, submitted by the same requester (Briana Ruggiero).\n\nBoth this task (XCF-18682) and the above tasks are part of the Switch campaign for AU/NZ regions. Please review to ensure messaging alignment, avoid duplicate video production effort, and coordinate timing with the in-progress XCF-14443 work."
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219669728708328": {
       "code": "XCF-18651",
@@ -1280,7 +1283,8 @@
           "text": "this is not a duplicate task. The other task is for the web team to create the landing page that will host this guide. Also not sure why it says cancelled, they are all being actively worked on."
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219659012358831": {
       "code": "XCF-18642",
@@ -1297,13 +1301,15 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1201341994148750 Will share when he has an update about the offer"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219658120269207": {
       "code": "XCF-18635",
       "name": "XCF-18635 | UK | SB | Refreshed Smart Document Capture ads",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219628538605471": {
       "code": "XCF-18536",
@@ -1315,19 +1321,22 @@
           "text": "A related in-progress project has been identified that should be reviewed:\n\n• https://app.asana.com/0/0/1213351112031172 - This is the parent roadmap project for the Know Your Numbers NZ program (Status: In Progress). Please review this task to ensure the Maori version assets are aligned with the broader program scope and timeline."
         }
       ],
-      "summary": "Fast. An automated flag linked it to the parent Know Your Numbers roadmap project."
+      "summary": "Fast. An automated flag linked it to the parent Know Your Numbers roadmap project.",
+      "cause": "No blocker"
     },
     "1219607134768003": {
       "code": "XCF-18470",
       "name": "XCF-18470 | UK | LCE - Payments Radio Creative",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219600575789442": {
       "code": "XCF-18463",
       "name": "XCF-18463 | NZ | HVSB Digital Audio",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219605441721029": {
       "code": "XCF-18456",
@@ -1339,19 +1348,22 @@
           "text": "Potential duplicate identified. Please review before proceeding:\n\n• https://app.asana.com/0/0/1218502491378821/f - Nearly identical campaign concept with same messaging theme, products, and audience. Status: In Progress.\n\nBoth tasks focus on the 'Smarter tools, working together' campaign targeting SBs and ABs with smart document capture, auto bank rec, and analytics. Please confirm whether this is a duplicate, a regional variant, or a separate phase of the same campaign."
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219605439802073": {
       "code": "XCF-18449",
       "name": "XCF-18449 | UK | Smart Tools free-form",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219607131603016": {
       "code": "XCF-18441",
       "name": "XCF-18441 | UK | MTD evergreen refresh",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219598730326092": {
       "code": "XCF-18435",
@@ -1363,7 +1375,8 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1210165170092380 - I've submitted the request for the presentation, which will be triaged during Monday's queue. I've linked through to the presentation but will lean on you for some direction and confirming the final deck content on Monday."
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219605406552948": {
       "code": "XCF-18426",
@@ -1375,13 +1388,15 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1204783047017636assigning you this one to sit with Ciaran as per the request details. Thank you so much!"
         }
       ],
-      "summary": "Routed directly to a named designer. No blockers."
+      "summary": "Routed directly to a named designer. No blockers.",
+      "cause": "No blocker"
     },
     "1219590261759794": {
       "code": "XCF-18418",
       "name": "XCF-18418 | US | Updated SB Cashflow Ads, Meta",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219589634414549": {
       "code": "XCF-18411",
@@ -1393,7 +1408,8 @@
           "text": "A related request has been identified that may require coordination:\n\nSimilar Campaign Structure: XCFT-1367 | US Switch Q2 2026 – Meta | TikTok | LinkedIn\nhttps://app.asana.com/0/0/1214569681714573\n\nBoth this task (XCF-18411) and XCFT-1367 are US Switch campaigns on Meta with identical structure: 4 key messages, 4 ads per message, and 4 designs per message. While XCFT-1367 was completed in June 2026 and this task is for November 2026 (peak switch season), please review to ensure messaging consistency and confirm this is intended as a seasonal refresh rather than a duplicate effort.\n\nRelated Earlier Phase Tasks:\n\n    XCF-16392 | US Switch creative with price comparison claims (Oct 2026): https://app.asana.com/0/0/1218883098232884\n    XCF-16399 | US Switch YouTube videos (Oct 2026): https://app.asana.com/0/0/1218885064890208\n"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219530593885652": {
       "code": "XCF-18249",
@@ -1405,19 +1421,22 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1204783047017636just shipping to you to book in with the studio due to short deadline. Let me know if is okay?"
         }
       ],
-      "summary": "Straightforward. Routed to the studio on a short deadline."
+      "summary": "Straightforward. Routed to the studio on a short deadline.",
+      "cause": "No blocker"
     },
     "1219481561069642": {
       "code": "XCF-18152",
       "name": "XCF-18152 | Review design POV slides for external presentation",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219467920394159": {
       "code": "XCF-18126",
       "name": "XCF-18126 | Meta | Melio | Managing International Payments statics",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219453160829260": {
       "code": "XCF-18122",
@@ -1444,7 +1463,8 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1157296694332102 just checking if you have the URL ready for the QR code?"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219452955895693": {
       "code": "XCF-18118",
@@ -1461,7 +1481,8 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1205442966589515assigning this one to you. Let me know if that works! Thanks"
         }
       ],
-      "summary": "Fast — routed and assigned the same day."
+      "summary": "Fast — routed and assigned the same day.",
+      "cause": "No blocker"
     },
     "1219432393487625": {
       "code": "XCF-18086",
@@ -1478,7 +1499,8 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1204783047017636assigning you the values frames work due in Jan. Thanks so much!"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219432177116010": {
       "code": "XCF-18049",
@@ -1490,7 +1512,8 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1207584863261789 are you able to share the copy for this one when ready? Thanks 🙂"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219429695821149": {
       "code": "XCF-18042",
@@ -1512,13 +1535,15 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1201341994148750 to follow up on the airpod photos"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219399483827248": {
       "code": "XCF-18029",
       "name": "XCF-18029 | Bridget Snelling Keynote - Vega Conference NZ",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219395688185860": {
       "code": "XCF-18020",
@@ -1530,7 +1555,8 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1211711605400895thank you for your request.\n\nI would firstly look at whether you could repurpose existing assets?\n\nI've given you view access to the below Figma files, this would help with your eDM banners and Webpage imagery. You could also use the Social media templates in Canva.\nhttps://www.figma.com/design/hUn4LrVwsGKQIAa5OsoVNg/XCFT-5945-%7C-SEO-Based-Web-Imagery?node-id=272-6094&t=XV0lsA4nHd5Tmj5Q-1 \nhttps://www.figma.com/design/r8B8o2hBLLjv4i2BQcW5sx/XCFT-590---Lifecycle-Email-Journeys?node-id=1459-14521&t=4zMcMaHSkx3CpkeS-1.\n\nLet me know your thoughts and we'll go from there. Thanks"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219344951557869": {
       "code": "XCF-17942",
@@ -1547,7 +1573,8 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1205645532237101, https://app.asana.com/1/41261904390129/profile/1205626585159544 let me know Ben already picked this up. Thanks!"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219294614410236": {
       "code": "XCF-17869",
@@ -1579,7 +1606,8 @@
           "text": "Fantastic!!"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219294337197872": {
       "code": "XCF-17862",
@@ -1616,7 +1644,8 @@
           "text": "thanks https://app.asana.com/1/41261904390129/profile/1212669624854574looks great 😄 \ncc https://app.asana.com/1/41261904390129/profile/1207584863261789"
         }
       ],
-      "summary": "Short clarification on what the IPC asset needed, then delivered."
+      "summary": "Short clarification on what the IPC asset needed, then delivered.",
+      "cause": "No blocker"
     },
     "1219294336511174": {
       "code": "XCF-17855",
@@ -1633,7 +1662,8 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1212706546107100 just checking in if you have a draft copy for the emails? Thanks."
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219294273209570": {
       "code": "XCF-17848",
@@ -1675,13 +1705,15 @@
           "text": "Amazing, thank you https://app.asana.com/1/41261904390129/profile/1212669624854574! \ncc https://app.asana.com/1/41261904390129/profile/1207862144777637 https://app.asana.com/1/41261904390129/profile/1207975383848867"
         }
       ],
-      "summary": "**Go-live pulled forward mid-flight.** Landed in the wrong place, needed access, then the date moved up a week and the team prioritised it."
+      "summary": "**Go-live pulled forward mid-flight.** Landed in the wrong place, needed access, then the date moved up a week and the team prioritised it.",
+      "cause": "Requester-side"
     },
     "1219291029707435": {
       "code": "XCF-17810",
       "name": "XCF-17810 | Recruiting Event - Rush Assets",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219290874337430": {
       "code": "XCF-17803",
@@ -1718,13 +1750,15 @@
           "text": "Update - https://app.asana.com/1/41261904390129/profile/1212669624854574 completed the https://www.figma.com/design/r8B8o2hBLLjv4i2BQcW5sx/XCFT-590---Lifecycle-Email-Journeys?node-id=4601-50179&p=f&t=Ya0fxLMAxTV3RLXl-0 and passed it over to the AIM team to motion."
         }
       ],
-      "summary": "Access request, then a quick clarification on placement before handover to the AI & Media team."
+      "summary": "Access request, then a quick clarification on placement before handover to the AI & Media team.",
+      "cause": "Access & permissions"
     },
     "1219290467357341": {
       "code": "XCF-17794",
       "name": "XCF-17794 | Xero x Gemini integration assets ",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219234457707714": {
       "code": "XCF-17643",
@@ -1741,7 +1775,8 @@
           "text": "Thank you sooooooo much https://app.asana.com/1/41261904390129/profile/1205645532237101 🙏🙇‍♀️"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219229555896870": {
       "code": "XCF-17639",
@@ -1758,13 +1793,15 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1208221644203511I'll cancel this request as you will be requesting via Jacquii Rubin's team."
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219198862643095": {
       "code": "XCF-17562",
       "name": "XCF-17562 | ICB Summit Presentation Slides",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219196558096552": {
       "code": "XCF-17507",
@@ -1781,7 +1818,8 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1211974883498500assigning you this Canva template request to sit in the studio. Thank you so much!"
         }
       ],
-      "summary": "Routed to the studio the same day. An automated flag noted an earlier Canva template job."
+      "summary": "Routed to the studio the same day. An automated flag noted an earlier Canva template job.",
+      "cause": "No blocker"
     },
     "1219195198065173": {
       "code": "XCF-17498",
@@ -1793,37 +1831,43 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1211974883498500assigning you this request to sit in the studio. Thanks!"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219160274779106": {
       "code": "XCF-17431",
       "name": "XCF-17431 | XCF-17431 |  Performance Pod Reporting",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219160283255379": {
       "code": "XCF-17404",
       "name": "XCF-17404 |  Web Refresh ",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219160274312373": {
       "code": "XCF-17385",
       "name": "XCF-17385 | Design assistance for Ross Tucker presentation",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219097320153231": {
       "code": "XCF-17319",
       "name": "XCF-17319 | [ON HOLD] SU1575 - First app login push notifications",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219097370549250": {
       "code": "XCF-17312",
       "name": "XCF-17312 | [ON HOLD] SU1574 - Invoicing: JAX welcome series iteration",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219097160118414": {
       "code": "XCF-17305",
@@ -1855,7 +1899,8 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1207975383848867, please let us know if you have a preference so we know which one to animate? Thanks."
         }
       ],
-      "summary": "**Blocked on access** — the copy doc, then an expired video link — before design could begin."
+      "summary": "**Blocked on access** — the copy doc, then an expired video link — before design could begin.",
+      "cause": "Access & permissions"
     },
     "1219094074159186": {
       "code": "XCF-17237",
@@ -1867,7 +1912,8 @@
           "text": "Related tasks identified that may require coordination:\n\nRelated Task 1: XCF-17230 | DETAILS TO COME – UP1633 – UP: Time Based Upgrade Nudge Iteration\nhttps://app.asana.com/0/0/1219093908677972\n\nRelated Task 2: XCF-17209 | DETAILS TO COME – CS1639 – Inv: Automated reminders nudge\nhttps://app.asana.com/0/0/1219093667707775\n\nRelated Task 3: XCF-17216 | DETAILS TO COME – UP1629 – AD: AI Automate for Bank Rec Ignite Users\nhttps://app.asana.com/0/0/1219093873968513\n\nRelated Task 4: XCF-17223 | DETAILS TO COME – CS1622 – Bill: Cash-flow manager/Analytics Xsell trigger\nhttps://app.asana.com/0/0/1219093874227120\n\nAll five tasks share the following characteristics:\n\n    Same requester: Halle Mitchell\n    Same business group: Lifecycle & customer engagement\n    Same cost centre: 3071\n    Same request category: Performance POD request\n    Same channel: Email\n    Same support needed: Design\n    All have placeholder status (DETAILS TO COME)\n    Similar in-market dates (Nov 3 – Dec 1, 2026)\n\nWhile these appear to be separate initiatives (Grow>Comp SDC Upgrade Nudge, Time Based Upgrade Nudge, Automated reminders, Bank Rec AI Automate, and Cash-flow manager/Analytics), they are part of a batch of "
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219093908677972": {
       "code": "XCF-17230",
@@ -1879,7 +1925,8 @@
           "text": "Related tasks identified that may require coordination:\n\nRelated Task 1: XCF-17209 | DETAILS TO COME – CS1639 – Inv: Automated reminders nudge\nhttps://app.asana.com/0/0/1219093667707775\n\nRelated Task 2: XCF-17223 | DETAILS TO COME – CS1622 – Bill: Cash-flow manager/Analytics Xsell trigger\nhttps://app.asana.com/0/0/1219093874227120\n\nRelated Task 3: XCF-17216 | DETAILS TO COME – UP1629 – AD: AI Automate for Bank Rec Ignite Users\nhttps://app.asana.com/0/0/1219093873968513\n\nAll four tasks share the following characteristics:\n\n    Same requester: Halle Mitchell\n    Same business group: Lifecycle & customer engagement\n    Same cost centre: 3071\n    Same request category: Performance POD request\n    Same channel: Email\n    Same support needed: Design\n    All have placeholder status (DETAILS TO COME)\n    Similar in-market dates (Nov 3, 10, 17, 2026)\n\nWhile these appear to be separate initiatives (Invoicing, Bills/Cash-flow, Bank Reconciliation, and Upgrade Nudge), they are part of a batch of similar requests from the same requester. Please review to confirm these are distinct requests and coordinate messaging/timing if needed before proceeding."
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219093874227120": {
       "code": "XCF-17223",
@@ -1896,7 +1943,8 @@
           "text": "Related tasks identified that may require coordination:\n\nRelated Task 1: XCF-17209 | DETAILS TO COME – CS1639 – Inv: Automated reminders nudge\nhttps://app.asana.com/0/0/1219093667707775\n\nRelated Task 2: XCF-17216 | DETAILS TO COME – UP1629 – AD: AI Automate for Bank Rec Ignite Users\nhttps://app.asana.com/0/0/1219093873968513\n\nAll three tasks share the following characteristics:\n\n    Same requester: Halle Mitchell\n    Same business group: Lifecycle & customer engagement\n    Same cost centre: 3071\n    Same request category: Performance POD request\n    Same channel: Email\n    Same support needed: Design\n    All have placeholder status (DETAILS TO COME)\n    Similar in-market dates (Nov 3, 10, and 17, 2026)\n\nWhile these appear to be separate initiatives (Invoicing, Bank Reconciliation, and Bills/Cash-flow), they are part of a batch of similar requests from the same requester. Please review to confirm these are distinct requests and coordinate messaging/timing if needed before proceeding."
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219093873968513": {
       "code": "XCF-17216",
@@ -1908,7 +1956,8 @@
           "text": "A related task has been identified that may require coordination:\n\nRelated Task: XCF-17209 | DETAILS TO COME – CS1639 – Inv: Automated reminders nudge\nhttps://app.asana.com/0/0/1219093667707775\n\nBoth this task (XCF-17216) and XCF-17209 share the following characteristics:\n\n    Same requester: Halle Mitchell\n    Same business group: Lifecycle & customer engagement\n    Same cost centre: 3071\n    Same request category: Performance POD request\n    Same channel: Email\n    Both follow the 'DETAILS TO COME' placeholder pattern\n    Similar in-market dates (Nov 3 vs. Nov 10, 2026)\n\nWhile this task focuses on AI Automate for Bank Rec Ignite Users and XCF-17209 focuses on Automated reminders, the high similarity in metadata and placeholder status suggests these may be related requests. Please review to confirm whether this is a separate initiative or a follow-up request before proceeding."
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219093667707775": {
       "code": "XCF-17209",
@@ -1920,13 +1969,15 @@
           "text": "A related task has been identified that may require coordination:\n\nRelated Task: XCF-14518 | XCF BRIEF | Inv: 1st invoice sent email GIF headers - CS1562\nhttps://app.asana.com/0/0/1218728059773530\n\nBoth this task (XCF-17209) and XCF-14518 share the following characteristics:\n\n    Same requester: Halle Mitchell\n    Same business group: Lifecycle & customer engagement\n    Same cost centre: 3071 Digital Customer Engagement\n    Same channel: Email\n    Similar focus: Invoicing-related email assets (Inv:)\n    Same Performance POD request category\n\nXCF-14518 was completed on September 22, 2026 and involved creating email GIF headers for invoicing. The current request (XCF-17209) is scheduled for November 3, 2026 in-market date. Since this task is currently a placeholder with \"DETAILS TO COME\" throughout, please review to confirm whether this is a new iteration, a follow-up request, or a separate initiative before proceeding."
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219089838567563": {
       "code": "XCF-17149",
       "name": "XCF-17149 | Updated MSFT assets for upcoming PR announcement",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219089341430664": {
       "code": "XCF-17144",
@@ -1943,19 +1994,22 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1201672510981401, thanks for reaching out. We need more info to get this underway. I'll tag you into the message I sent previously."
         }
       ],
-      "summary": "**Blocked on missing information.** XCF had asked for more detail and was waiting on a reply when the requester chased on 8 Oct."
+      "summary": "**Blocked on missing information.** XCF had asked for more detail and was waiting on a reply when the requester chased on 8 Oct.",
+      "cause": "Brief & scoping"
     },
     "1219085664259033": {
       "code": "XCF-17139",
       "name": "XCF-17139 | Updating PPT to event template",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219050673873043": {
       "code": "XCF-17094",
       "name": "XCF-17094 | Blog thumbnail/header image",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219044115615620": {
       "code": "XCF-17084",
@@ -1972,19 +2026,22 @@
           "text": "We no longer need support on this exact request. Thank you!"
         }
       ],
-      "summary": "**Withdrawn.** Waiting on the refreshed cashflow concept due 19 Oct; the requester then said support was no longer needed."
+      "summary": "**Withdrawn.** Waiting on the refreshed cashflow concept due 19 Oct; the requester then said support was no longer needed.",
+      "cause": "Requester-side"
     },
     "1219016090508790": {
       "code": "XCF-17078",
       "name": "XCF-17078 | QR code request for the modern practice playbook",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219014356942170": {
       "code": "XCF-17072",
       "name": "XCF-17072 | Pull up Banner",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1219014313158356": {
       "code": "XCF-17068",
@@ -1996,13 +2053,15 @@
           "text": "Sorry can we please update the second QR code to - https://campus.syftanalytics.com/p/xero-advisory-onboarding"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218974144099392": {
       "code": "XCF-16970",
       "name": "XCF-16970 | AU Treasury Consultation Submission",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218969553307537": {
       "code": "XCF-16950",
@@ -2024,7 +2083,8 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1209839736832014 and https://app.asana.com/1/41261904390129/profile/1203488179897732, please find the two requested GIFs attached. Let me know if you have any questions / feedback. Thanks."
         }
       ],
-      "summary": "Straightforward delivery, with a coordination note against a related GIF request."
+      "summary": "Straightforward delivery, with a coordination note against a related GIF request.",
+      "cause": "No blocker"
     },
     "1218968049958477": {
       "code": "XCF-16731",
@@ -2076,13 +2136,15 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1218383440022455, in Salesforce Marketing Cloud email template, the partner blue that is always used is #1f65d6"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218967159014062": {
       "code": "XCF-16721",
       "name": "XCF-16721 | Xero banner artwork - urgent",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218948141969703": {
       "code": "XCF-16464",
@@ -2094,13 +2156,15 @@
           "text": "Sorry team turns out we don't need this 🙇‍♀️ please delete/mark complete"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218914659740126": {
       "code": "XCF-16407",
       "name": "XCF-16407 | Update sales PDF's with new NZ pricing changes ",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218885064890208": {
       "code": "XCF-16399",
@@ -2167,7 +2231,8 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1216496014620082 and https://app.asana.com/1/41261904390129/profile/1211026264666242\nSome videos for you here: https://f.io/N4M99Jgh \nIn claim 5 we had a double up of \"powerful\" so made a quick Vo change, to \"capable\" which was Chris's brilliant idea, so we loved it."
         }
       ],
-      "summary": "**Deliberately sequenced** behind XCF-16392, which had to be approved before storyboards could be built."
+      "summary": "**Deliberately sequenced** behind XCF-16392, which had to be approved before storyboards could be built.",
+      "cause": "Capacity queue"
     },
     "1218883098232884": {
       "code": "XCF-16392",
@@ -2239,7 +2304,8 @@
           "text": "Approved and waiting to go live. Will complete once live."
         }
       ],
-      "summary": "Active creative cycle: options presented, claims wording checked, copy through review."
+      "summary": "Active creative cycle: options presented, claims wording checked, copy through review.",
+      "cause": "Creative iteration"
     },
     "1218855595843410": {
       "code": "XCF-16384",
@@ -2296,13 +2362,15 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1216496014620082 and https://app.asana.com/1/41261904390129/profile/1207975383848867 please find the https://drive.google.com/drive/folders/11jZ5xCyOMXxBUvhWB78dSUOjH0orT4Ft?usp=sharing. Approved by Chris L."
         }
       ],
-      "summary": "**Routing question first** — which POD owned it — then it entered the weekly prioritisation cycle."
+      "summary": "**Routing question first** — which POD owned it — then it entered the weekly prioritisation cycle.",
+      "cause": "Capacity queue"
     },
     "1218853800423271": {
       "code": "XCF-16379",
       "name": "XCF-16379 | Okta tile image for XFG portal",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218851875089531": {
       "code": "XCF-16374",
@@ -2319,7 +2387,8 @@
           "text": "Confirmed by Keely that this does not need addressing anymore and can be closed."
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218849693609966": {
       "code": "XCF-16323",
@@ -2341,13 +2410,15 @@
           "text": "Also, responding to the Asana AI comment - this is for a new campaign and unrelated to the previous 1-pager request. Strange that the AI would think its related... oh well 🙂"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218848435396342": {
       "code": "XCF-16318",
       "name": "XCF-16318 | Candidate one-pager template",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218815982748171": {
       "code": "XCF-16312",
@@ -2419,7 +2490,8 @@
           "text": "Perfect! I've made the above updates and added the android version to the https://drive.google.com/drive/folders/1bBRMuZbKDcaxOzyJQmTEkW0ZbCOcaLGE?usp=drive_linkhttps://app.asana.com/1/41261904390129/profile/1208636107838563 🙂"
         }
       ],
-      "summary": "**Misrouted.** Two people named Jenna were confused in Asana, so it sat with the wrong owner before the right requester picked it up."
+      "summary": "**Misrouted.** Two people named Jenna were confused in Asana, so it sat with the wrong owner before the right requester picked it up.",
+      "cause": "Misrouted"
     },
     "1218806165752341": {
       "code": "XCF-15604",
@@ -2491,7 +2563,8 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1201341994148750 mentioned it would be great to action these during this week"
         }
       ],
-      "summary": "**Queued behind US Switch, then blocked on Melio-side access.** Repeated requests for asset and image permissions from the partner."
+      "summary": "**Queued behind US Switch, then blocked on Melio-side access.** Repeated requests for asset and image permissions from the partner.",
+      "cause": "Access & permissions"
     },
     "1218781917021584": {
       "code": "XCF-15594",
@@ -2508,13 +2581,15 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1206349683781343 Just checking back in on this request. Thanks!"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218778252905943": {
       "code": "XCF-15585",
       "name": "XCF-15585 | QR code for Next Gen UK Payroll beta",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218771112505896": {
       "code": "XCF-15550",
@@ -2526,7 +2601,8 @@
           "text": "Potential related tasks identified. Please review the following before proceeding:\n\n• XCF-15545 | QR code Workpapers plus landing page (https://app.asana.com/0/0/1218771080396044/f)\n• XCF-14456 | QR code for landing page - coming soon (https://app.asana.com/0/0/1218687870832359/f)\n\nBoth are Workpapers Plus QR code requests from the same requester (Jodie Kerr) in ANZ Marketing with similar due dates (Oct 1-2, 2026). Since this sticker update task references the Workpapers Plus QR code request, please confirm whether this is a follow-up to one of the existing QR code tasks or a separate initiative to avoid duplicate work."
         }
       ],
-      "summary": "Fast. Automated flag only, pointing at related QR code tasks."
+      "summary": "Fast. Automated flag only, pointing at related QR code tasks.",
+      "cause": "No blocker"
     },
     "1218771080396044": {
       "code": "XCF-15545",
@@ -2538,31 +2614,36 @@
           "text": "Potential duplicate identified: This task appears to be a duplicate of https://app.asana.com/0/0/1218687870832359/f which is already marked as Complete. Both requests are for a QR code for the Workpapers Plus landing page from the same requester (Jodie Kerr) in ANZ Marketing with nearly identical due dates (Oct 1 vs Oct 2, 2026). The previous task had the URL marked as 'TBC' and is now complete. Please review before proceeding to avoid duplicate work."
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218770483597359": {
       "code": "XCF-15540",
       "name": "XCF-15540 | 1 page custom flyer creation for partner",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218768713878690": {
       "code": "XCF-15536",
       "name": "XCF-15536 | Updating Xero branding on Stripe's side",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218760805056183": {
       "code": "XCF-14661",
       "name": "XCF Business Review Deck",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218736233745928": {
       "code": "XCF-14646",
       "name": "XCF-14646 | Update to \"Understanding e-Invoicing for Malaysia: A guide to getting started\"",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218728059773530": {
       "code": "XCF-14518",
@@ -2579,49 +2660,57 @@
           "text": "Adding in an update shared yesterday via Slack - \"We have the https://drive.google.com/drive/folders/1HpEpASib5zwrhh9_HZazwYdpeiTX2MGA?usp=sharing ready here for review. Worth noting that incorporating a photography human element has increased the GIF size to 1.4MB. Let us know what you think\"."
         }
       ],
-      "summary": "Requester chased with the experiment already scheduled live; adding a photographic element made the design harder than expected."
+      "summary": "Requester chased with the experiment already scheduled live; adding a photographic element made the design harder than expected.",
+      "cause": "Creative iteration"
     },
     "1218727593588454": {
       "code": "XCF-14516",
       "name": "XCF-14516 | Sprint | 9th - 13th Nov",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218727593588451": {
       "code": "XCF-14515",
       "name": "XCF-14515 | Sprint | 2nd - 6th Nov",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218727593588448": {
       "code": "XCF-14514",
       "name": "XCF-14514 | Sprint | 26th - 30th Oct",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218727593588445": {
       "code": "XCF-14513",
       "name": "XCF-14513 | Sprint | 19th - 23rd Oct",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218727593588442": {
       "code": "XCF-14512",
       "name": "XCF-14512 | Sprint | 12th - 16 Oct",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218727593588439": {
       "code": "XCF-14511",
       "name": "XCF-14511 | Sprint | 5th - 9th Oct",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218727593588436": {
       "code": "XCF-14510",
       "name": "XCF-14510 | Sprint | 28th Sep - 2nd Oct",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218691875562027": {
       "code": "XCF-14477",
@@ -2643,7 +2732,8 @@
           "text": "For completeness - confirming that we are targeting launch of this agent on 13 October (NZT). We will need to kick off comms about 1 week before so ideally we have the name and agent avatar by 5 October so we can kick off comms on 6 OCtober (NZT)"
         }
       ],
-      "summary": "**Picked up immediately.** The only discussion was reconciling three conflicting launch dates in the request."
+      "summary": "**Picked up immediately.** The only discussion was reconciling three conflicting launch dates in the request.",
+      "cause": "No blocker"
     },
     "1218689017325211": {
       "code": "XCF-14461",
@@ -2675,7 +2765,8 @@
           "text": "Thanks Quincey - have popped a request over that side too"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218687870832359": {
       "code": "XCF-14456",
@@ -2692,7 +2783,8 @@
           "text": "Hello - I believe the team already did this 🙂"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218615654687689": {
       "code": "XCF-14443",
@@ -2744,7 +2836,8 @@
           "text": "Sent to region!"
         }
       ],
-      "summary": "**Capacity queue.** Explicitly held while US Switch took priority that week."
+      "summary": "**Capacity queue.** Explicitly held while US Switch took priority that week.",
+      "cause": "Capacity queue"
     },
     "1218615585622898": {
       "code": "XCF-14439",
@@ -2831,13 +2924,15 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1216559886847848 working on this one today"
         }
       ],
-      "summary": "**Queued behind US Switch** until capacity freed up, then delivered to the 12 Oct deadline."
+      "summary": "**Queued behind US Switch** until capacity freed up, then delivered to the 12 Oct deadline.",
+      "cause": "Capacity queue"
     },
     "1218610164117965": {
       "code": "XCF-14419",
       "name": "XCF-14419 | Review 1-pager copy",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218609705922114": {
       "code": "XCF-14415",
@@ -2854,19 +2949,22 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1174390084959182 The Performance Marketing team can help take care of any dot com requests. This is the Asana request form - https://form.asana.com/?k=sXAtQGFaVE0diR2uVMxxkQ&d=41261904390129\n\nhttps://app.asana.com/app/asana/-/get_asset?asset_id=1218727542165887\n"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218602999657228": {
       "code": "XCF-14402",
       "name": "XCF-14402 | Xero Learning Partner Logo",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218574926274109": {
       "code": "XCF-14396",
       "name": "XCF-14396 | Update to existing Syft Analytics document",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218570527076671": {
       "code": "XCF-14379",
@@ -2878,13 +2976,15 @@
           "text": "Potential duplicate/related work identified. Please review the following completed project before proceeding:\n\n• XCFT-9090 - This is Xero, deck redesign (https://app.asana.com/0/0/1217013516297033/f)\n\nThis task involves amendments to the same 'This is Xero' deck document that was recently completed (Aug 30-31, 2026). The new request is for updates to slides 13 (Accountable Intelligence) and 14 (Just ask Xero imagery). Please confirm whether these amendments should be incorporated into the existing completed project or if this represents new, separate work."
         }
       ],
-      "summary": "No human discussion recorded — only an automated flag pointing at an earlier \"This is Xero\" deck redesign."
+      "summary": "No human discussion recorded — only an automated flag pointing at an earlier \"This is Xero\" deck redesign.",
+      "cause": "Unexplained"
     },
     "1218525568292354": {
       "code": "XCF-14283",
       "name": "XCF-14283 | Briana Watkins-Kasel",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218502394903715": {
       "code": "XCF-14178",
@@ -2896,13 +2996,15 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1204783047017636"
         }
       ],
-      "summary": "No discussion recorded — the only comment is an empty mention."
+      "summary": "No discussion recorded — the only comment is an empty mention.",
+      "cause": "Unexplained"
     },
     "1218490233727240": {
       "code": "XCF-14140",
       "name": "XCF-14140 | Interim Report FY27",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218487790595325": {
       "code": "XCF-14138",
@@ -2919,19 +3021,22 @@
           "text": "Draft so far - https://docs.google.com/document/d/1iQj5umSm-8Ufym0QmogzYLB-HnzSgLg-YC9p8sRSIPk/edit?usp=sharing"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218483483003051": {
       "code": "XCF-14131",
       "name": "XCFT-600 v2 | GL | Programmatic Audio AI Ads",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218490234646100": {
       "code": "XCF-14120",
       "name": "XCF-14120 | Logo Review WX",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218475064180516": {
       "code": "XCF-14037",
@@ -2983,7 +3088,8 @@
           "text": "Yes correct, thank you! Maybe by 30 Oct if that is doable?"
         }
       ],
-      "summary": "**Long clarification loop.** Four rounds of questions across three weeks to establish what was being updated and which team owned it. Requester also asked to push it out three weeks."
+      "summary": "**Long clarification loop.** Four rounds of questions across three weeks to establish what was being updated and which team owned it. Requester also asked to push it out three weeks.",
+      "cause": "Brief & scoping"
     },
     "1218475061545624": {
       "code": "XCF-14029",
@@ -3045,7 +3151,8 @@
           "text": "https://drive.google.com/drive/folders/1KZrBM60qlGbSAilvgHdy0vNISpbQFIUx?usp=sharingyou go https://app.asana.com/1/41261904390129/profile/1211026264666242 🙂"
         }
       ],
-      "summary": "Same Reddit concept cycle as XCF-14022 — sizes and routes settled across several review rounds."
+      "summary": "Same Reddit concept cycle as XCF-14022 — sizes and routes settled across several review rounds.",
+      "cause": "Creative iteration"
     },
     "1218473611008922": {
       "code": "XCF-14022",
@@ -3092,7 +3199,8 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1212669624854574 fantastic! have trafficked these 😄"
         }
       ],
-      "summary": "**Concept-led work, not waiting.** Routes presented, reviewed in a WIP, then refined and resized."
+      "summary": "**Concept-led work, not waiting.** Routes presented, reviewed in a WIP, then refined and resized.",
+      "cause": "Creative iteration"
     },
     "1218471045704282": {
       "code": "XCF-14015",
@@ -3124,7 +3232,8 @@
           "text": "Great to have these sizes, thank you team!"
         }
       ],
-      "summary": "In video triage initially, then delivered in batches ahead of the stated goal."
+      "summary": "In video triage initially, then delivered in batches ahead of the stated goal.",
+      "cause": "Capacity queue"
     },
     "1218470004054727": {
       "code": "XCF-14008",
@@ -3161,7 +3270,8 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1211026264666242 FYI"
         }
       ],
-      "summary": "Sat in video-team triage awaiting a timeline, then moved fast once picked up — delivered within days of starting."
+      "summary": "Sat in video-team triage awaiting a timeline, then moved fast once picked up — delivered within days of starting.",
+      "cause": "Capacity queue"
     },
     "1218447732532058": {
       "code": "XCF-14004",
@@ -3178,43 +3288,50 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1157296694332102https://app.asana.com/1/41261904390129/profile/1211496298336320\n\nQR code in SVG (Print) & PNG (Digital) any question please reach out, thanks\n\nhttps://app.asana.com/app/asana/-/get_asset?asset_id=1218451125898737\n"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218416937662839": {
       "code": "XCF-13844",
       "name": "XCF-13844 | Social asset",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218411618962652": {
       "code": "XCF-13842",
       "name": "XCF-13842 | [no value] | XCF delivery support | ZA: Roadshow 2027 registration campaign",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218383138574504": {
       "code": "XCF-13800",
       "name": "XCF-13800 | Illustration image",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218382738234301": {
       "code": "XCF-13796",
       "name": "XCF-13796 | Illustrations",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218379718550669": {
       "code": "XCF-13783",
       "name": "XCF-13783 | Landing page copy",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218378594430693": {
       "code": "XCF-13779",
       "name": "XCF-13779 | Landing page copy",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218367268660504": {
       "code": "XCF-13774",
@@ -3226,7 +3343,8 @@
           "text": "Related project identified: XCFT-5724 | Molly Garcia (https://app.asana.com/0/1215906401561993/1215953162522556) - This was a previous swag design request from the same requester (Molly Garcia, cost centre 7036) completed in June 2026 for Xerocon custom swag. The current request (XCF-13774) is for logo modification for partner award winner swag with a September 11 deadline. While these are distinct requests, please confirm this is not related to the previous project before proceeding."
         }
       ],
-      "summary": "Fastest in the set. Automated flag linked it to a prior swag request from the same requester."
+      "summary": "Fastest in the set. Automated flag linked it to a prior swag request from the same requester.",
+      "cause": "No blocker"
     },
     "1218350428654354": {
       "code": "XCF-13769",
@@ -3243,7 +3361,8 @@
           "text": "Potential duplicate identified. Please review the following related task before proceeding:\n\n• XCFT-1064 - Update MTD fast track guide (https://app.asana.com/0/0/1214081023031975/f)\n\nThis task involves the same document (MTD fast track guide), same requester (Flaka Jasari), same deliverable type (PDF amends), and same campaign (MTD). The previous task was completed in April 2026. Please confirm whether this is a new request for additional amends or if it relates to the previously completed work."
         }
       ],
-      "summary": "Fast. Requester flagged changes coming the following week; an automated check noted a related guide."
+      "summary": "Fast. Requester flagged changes coming the following week; an automated check noted a related guide.",
+      "cause": "No blocker"
     },
     "1218344138545215": {
       "code": "XCF-13703",
@@ -3255,7 +3374,8 @@
           "text": "Potential related task identified:\n\nhttps://app.asana.com/0/1215906401561993/1218128089210086 - Also a Hackathon 2026 request for creative assets\n\nWhile this request is for sticker/logo designs and the existing task is for a hero graphic, both are part of the Hackathon 2026 initiative. Please review to ensure these requests are coordinated and avoid any overlapping work or conflicting creative directions."
         }
       ],
-      "summary": "No human discussion recorded — only an automated flag that it may overlap an existing Hackathon creative request."
+      "summary": "No human discussion recorded — only an automated flag that it may overlap an existing Hackathon creative request.",
+      "cause": "Unexplained"
     },
     "1218344188773381": {
       "code": "XCF-13698",
@@ -3272,7 +3392,8 @@
           "text": "Yea it did, for SH review currently"
         }
       ],
-      "summary": "Already routed and sitting in stakeholder review when queried."
+      "summary": "Already routed and sitting in stakeholder review when queried.",
+      "cause": "No blocker"
     },
     "1218328580526504": {
       "code": "XCF-13688",
@@ -3289,7 +3410,8 @@
           "text": "you can consolidate IE and ZA under EMEA but they are 2 different markets with the same deliverables."
         }
       ],
-      "summary": "Flagged as a possible duplicate of the Ireland request; requester confirmed IE and ZA are separate markets with identical deliverables."
+      "summary": "Flagged as a possible duplicate of the Ireland request; requester confirmed IE and ZA are separate markets with identical deliverables.",
+      "cause": "Brief & scoping"
     },
     "1218328182783597": {
       "code": "XCF-13684",
@@ -3331,19 +3453,22 @@
           "text": "Exactly how Tom mentioned above. Im confused who can create these quotes on paid social ads"
         }
       ],
-      "summary": "Scope discussion — whether to film new video in Ireland or template the existing quotes — resolved quickly."
+      "summary": "Scope discussion — whether to film new video in Ireland or template the existing quotes — resolved quickly.",
+      "cause": "Brief & scoping"
     },
     "1218309727203958": {
       "code": "XCF-13648",
       "name": "XCF-13648 | [no value] | XCF delivery support | Xerocon Melbourne 2027",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218306390936185": {
       "code": "XCF-13631",
       "name": "[no value] | [no value] | XCF delivery support | FY28 NZ XPAS event",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218306385297522": {
       "code": "XCF-13626",
@@ -3360,25 +3485,29 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1200166939945319 can you please share the doc with me too? Thanks"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218304523303251": {
       "code": "XCF-13613",
       "name": "XCF-13613 | XCF Slack emojis",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218306352894050": {
       "code": "XCF-13591",
       "name": "XCF-13591 | SSC Linked In tile",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218306343046919": {
       "code": "XCF-13584",
       "name": "XCF-13584 | Holiday store swag promo",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218301401635702": {
       "code": "XCF-13579",
@@ -3390,7 +3519,8 @@
           "text": "Potential related task identified:\n\nhttps://app.asana.com/0/1215906401561993/1215023286944904 - Completed Aduro co-branded banner (same requester, region, business group, and FedEx printing specifications)\n\nThis new request is for Enterprise co-branded banners and references the Aduro banner completed earlier. While these appear to be for different partner organizations, please review to confirm this is a distinct request and not a duplicate or related project that should be consolidated."
         }
       ],
-      "summary": "No human discussion recorded — only an automated flag against a previous co-branded banner job."
+      "summary": "No human discussion recorded — only an automated flag against a previous co-branded banner job.",
+      "cause": "Unexplained"
     },
     "1218286278545643": {
       "code": "XCF-13574",
@@ -3497,7 +3627,8 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1198922887031423 That's great! Please let us know if this is okay to close or if you need anything else from us. Thanks!"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218252126129315": {
       "code": "XCF-13564",
@@ -3509,43 +3640,50 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1204783047017636assigning you this request. Its been converted to a project and I've assigned you to it. Thanks so much!"
         }
       ],
-      "summary": "No blocker recorded. Converted and assigned on 8 Sep with no discussion beyond the handover note."
+      "summary": "No blocker recorded. Converted and assigned on 8 Sep with no discussion beyond the handover note.",
+      "cause": "Unexplained"
     },
     "1218213791826507": {
       "code": "XCF-12076",
       "name": "XCF-12076 | Blog header image: Xero x Anthropic, Xerocon US",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218207733628585": {
       "code": "XCF-11710",
       "name": "XCF-11710 | Canva XCF approvals",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218207733628576": {
       "code": "XCF-11705",
       "name": "XCF-11705 | Sprint | 31st - 4th Sep",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218207733628567": {
       "code": "XCF-11700",
       "name": "XCF - 11700 | Sprint | 7th - 11th Sep",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218207962551413": {
       "code": "XCF-11692",
       "name": "XCF-11687 | Sprint | 14th - 18th September",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218207962551399": {
       "code": "XCF-11687",
       "name": "XCF-11692 | Sprint | 21st - 25th September",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218170817279172": {
       "code": "XCF-10865",
@@ -3557,7 +3695,8 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1204783047017636could we please have a logo designed for XGF: Volunteering. https://app.asana.com/1/41261904390129/profile/1201712921330600 we will use this for the announcement comms going out 9 Sept."
         }
       ],
-      "summary": "Single request comment with a fixed 9 Sep comms deadline. No back-and-forth."
+      "summary": "Single request comment with a fixed 9 Sep comms deadline. No back-and-forth.",
+      "cause": "No blocker"
     },
     "1218138586922005": {
       "code": "XCF-10771",
@@ -3574,7 +3713,8 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1204783047017636 as per slack, no photography will be supplied in time so happy with generic images to support the post event content. Thanks!"
         }
       ],
-      "summary": "**Blocked on inputs that never arrived.** Waiting on event photography; resolved once the requester confirmed generic imagery was acceptable."
+      "summary": "**Blocked on inputs that never arrived.** Waiting on event photography; resolved once the requester confirmed generic imagery was acceptable.",
+      "cause": "Requester-side"
     },
     "1218135957033848": {
       "code": "XCF-10733",
@@ -3616,7 +3756,8 @@
           "text": "QR codes here https://app.asana.com/1/41261904390129/profile/1209190499812055. Let me know if you'll need any more otherwise will close this off 🙂"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218128089210086": {
       "code": "XCF-10682",
@@ -3638,7 +3779,8 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1204783047017636 and https://app.asana.com/1/41261904390129/profile/1212667806471513 - a quick check in on the hackathon creative? If it isn't possible to get this done today (7 Sep), then please let me know?  (Otherwise I'll try and spin up something with Gemini)"
         }
       ],
-      "summary": "**Queued behind Roadshow work.** Scope was agreed the same day; the requester chased on 7 Sep before it moved."
+      "summary": "**Queued behind Roadshow work.** Scope was agreed the same day; the requester chased on 7 Sep before it moved.",
+      "cause": "Capacity queue"
     },
     "1218113925952836": {
       "code": "XCF-10681",
@@ -3665,7 +3807,8 @@
           "text": "Something like this https://app.asana.com/1/41261904390129/profile/1204783047017636\n\nhttps://app.asana.com/app/asana/-/get_asset?asset_id=1218284594601105\n"
         }
       ],
-      "summary": "**Incomplete brief.** Two rounds of questions on channels and specs before the requester supplied usage context on 8 Sep."
+      "summary": "**Incomplete brief.** Two rounds of questions on channels and specs before the requester supplied usage context on 8 Sep.",
+      "cause": "Brief & scoping"
     },
     "1218122998453238": {
       "code": "XCF-10680",
@@ -3682,7 +3825,8 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1212667806471504 assigning this one your way for next weeks sprint in line with the previous US sales decks you supported"
         }
       ],
-      "summary": "Clean routing, no blockers — assigned to the studio for the following sprint."
+      "summary": "Clean routing, no blockers — assigned to the studio for the following sprint.",
+      "cause": "No blocker"
     },
     "1218078610220722": {
       "code": "XCF-10648",
@@ -3699,7 +3843,8 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1204643954821736 have requested access to the sheet please 🙂"
         }
       ],
-      "summary": "**Waiting on access, not capacity.** Assigned to Logen on day one, but he needed access to the requester’s source sheet and the handover stalled there."
+      "summary": "**Waiting on access, not capacity.** Assigned to Logen on day one, but he needed access to the requester’s source sheet and the handover stalled there.",
+      "cause": "Access & permissions"
     },
     "1218078262167491": {
       "code": "XCF-10647",
@@ -3716,7 +3861,8 @@
           "text": "note eDM support only - no landing page copy"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1218067536923828": {
       "code": "XCF-10616",
@@ -3853,7 +3999,8 @@
           "text": "Amazing, thank you!"
         }
       ],
-      "summary": "Deck access needed first, then a long but productive thread agreeing which merch items to refresh."
+      "summary": "Deck access needed first, then a long but productive thread agreeing which merch items to refresh.",
+      "cause": "Access & permissions"
     },
     "1218038063760973": {
       "code": "XCF-10598",
@@ -3900,7 +4047,8 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1209190499812055 https://app.asana.com/1/41261904390129/profile/1204783047017636\n\nPlease see attached updated SMB pricing plan AU with Ultra row added in"
         }
       ],
-      "summary": "**Active throughout.** Time went on pinning down exactly which rows changed, then locating the working InDesign files. Delivered 4 Sep."
+      "summary": "**Active throughout.** Time went on pinning down exactly which rows changed, then locating the working InDesign files. Delivered 4 Sep.",
+      "cause": "Creative iteration"
     },
     "1218003783601972": {
       "code": "XCF-10565",
@@ -4057,7 +4205,8 @@
           "text": "Smartly IDs are here: 3392 - 3397\nhttps://app.asana.com/1/41261904390129/profile/1211285596272417 https://app.asana.com/1/41261904390129/profile/1216496014620082"
         }
       ],
-      "summary": "**Long creative iteration** — 30 comments reconciling brief versions, then several rounds on copy and design direction."
+      "summary": "**Long creative iteration** — 30 comments reconciling brief versions, then several rounds on copy and design direction.",
+      "cause": "Creative iteration"
     },
     "1217998532518195": {
       "code": "XCF-10543",
@@ -4104,7 +4253,8 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1211285596272417\n\nIds are 3380 - 3391. \nFirst 6 are Feature-led - Message testing\nSecond 6 are Social-proof"
         }
       ],
-      "summary": "**Held for regional feedback** that changed the headlines. Resumed once updated messaging came back."
+      "summary": "**Held for regional feedback** that changed the headlines. Resumed once updated messaging came back.",
+      "cause": "Approval cycle"
     },
     "1217996809406601": {
       "code": "XCF-10533",
@@ -4166,7 +4316,8 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1211285596272417 to ask Paid Social to turn live and share launch post."
         }
       ],
-      "summary": "**Stakeholder approval cycle.** Copy went to region, the owner went on leave, cover had to re-request document access, then another feedback round followed."
+      "summary": "**Stakeholder approval cycle.** Copy went to region, the owner went on leave, cover had to re-request document access, then another feedback round followed.",
+      "cause": "Approval cycle"
     },
     "1217996047123477": {
       "code": "XCF-10530",
@@ -4178,7 +4329,8 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1133487637317268 booking this in for next week. Should have everything needed to get underway but let me know if any questions. Thanks!"
         }
       ],
-      "summary": "Booked straight into the following week’s sprint. No blockers."
+      "summary": "Booked straight into the following week’s sprint. No blockers.",
+      "cause": "No blocker"
     },
     "1217902343187988": {
       "code": "XCF-10447",
@@ -4250,7 +4402,8 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1213911683756869 we completed these refinements a couple weeks back. Tagged you in this task: https://app.asana.com/1/41261904390129/project/1218226868581141/task/1218773439937494?focus=true"
         }
       ],
-      "summary": "**Stalled twice.** First on Google Slides edit access, then a round of design feedback sat unactioned for two weeks — Logen acknowledged the miss on 24 Sep."
+      "summary": "**Stalled twice.** First on Google Slides edit access, then a round of design feedback sat unactioned for two weeks — Logen acknowledged the miss on 24 Sep.",
+      "cause": "Dropped"
     },
     "1217896257579749": {
       "code": "XCF-10437",
@@ -4302,7 +4455,8 @@
           "text": "Amazing! Thank you Hannah."
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1217896144286131": {
       "code": "XCF-10434",
@@ -4324,13 +4478,15 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1209190499812055 I would recommend creating thiese using the new Canva templates that rolled out last week.\n\nAll the info need to get underway can be found here: https://docs.google.com/presentation/d/1W9j2x7TVqV_xxWggYL-v1KMs1L4JA_6DqHnfxHUhU4o/edit?usp=sharing"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1217860240731094": {
       "code": "XCF-10395",
       "name": "XCF-10395 - New video intro and outro",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1217836028174143": {
       "code": "XCF-10378",
@@ -4372,7 +4528,8 @@
           "text": "Thanks https://app.asana.com/1/41261904390129/profile/1212667806471504 🙌 \n\n https://app.asana.com/1/41261904390129/profile/1211496298336320is going to start building out some Jomablue events and will shout if there are any issues."
         }
       ],
-      "summary": "Scheduled into the following week’s sprint as agreed. A wrong template link added one extra round."
+      "summary": "Scheduled into the following week’s sprint as agreed. A wrong template link added one extra round.",
+      "cause": "No blocker"
     },
     "1217767652827495": {
       "code": "XCF-10364",
@@ -4419,7 +4576,8 @@
           "text": "You are amazing. Thanks https://app.asana.com/1/41261904390129/profile/1212669624854574"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1217779616964205": {
       "code": "XCF-10348",
@@ -4451,13 +4609,15 @@
           "text": "This is great! Thanks so much"
         }
       ],
-      "summary": "**Date renegotiated upfront.** XCF flagged the Canva rebuild would not make the Monday driver; the requester accepted end of the following week."
+      "summary": "**Date renegotiated upfront.** XCF flagged the Canva rebuild would not make the Monday driver; the requester accepted end of the following week.",
+      "cause": "No blocker"
     },
     "1217769045611792": {
       "code": "XCF-10342",
       "name": "XCF-10342 | AIM Motion R1 - SB | AB - AI MODULAR Video Creative Brief",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1217772702375842": {
       "code": "XCF-10337",
@@ -4504,7 +4664,8 @@
           "text": "Done! \n\nanother consideration that I think I didn't include is making it very clear that it is for externals as we are running a tandem campaign to get xeros to refer customers and dont want Xeros getting confused and using these external facing posters / QR codes"
         }
       ],
-      "summary": "**Access first, then a date reset.** Stalled on document access, then the 3 Sep driver was declined as unachievable and the requester moved their launch."
+      "summary": "**Access first, then a date reset.** Stalled on document access, then the 3 Sep driver was declined as unachievable and the requester moved their launch.",
+      "cause": "Access & permissions"
     },
     "1217695742491717": {
       "code": "XCF-10091",
@@ -4596,7 +4757,8 @@
           "text": "Thanks Pete. https://app.asana.com/1/41261904390129/profile/1211074887539898, I've reached out to IT and asked them to implement for Xero's based in the SG office only."
         }
       ],
-      "summary": "**Ambiguous brief, then external dependency.** Three exchanges to establish what \"email sign off artwork\" meant, after which delivery depended on the brand refresh rollout and IT — outside XCF’s control."
+      "summary": "**Ambiguous brief, then external dependency.** Three exchanges to establish what \"email sign off artwork\" meant, after which delivery depended on the brand refresh rollout and IT — outside XCF’s control.",
+      "cause": "Brief & scoping"
     },
     "1217674186640058": {
       "code": "XCF-10082",
@@ -4638,7 +4800,8 @@
           "text": "We haven't had approval yet, as we were hoping to understand who were the content owners and then put together a deck then get approval once we had a draft. \n\nI've reached out to quite a few teams internally and wasn't able to gather who owned it or didnt hear back.\n\nAre we able to get the decks first, and then I can connect with the Xerocon team following on the ask?"
         }
       ],
-      "summary": "**Blocked on content-owner approval.** Pete asked repeatedly whether permission existed to reuse the Xerocon decks; it had not been obtained."
+      "summary": "**Blocked on content-owner approval.** Pete asked repeatedly whether permission existed to reuse the Xerocon decks; it had not been obtained.",
+      "cause": "Approval cycle"
     },
     "1217632873618639": {
       "code": "XCF-10041",
@@ -4670,7 +4833,8 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1204783047017636, this is now scheduled for Monday 12 October. The documents should be finalised by the end of next week."
         }
       ],
-      "summary": "**Not an XCF delay.** Deliberately placed On Hold because Product & Engineering pushed the underlying release. Requester confirmed a new date of 12 Oct."
+      "summary": "**Not an XCF delay.** Deliberately placed On Hold because Product & Engineering pushed the underlying release. Requester confirmed a new date of 12 Oct.",
+      "cause": "Requester-side"
     },
     "1217625917069232": {
       "code": "XCF-10026",
@@ -4682,7 +4846,8 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1201748334474309 and https://app.asana.com/1/41261904390129/profile/1214635459466145 I've left comments in the deck to get some information. We will need this brief completed and approved by Meg before we can KO. https://app.asana.com/1/41261904390129/profile/1214038101452027 Tagging you as the PM that can pick this request up. thanks!"
         }
       ],
-      "summary": "**Incomplete brief.** Could not kick off until the brief was finished and approved by the stakeholder."
+      "summary": "**Incomplete brief.** Could not kick off until the brief was finished and approved by the stakeholder.",
+      "cause": "Brief & scoping"
     },
     "1217448989669529": {
       "code": "XCF-9873",
@@ -4794,7 +4959,8 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1211026264666242 FYI"
         }
       ],
-      "summary": "**Kick-off blocked by the calendar, then rescoped.** The kick-off had to wait for Xerocon and the leadership summit; the call then cut scope from 84 variants to 7 videos."
+      "summary": "**Kick-off blocked by the calendar, then rescoped.** The kick-off had to wait for Xerocon and the leadership summit; the call then cut scope from 84 variants to 7 videos.",
+      "cause": "Brief & scoping"
     },
     "1217447997440488": {
       "code": "XCF-9865",
@@ -4871,13 +5037,15 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1209839736832014 https://app.asana.com/1/41261904390129/profile/1214923954467978, checking in if you need anything else from us for this?"
         }
       ],
-      "summary": "**Rerouted, then waiting on product files.** Passed to AI & Media, who needed product Figma files; design direction also shifted away from product GIFs mid-flight."
+      "summary": "**Rerouted, then waiting on product files.** Passed to AI & Media, who needed product Figma files; design direction also shifted away from product GIFs mid-flight.",
+      "cause": "Access & permissions"
     },
     "1217363848610916": {
       "code": "XCF-9761",
       "name": "XCF-9761 - Xero/Melio Co-branded Visual Assets",
       "comments": [],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1217333575043907": {
       "code": "XCF-9750",
@@ -4894,7 +5062,8 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1212672438909411 These screens appear on Smart TV home pages. I've included a mock up example using YBS. \n\nThis placement is to generate additional cut through so it would be treated similar to a BVOD / CTV placement, measuring whether these contribute to lift in awareness / consideration. There will be no click through URL required. \n\nhttps://app.asana.com/app/asana/-/get_asset?asset_id=1217359758608446\n"
         }
       ],
-      "summary": "**Arrived unbriefed.** Quincey had to establish where the screens appeared and what action they drove before anything could start."
+      "summary": "**Arrived unbriefed.** Quincey had to establish where the screens appeared and what action they drove before anything could start.",
+      "cause": "Brief & scoping"
     },
     "1217320290089434": {
       "code": "XCF-9744",
@@ -4916,7 +5085,8 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1211157647475800 assigning you this one to sit in the AI & Media team. If you look at the comments the video has been shared and Figma files to come. Thank you so much!"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1217319357714971": {
       "code": "XCF-9742",
@@ -4948,7 +5118,8 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1216261344869346 just an update that we're across the logo request and are getting internal feedback before sharing anything here. Will likely come your way next week. Thank you 🙂"
         }
       ],
-      "summary": "**Requester-side delay.** XCF engaged within a week, then the requester was travelling and took two weeks to reply. Scope also grew from assets to a full logo needing internal brand feedback."
+      "summary": "**Requester-side delay.** XCF engaged within a week, then the requester was travelling and took two weeks to reply. Scope also grew from assets to a full logo needing internal brand feedback.",
+      "cause": "Requester-side"
     },
     "1217312738377162": {
       "code": "XCF-9725",
@@ -5005,7 +5176,8 @@
           "text": "All done. cheers."
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1217266773836326": {
       "code": "XCF-9598",
@@ -5022,7 +5194,8 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1211157647475800 assigning this to you. Please connect with Quincey in your catch up regarding this request. Thanks!"
         }
       ],
-      "summary": "Routed and assigned within a day, then no further discussion recorded. The thread does not explain the wait."
+      "summary": "Routed and assigned within a day, then no further discussion recorded. The thread does not explain the wait.",
+      "cause": "Unexplained"
     },
     "1217209763378137": {
       "code": "XCF-9498",
@@ -5124,7 +5297,8 @@
           "text": "https://app.asana.com/1/41261904390129/profile/1216496014620082, all good to close, thank you!"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1217180912246449": {
       "code": "XCF-9414",
@@ -5146,7 +5320,8 @@
           "text": "Thank you https://app.asana.com/1/41261904390129/profile/1204783047017636really appreciate that!"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1217107505402166": {
       "code": "XCF-9221",
@@ -5338,7 +5513,8 @@
           "text": "I still need to build these ads early next week. Once I have built them, we should be good to close this task out later in the week. 👍"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     },
     "1216951170275692": {
       "code": "XCF-8977",
@@ -5375,7 +5551,8 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1204783047017636 please put this on hold for now. We'll need to pick up when https://app.asana.com/1/41261904390129/profile/1205223421169046is back from leave.\n\nCC: https://app.asana.com/1/41261904390129/profile/1212280381411974"
         }
       ],
-      "summary": null
+      "summary": null,
+      "cause": null
     }
   }
 }

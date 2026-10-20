@@ -767,6 +767,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <input id="rq-search" class="rq-search" type="search" placeholder="Filter by code, name, POD or requester…" oninput="renderRequests()">
     <select id="rq-quarter" class="rq-select" onchange="renderRequests()"><option value="">All quarters</option></select>
     <select id="rq-type" class="rq-select" onchange="renderRequests()"><option value="">All project types</option></select>
+    <select id="rq-cause" class="rq-select" onchange="renderRequests()"><option value="">All causes</option></select>
     <select id="rq-sort" class="rq-select" onchange="renderRequests()">
       <option value="longest">Longest wait first</option>
       <option value="shortest">Shortest wait first</option>
@@ -910,9 +911,9 @@ function rqMedian(arr){
 // One breakdown table per dimension: how many requests, how many measurable,
 // and the median wait. Bar is scaled against the slowest group so the shape reads
 // at a glance rather than needing the numbers compared by eye.
-function rqBreakdown(title,keyFn,order){
+function rqBreakdown(title,keyFn,order,source){
   const groups={};
-  REQUESTS_DATA.forEach(r=>{
+  (source||REQUESTS_DATA).forEach(r=>{
     const k=keyFn(r)||'Unset';
     (groups[k]=groups[k]||[]).push(r);
   });
@@ -951,9 +952,16 @@ function renderRequests(){
   const types=[...new Set(REQUESTS_DATA.map(r=>r.projectType).filter(Boolean))].sort();
   rqFillSelect('rq-quarter',quarters);
   rqFillSelect('rq-type',types);
+  rqFillSelect('rq-cause',[...new Set(REQUESTS_DATA.map(r=>r.cause).filter(Boolean))].sort());
+  // Cause is only assigned to requests that have a measurable wait, so this panel
+  // reads from those alone — otherwise 300+ unmeasured rows pile into "Unset".
+  const caused=REQUESTS_DATA.filter(r=>r.durationHours!==null&&r.cause);
+  const CAUSE_ORDER=['Access & permissions','Brief & scoping','Capacity queue','Approval cycle',
+    'Requester-side','Creative iteration','Misrouted','Dropped','No blocker','Unexplained'];
   document.getElementById('rq-breakdowns').innerHTML=
     rqBreakdown('Median wait by quarter',r=>r.quarter,quarters)+
-    rqBreakdown('Median wait by project type',r=>r.projectType,['Roadmap','Micro (BAU)','XCF initiative','Unset']);
+    rqBreakdown('Median wait by project type',r=>r.projectType,['Roadmap','Micro (BAU)','XCF initiative','Unset'])+
+    (caused.length?rqBreakdown('Median wait by cause — '+caused.length+' classified',r=>r.cause,CAUSE_ORDER,caused):'');
 
   const measured=REQUESTS_DATA.filter(r=>r.durationHours!==null&&r.durationHours!==undefined);
   const sorted=measured.map(r=>r.durationHours).sort((a,b)=>a-b);
@@ -992,6 +1000,8 @@ function renderRequests(){
   if(onlyMeasured)rows=rows.filter(r=>r.durationHours!==null&&r.durationHours!==undefined);
   if(fq)rows=rows.filter(r=>r.quarter===fq);
   if(ft)rows=rows.filter(r=>r.projectType===ft);
+  const fc=document.getElementById('rq-cause').value;
+  if(fc)rows=rows.filter(r=>r.cause===fc);
   if(q)rows=rows.filter(r=>((r.code||'')+' '+(r.name||'')+' '+(r.pod||'')+' '+(r.requester||'')).toLowerCase().includes(q));
 
   // Unmeasured rows have no duration to rank by, so they always sink to the bottom
@@ -1016,8 +1026,12 @@ function renderRequests(){
       '</tr></thead><tbody>';
     rows.forEach(r=>{
       const pod=r.pod?'<span class="rq-pill" style="color:var(--sky);border-color:var(--sky)">'+r.pod+'</span>':'<span class="rq-none">—</span>';
+      const CAUSE_COL={'Access & permissions':'#F5A623','Brief & scoping':'#CF89FE','Capacity queue':'#3eccff',
+        'Approval cycle':'#FDCC08','Requester-side':'#FF719B','Creative iteration':'#6AEAAA',
+        'Misrouted':'#FF719B','Dropped':'#FF719B','No blocker':'#8b9abf','Unexplained':'#8b9abf'};
+      const tag=r.cause?'<div style="margin-bottom:4px"><span class="rq-type" style="color:'+(CAUSE_COL[r.cause]||'var(--muted)')+';border-color:'+(CAUSE_COL[r.cause]||'var(--muted)')+'">'+r.cause+'</span></div>':'';
       let why;
-      if(r.summaryHtml)why=r.summaryHtml;
+      if(r.summaryHtml)why=tag+r.summaryHtml;
       else if(r.durationHours===null||r.durationHours===undefined)why='<span class="rq-none">No linked project marked On Track</span>';
       else if(!r.commentCount)why='<span class="rq-none">No comments on the request</span>';
       else why='<span class="rq-none">'+r.commentCount+' comment'+(r.commentCount===1?'':'s')+' — not yet summarised</span>';
