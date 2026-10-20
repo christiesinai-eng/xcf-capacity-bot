@@ -767,6 +767,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <input id="rq-search" class="rq-search" type="search" placeholder="Filter by code, name, POD or requester…" oninput="renderRequests()">
     <select id="rq-quarter" class="rq-select" onchange="renderRequests()"><option value="">All quarters</option></select>
     <select id="rq-type" class="rq-select" onchange="renderRequests()"><option value="">All project types</option></select>
+    <select id="rq-sort" class="rq-select" onchange="renderRequests()">
+      <option value="longest">Longest wait first</option>
+      <option value="shortest">Shortest wait first</option>
+      <option value="newest">Most recent first</option>
+      <option value="oldest">Oldest first</option>
+    </select>
     <label class="rq-toggle"><input type="checkbox" id="rq-only-measured" checked onchange="renderRequests()"> Only requests with a cycle time</label>
   </div>
   <div class="rq-tablewrap">
@@ -984,6 +990,20 @@ function renderRequests(){
   if(fq)rows=rows.filter(r=>r.quarter===fq);
   if(ft)rows=rows.filter(r=>r.projectType===ft);
   if(q)rows=rows.filter(r=>((r.code||'')+' '+(r.name||'')+' '+(r.pod||'')+' '+(r.requester||'')).toLowerCase().includes(q));
+
+  // Unmeasured rows have no duration to rank by, so they always sink to the bottom
+  // of a duration sort rather than being treated as zero.
+  const sort=document.getElementById('rq-sort').value;
+  const dur=r=>(r.durationHours===null||r.durationHours===undefined)?null:r.durationHours;
+  rows=rows.slice().sort((a,b)=>{
+    if(sort==='newest')return b.submittedAt.localeCompare(a.submittedAt);
+    if(sort==='oldest')return a.submittedAt.localeCompare(b.submittedAt);
+    const da=dur(a),db=dur(b);
+    if(da===null&&db===null)return b.submittedAt.localeCompare(a.submittedAt);
+    if(da===null)return 1;
+    if(db===null)return -1;
+    return sort==='shortest'?da-db:db-da;
+  });
 
   if(!rows.length){
     tbl.innerHTML='<tr><td><div class="rq-empty">No requests match this filter.</div></td></tr>';

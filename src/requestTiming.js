@@ -49,6 +49,14 @@ function loadCache() {
   }
 }
 
+// A request task belongs to several projects, and Asana's permalink_url points at
+// whichever one it picks — usually "Cost per asset", not the intake board. Build the
+// URL against XCF | Requests so the link opens the task in the context people expect.
+function requestUrl(taskGid) {
+  const ws = process.env.ASANA_WORKSPACE_GID || '41261904390129';
+  return `https://app.asana.com/1/${ws}/project/${REQUESTS_PROJECT_GID}/task/${taskGid}`;
+}
+
 function enumValue(t, gid) { return t.custom_fields?.find(f => f.gid === gid)?.enum_value?.name || null; }
 function textValue(t, gid) { return t.custom_fields?.find(f => f.gid === gid)?.text_value || null; }
 function peopleValue(t, gid) { return t.custom_fields?.find(f => f.gid === gid)?.people_value?.[0]?.name || null; }
@@ -198,7 +206,7 @@ async function buildRequestsData() {
       gid: r.gid,
       code: extractCode(textValue(r, XCF_CODE_FIELD_GID) || r.name),
       name: (r.name || '').replace(/^\[Converted to project\]\s*/, ''),
-      url: r.permalink_url,
+      url: requestUrl(r.gid),
       pod: enumValue(r, PODS_FIELD_GID),
       requester: peopleValue(r, REQUESTER_FIELD_GID),
       requestStatus: enumValue(r, STATUS_FIELD_GID),
