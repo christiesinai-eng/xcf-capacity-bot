@@ -66,6 +66,7 @@ async function getTasksForUser(userGid) {
     'completed',
     'due_on',
     'start_on',
+    'parent.gid',
     'created_by.name',
     'created_by.gid',
     'memberships.project.name',
@@ -184,8 +185,26 @@ function addDays(dateStr, n) {
 function round1(n) { return Math.round(n * 10) / 10; }
 function round2(n) { return Math.round(n * 100) / 100; }
 
+// Manual POD assignments for members excluded from the capacity tab
+const MANUAL_POD = {
+  'Christie Sinai': 'Campaign Ops',
+  'Pete Montgomery': 'Design',
+  'Ben Smith': 'Campaign',
+  'James Blow': 'Campaign',
+};
+
+// Manual OOO overrides — for members whose OOO can't be set in Asana (e.g. long leave)
+const MANUAL_OOO = [
+  { name: 'Aniqah', start: '2026-07-01', end: '2027-07-31' },
+  { name: 'Steph Gardner', start: '2026-07-20', end: '2026-08-09' },
+  { name: 'Christie Sinai', start: '2026-09-16', end: '2026-10-04' },
+];
+
 const EXCLUDED_MEMBERS = [
   'Gabrielle George',
+  'Gabrielle GeorgeTo', // typo'd duplicate account in Asana
+  'Natalie Wei Jia Lee',
+  'Brad Holland',
   'Christie Sinai',
   'Sha Edalati',
   'Chris Larcombe',
@@ -193,9 +212,20 @@ const EXCLUDED_MEMBERS = [
   'Nadim Malvat',
   'Ben Smith',
   'Ali Berg',
-  'Quincey Brinker',
-  'James Blow',
+  'Chiko Kurniawan',
 ];
+
+// Hidden from the OOO tab entirely — both booked leave and the no-leave stub row.
+// Deliberately separate from EXCLUDED_MEMBERS: someone can be off the workload tabs
+// but still need their leave visible (e.g. Christie, Pete), so excluding a member
+// from capacity must not silently hide when they're away.
+const OOO_EXCLUDED = new Set([
+  'Gabrielle George',
+  'Gabrielle GeorgeTo',
+  'Natalie Wei Jia Lee',
+  'Brad Holland',
+  'mikeohall@me.com',
+]);
 
 // These members appear on the capacity tab but are excluded from the missing fields tab
 const MISSING_EXCLUDED_MEMBERS = [
@@ -204,7 +234,6 @@ const MISSING_EXCLUDED_MEMBERS = [
   'Tom Gregson',
   'Christie Sinai',
   'Becky Sharp',
-  'Naomi Lawson',
   'Sherry Choe',
   'Sandeep Garcha',
   'mikeohall@me.com',
@@ -244,6 +273,28 @@ async function buildMemberData() {
     const incomplete = await getTasksForUser(member.gid);
     totalTaskCount += incomplete.length;
 
+    // For subtasks with no estimate, fetch parent task data to support rollup logic:
+    // - If parent has estimate: suppress subtask from missing fields; report parent if it lacks a due date
+    // - If parent has no estimate: show subtask in missing fields normally
+    const parentGidsNeeded = new Set(
+      incomplete.filter(t => !getCustomFieldNumber(t, estGid) && t.parent?.gid).map(t => t.parent.gid)
+    );
+    const parentData = {}; // gid → { name, due, est }
+    if (parentGidsNeeded.size > 0) {
+      const parentClient = asanaClient();
+      await batchedMap([...parentGidsNeeded], async (gid) => {
+        try {
+          const resp = await parentClient.get(`/tasks/${gid}`, {
+            params: { opt_fields: 'name,due_on,custom_fields.gid,custom_fields.number_value' },
+          });
+          const pt = resp.data.data;
+          const mins = getCustomFieldNumber(pt, estGid);
+          parentData[gid] = { name: pt.name, due: pt.due_on || null, est: mins ? mins / 60 : null };
+        } catch (_) {}
+      }, 5, 500);
+    }
+    const reportedParentGids = new Set();
+
     const pod = podMap[member.name] || 'Unknown';
 
     const memberTasks = [];
@@ -258,6 +309,14 @@ async function buildMemberData() {
       const end = new Date(vd.end_on + 'T00:00:00');
       return todayDate >= start && todayDate <= end;
     })();
+    // Manual OOO overrides (for long leave not set in Asana)
+    if (!isOoo) {
+      isOoo = MANUAL_OOO.some(o =>
+        member.name.startsWith(o.name) &&
+        todayDate >= new Date(o.start + 'T00:00:00') &&
+        todayDate <= new Date(o.end + 'T00:00:00')
+      );
+    }
     const seenGids = new Set();
 
     for (const t of incomplete) {
@@ -268,8 +327,12 @@ async function buildMemberData() {
       // Skip completed tasks (belt-and-suspenders on top of completed_since:now)
       if (t.completed === true) continue;
 
+      // Skip placeholder capacity tasks — they represent unbooked time, not actual work
+      if (/placeholder/i.test(t.name)) continue;
+
       const estMinutes = getCustomFieldNumber(t, estGid);
       const estimatedHours = estMinutes ? estMinutes / 60 : null;
+      const parentInfo = t.parent?.gid ? (parentData[t.parent.gid] ?? null) : null;
       const startDate = t.start_on || null;
       const dueDate = t.due_on || null;
 
@@ -297,6 +360,30 @@ async function buildMemberData() {
 
       // Use first qualifying project as the display name
       const projectName = qualifyingProjects[0] ?? '';
+
+      // Subtask whose estimate rolls up to its parent — report the parent instead of the subtask
+      if (!estimatedHours && parentInfo?.est) {
+        // If parent is missing a due date, report the parent in missing fields (once per parent)
+        if (!parentInfo.due &&
+            !MISSING_EXCLUDED_MEMBERS.includes(member.name) &&
+            !reportedParentGids.has(t.parent.gid)) {
+          const skipNames = ['Production', 'In Market'];
+          if (!skipNames.includes(parentInfo.name?.trim())) {
+            reportedParentGids.add(t.parent.gid);
+            missingCount++;
+            allMissingTasks.push({
+              name: parentInfo.name,
+              gid: t.parent.gid,
+              proj: projectName,
+              assignee: member.name,
+              createdBy: '—',
+              pod,
+              missing: 'No due date',
+            });
+          }
+        }
+        continue; // Subtask covered by parent estimate — exclude from capacity & missing fields
+      }
 
       const isMissingFields = !estimatedHours || !dueDate;
       const isOverdue =
@@ -406,17 +493,29 @@ async function buildMemberData() {
 // ─────────────────────────────────────────────────────────────────────────────
 // PM TEAM DATA
 // ─────────────────────────────────────────────────────────────────────────────
-const PM_PORTFOLIO_GID = '1212248393751048';
+const PM_PORTFOLIO_GID = '1217210785824637'; // XCF | Projects (migrated from XCF: PM Dashboard Sep 2026)
+const PROJECT_TYPE_FIELD_GID = '1217575429570978'; // Project type (XCF): Roadmap | Micro (BAU) | XCF initiative
 
-const PM_EXCLUDED_OWNERS = [
-  'Christie Sinai', 'Ben Hobbs', 'Domenic Iaria',
-  'Nadim Malvat', 'Sandeep Garcha', 'Will Rich', 'Ali Berg',
+// Only these PMs appear on the PM Team tab
+const PM_ALLOWED_MEMBERS = [
+  'Quincey Brinker',
+  'Sherry Choe',
+  'Deepak Aujla',
+  'Logen Stent',
+  'Naomi Lawson',
+  'Becky Sharp',
+  'Tom Gregson',
+];
+
+// PMs who should always appear on the PM tab even if they own no portfolio projects yet
+const MANUAL_PM_MEMBERS = [
+  'Deepak Aujla',
 ];
 
 // Projects to hide from specific PMs (substring match on project name)
 const PM_PROJECT_EXCLUSIONS = {
   'Quincey Brinker': ['XCF: 2027 Goals', 'XCF Creative Development'],
-  'Logen Stent':     ['Design BAU Board', 'Design Studio BAU Board'],
+  'Logen Stent':     ['Design BAU Board'],
 };
 
 async function buildPMData() {
@@ -431,8 +530,8 @@ async function buildPMData() {
   const teamMembers = await getWorkspaceMembers();
   const memberByGid = {};
   teamMembers.forEach(m => { memberByGid[m.gid] = m.name; });
-  const excludedGids = new Set(
-    teamMembers.filter(m => PM_EXCLUDED_OWNERS.includes(m.name)).map(m => m.gid)
+  const allowedGids = new Set(
+    teamMembers.filter(m => PM_ALLOWED_MEMBERS.includes(m.name)).map(m => m.gid)
   );
 
   // Fetch all portfolio items with completed flag (paginated)
@@ -440,7 +539,7 @@ async function buildPMData() {
   let offset = null;
   do {
     const params = {
-      opt_fields: 'name,gid,completed,owner.gid,owner.name,start_on,due_on,permalink_url',
+      opt_fields: 'name,gid,completed,archived,owner.gid,owner.name,start_on,due_on,permalink_url,custom_fields.gid,custom_fields.enum_value.name',
       limit: 100,
     };
     if (offset) params.offset = offset;
@@ -449,11 +548,12 @@ async function buildPMData() {
     offset = resp.data.next_page?.offset ?? null;
   } while (offset);
 
-  // Filter: starts with X/8/9, non-excluded owner, NOT completed
+  // Filter: starts with X/8/9, non-excluded owner, NOT completed or archived
   const qualifying = allProjects.filter(p =>
     p.name && /^[X89]/i.test(p.name) &&
-    p.owner?.gid && !excludedGids.has(p.owner.gid) &&
-    !p.completed
+    p.owner?.gid && allowedGids.has(p.owner.gid) &&
+    !p.completed &&
+    !p.archived
   );
 
   // Fetch task completion counts in batches to avoid Asana 429 rate limits
@@ -499,6 +599,7 @@ async function buildPMData() {
       completedTasks: done,
       totalTasks:     total,
       pct:   total > 0 ? Math.round((done / total) * 100) : null,
+      projectType: p.custom_fields?.find(f => f.gid === PROJECT_TYPE_FIELD_GID)?.enum_value?.name || null,
       pmTasks: [], // PM Time Tracking tasks live here (nested under project)
     });
   }
@@ -558,6 +659,15 @@ async function buildPMData() {
     pm.today = round1(pm.tasks.reduce((s, t) => s + t.th, 0));
     pm.week  = round1(pm.tasks.reduce((s, t) => s + t.wh, 0));
     pm.month = round1(pm.tasks.reduce((s, t) => s + t.mh, 0));
+  }
+
+  // Ensure all allowed PM members always appear on the tab even with no portfolio projects
+  const existingNames = new Set(Object.values(pmMap).map(p => p.name));
+  for (const name of PM_ALLOWED_MEMBERS) {
+    if (existingNames.has(name)) continue;
+    const member = teamMembers.find(m => m.name === name);
+    if (!member) continue;
+    pmMap[member.gid] = { name, gid: member.gid, projects: [], tasks: [], today: 0, week: 0, month: 0 };
   }
 
   return Object.values(pmMap).sort((a, b) => a.name.localeCompare(b.name));
@@ -654,4 +764,509 @@ async function buildScopeCreepData() {
   return results;
 }
 
-module.exports = { buildMemberData, buildPMData, buildScopeCreepData };
+// ─────────────────────────────────────────────────────────────────────────────
+// OOO DATA
+// ─────────────────────────────────────────────────────────────────────────────
+const LEAVE_PROJECT_GID = '1212867822525791';
+
+async function buildOOOData() {
+  const client = asanaClient();
+  const podMap = process.env.ASANA_POD_MAP ? JSON.parse(process.env.ASANA_POD_MAP) : {};
+
+  const workspaceMembers = await getWorkspaceMembers();
+  const memberByName = {};
+  workspaceMembers.forEach(m => { memberByName[m.name] = m; });
+
+  const entries = [];
+  const seen = new Set();
+
+  function addEntry(name, pod, start, end, source) {
+    if (OOO_EXCLUDED.has(name)) return;
+    if (!start || !end || start > end) return;
+    const key = `${name}|${start}|${end}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    entries.push({ name, pod, start, end, source });
+  }
+
+  const manualOooNames = new Set(MANUAL_OOO.map(e => e.name));
+
+  // 1. Asana vacation_dates set by each user (skip anyone with a manual override)
+  for (const member of workspaceMembers) {
+    if (manualOooNames.has(member.name)) continue;
+    const vd = member.vacation_dates;
+    if (vd?.start_on && vd?.end_on) {
+      const pod = MANUAL_POD[member.name] || podMap[member.gid] || 'Unknown';
+      addEntry(member.name, pod, vd.start_on, vd.end_on, 'asana');
+    }
+  }
+
+  // 2. MANUAL_OOO entries (take priority over Asana vacation_dates)
+  for (const entry of MANUAL_OOO) {
+    const member = workspaceMembers.find(m => m.name.startsWith(entry.name));
+    if (!member) continue;
+    const pod = MANUAL_POD[member.name] || podMap[member.gid] || 'Unknown';
+    addEntry(member.name, pod, entry.start, entry.end, 'manual');
+  }
+
+  // 3. Leave backup project tasks (all assignees, no exclusions)
+  try {
+    let offset = null;
+    const leaveTasks = [];
+    do {
+      const params = {
+        project: LEAVE_PROJECT_GID,
+        opt_fields: 'name,assignee.name,assignee.gid,start_on,due_on,completed',
+        limit: 100,
+      };
+      if (offset) params.offset = offset;
+      const resp = await client.get('/tasks', { params });
+      leaveTasks.push(...resp.data.data);
+      offset = resp.data.next_page?.offset ?? null;
+    } while (offset);
+
+    for (const task of leaveTasks) {
+      if (task.completed || !task.due_on) continue;
+      const name = task.assignee?.name;
+      if (!name) continue;
+      if (manualOooNames.has(name)) continue; // manual entry takes priority
+      const member = memberByName[name];
+      const pod = MANUAL_POD[name] || (member ? (podMap[member.gid] || 'Unknown') : 'Unknown');
+      addEntry(name, pod, task.start_on || task.due_on, task.due_on, 'project');
+    }
+  } catch (err) {
+    console.warn('[OOO] Failed to fetch leave project:', err.message);
+  }
+
+  // Ensure every workspace member appears on the OOO tab, even with no OOO entries.
+  // These stub entries have no start/end and are skipped when rendering bars.
+  const seenNames = new Set(entries.map(e => e.name));
+  for (const member of workspaceMembers) {
+    if (seenNames.has(member.name)) continue;
+    if (OOO_EXCLUDED.has(member.name)) continue;
+    const pod = MANUAL_POD[member.name] || podMap[member.name] || 'Unknown';
+    entries.push({ name: member.name, pod, stub: true });
+  }
+
+  return entries;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ROADMAP / FORECASTER DATA  (driven by PM Dashboard portfolio)
+// ─────────────────────────────────────────────────────────────────────────────
+const BAR_TYPE_FIELD_GID    = '1213575237986690'; // Bar type (XCF): Production / In Market / Project Brief Due
+const APPL_REGIONS_FIELD_GID = '1212086752729219'; // Applicable Regions (Mktg Planning)
+const PRIORITY_FIELD_GID     = '1213031863971472'; // Priority (XCF): High / Medium / Low
+
+async function buildRoadmapData() {
+  const client = asanaClient();
+
+  // 1. Fetch all PM portfolio items (with regions)
+  const portfolioItems = [];
+  let offset = null;
+  do {
+    const params = {
+      opt_fields: [
+        'name,gid,completed',
+        'custom_fields.gid,custom_fields.multi_enum_values.name,custom_fields.enum_value.name',
+      ].join(','),
+      limit: 100,
+    };
+    if (offset) params.offset = offset;
+    const resp = await client.get(`/portfolios/${PM_PORTFOLIO_GID}/items`, { params });
+    portfolioItems.push(...resp.data.data);
+    offset = resp.data.next_page?.offset ?? null;
+  } while (offset);
+
+  // 1b. Batch-fetch each project's current status update — the portfolio items endpoint
+  //     doesn't populate current_status_update, so we fetch it per-project.
+  const projectStatuses = {};
+  await batchedMap(portfolioItems, async (item) => {
+    try {
+      const resp = await client.get(`/projects/${item.gid}`, {
+        params: { opt_fields: 'gid,current_status_update.status_type,current_status_update.title' },
+      });
+      const su = resp.data.data.current_status_update;
+      projectStatuses[item.gid] = { statusType: su?.status_type || null, title: su?.title || null };
+    } catch (_) {
+      projectStatuses[item.gid] = { statusType: null, title: null };
+    }
+  }, 5, 300);
+
+  // 2. For each portfolio project, fetch its bar-type tasks (Production / In Market / Brief)
+  // Also match by task name for projects that don't have the Bar type field set
+  const BAR_NAME_FALLBACKS = new Map([
+    ['production', 'Production'],
+    ['in market', 'In Market'],
+    ['project brief due', 'Project Brief Due'],
+  ]);
+  const barTasksMap = {};
+  await batchedMap(portfolioItems, async (item) => {
+    try {
+      const resp = await client.get('/tasks', {
+        params: {
+          project: item.gid,
+          opt_fields: 'name,start_on,due_on,custom_fields.gid,custom_fields.enum_value.name',
+          limit: 100,
+        },
+      });
+      barTasksMap[item.gid] = resp.data.data.filter(t => {
+        const bt = t.custom_fields?.find(f => f.gid === BAR_TYPE_FIELD_GID)?.enum_value?.name;
+        if (bt && bt !== 'Parent task') return true;
+        return BAR_NAME_FALLBACKS.has((t.name || '').trim().toLowerCase());
+      });
+    } catch (_) {
+      barTasksMap[item.gid] = [];
+    }
+  }, 5, 300);
+
+  // 3. Build RT_RAW_TASKS entries from portfolio
+  const result = [];
+  for (const item of portfolioItems) {
+    // Only include Roadmap projects (Project type (XCF) custom field)
+    const projectType = item.custom_fields?.find(f => f.gid === PROJECT_TYPE_FIELD_GID)?.enum_value?.name;
+    if (projectType !== 'Roadmap') continue;
+
+    const { statusType, title: statusTitle } = projectStatuses[item.gid] || {};
+    const dropped = statusType === 'dropped';
+
+    // Bar tasks → subtasks format (template matches by name: Production / In Market / Project Brief Due)
+    // Deduplicate by bar type name, preferring tasks that have due_on set
+    const barByType = {};
+    for (const t of (barTasksMap[item.gid] || [])) {
+      const barName = t.custom_fields?.find(f => f.gid === BAR_TYPE_FIELD_GID)?.enum_value?.name
+        || BAR_NAME_FALLBACKS.get((t.name || '').trim().toLowerCase());
+      if (!barName || barName === 'Parent task') continue;
+      if (!barByType[barName] || (!barByType[barName].due_on && t.due_on)) {
+        barByType[barName] = t;
+      }
+    }
+    const subtasks = Object.entries(barByType).map(([barName, t]) => ({
+      name: barName,
+      start_on: t.start_on || null,
+      due_on: t.due_on || null,
+    }));
+
+    const rf = item.custom_fields?.find(f => f.gid === APPL_REGIONS_FIELD_GID);
+    const regions = rf?.multi_enum_values?.map(v => v.name) || [];
+
+    result.push({
+      name: item.name,
+      completed: item.completed || false,
+      subtasks,
+      url: `https://app.asana.com/0/portfolio/${PM_PORTFOLIO_GID}/${item.gid}`,
+      pmName: item.name,
+      dropped,
+      regions,
+      projectStatus: statusType || null,
+      statusTitle: statusTitle || null,
+    });
+  }
+
+  return result;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BAU BOARD DATA  (Design BAU + Performance BAU)
+// ─────────────────────────────────────────────────────────────────────────────
+const BAU_BOARDS = [
+  { name: 'Design BAU',      gid: '1212644837995359' }, // XCF | Design BAU Board (updated Sep 2026)
+  { name: 'Performance BAU', gid: '1212446476552313' },
+];
+
+async function buildBAUData() {
+  const client = asanaClient();
+  const estGid = process.env.ASANA_FIELD_GID_ESTIMATED_TIME;
+
+  const taskFields = [
+    'gid', 'name', 'completed', 'permalink_url',
+    'assignee.name',
+    'start_on', 'due_on',
+    'custom_fields.gid', 'custom_fields.number_value', 'custom_fields.enum_value.name',
+    'subtasks.gid',
+  ].join(',');
+
+  const subtaskFields = [
+    'gid', 'name', 'completed', 'permalink_url',
+    'assignee.name', 'start_on', 'due_on',
+    'custom_fields.gid', 'custom_fields.number_value', 'custom_fields.enum_value.name',
+  ].join(',');
+
+  function isCancelled(task) {
+    const sf = task.custom_fields?.find(f => f.gid === STATUS_FIELD_GID || f.name?.toLowerCase() === 'status');
+    const sv = (sf?.enum_value?.name ?? '').toLowerCase();
+    return sv === 'cancelled' || sv === 'canceled';
+  }
+
+  const result = [];
+
+  for (const board of BAU_BOARDS) {
+    const allTasks = [];
+    let offset = null;
+    do {
+      const params = { project: board.gid, opt_fields: taskFields, limit: 100 };
+      if (offset) params.offset = offset;
+      const resp = await client.get('/tasks', { params });
+      allTasks.push(...resp.data.data);
+      offset = resp.data.next_page?.offset ?? null;
+    } while (offset);
+
+    const activeTasks = allTasks.filter(t => !t.completed && !isCancelled(t) && !/canva approval/i.test(t.name));
+
+    // Fetch subtasks for tasks that have them
+    const subtaskMap = {};
+    const tasksWithSubs = activeTasks.filter(t => t.subtasks?.length > 0);
+    await batchedMap(tasksWithSubs, async (task) => {
+      try {
+        const resp = await client.get(`/tasks/${task.gid}/subtasks`, {
+          params: { opt_fields: subtaskFields, limit: 100 },
+        });
+        subtaskMap[task.gid] = resp.data.data.filter(s => !s.completed && !isCancelled(s));
+      } catch (_) {
+        subtaskMap[task.gid] = [];
+      }
+    }, 5, 500);
+
+    function getStatus(task) {
+      const sf = task.custom_fields?.find(f => f.gid === STATUS_FIELD_GID || f.name?.toLowerCase() === 'status');
+      return sf?.enum_value?.name ?? null;
+    }
+
+    function getPriority(task) {
+      return task.custom_fields?.find(f => f.gid === PRIORITY_FIELD_GID)?.enum_value?.name ?? null;
+    }
+
+    const tasks = activeTasks.map(t => {
+      const estMins = t.custom_fields?.find(f => f.gid === estGid)?.number_value;
+      return {
+        gid: t.gid,
+        name: t.name,
+        url: t.permalink_url,
+        assignee: t.assignee?.name ?? null,
+        start: t.start_on ?? null,
+        due: t.due_on ?? null,
+        est: estMins ? round2(estMins / 60) : null,
+        status: getStatus(t),
+        priority: getPriority(t),
+        subtasks: (subtaskMap[t.gid] || []).map(s => {
+          const sEst = s.custom_fields?.find(f => f.gid === estGid)?.number_value;
+          return {
+            gid: s.gid,
+            name: s.name,
+            url: s.permalink_url,
+            assignee: s.assignee?.name ?? null,
+            start: s.start_on ?? null,
+            due: s.due_on ?? null,
+            est: sEst ? round2(sEst / 60) : null,
+            status: getStatus(s),
+            priority: getPriority(s),
+          };
+        }),
+      };
+    });
+
+    result.push({ board: board.name, gid: board.gid, tasks });
+  }
+
+  return result;
+}
+
+// ─── COSTINGS REPORT BUILDERS ───
+
+const COST_PER_ASSET_PROJECT_NAME = 'XCF: Cost per asset + Asset counter (Roadmap Projects & Micro/BAU tasks)';
+const AI_CREDITS_PROJECT_NAME = 'XCF: AI Usage (Roadmap Projects & Micro/BAU tasks)';
+
+async function searchProjectByName(projectName) {
+  const client = asanaClient();
+  try {
+    const params = {
+      opt_fields: 'gid,name',
+      limit: 100,
+    };
+    const resp = await client.get(`/workspaces/${process.env.ASANA_WORKSPACE_GID}/projects`, { params });
+    const projects = resp.data.data || [];
+    const match = projects.find(p => p.name === projectName);
+    if (match) {
+      console.log(`[Costings] Found project: ${projectName} (${match.gid})`);
+      return match;
+    }
+    console.log(`[Costings] Project not found: "${projectName}". Available projects:`, projects.map(p => p.name).slice(0, 10).join(', '));
+    return null;
+  } catch (err) {
+    console.log(`[Costings] Project search error:`, err.message);
+    return null;
+  }
+}
+
+async function getProjectTasks(projectGid) {
+  const client = asanaClient();
+  const optFields = [
+    'gid',
+    'name',
+    'completed',
+    'due_on',
+    'assignee.name',
+    'assignee.gid',
+    'memberships.project.name',
+    'custom_fields.gid',
+    'custom_fields.name',
+    'custom_fields.number_value',
+    'custom_fields.enum_value.name',
+    'custom_fields.display_value',
+  ].join(',');
+
+  const allTasks = [];
+  let offset = null;
+
+  do {
+    const params = {
+      opt_fields: optFields,
+      limit: 100,
+    };
+    if (offset) params.offset = offset;
+    const resp = await client.get(`/projects/${projectGid}/tasks`, { params });
+    allTasks.push(...resp.data.data.filter(t => !t.completed));
+    offset = resp.data.next_page?.offset ?? null;
+  } while (offset);
+
+  return allTasks;
+}
+
+async function getPortfolioProjects2(portfolioGid) {
+  const client = asanaClient();
+  const projects = [];
+  let offset = null;
+
+  do {
+    const params = {
+      opt_fields: 'gid,name',
+      limit: 100,
+    };
+    if (offset) params.offset = offset;
+    try {
+      const resp = await client.get(`/portfolios/${portfolioGid}/portfolio_items`, { params });
+      projects.push(...resp.data.data.filter(p => p.resource_type === 'project'));
+      offset = resp.data.next_page?.offset ?? null;
+    } catch (err) {
+      console.log(`[Costings] Portfolio fetch error: ${err.message}`);
+      break;
+    }
+  } while (offset);
+
+  return projects;
+}
+
+async function buildCostingsData() {
+  try {
+
+    const costPerAssetData = {
+      summary: { totalAssets: 0, totalCost: 0, averageCost: 0 },
+      byAsset: [],
+      byPerson: [],
+      byProject: [],
+      rawTasks: [],
+    };
+
+    const aiCreditsData = {
+      summary: { totalCredits: 0, averageCreditsPerProject: 0, projectCount: 0 },
+      byProject: [],
+      byPerson: [],
+      rawTasks: [],
+    };
+
+    // Fetch cost per asset data
+    if (costProject) {
+      console.log(`[Costings] Fetching Cost per asset from project ${costProject.gid}`);
+      const costTasks = await getProjectTasks(costProject.gid);
+      costPerAssetData.rawTasks = costTasks;
+
+      // Group by asset and aggregate
+      const assetMap = new Map();
+      const personMap = new Map();
+      const projectMap = new Map();
+
+      for (const task of costTasks) {
+        const assetName = task.name;
+        const cost = getCustomFieldNumber(task, process.env.ASANA_FIELD_GID_COST);
+        const person = task.assignee?.name || 'Unassigned';
+        const project = task.memberships?.[0]?.project?.name || 'Unknown';
+
+        // By asset
+        if (!assetMap.has(assetName)) {
+          assetMap.set(assetName, { name: assetName, cost: cost || 0, taskGid: task.gid });
+        }
+
+        // By person
+        if (!personMap.has(person)) {
+          personMap.set(person, { name: person, totalAssets: 0, totalCost: 0 });
+        }
+        personMap.get(person).totalAssets += 1;
+        personMap.get(person).totalCost += cost || 0;
+
+        // By project
+        if (!projectMap.has(project)) {
+          projectMap.set(project, { name: project, assets: 0, cost: 0 });
+        }
+        projectMap.get(project).assets += 1;
+        projectMap.get(project).cost += cost || 0;
+      }
+
+      costPerAssetData.byAsset = Array.from(assetMap.values()).sort((a, b) => b.cost - a.cost);
+      costPerAssetData.byPerson = Array.from(personMap.values()).sort((a, b) => b.totalCost - a.totalCost);
+      costPerAssetData.byProject = Array.from(projectMap.values()).sort((a, b) => b.cost - a.cost);
+      costPerAssetData.summary.totalAssets = costTasks.length;
+      costPerAssetData.summary.totalCost = Math.round(costTasks.reduce((sum, t) => sum + (getCustomFieldNumber(t, process.env.ASANA_FIELD_GID_COST) || 0), 0) * 100) / 100;
+      costPerAssetData.summary.averageCost = costPerAssetData.summary.totalAssets > 0
+        ? Math.round(costPerAssetData.summary.totalCost / costPerAssetData.summary.totalAssets * 100) / 100
+        : 0;
+    }
+
+    // Fetch AI credits data
+    if (aiProject) {
+      console.log(`[Costings] Fetching AI Credits from project ${aiProject.gid}`);
+      const aiTasks = await getProjectTasks(aiProject.gid);
+      aiCreditsData.rawTasks = aiTasks;
+
+      const projectMap = new Map();
+      const personMap = new Map();
+
+      for (const task of aiTasks) {
+        const credits = getCustomFieldNumber(task, process.env.ASANA_FIELD_GID_AI_CREDITS) || 0;
+        const person = task.assignee?.name || 'Unassigned';
+        const project = task.memberships?.[0]?.project?.name || 'Unknown';
+
+        // By project
+        if (!projectMap.has(project)) {
+          projectMap.set(project, { name: project, credits: 0, taskCount: 0 });
+        }
+        projectMap.get(project).credits += credits;
+        projectMap.get(project).taskCount += 1;
+
+        // By person
+        if (!personMap.has(person)) {
+          personMap.set(person, { name: person, credits: 0, taskCount: 0 });
+        }
+        personMap.get(person).credits += credits;
+        personMap.get(person).taskCount += 1;
+      }
+
+      aiCreditsData.byProject = Array.from(projectMap.values()).sort((a, b) => b.credits - a.credits);
+      aiCreditsData.byPerson = Array.from(personMap.values()).sort((a, b) => b.credits - a.credits);
+      aiCreditsData.summary.totalCredits = Math.round(aiTasks.reduce((sum, t) => sum + (getCustomFieldNumber(t, process.env.ASANA_FIELD_GID_AI_CREDITS) || 0), 0) * 100) / 100;
+      aiCreditsData.summary.projectCount = projectMap.size;
+      aiCreditsData.summary.averageCreditsPerProject = aiCreditsData.summary.projectCount > 0
+        ? Math.round(aiCreditsData.summary.totalCredits / aiCreditsData.summary.projectCount * 100) / 100
+        : 0;
+    }
+
+    return { costPerAssetData, aiCreditsData };
+  } catch (err) {
+    console.error('[Costings] Builder error:', err.message);
+    return {
+      costPerAssetData: { summary: {}, byAsset: [], byPerson: [], byProject: [], rawTasks: [] },
+      aiCreditsData: { summary: {}, byProject: [], byPerson: [], rawTasks: [] },
+    };
+  }
+}
+
+module.exports = { buildMemberData, buildPMData, buildScopeCreepData, buildOOOData, buildRoadmapData, buildBAUData, buildCostingsData, asanaClient, batchedMap };

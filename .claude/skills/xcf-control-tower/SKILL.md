@@ -62,8 +62,16 @@ writes `reports/xcf-report-YYYY-MM-DD.html` → deploy that file.
 | Performance BAU board | `1212446476552313` |
 | Leave project | `LEAVE_PROJECT_GID` (in .env) |
 | Slack PM updates channel | `C0B3YCKT0JV` |
+| XCF \| Requests project | `1215906401561993` |
+| Status (XCF) field | `1211986892220398` (In Progress = `1211986892220400`) |
+| XCF code text field | `1213726159416934` |
+| PODS (XCF) field | `1211165589636938` |
+| Requester (XCF) field | `1218344624492289` |
 
 **Project type values:** `Roadmap` / `Micro (BAU)` / `XCF initiative`
+
+**Fiscal quarters:** Xero's FY starts 1 April, so FY27 Q1 = Apr–Jun 2026. Matches the
+`FY27 Q2` labels on the Quarter (Mkt Planning) field.
 
 ---
 
@@ -119,9 +127,46 @@ writes `reports/xcf-report-YYYY-MM-DD.html` → deploy that file.
 **AI summaries:** Stored manually in `slack-pm-updates-cache.json` under `executiveSummary` key per week
 **Format:** Week grouped by Monday, labelled by Friday of that week
 
-### 9. BAU Tab (Design + Performance)
+### 9. Request Cycle Time Tab
+**Data builder:** `buildRequestsData()` in `src/requestTiming.js`
+**Source:** XCF | Requests (`1215906401561993`) + XCF | Projects portfolio
+**Measures:** Request `created_at` → the linked project's first **On Track** status update
+**Shows:** Coverage box, median wait broken down by fiscal quarter and project type,
+then a filterable table with an AI-written explanation of each wait.
+
+**Why On Track and not `Status (XCF) = In Progress`:**
+The original ask was to measure to `Status (XCF) = In Progress`. Two things ruled that out:
+- On *request tasks* that value is never used — 0 of 100 sampled requests ever hit it.
+- On *projects* it is used (131 at last count), but Asana exposes **no change history for a
+  project's custom fields**. There is no project equivalent of `/tasks/{gid}/stories`, and
+  `/workspaces/{gid}/audit_log_events` returns `403 — Auth token must belong to service
+  account`. So the moment a project became In Progress is simply not retrievable.
+
+The project's first `color: green` status update is the only dated "work started" signal
+available, so that is what the tab measures.
+
+**Request → project linking is name-based and lossy.** Asana keeps no relationship once a
+task is converted to a project. The join is the `XCF-####` code appearing in both names.
+Of 428 projects: 254 use `XCF-####` (matchable), 94 use `XCFP-###`, 49 use `XCFT-###`,
+31 have no code. Roughly 40% can never be matched.
+
+**Coverage is deliberately prominent.** Only ~48 of ~412 requests have a measurable cycle.
+The coverage box at the top of the tab states this in plain numbers so the medians are
+never read as covering everything. It is an adoption metric — it rises as the team posts
+project status updates.
+
+**Comment summaries** live in `request-timing-cache.json` under `requests[gid].summary`,
+hand-written (see "Regenerate the request summaries" below). The builder preserves them
+across rebuilds.
+
+**Caching:** a project's first green never changes, so resolved lookups are cached
+permanently. First run costs hundreds of API calls; later runs are near-free.
+
+### 10. BAU Tab (Design + Performance) — orphaned
 **Data builder:** `buildBAUData()` in `src/asana.js`
 **Source:** Design BAU board + Performance BAU board
+**Note:** `buildBAUData()` still runs and `BAU_DATA` is still injected, but the nav button
+was removed, so `renderBAU()` is unreachable. Harmless; safe to delete.
 
 ---
 
@@ -162,6 +207,23 @@ Add to `MANUAL_OOO` in `src/asana.js`:
 { name: 'First Last', start: 'YYYY-MM-DD', end: 'YYYY-MM-DD' }
 ```
 This takes priority over Asana vacation_dates and leave project tasks for that person.
+
+### Regenerate the request cycle-time summaries
+The "Why" column on the Request Cycle Time tab is hand-written, not generated at build time.
+1. Build, then read the rows that have a cycle time and at least one comment:
+   `node -e "...REQUESTS_DATA..."` — or read `request-timing-cache.json` directly.
+2. Read each request's `comments[]` and write a one-or-two sentence explanation of why that
+   request waited as long as it did. Lead with the cause in bold: **Waiting on access**,
+   **Requester-side delay**, **Not an XCF delay**, and so on.
+3. Write them into `request-timing-cache.json` at `requests[<gid>].summary` (markdown — bold,
+   italics and links all render via `mdToHtml`).
+4. Rebuild. The builder preserves existing summaries, so this is additive.
+
+Be honest in these: several requests have only automated duplicate-detection comments and no
+human discussion. Say that, rather than inventing a narrative.
+
+**Never commit `.env`, but always commit `request-timing-cache.json`** — the summaries are
+hand-written and unrecoverable if lost.
 
 ### Add an AI summary for a PM updates week
 1. Open `slack-pm-updates-cache.json`

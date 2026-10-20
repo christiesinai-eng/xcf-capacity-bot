@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>XCF Costings Report · 5 Oct 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#000000;color:#fff;min-height:100vh}
+:root{
+  --mid:#000000;--blue:#1f65d6;--sky:#3eccff;--yellow:#FDCC08;--purple:#CF89FE;
+  --green:#6AEAAA;--ops:#CF89FE;--surface:rgba(255,255,255,0.06);--surface2:rgba(255,255,255,0.10);
+  --border:rgba(255,255,255,0.12);--txt:#fff;--muted:#cbcac9;--red:#FF719B;--amber:#FDCC08;
+  --mint:#6AEAAA;--warm-grey:#f2f1ee;--mid-grey:#cbcac9;
+}
+
+/* ── CONTROL TOWER BANNER ── */
+.ct-banner{background:linear-gradient(135deg,rgba(207,137,254,0.12) 0%,rgba(31,101,214,0.10) 50%,rgba(106,234,170,0.08) 100%);border-bottom:1px solid var(--border);padding:18px 24px;text-align:center}
+.ct-banner-title{font-size:44px;font-weight:800;color:#fff;letter-spacing:-0.03em;line-height:1}
+.ct-banner-sub{font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:0.12em;text-transform:uppercase}
+
+/* ── TOP BAR ── */
+.top-bar{background:#000000;border-bottom:1px solid var(--border);padding:18px 24px 0}
+.top-row{display:flex;align-items:center;gap:14px;margin-bottom:4px}
+.xcf-badge{background:var(--mid);color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.08em;text-transform:uppercase}
+.top-title{font-size:26px;font-weight:700;color:#fff;letter-spacing:-.02em}
+.top-subtitle{font-size:13px;font-weight:400;color:var(--muted);margin-left:2px}
+.top-meta{font-size:11px;color:var(--muted);margin-top:6px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:8px}
+.top-meta .dot{width:3px;height:3px;border-radius:50%;background:var(--muted);display:inline-block;opacity:.5}
+.stat-pills{display:flex;gap:10px;padding-bottom:16px;flex-wrap:wrap}
+.stat-pill{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:70px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface)}
+.stat-pill .sv{font-size:26px;font-weight:700;line-height:1}
+.stat-pill .sl{font-size:11px;color:var(--muted);margin-top:4px;font-weight:500;letter-spacing:.02em}
+.stat-pill.red{border-color:rgba(255,113,155,0.4);background:rgba(255,113,155,0.10)}.stat-pill.red .sv{color:var(--red)}
+.stat-pill.amber{border-color:rgba(253,204,8,0.4);background:rgba(253,204,8,0.08)}.stat-pill.amber .sv{color:var(--amber)}
+.stat-pill.blue{border-color:#1e3a6e;background:#050e20}.stat-pill.blue .sv{color:var(--sky)}
+.stat-pill.green{border-color:rgba(106,234,170,0.4);background:rgba(106,234,170,0.08)}.stat-pill.green .sv{color:var(--green)}
+
+/* ── NAV ── */
+.nav-bar{display:flex;gap:8px;padding:12px 20px;background:#000000;border-bottom:1px solid var(--border);overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}
+.nav-bar::-webkit-scrollbar{display:none}
+.nav-btn{font-size:12px;font-weight:500;padding:7px 16px;border-radius:6px;border:1px solid var(--border);cursor:pointer;background:var(--surface);color:var(--txt);transition:all .15s;white-space:nowrap}
+.nav-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.nav-btn:hover:not(.active){background:var(--surface2)}
+
+/* ── VIEWS ── */
+.view{display:none;padding:20px}
+.view.active{display:block}
+
+/* ── FILTERS ── */
+.filter-bar{display:flex;gap:12px;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center}
+.filter-group{display:flex;gap:6px;align-items:center}
+.filter-label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.filter-input,.filter-select{background:var(--surface2);color:var(--txt);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12px;outline:none}
+.filter-input:focus,.filter-select:focus{border-color:var(--blue)}
+.filter-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:6px;background:rgba(31,101,214,0.15);border:1px solid rgba(31,101,214,0.3);font-size:11px;color:var(--sky)}
+
+/* ── TABLE (shared) ── */
+.tbl-wrap{margin:0 20px 20px}
+.section-title{font-size:13px;font-weight:600;color:#fff;padding:12px 0 8px;display:flex;justify-content:space-between;align-items:center}
+.section-title span{font-size:11px;color:var(--muted);font-weight:400}
+.tbl-head{padding:8px 10px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);display:grid;gap:8px;background:var(--surface)}
+.tbl-row{display:grid;gap:8px;align-items:center;padding:10px;border-bottom:.5px solid var(--border);background:transparent;transition:background .1s}
+.tbl-row:hover{background:var(--surface)}
+.r-name{font-size:13px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.r-value{font-size:13px;font-weight:600;color:var(--sky);text-align:right}
+.r-secondary{font-size:11px;color:var(--muted);text-align:right}
+.bar-cell{display:flex;align-items:center;gap:6px}
+.bar-bg{flex:1;height:5px;border-radius:3px;background:var(--border);overflow:hidden}
+.bar-fill{height:100%;border-radius:3px}
+
+/* ── CHART BARS ── */
+.chart-item{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.chart-label{font-size:12px;color:var(--txt);min-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chart-bar-bg{flex:1;height:24px;border-radius:6px;background:var(--surface);overflow:hidden;position:relative}
+.chart-bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px}
+.chart-value{font-size:12px;color:var(--txt);font-weight:600;min-width:60px;text-align:right;white-space:nowrap}
+
+/* ── STATS GRID ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:0 20px 20px}
+.stat-card{background:var(--surface);border-radius:10px;border:1px solid var(--border);padding:14px;text-align:center}
+.stat-card .label{font-size:10px;color:var(--muted);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.stat-card .value{font-size:28px;font-weight:700;line-height:1;color:var(--sky)}
+.stat-card .detail{font-size:11px;color:var(--muted);margin-top:6px}
+</style>
+</head>
+<body>
+<div class="ct-banner">
+  <div class="ct-banner-title">XCF Creative Foundry</div>
+  <div class="ct-banner-sub">Costings Report</div>
+</div>
+
+<div class="top-bar">
+  <div class="top-row">
+    <span class="xcf-badge">Report</span>
+    <span class="top-title">Costings</span>
+    <span class="top-subtitle">Dashboard</span>
+  </div>
+  <div class="top-meta">
+    <span>Last updated <strong id="updated-time">5 Oct 2026</strong></span>
+    <span class="dot"></span>
+    <span><strong id="task-count">0</strong> total items</span>
+  </div>
+</div>
+
+<div class="nav-bar">
+  <button class="nav-btn active" onclick="showView('cost-per-asset')">Cost per Asset</button>
+  <button class="nav-btn" onclick="showView('ai-credits')">AI Credits</button>
+</div>
+
+<!-- COST PER ASSET VIEW -->
+<div id="cost-per-asset" class="view active">
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label class="filter-label">Filter by:</label>
+      <input type="text" id="asset-person-filter" class="filter-input" placeholder="Person">
+      <input type="text" id="asset-project-filter" class="filter-input" placeholder="Project">
+      <input type="date" id="asset-date-from" class="filter-input">
+      <input type="date" id="asset-date-to" class="filter-input">
+      <button class="nav-btn" onclick="resetAssetFilters()">Clear</button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="label">Total Assets</div>
+      <div class="value" id="cpa-total-assets">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Total Cost</div>
+      <div class="value" id="cpa-total-cost">$0</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Average Cost</div>
+      <div class="value" id="cpa-avg-cost">$0</div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 0 20px 20px;">
+    <div>
+      <div class="section-title">By Asset Type</div>
+      <div id="cpa-charts-asset" style="padding: 0 10px;"></div>
+    </div>
+    <div>
+      <div class="section-title">By Pod Team</div>
+      <div id="cpa-charts-pod" style="padding: 0 10px;"></div>
+    </div>
+  </div>
+
+  <div style="margin: 0 20px 20px;">
+    <div class="section-title">By Person</div>
+    <div id="cpa-charts-person" style="padding: 0 10px;"></div>
+  </div>
+
+  <div class="tbl-wrap">
+    <div class="section-title">By Asset <span id="cpa-asset-count">0 items</span></div>
+    <div class="tbl-head" style="grid-template-columns:2fr 1fr">
+      <div>Asset Name</div>
+      <div>Cost</div>
+    </div>
+    <div id="cpa-by-asset"></div>
+  </div>
+
+  <div class="tbl-wrap">
+    <div class="section-title">By Person <span id="cpa-person-count">0 items</span></div>
+    <div class="tbl-head" style="grid-template-columns:2fr 1fr 1fr">
+      <div>Person</div>
+      <div>Assets</div>
+      <div>Total Cost</div>
+    </div>
+    <div id="cpa-by-person"></div>
+  </div>
+
+  <div class="tbl-wrap">
+    <div class="section-title">By Project <span id="cpa-project-count">0 items</span></div>
+    <div class="tbl-head" style="grid-template-columns:2fr 1fr 1fr">
+      <div>Project</div>
+      <div>Assets</div>
+      <div>Total Cost</div>
+    </div>
+    <div id="cpa-by-project"></div>
+  </div>
+</div>
+
+<!-- AI CREDITS VIEW -->
+<div id="ai-credits" class="view">
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label class="filter-label">Filter by:</label>
+      <input type="text" id="ai-person-filter" class="filter-input" placeholder="Person">
+      <input type="text" id="ai-project-filter" class="filter-input" placeholder="Project">
+      <input type="date" id="ai-date-from" class="filter-input">
+      <input type="date" id="ai-date-to" class="filter-input">
+      <button class="nav-btn" onclick="resetAIFilters()">Clear</button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="label">Total Credits</div>
+      <div class="value" id="ai-total-credits">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Projects</div>
+      <div class="value" id="ai-project-count-stat">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Avg Credits/Project</div>
+      <div class="value" id="ai-avg-credits">0</div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <div class="section-title">By Project <span id="ai-project-items">0 items</span></div>
+    <div class="tbl-head" style="grid-template-columns:2fr 1fr 1fr">
+      <div>Project</div>
+      <div>Credits</div>
+      <div>Tasks</div>
+    </div>
+    <div id="ai-by-project"></div>
+  </div>
+
+  <div class="tbl-wrap">
+    <div class="section-title">By Person <span id="ai-person-items">0 items</span></div>
+    <div class="tbl-head" style="grid-template-columns:2fr 1fr 1fr">
+      <div>Person</div>
+      <div>Credits</div>
+      <div>Tasks</div>
+    </div>
+    <div id="ai-by-person"></div>
+  </div>
+</div>
+
+<script>
+const COST_PER_ASSET_DATA=[];
+const AI_CREDITS_DATA=[];
+
+function showView(viewId) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(viewId).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function formatCurrency(n) {
+  return new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0}).format(n);
+}
+
+const chartColors = ['#1f65d6', '#3eccff', '#FDCC08', '#CF89FE', '#6AEAAA', '#FF719B', '#a78bfa', '#4ade80'];
+
+function renderBarChart(containerId, items, maxValue) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  let html = '';
+  items.forEach((item, idx) => {
+    const pct = (item.cost || item.credits || 0) / maxValue * 100;
+    const color = chartColors[idx % chartColors.length];
+    const value = formatCurrency(item.cost || item.credits || 0);
+
+    html += `<div class="chart-item">
+      <div class="chart-label">${item.name}</div>
+      <div class="chart-bar-bg">
+        <div class="chart-bar-fill" style="width: ${pct}%; background: ${color};">
+          ${pct > 5 ? `<span style="font-size: 10px; color: rgba(255,255,255,0.7);">${Math.round(pct)}%</span>` : ''}
+        </div>
+      </div>
+      <div class="chart-value">${value}</div>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+function renderCostPerAsset() {
+  const summary = COST_PER_ASSET_DATA.summary;
+  document.getElementById('cpa-total-assets').textContent = summary.totalAssets || 0;
+  document.getElementById('cpa-total-cost').textContent = formatCurrency(summary.totalCost || 0);
+  document.getElementById('cpa-avg-cost').textContent = formatCurrency(summary.averageCost || 0);
+
+  // Charts
+  const assetData = (COST_PER_ASSET_DATA.byAsset || []).slice(0, 10);
+  const podData = (COST_PER_ASSET_DATA.byProject || []).slice(0, 10);
+  const personData = (COST_PER_ASSET_DATA.byPerson || []).slice(0, 10);
+
+  if (assetData.length > 0) {
+    const maxAsset = Math.max(...assetData.map(a => a.cost || 0));
+    renderBarChart('cpa-charts-asset', assetData, maxAsset);
+  }
+
+  if (podData.length > 0) {
+    const maxPod = Math.max(...podData.map(p => p.cost || 0));
+    renderBarChart('cpa-charts-pod', podData, maxPod);
+  }
+
+  if (personData.length > 0) {
+    const maxPerson = Math.max(...personData.map(p => p.totalCost || 0));
+    renderBarChart('cpa-charts-person', personData, maxPerson);
+  }
+
+  // By Asset
+  let html = '';
+  (COST_PER_ASSET_DATA.byAsset || []).forEach(item => {
+    html += `<div class="tbl-row" style="grid-template-columns:2fr 1fr">
+      <div class="r-name">${item.name}</div>
+      <div class="r-value">${formatCurrency(item.cost || 0)}</div>
+    </div>`;
+  });
+  document.getElementById('cpa-by-asset').innerHTML = html;
+  document.getElementById('cpa-asset-count').textContent = (COST_PER_ASSET_DATA.byAsset || []).length + ' items';
+
+  // By Person
+  html = '';
+  (COST_PER_ASSET_DATA.byPerson || []).forEach(item => {
+    html += `<div class="tbl-row" style="grid-template-columns:2fr 1fr 1fr">
+      <div class="r-name">${item.name}</div>
+      <div class="r-secondary">${item.totalAssets || 0}</div>
+      <div class="r-value">${formatCurrency(item.totalCost || 0)}</div>
+    </div>`;
+  });
+  document.getElementById('cpa-by-person').innerHTML = html;
+  document.getElementById('cpa-person-count').textContent = (COST_PER_ASSET_DATA.byPerson || []).length + ' items';
+
+  // By Project
+  html = '';
+  (COST_PER_ASSET_DATA.byProject || []).forEach(item => {
+    html += `<div class="tbl-row" style="grid-template-columns:2fr 1fr 1fr">
+      <div class="r-name">${item.name}</div>
+      <div class="r-secondary">${item.assets || 0}</div>
+      <div class="r-value">${formatCurrency(item.cost || 0)}</div>
+    </div>`;
+  });
+  document.getElementById('cpa-by-project').innerHTML = html;
+  document.getElementById('cpa-project-count').textContent = (COST_PER_ASSET_DATA.byProject || []).length + ' items';
+}
+
+function renderAICredits() {
+  const summary = AI_CREDITS_DATA.summary;
+  document.getElementById('ai-total-credits').textContent = Math.round(summary.totalCredits || 0).toLocaleString();
+  document.getElementById('ai-project-count-stat').textContent = summary.projectCount || 0;
+  document.getElementById('ai-avg-credits').textContent = Math.round(summary.averageCreditsPerProject || 0).toLocaleString();
+
+  // By Project
+  let html = '';
+  (AI_CREDITS_DATA.byProject || []).forEach(item => {
+    html += `<div class="tbl-row" style="grid-template-columns:2fr 1fr 1fr">
+      <div class="r-name">${item.name}</div>
+      <div class="r-value">${Math.round(item.credits || 0).toLocaleString()}</div>
+      <div class="r-secondary">${item.taskCount || 0}</div>
+    </div>`;
+  });
+  document.getElementById('ai-by-project').innerHTML = html;
+  document.getElementById('ai-project-items').textContent = (AI_CREDITS_DATA.byProject || []).length + ' items';
+
+  // By Person
+  html = '';
+  (AI_CREDITS_DATA.byPerson || []).forEach(item => {
+    html += `<div class="tbl-row" style="grid-template-columns:2fr 1fr 1fr">
+      <div class="r-name">${item.name}</div>
+      <div class="r-value">${Math.round(item.credits || 0).toLocaleString()}</div>
+      <div class="r-secondary">${item.taskCount || 0}</div>
+    </div>`;
+  });
+  document.getElementById('ai-by-person').innerHTML = html;
+  document.getElementById('ai-person-items').textContent = (AI_CREDITS_DATA.byPerson || []).length + ' items';
+}
+
+function resetAssetFilters() {
+  document.getElementById('asset-person-filter').value = '';
+  document.getElementById('asset-project-filter').value = '';
+  document.getElementById('asset-date-from').value = '';
+  document.getElementById('asset-date-to').value = '';
+  renderCostPerAsset();
+}
+
+function resetAIFilters() {
+  document.getElementById('ai-person-filter').value = '';
+  document.getElementById('ai-project-filter').value = '';
+  document.getElementById('ai-date-from').value = '';
+  document.getElementById('ai-date-to').value = '';
+  renderAICredits();
+}
+
+function init() {
+  const taskCount = (COST_PER_ASSET_DATA.rawTasks || []).length + (AI_CREDITS_DATA.rawTasks || []).length;
+  document.getElementById('task-count').textContent = taskCount;
+  renderCostPerAsset();
+  renderAICredits();
+}
+
+init();
+</script>
+</body>
+</html>

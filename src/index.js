@@ -1,18 +1,28 @@
 require('dotenv').config();
 const cron = require('node-cron');
-const { buildMemberData, buildPMData, buildScopeCreepData } = require('./asana');
+const { buildMemberData, buildPMData, buildScopeCreepData, buildOOOData, buildRoadmapData, buildBAUData } = require('./asana');
 const { saveReport } = require('./report');
+const { buildPMUpdatesData } = require('./slackUpdates');
+const { buildRequestsData } = require('./requestTiming');
 
 async function runReport() {
   console.log(`[${new Date().toISOString()}] Running XCF capacity report...`);
 
-  const [capacityData, pmData, scopeCreepData] = await Promise.all([
+  const [capacityData, pmData, scopeCreepData, oooData, roadmapData, bauData, pmUpdatesData, requestsData] = await Promise.all([
     buildMemberData(),
     buildPMData(),
     buildScopeCreepData(),
+    buildOOOData(),
+    buildRoadmapData(),
+    buildBAUData(),
+    buildPMUpdatesData(),
+    buildRequestsData().catch((err) => {
+      console.warn('[Requests] builder failed, tab will be empty:', err.message);
+      return [];
+    }),
   ]);
 
-  saveReport({ ...capacityData, pmData, scopeCreepData });
+  saveReport({ ...capacityData, pmData, scopeCreepData, oooData, pmUpdatesData, roadmapData, bauData, requestsData });
 
   console.log(`[${new Date().toISOString()}] Done.`);
 }
