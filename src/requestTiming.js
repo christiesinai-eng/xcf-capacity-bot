@@ -22,7 +22,10 @@ function fiscalQuarter(iso) {
   return `FY${fy} Q${q}`;
 }
 
-const WINDOW_DAYS = 90;
+// Fixed start at the top of FY27 Q2 rather than a rolling 90-day window, so the
+// coverage figure is comparable week to week instead of silently dropping older
+// requests off the back as it slides. Matches the Regional Requests tab's window.
+const WINDOW_START = '2026-07-01T00:00:00.000Z';
 const CACHE_PATH = path.join(__dirname, '..', 'request-timing-cache.json');
 
 // Asana exposes no change history for a PROJECT's custom fields, and the audit-log
@@ -146,7 +149,7 @@ async function buildRequestsData() {
     return [];
   }
   const client = asanaClient();
-  const since = new Date(Date.now() - WINDOW_DAYS * 24 * 3600 * 1000).toISOString();
+  const since = WINDOW_START;
 
   let requests, projects;
   try {
@@ -186,7 +189,7 @@ async function buildRequestsData() {
   }
 
   console.log(
-    `[Requests] ${requests.length} requests in last ${WINDOW_DAYS}d | ` +
+    `[Requests] ${requests.length} requests since ${WINDOW_START.slice(0, 10)} | ` +
     `${projects.length} projects (${Object.keys(projectByCode).length} with XCF-#### codes) | ` +
     `${matched.length} matched`
   );

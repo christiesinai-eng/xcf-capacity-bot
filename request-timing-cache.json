@@ -1245,6 +1245,104 @@
       "startedAt": null,
       "startedBy": null,
       "firstStatusAt": null
+    },
+    "1218208563024198": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1219717746621732": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-10-20T19:32:56.005Z",
+      "startedAt": "2026-10-20T19:32:56.005Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-10-20T19:33:13.773Z"
+    },
+    "1218208563024132": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-10-15T23:09:57.834Z",
+      "startedAt": "2026-10-15T23:09:57.834Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": null
+    },
+    "1218208563024112": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218208563024100": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218208563024092": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218207494823218": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-09-14T23:36:00.849Z",
+      "startedAt": "2026-09-14T23:36:00.849Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-10-02T01:50:49.227Z"
+    },
+    "1218208563024065": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218207370361213": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-07T00:23:54.531Z"
+    },
+    "1218207505676288": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-07T04:14:29.915Z"
+    },
+    "1218207370378532": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": "2026-09-30T02:29:05.116Z"
+    },
+    "1218207505676426": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "firstStatusAt": null
+    },
+    "1218207368759792": {
+      "firstOnTrackAt": "2026-09-07T04:36:01.297Z",
+      "firstInProgressAt": "2026-09-06T05:13:14.338Z",
+      "startedAt": "2026-09-06T05:13:14.338Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-07T04:36:01.297Z"
+    },
+    "1218226868578477": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-09-07T03:32:13.037Z",
+      "startedAt": "2026-09-07T03:32:13.037Z",
+      "startedBy": "In Progress",
+      "firstStatusAt": "2026-09-22T02:36:21.861Z"
     }
   },
   "requests": {
@@ -5742,6 +5840,891 @@
       "code": "XCF-18705",
       "name": "XCF-18705 | Baxter logo for Xero board",
       "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1219727517184511": {
+      "code": "XCF-18715",
+      "name": "XCF-18715 | QR Code Creation for Aprio Event ",
+      "comments": [
+        {
+          "author": "Christie Sinai",
+          "at": "2026-10-20T19:32:24.853Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1174390084959182 here is your QR code. Please reach out if you need anything else.\n\n\nhttps://app.asana.com/app/asana/-/get_asset?asset_id=1219717177439479\n"
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1216778075441438": {
+      "code": "XCF-8508",
+      "name": "XCF-8508 | XCFT-8508 - AwardCo Recognition Image Library",
+      "comments": [
+        {
+          "author": "Rob Harding Jolley",
+          "at": "2026-08-05T05:51:37.084Z",
+          "text": "Adding https://app.asana.com/1/41261904390129/profile/1207376557435008 for visibilty"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-08-06T01:51:24.007Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1159741219796751, thanks for submitting this request. Can you please confirm how many assets you require? And are these just generic Xero branded images that don't require copy?"
+        },
+        {
+          "author": "Tu Elliott",
+          "at": "2026-08-13T02:52:52.835Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1204783047017636, Thanks for getting back to us. \n\n    We're wanting the static Xero values images with no copy (all values)\n    Gif Xero values images (all values) \n    Xero generic branded images with the below copy. \n        Congratulations\n        Thank you \n        Happy Xeroversary!\n        Happy Birthday\n        Wishing you well \n    New asset: Xero branded Logo for \"Xcellence\", can be used for the platform and as an image for Slack. Perhaps a similar design to 'Citizen Builders' logo. \n\nHope I've shared enough detail, please let me know if you need more Logen. Otherwise happy to chat further on Slack."
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-08-16T19:08:09.411Z",
+          "text": "Thanks https://app.asana.com/1/41261904390129/profile/1207376557435008\n    Static values assets and gifs can be found in the gdrive folder here: https://drive.google.com/drive/folders/1HKEoTHfMKYbUxciPvKD4WeIbKA14N8si?usp=sharing\n    What specs would the branded images with copy need to be? This can be fit into an upcoming sprint\n    A new logo will be a larger piece of work that we'd need to put more design thought into. Can you please provide more information on the context for this?\n"
+        },
+        {
+          "author": "Tu Elliott",
+          "at": "2026-08-18T23:47:58.946Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1210041358979687 & https://app.asana.com/1/41261904390129/profile/1216752386502904, please see request above."
+        },
+        {
+          "author": "Chris Koski",
+          "at": "2026-08-22T00:42:51.839Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1204783047017636 The security permissions on this folder prohibit downloading and our external vendor isn't able to access the folder at all, even when it is shared. Can you help us by relaxing the security permissions on that folder to allow our external vendor to pleae donwload the existing saset folder? Thank you\n\ncc https://app.asana.com/1/41261904390129/profile/1216752386502904"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-08-22T02:59:06.297Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1210041358979687 I've shared with Lindsay"
+        },
+        {
+          "author": "Alec Katric",
+          "at": "2026-08-24T20:37:10.734Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1204783047017636 - we need to add Dolly and Linden from the vendor side due to OOO"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-08-28T01:39:19.166Z",
+          "text": "Hey all, can I please confirm whether there is still need for XCF support on this request? If so, are you able to provide more information on my earlier comment? Thanks"
+        },
+        {
+          "author": "Alec Katric",
+          "at": "2026-08-28T03:44:18.140Z",
+          "text": "all set for now - thanks!"
+        },
+        {
+          "author": "Tu Elliott",
+          "at": "2026-09-03T02:55:34.685Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1204783047017636, can we please open this up? We've been asked to go ahead with original assets ask.\n\n-Xero branded Logo for \"Xcellence\", can be used for the platform and for the Okta tile. Perhaps a similar design to 'Citizen Builders' logo. \n-Xero generic branded images with the below copy. \n        Congratulations\n        Great work\n        You're amazing\n        Thank you\n        Well done\n        You're brilliant\n        Fantastic job\n        Excellent work\n        Amazing effort\n\nIs it possible for both pieces to be added to a sprint before Sep 21st?  https://app.asana.com/1/41261904390129/profile/1216752386502904, anything else to add?"
+        },
+        {
+          "author": "Alec Katric",
+          "at": "2026-09-04T17:23:44.022Z",
+          "text": "looks good - thanks https://app.asana.com/1/41261904390129/profile/1207376557435008!"
+        },
+        {
+          "author": "Rob Harding Jolley",
+          "at": "2026-09-17T03:24:47.155Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1204783047017636 can I check in on where we got to with the Xero branded Logo for Xcellence?"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-09-20T23:33:50.413Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1159741219796751, apologies for the slow response. This is booked in with the team to look at later this week. We're looking to bring the logo in line with the new brand architecture. \n\nIn the mean time, we've shared the generic images with https://app.asana.com/1/41261904390129/profile/1207376557435008 for review."
+        },
+        {
+          "author": "Rob Harding Jolley",
+          "at": "2026-09-20T23:49:21.333Z",
+          "text": "Thanks for the update! Is it possible to share those with me as well? (If you haven't already that is)"
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1216710006487257": {
+      "code": "XCF-8104",
+      "name": "XCFT-8104 | Onsite customer referral program infographic ",
+      "comments": [
+        {
+          "author": "Becky Sharp",
+          "at": "2026-08-06T05:54:30.443Z",
+          "text": "Where is it going? Onto this webpage https://www.xero.com/us/campaign/refer-a-friend/\n\nInfographic designed in this page: https://www.figma.com/design/8lTqhsHjFGl0mghYAm1qb7/Xero---Refer-a-Friend?node-id=58-1133&t=kpyL08TzZMRORhqv-1 already by https://app.asana.com/1/41261904390129/profile/1212121841218878\n\nhttps://app.asana.com/1/41261904390129/profile/1213663905582429 - please confirm when you're ready for us to export this, or if there are further changes to the webpages, we can hold off."
+        },
+        {
+          "author": "Becky Sharp",
+          "at": "2026-08-27T09:35:29.873Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1213663905582429 while I am on leave https://app.asana.com/1/41261904390129/profile/1216496014620082 is taking over for performance. \n\nWe confirmedhttps://www.figma.com/design/8lTqhsHjFGl0mghYAm1qb7/Xero---Refer-a-Friend?node-id=57-992&t=OdbLkL5tV9iwix4Y-0 meets your requirements, but you had some web page issues to sort out on your end. \n\nhttps://app.asana.com/app/asana/-/get_asset?asset_id=1217905786742006\n\n\nCan we close this one off? https://app.asana.com/1/41261904390129/profile/1216496014620082 https://app.asana.com/1/41261904390129/profile/1214337880499305 or https://app.asana.com/1/41261904390129/profile/1212121841218878 can help you with any export formatting for this one."
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-09-02T00:30:54.452Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1213663905582429, I plan to close this project at the end of this week but please let us know if you need anything else from us. Thanks!"
+        },
+        {
+          "author": "Dan Christ",
+          "at": "2026-09-04T04:54:55.744Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1216496014620082, apologies for the delayed response it's been a busy week!\n\nI'm just getting the design and components formally confirmed and finalised via this Asana request: https://app.asana.com/1/41261904390129/project/1213663808828853/task/1216710001412544?focus=true and then I'll be able to pass the file through on this ticket for adding to the dotcom page. \n\nAre we able to keep this ticket open please?"
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-09-09T01:26:57.179Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1213663905582429 Sounds good, we'll keep it open."
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1216588439896005": {
+      "code": "XCF-6826",
+      "name": "XCFT-6826 - Sales PDF updates",
+      "comments": [
+        {
+          "author": "Logen Stent",
+          "at": "2026-07-27T00:05:35.592Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1190928097223199, apologies this one slipped under the radar. I've tagged you in the doc but could you please share the two existing pdfs that need updating?\n\nIs there potential to deliver this any later than tomorrow? Our team are currently very full at capacity so looking to fit this around other jobs. Thanks"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-07-27T06:03:17.475Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1212669624854580one for next week but putting on the radar now. I'm having difficulty locating the working files for these but looks like you may have previously worked on a similar job?\n\nIf we can't locate the working files we may need to recreate these, potentially in the updated look and feel.\n\nDAM sharelink here: https://brandfolder.com/s/kmckf5rbjw3k78k5skk35z8b"
+        },
+        {
+          "author": "Chiko Kurniawan",
+          "at": "2026-08-03T15:51:49.508Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1204783047017636 is the PDF urgently needed? I can rework it like the previous one and just change it to the new logo? or if there's time I can recreate the design into Canva/Figma so they can update the changes in the future 😄\nlet me know thanksss"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-08-04T03:22:51.312Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1212669624854580 , I believe https://app.asana.com/1/41261904390129/profile/1190928097223199 is happy for us to deliver by end of week. If that gives you enough time to recreate in Canva alongside other jobs this week then that'd be ideal. Otherwise a simple rework to meet the deadline will be ok too."
+        },
+        {
+          "author": "Jess Warton",
+          "at": "2026-08-04T03:24:32.216Z",
+          "text": "Hey team! Would love these to be done in Canva, so happy to continue waiting for this to be achieved. Would make our future lives so much easier!"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-08-04T03:30:35.754Z",
+          "text": "Agreed https://app.asana.com/1/41261904390129/profile/1190928097223199 I think this is the best solve too. Would it be ok to shift to next week's sprint to allow this? Appreciate it's been on the back burner a little bit now."
+        },
+        {
+          "author": "Jess Warton",
+          "at": "2026-08-04T04:41:49.237Z",
+          "text": "Yup thats all good https://app.asana.com/1/41261904390129/profile/1204783047017636🙂 Thanks!"
+        },
+        {
+          "author": "Jess Warton",
+          "at": "2026-08-04T04:43:30.917Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1204783047017636 is there anyway to get the AU one created into Canva at the same time? I know we just requested changes on it on another ticket, but if possible its changed over, ongoing maintenance can then sit with us!"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-08-05T02:53:09.740Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1190928097223199 can you please share a link to the other ticket? I'll look to bundle these jobs together of possible."
+        },
+        {
+          "author": "Jess Warton",
+          "at": "2026-08-06T00:17:35.266Z",
+          "text": "AU pricing PDF request https://app.asana.com/1/41261904390129/task/1216065214400412?focus=true\nThanks https://app.asana.com/1/41261904390129/profile/1204783047017636"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-08-06T01:33:39.787Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1212669624854580 I've moved this one to next week. Can you please create in Canva and also the AU version you previously updated for Jess?"
+        },
+        {
+          "author": "Chiko Kurniawan",
+          "at": "2026-08-13T14:37:57.647Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1190928097223199 here are the canva working files and PDFs of the updated pricing plans\n\nNZ AB & SB Pricing plan - https://canva.link/hfoxn6u25n3uovt\nNZ SB Pricing plan - https://canva.link/5edefq8sesghoq7\n\nUS Partner & SMB Pricing plan - https://canva.link/vvii338t5g9p8d2 \n\nAU AB & SB pricing plan 2026 - https://canva.link/pye661khvfoiaiu\n\nand here is the Canva Folder all this pricing plan is kept in https://canva.link/hudhwd419ltjfmp\n\nlet me know if this is all good 😄 cc https://app.asana.com/1/41261904390129/profile/1204783047017636"
+        },
+        {
+          "author": "Jess Warton",
+          "at": "2026-08-14T04:25:14.384Z",
+          "text": "THIS IS AMAZING!\nThank you https://app.asana.com/1/41261904390129/profile/1212669624854580 https://app.asana.com/1/41261904390129/profile/1204783047017636"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-08-14T04:36:10.072Z",
+          "text": "Awesome work https://app.asana.com/1/41261904390129/profile/1212669624854580! I'll close this one off Jess, let me know if you need anything further"
+        },
+        {
+          "author": "Jess Warton",
+          "at": "2026-08-18T21:56:11.293Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1204783047017636 https://app.asana.com/1/41261904390129/profile/1212669624854580\nI am so sorry, we're just sorting out peoples access to Canva so we can sort future management of these PDFs however we are needing Gusto added into the US Partner & SMB pricing plan. Is there anyway I could please get this added and sent to me as a PDF? Screenshot below matches the website which is all we'd need added. \nhttps://www.xero.com/us/pricing-plans/\n\nLet me know if you need a new request created for this or if this comment is ok! \n\n\nhttps://app.asana.com/app/asana/-/get_asset?asset_id=1217623679080839\n\n\nTHANK YOU SO MUCH!! 🙂"
+        },
+        {
+          "author": "Chiko Kurniawan",
+          "at": "2026-08-20T10:57:42.087Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1190928097223199 updated 😄"
+        },
+        {
+          "author": "Jess Warton",
+          "at": "2026-08-23T22:22:00.487Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1212669624854580🙂 \nCan you please update the pricing on page 2 to match page 1? Looks like its still old pricing on the second page! 🙏\n\nCan you also please turn the X into a TICK for Files Storage on Ledger and Cashbook columns?"
+        },
+        {
+          "author": "Chiko Kurniawan",
+          "at": "2026-08-24T09:55:40.574Z",
+          "text": "sorry about that https://app.asana.com/1/41261904390129/profile/1190928097223199😓 I have updated it"
+        },
+        {
+          "author": "Shane Atha",
+          "at": "2026-09-02T23:05:19.624Z",
+          "text": "hi https://app.asana.com/1/41261904390129/profile/1212669624854580I am the US product marketing lead and taking over this update request. We have worked to consolidate all feedback and we will need another version of the price sheet PDF\n\n-Please reference this doc which has the aligned feedback / changes on tab \"Current PDF Review Tab\" → please use this to see our required changes and send back an updated PDF. If you have any questions, slack me but the document should hopefully give clear guidance. The hope is you create the PDF by following this \"Current PDF Review Tab\" exactly, including the line items, text, numbers, etc. We have made changes to text, numbers, removed some rows, etc so please just make sure the PDF matches this tab exactly. \n\nhttps://docs.google.com/document/d/1LMPn0ArBuNzhDGaEsd84CsgbWo6Kjr_fegaHsEiOu7g/edit?tab=t.0"
+        },
+        {
+          "author": "Shane Atha",
+          "at": "2026-09-02T23:07:43.115Z",
+          "text": "here is screenshot of what we need the PDF to reflect (in the same format as the current PDF but with all the aspects matching this document)\n\nhttps://app.asana.com/app/asana/-/get_asset?asset_id=1218119113455163\n\nhttps://app.asana.com/app/asana/-/get_asset?asset_id=1218119113455165\n\nhttps://app.asana.com/app/asana/-/get_asset?asset_id=1218119113455167\n\nhttps://app.asana.com/app/asana/-/get_asset?asset_id=1218119113554224\n"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-09-03T04:03:34.042Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1213788057645108, when are these updates needed by? We'll need to work this in around current sprint tasks.\n\nhttps://app.asana.com/1/41261904390129/profile/1212669624854580 I'll create a subtask for this and let me know if you need any further clarification on this."
+        },
+        {
+          "author": "Shane Atha",
+          "at": "2026-09-03T15:01:03.226Z",
+          "text": "can we have this by next friday 9/11?"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-09-03T23:16:29.028Z",
+          "text": "Sure thing https://app.asana.com/1/41261904390129/profile/1213788057645108 we can deliver by then. Thanks!"
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1216468611779114": {
+      "code": "XCF-6717",
+      "name": "XCFT-6717 | US | Acast 30s Script Reviews",
+      "comments": [
+        {
+          "author": "Jenna Oakley",
+          "at": "2026-07-10T17:54:02.900Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1211157647475800 need a quick copy review for some new 30s spots being produced by an external agency."
+        },
+        {
+          "author": "Becky Sharp",
+          "at": "2026-07-14T23:06:08.780Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1211026264666242 - Chris has gone over these with your two notes in mind, as well as his own US knowledge:\n    Lead with the brand name – Get \"Xero\" in early in the copy, since the US market isn't yet familiar with the brand.\n    Simplify the CTA – Drop the double CTA. \nHe rewrote his proposed scripts directly."
+        },
+        {
+          "author": "Jenna Oakley",
+          "at": "2026-07-14T23:10:09.949Z",
+          "text": "Fantastic, thanks https://app.asana.com/1/41261904390129/profile/1211157647475800 https://app.asana.com/1/41261904390129/profile/1214337880499305 🙌\nhttps://docs.google.com/document/d/1hfE7SFlFmXsz1De5h8ovnMP9QY--LLkr/edit to the ext. agency and report back if there's anything further."
+        },
+        {
+          "author": "Jenna Oakley",
+          "at": "2026-07-15T01:05:54.967Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1211157647475800 https://app.asana.com/1/41261904390129/profile/1214337880499305 confirming we need to run through legal as well here."
+        },
+        {
+          "author": "Jenna Oakley",
+          "at": "2026-07-17T16:19:12.903Z",
+          "text": "Hey https://app.asana.com/0/1211157647492263/1211157647492263 https://app.asana.com/0/1214332910467965/1214332910467965 we’re hoping XCF can run these through legal for us. Lmk if that’s possible 🙏 TYSM!! "
+        },
+        {
+          "author": "Jenna Oakley",
+          "at": "2026-07-21T02:57:39.087Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1211157647475800 confirming XCF will work with legal for approval on these scripts 💗"
+        },
+        {
+          "author": "Jenna Oakley",
+          "at": "2026-07-27T21:07:02.942Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1211157647475800 https://app.asana.com/1/41261904390129/profile/1214337880499305 can you please confirm legal has been engaged for this project?"
+        },
+        {
+          "author": "Becky Sharp",
+          "at": "2026-07-27T22:02:24.974Z",
+          "text": "Hey  https://app.asana.com/1/41261904390129/profile/1211026264666242 - so sorry this one slipped from my radar last week. \n\nI will look into this today!"
+        },
+        {
+          "author": "Becky Sharp",
+          "at": "2026-08-28T01:38:22.920Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1211026264666242 sorry, didn't get to this but https://app.asana.com/1/41261904390129/profile/1216496014620082 is handling this!"
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-08-28T17:27:08.896Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1211026264666242, confirming legal has been engaged i.e. https://xero.atlassian.net/servicedesk/customer/portal/1149/group/1709/create/2453 has been submitted for legal review. I will provide an update when I get a response from the legal team."
+        },
+        {
+          "author": "Jenna Oakley",
+          "at": "2026-08-31T20:06:24.260Z",
+          "text": "Thanks https://app.asana.com/1/41261904390129/profile/1216496014620082!"
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-09-02T00:58:58.633Z",
+          "text": "Update - Legal ticket has been assigned to Naomi Metcalfe and she changed the ticket / review to In-Progress. Waiting on Naomi to respond."
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-09-03T21:31:50.932Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1211026264666242 Two small changes recommended by legal - Instead of saying that Xero “will\" save you hours, we say Xero \"can\" or \"could” save you hours, as it’s not guaranteed that they “will” save this time. Are you okay to choose what you would like to use in the 1st and 3rd https://docs.google.com/document/d/1hfE7SFlFmXsz1De5h8ovnMP9QY--LLkr/edit (comments highlight the specific parts)? Then this will be fine from their perspective."
+        },
+        {
+          "author": "Jenna Oakley",
+          "at": "2026-09-03T23:01:12.786Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1216496014620082 fantastic thank you! \nWill pass this on now with the change to \"will\" 😄 Cheers!"
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1216463083102295": {
+      "code": "XCF-6714",
+      "name": "XCF-6714 | XCFT-6714 - Canada open banking ",
+      "comments": [
+        {
+          "author": "Logen Stent",
+          "at": "2026-08-05T04:29:33.462Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1208274326876522 apologies for the delay on this request. \n\nCould you use our updated Google Slide templates with the new brand? \n\nAnd will you be working with the social team for the social aspects of this request? We have provided them updated Canva templates in the new brand. These haven't been rolled out to the wider org yet however."
+        },
+        {
+          "author": "Rola Tfaili",
+          "at": "2026-08-18T15:42:32.648Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1204783047017636 apologies, been on PTO! So, are you suggesting we develop net-new assets from the new templates vs having y'all pull together? Just clarifying. \n\nAnd if we do, do we need to get it approved by XCF?"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-08-18T17:09:10.223Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1208274326876522, the Google Slide template is available to all Xero's and in the new look and feel. Should be able to self serve without XCF input but we could do a review if you had any concerns there.\n\nFor the social tiles, we have a suite available in the new look and feel which could be used and run through the approvals channel.\n\n\nhttps://app.asana.com/app/asana/-/get_asset?asset_id=1217570927789851\n"
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1216379516040407": {
+      "code": "XCF-6488",
+      "name": "XCF-6488 | XCFT-6488 - XCF/Xero Look and Feel for Claude reports",
+      "comments": [
+        {
+          "author": "Christie Sinai",
+          "at": "2026-07-08T00:18:01.495Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1204783047017636this is one for me. Hope this is okay to route to you. Am happy to do any heavy lifting on it and/or have a kick off. Anything you need. Thanks so much!"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-07-20T04:41:13.526Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1205645532237101 if possible can we put this on hold until after the AI Brain work? I just don't think we'll be able to make it work until then."
+        },
+        {
+          "author": "Christie Sinai",
+          "at": "2026-07-20T04:47:52.567Z",
+          "text": "Of course https://app.asana.com/1/41261904390129/profile/1204783047017636this is the lowest on the list and absolutely falls to the bottom of the pile! Just wanted to get it on the radar."
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1216332838518688": {
+      "code": "XCF-6729",
+      "name": "XCF-6729 XCF ASSETS | XAA abandoned checkout - SU1502",
+      "comments": [
+        {
+          "author": "Keely Waller",
+          "at": "2026-07-13T23:37:16.732Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1211157647475800, \nSurfacing this one. Go live date we are aiming for is  27/07/2026. \n\nThank you."
+        },
+        {
+          "author": "Becky Sharp",
+          "at": "2026-07-13T23:53:53.107Z",
+          "text": "Access to cop doc requested https://app.asana.com/1/41261904390129/profile/1207584863261789 - looks like will we need to provide copy support for this one?"
+        },
+        {
+          "author": "Keely Waller",
+          "at": "2026-07-14T22:55:41.911Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1211157647475800, \nJust imagery please. Catch up shortly on this one."
+        },
+        {
+          "author": "Becky Sharp",
+          "at": "2026-07-15T05:02:21.172Z",
+          "text": "Thanks for your time on this - https://docs.google.com/document/d/1y1Y5kKizPC4ItAmd_haSKCQzw-iBq5plpQpoEZpIKKw/edit?usp=sharing, but confirming we will come up with some image suggestions for mobile push notifications, that don't include any offers."
+        },
+        {
+          "author": "Keely Waller",
+          "at": "2026-07-15T05:15:36.186Z",
+          "text": "Thanks very much team 🙏"
+        },
+        {
+          "author": "Pam Stanton",
+          "at": "2026-07-20T23:49:41.877Z",
+          "text": "hi https://app.asana.com/1/41261904390129/profile/1211157647475800, sorry understand work is likely already underway on this one but we've just heard from marketing automation that we don't have the capability to run images in push notifications at this stage.\nWe'll revisit this when the capability is available but in the meantime you can put this task on hold. Thanks!"
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1216328699018212": {
+      "code": "XCF-6456",
+      "name": "XCFT-6456 | Meta | Static | UK/AU SB Playable Ads for App | July 2026",
+      "comments": [
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-07-08T22:51:13.108Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1214337880499305\nTinder style do the matching invoice etc"
+        },
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-07-08T22:51:51.264Z",
+          "text": "Do we get CRO involved here too\nProduction cost? where is it coming from? \nTalk to Phil / Tara"
+        },
+        {
+          "author": "Becky Sharp",
+          "at": "2026-07-16T23:41:53.414Z",
+          "text": "Confirming we have a call booked for next week to talk through."
+        },
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-08-03T22:32:12.135Z",
+          "text": "this week"
+        },
+        {
+          "author": "Becky Sharp",
+          "at": "2026-08-07T00:16:27.144Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1211285596272417 - Hannah has done a great job mocking up some figma ideas for the Playable ads - https://www.figma.com/design/Yo7QUVIUIKtmiKMzpuDGiI/XCF-6456---Meta-Playable-ads?node-id=1-220&t=n9TG5kVUiaIrwsbt-1\n\nWould love your thoughts and to select one direction for these, and let us know any feedback. \n\nThank you!"
+        },
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-08-07T00:34:24.134Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1211157647475800 https://app.asana.com/1/41261904390129/profile/1212669624854574\nthis is so great I like it!\nI am going to pass this over to https://app.asana.com/1/41261904390129/profile/1211026264666242now though, as she is taking on the app things. \nOnce she reviews we can proceed."
+        },
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-08-10T22:35:02.228Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1211026264666242"
+        },
+        {
+          "author": "Becky Sharp",
+          "at": "2026-08-14T04:08:53.410Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1211026264666242 - just checking how hard the 17 August deadline was on this so we can prioritise accordingly next week CC https://app.asana.com/1/41261904390129/profile/1216496014620082."
+        },
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-08-17T01:38:28.293Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1211157647475800this is a hard deadline, considering they wanted them at the start of august."
+        },
+        {
+          "author": "Becky Sharp",
+          "at": "2026-08-17T07:08:29.021Z",
+          "text": "Thanks https://app.asana.com/1/41261904390129/profile/1211285596272417 - https://app.asana.com/1/41261904390129/profile/1211026264666242 we will prioritise when we get feedback on these."
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-08-24T21:23:36.645Z",
+          "text": "Update / Next Steps - Need approval / direction from https://app.asana.com/1/41261904390129/profile/1211026264666242."
+        },
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-08-24T23:47:13.478Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1216496014620082I am happy to approve this! I think the concept is strong and is great way to engage in what is quite a boring app haha!\nI can start getting this over to the external agency. \nThe email to share with is the following please: satyajeet.deo@digilakshya.com"
+        },
+        {
+          "author": "Becky Sharp",
+          "at": "2026-08-27T09:43:21.303Z",
+          "text": "Confirming I have invited satyajeet.deo@digilakshya.com as view only to the https://www.figma.com/design/Yo7QUVIUIKtmiKMzpuDGiI/XCF-6456---Meta-Playable-ads?node-id=1-220&t=n9TG5kVUiaIrwsbt-1\n\nThey should have access to download the assets into their own Figma space.\n\nhttps://app.asana.com/1/41261904390129/profile/1211285596272417 please let Satyajeet know we have invited them.\n\nhttps://app.asana.com/1/41261904390129/profile/1216496014620082 if there are any issue Christie knows how to get externals onto Figma - she just needs email and link to the figma board."
+        },
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-08-28T00:10:46.164Z",
+          "text": "Thanks https://app.asana.com/1/41261904390129/profile/1211157647475800I let him now 🙂\nhttps://app.asana.com/1/41261904390129/profile/1211026264666242 will take from here for app"
+        },
+        {
+          "author": "Jenna Oakley",
+          "at": "2026-08-31T18:38:05.239Z",
+          "text": "Confirming work is being started by the external agency 🙂"
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-09-01T00:31:29.200Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1211026264666242 That's great! Will you need anything else from our side to complete this project?"
+        },
+        {
+          "author": "Jenna Oakley",
+          "at": "2026-09-01T01:46:25.093Z",
+          "text": "Currently we have all we need https://app.asana.com/1/41261904390129/profile/1216496014620082! If anything pops up I'll ping you here 😄"
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1216328453286842": {
+      "code": "XCF-6446",
+      "name": "XCFT-6446 | Meta | TikTok | Video | US Xero Payroll | July 2026",
+      "comments": [
+        {
+          "author": "Unknown",
+          "at": "2026-07-07T01:44:58.851Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1210222674373876 this request requires video support. Could you please assign it to someone available to work on it? Thanks https://app.asana.com/1/41261904390129/profile/1211157647475800."
+        },
+        {
+          "author": "Becky Sharp",
+          "at": "2026-08-18T00:35:31.402Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1211285596272417 - brief says both 4 AI videos and also 3 concepts - can you confirm how many we need? The less we do the quicker we can deliver them.\n\nLet us know if you want a call to talk through the storyboards. There are 6 ideas, and we fleshed out 4 of our preferred ideas, but would love to narrow it down the 3. Let us know your thoughts. \n\nhttps://app.asana.com/1/41261904390129/profile/1216559886847848 will share the Figma link next:"
+        },
+        {
+          "author": "Carly Brand",
+          "at": "2026-08-18T00:35:34.293Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1211285596272417 -  storyboard concepts and initial ideas are in this https://www.figma.com/design/FMIhTHaQQ5Hn5bhrkC8Bxf/XCFT-6446-%7C-TikTok-%7C-US-Xero-Payroll?node-id=101-67&p=f&t=mUYXPHC57Q7pYfHD-0\n\ncc: https://app.asana.com/1/41261904390129/profile/1211157647475800"
+        },
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-08-18T02:38:04.652Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1211157647475800\nIs this the final copy with these concepts? Is this ready to go to the region?"
+        },
+        {
+          "author": "Becky Sharp",
+          "at": "2026-08-20T23:00:39.529Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1211285596272417\nThese are the ways in - these are the ideas we plan to refine, pending which one you prefer. You're welcome to share with region for their input and we are also happy to present the ideas to you and or regional stakeholders. But no, not final. We need to refine the concept once you've chosen them.\n\nhttps://www.figma.com/design/FMIhTHaQQ5Hn5bhrkC8Bxf/XCFT-6446-%7C-TikTok-%7C-US-Xero-Payroll?node-id=1-476&p=f&t=EerIdQMixwLc0sAs-0\n\nCC https://app.asana.com/1/41261904390129/profile/1216496014620082"
+        },
+        {
+          "author": "Becky Sharp",
+          "at": "2026-08-21T00:02:30.484Z",
+          "text": "Confirm if you can select the 3 or 4 ideas you like, we can refine from there Bri!"
+        },
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-08-23T22:35:23.903Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1211157647475800\nAB = perfect, I think we can get away with it being AI! As there is not too much \"humanisation\" \nSB = I actually like all of these!! https://app.asana.com/1/41261904390129/profile/1214337880499305 which would you recommend based off of the whole \"AI\" issue? I am thinking POV and Auto Pilot? as there is not as much face to face human needed?"
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-08-24T21:20:34.977Z",
+          "text": "Update / Next Steps:\n- Bri confirmed AB concept.\n- https://app.asana.com/1/41261904390129/profile/1214337880499305 to confirm what concept he recommends for SB.\n- Then pass over to AIM (Ben / Will) for video creation by Friday / early next week."
+        },
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-08-28T00:12:36.693Z",
+          "text": "Team, reminder this must go live the 4th\nHow are we going?\nThis was briefed almost 2 months ago now, so really hoping to get this one out on time. https://app.asana.com/1/41261904390129/profile/1216496014620082"
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-08-28T06:31:46.696Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1211285596272417 Chris has reviewed and details are being passed over to the AIM team with a meeting with them happening early next week. Still aiming for the 4th."
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-09-07T22:17:47.271Z",
+          "text": "Update - Statics and animations already shared (related to 6442). Sharing the videos from the AIM team for review:\nhttps://f.io/RbrC4yKU\nhttps://f.io/5viAZtxa\nWe'll need to discuss the UI one today in the joint meeting."
+        },
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-09-07T23:13:15.523Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1216496014620082\nConfirming i have messaged Michelle 🙂 \nShe is back online tomorrow, I have put in a time to meet with her too."
+        },
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-09-10T00:42:41.670Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1216496014620082\n\nConfirming michelle is getting this for us. \n\nThere are also going to be some updates to the videos above. \n\nI am just waiting for the regional feedback."
+        },
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-09-14T02:02:34.571Z",
+          "text": "Feedback from the region https://app.asana.com/1/41261904390129/profile/1216496014620082\n\nAlso, there was some feedback on the videos - they are very cute but there needs to be some changes.\nSaying autopilot isn't fully correct. Maybe something more of \"Xero Payroll let's you focus on what you love\" or something along those lines\nand then the text one is very cute, but something more along on the lines of \"We hired a new employee in california - \""
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-09-21T03:11:46.463Z",
+          "text": "Updates have been made, just getting the links to the new versions for you."
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-09-22T02:34:22.064Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1211285596272417 https://app.asana.com/1/41261904390129/profile/1201341994148750 New versions here: https://f.io/VpUxX17H"
+        },
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-09-22T02:35:49.832Z",
+          "text": "Thank you https://app.asana.com/1/41261904390129/profile/1216496014620082I have passed this to michelle"
+        },
+        {
+          "author": "Lee Haider",
+          "at": "2026-09-24T19:46:29.212Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1216496014620082 waiting on feedback from Michelle. I should have by EOD tomorrow, and will share here."
+        },
+        {
+          "author": "Lee Haider",
+          "at": "2026-09-28T17:33:37.007Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1216496014620082, below is a one pager regarding the feedback from Michelle and team. High level, the current videos don't accurately speak to the value proposition of Xero US Payroll, as it's not automation, it's having everything in one place, being able to calculate and file payroll taxes, and being covered in all 50 states.\n\nPlease review the feedback here for round 2: https://docs.google.com/document/d/1epf6RRFw_1_TALnZSbSpoQv9vL3LcEoTfAL2hD7o3OA/edit?usp=sharing"
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-09-28T22:40:31.106Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1201341994148750 thanks for the feedback, the Performance pod are meeting this week to review this and we'll provide an update afterwards."
+        },
+        {
+          "author": "Lee Haider",
+          "at": "2026-10-01T19:55:14.188Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1216496014620082, please let me know the status of the v2 videos are after Monday's WIP. Thank you."
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-10-01T23:00:54.920Z",
+          "text": "Had a review of this today - Hi https://app.asana.com/1/41261904390129/profile/1216559886847848 please look into this when back in office next week on Oct 7th and let Chris know if you have any questions."
+        },
+        {
+          "author": "Becky Sharp",
+          "at": "2026-10-06T23:02:24.526Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1216496014620082 - are we still planning on doing the UI video as part of these?"
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-10-09T02:03:29.346Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1201341994148750 - Checking if you would still like us to deliver the UI video? Last we heard (via the comments above) Michelle was looking into it. Looks like Michelle gave some feedback but the product UI wasn't mentioned. \n\nhttps://app.asana.com/1/41261904390129/profile/1216559886847848 / https://app.asana.com/1/41261904390129/profile/1212669624854574 are working on addressing the feedback and will post an update soon."
+        },
+        {
+          "author": "Lee Haider",
+          "at": "2026-10-09T17:36:59.600Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1216496014620082, do you need UI footage for the rework of video 1? If so, I can ask Michelle for it. \n\nCan you please let me know what the status and ETA is on the reworks outside of the UI ask? Is Video 2 ready for me to show Michelle?"
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-10-11T00:05:30.500Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1201341994148750, Re: v2 videos - https://app.asana.com/1/41261904390129/profile/1216559886847848 and https://app.asana.com/1/41261904390129/profile/1212669624854574 are updating storyboards and will check on alignment on this one before proceeding. \n\nRe: UI video (additional video) - The media team saw the script specifically calls out things like Payroll and State Taxes - so ideally they need to see the UI showing how State Taxes have been automatically applied. We discussed this with Brianna who was sourcing this from Michelle (https://app.asana.com/1/41261904390129/task/1216328453286842/comment/1218213869547972?focus=true)."
+        },
+        {
+          "author": "Carly Brand",
+          "at": "2026-10-12T00:23:42.446Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1201341994148750 - we have put together our response in the following slides to share with the stakeholder, to get alignment on the brief and output. Happy to realign with AIM team once they've reviewed! cc https://app.asana.com/1/41261904390129/profile/1212669624854574 https://app.asana.com/1/41261904390129/profile/1216496014620082"
+        },
+        {
+          "author": "Lee Haider",
+          "at": "2026-10-12T20:56:41.116Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1216496014620082, https://app.asana.com/1/41261904390129/profile/1216559886847848, https://app.asana.com/1/41261904390129/profile/1212669624854574\n\nI shared the above deck with the stakeholder, and they will review/provide feedback on your prosed path forward. Will aim to get you this by EOD tomorrow."
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-10-14T20:56:07.864Z",
+          "text": "Update - Feedback delivered and discussion about it on Slack (https://xero.enterprise.slack.com/archives/C0C995UDGHY). Next step is to meet to discuss the feedback this week / early next week."
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-10-16T01:22:42.114Z",
+          "text": "Adding two videos shared in the meeting today in case we need them to show the UI.\nhttps://xero.wistia.com/s/96tajafouz637i9\nhttps://xero.wistia.com/s/rx816312jtdjkmd"
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-10-16T01:53:48.501Z",
+          "text": "Update - Chris, Hannah and Carly meeting on their Tuesday to work on the feedback. We'll post an update afterwards."
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-10-19T23:02:13.107Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1201341994148750/ https://app.asana.com/1/41261904390129/profile/1211285596272417 - The team is working on updating the storyboard before end of day. Providing we are fine to stick with the sketch artist (with updates that address the feedback) then we can get the storyboard over to the Media team. I'll can then ask them for a timeline."
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1216275169606000": {
+      "code": "XCF-6379",
+      "name": "XCF-6379 | XCFT-6379 - Xero-fy these posters for our UK Offices to support our Neurodiversity ERG",
+      "comments": [
+        {
+          "author": "Logen Stent",
+          "at": "2026-08-16T19:45:34.701Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1205467722630601, thanks for submitting this request. Are these posters you've shared already ones that exist in the office. If not, whereabouts are they sourced from?"
+        },
+        {
+          "author": "Melanie Fischer",
+          "at": "2026-08-17T10:41:28.648Z",
+          "text": "They were sourced from Esty and I just printed them out as they were into A3 size and put them up in frames. \n\nNo rush but would be great to Xero-fy them more. Thank you!"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-08-17T22:33:10.617Z",
+          "text": "Thanks for the clarification. Is the copy standardised? Or are you wanting any of this tweaked at all?"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-08-28T00:25:36.305Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1205467722630601 just following up on the above. I can look to schedule this for next week's sprint."
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-08-28T04:45:29.011Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1213004621061104 just looping you into this job for next week once we have a little more info."
+        },
+        {
+          "author": "Melanie Fischer",
+          "at": "2026-08-28T14:43:18.161Z",
+          "text": "Apologies for the delay - we would like to add the Neurodiversity Logo on the poster please but no need to tweak the wording content\nFolder with the logos:\nhttps://drive.google.com/drive/folders/1h6Nk3p7faYgjKM5VXlynzGK883EIQsUe?usp=drive_link\nND logo below:\n\nhttps://drive.google.com/file/d/1qjnmHwnrjHqtqaeAxOXgB4PQps0rvn8W/view?usp=sharing"
+        },
+        {
+          "author": "Natalie Wei Jia Lee",
+          "at": "2026-08-31T01:34:47.742Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1205467722630601 Please provide access to the drives for both Logen and I. Thank you."
+        },
+        {
+          "author": "Natalie Wei Jia Lee",
+          "at": "2026-09-01T00:46:52.853Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1205467722630601 following up on access, if you can assist please. Thank you."
+        },
+        {
+          "author": "Melanie Fischer",
+          "at": "2026-09-01T16:31:00.170Z",
+          "text": "I have given you both access now - can you let me know if doesn't work - thank you!"
+        },
+        {
+          "author": "Natalie Wei Jia Lee",
+          "at": "2026-09-03T04:35:18.125Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1205467722630601 kindly find the A3 posters for review."
+        },
+        {
+          "author": "Melanie Fischer",
+          "at": "2026-09-03T11:13:13.145Z",
+          "text": "Does this work?"
+        },
+        {
+          "author": "Natalie Wei Jia Lee",
+          "at": "2026-09-04T00:41:50.878Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1205467722630601 Thanks for the logo. I have sent a first pass for review. Have a look when you get the chance."
+        },
+        {
+          "author": "Melanie Fischer",
+          "at": "2026-09-04T12:35:00.121Z",
+          "text": "Looks great thank you!!!\nWould it be possible to add the logo onto all 3 posters?\nAlso can you add a line at the bottom of each\n\nFor support, please join our https://xero.enterprise.slack.com/archives/C06Q00NREV9 and check out resources on Help Hub and Modern Health."
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-09-07T04:30:31.216Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1213004621061104 could you please take a look at this when you have a moment? I'll add additional time."
+        },
+        {
+          "author": "Natalie Wei Jia Lee",
+          "at": "2026-09-07T06:49:59.914Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1205467722630601 Kindly find the updated poster visuals."
+        },
+        {
+          "author": "Melanie Fischer",
+          "at": "2026-09-09T17:44:58.352Z",
+          "text": "Fantastic,thank you!"
+        },
+        {
+          "author": "Natalie Wei Jia Lee",
+          "at": "2026-09-10T01:10:39.883Z",
+          "text": "Thanks https://app.asana.com/1/41261904390129/profile/1205467722630601. Please use this print-ready pdf for production. Cheers."
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1216269528611081": {
+      "code": "XCF-6375",
+      "name": "XCF-6375 | XCFT-6375 - Xero Analytics Product Illustrations In New Brand Style",
+      "comments": [
+        {
+          "author": "Christie Sinai",
+          "at": "2026-07-06T19:05:24.421Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1210222674373876assigning you this one to scope, unpack etc.  Thanks!"
+        },
+        {
+          "author": "Bronwyn Sinclair",
+          "at": "2026-07-20T09:22:32.417Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1205645532237101 and https://app.asana.com/1/41261904390129/profile/1210222674373876 Just wanted to check in with both of you on this one. How has your scoping gone? Is the end of the month still an achievable deadline? Thanks!"
+        },
+        {
+          "author": "Christie Sinai",
+          "at": "2026-07-20T22:03:01.536Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1204783047017636assigning you this to get possibly Dan to look at this and reach out to Bronwyn. Thanks!"
+        },
+        {
+          "author": "Bronwyn Sinclair",
+          "at": "2026-07-29T07:37:45.212Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1205645532237101 and https://app.asana.com/1/41261904390129/task/1213848883292038 hope you guys are well! Just wanted to reach out for an update on this request. Thanks so much!"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-07-29T23:25:42.160Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1214144835095171, apologies for the delayed response and thanks for your patience here. \n\nWorking with https://app.asana.com/1/41261904390129/profile/1212672438909411 to unpack this further and figure out when and how best XCF can resource/support this. We'll update you as soon as we have a better understanding here. Thanks again"
+        },
+        {
+          "author": "Bronwyn Sinclair",
+          "at": "2026-07-30T06:06:43.197Z",
+          "text": "Thank you so much! Please let me know when you have an eta on this"
+        },
+        {
+          "author": "Quincey Brinker",
+          "at": "2026-07-31T18:28:33.700Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1214144835095171\n\nThanks for your patience. Looks like this came in just as part of our team was getting shifted to support Citizen's Builders and wasn't unpacked as quickly as we'd like. Sorry about this. \nCan we find out more on your deadline and top priorities? And do you have budget to support this request? At first glance it looks like it is about 19 Charms/icons, 14 Simplified UI images, and 4 banners. This is bigger than an XS/S (micro request) so doesn't fall in our typical Studio sprint but we want to make sure we get you what you need. Let me know if you can support with budget and we can work on securing external support. thanks!"
+        },
+        {
+          "author": "Bronwyn Sinclair",
+          "at": "2026-08-03T09:33:05.124Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1212672438909411 Thanks so much! At the moment we're looking to get everything done in time for launch at the end of the month. So, I think the best approach with that in mind would be for our team to take a look at everything and we'll put together designs and illustrations and then send them through to you guys for review if you're happy to go with that approach?"
+        },
+        {
+          "author": "Quincey Brinker",
+          "at": "2026-08-04T17:49:40.796Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1214144835095171 We want to make sure the brand elements are done in the same brand look/feel. Let us sync on our side and come back. We may be able to get approval to bring in external support. What is your absolute deadline? And could assets be rolling in over the next 2 months?"
+        },
+        {
+          "author": "Bronwyn Sinclair",
+          "at": "2026-08-05T06:43:14.877Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1212672438909411 thanks so much, for organising, if you guys want to handle it in house and can get additional support from your side that would be great! Product launch is the beginning of September so we need to hand over all the assets to engineering by the end of August. At this point there are no further plans for additional assets that we would need. This is everything that we have planned across the entire Analytics feature set."
+        },
+        {
+          "author": "Rebecca Mortimer",
+          "at": "2026-08-19T06:16:27.489Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1212672438909411 Just checking in - do you have any more clarity on timing for these assets? Thanks so much!"
+        },
+        {
+          "author": "Quincey Brinker",
+          "at": "2026-08-19T14:03:24.353Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1210807669859933 and https://app.asana.com/1/41261904390129/profile/1214144835095171 - Thomas Williams said to pause on this, he was working through the request with Charlene. We have not been direction to move forward yet."
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1216230954606916": {
+      "code": "XCF-6307",
+      "name": "XCFT-6307 | Self Serve Digital Banners | Master Templates",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1216230134547415": {
+      "code": "XCF-6299",
+      "name": "XCF-6299 | XCFT-6299 - Canva template: Sales-facing one-pager in new branding",
+      "comments": [
+        {
+          "author": "Sandeep Garcha",
+          "at": "2026-07-06T14:45:13.136Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1204783047017636\n\nCan we use the one pager templates that SDS are creating. Maybe we can pick this up tomorrow? thanks"
+        },
+        {
+          "author": "Sandeep Garcha",
+          "at": "2026-07-15T07:40:49.298Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1208486090370992\n\nWe have some new one-pager Canva templates that are currently being developed by an agency, and we should have them within the next two weeks.\nWould it be possible to wait until then? It would help us avoid duplicating work, especially as we're currently very low on capacity.  thanks cc https://app.asana.com/1/41261904390129/profile/1204783047017636"
+        },
+        {
+          "author": "Logen Stent",
+          "at": "2026-07-22T03:01:57.878Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1208486090370992 - following on Sandeep's message above. We are in the process of building the one pager templates out which should hopefully be ready in the next couple of weeks. \n\nI'm going to mark this as on hold at the moment and will update you when these are available. Thanks!"
+        },
+        {
+          "author": "Jenna Chamberlain",
+          "at": "2026-07-22T03:12:23.588Z",
+          "text": "Totally fine, appreciate the update Logen! Thank you."
+        }
+      ],
       "summary": null,
       "cause": null,
       "causedAt": null
