@@ -85,6 +85,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .rq-bd td:not(:first-child){text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
 .rq-bar{height:4px;border-radius:2px;background:var(--blue);display:block;margin-top:4px}
 .rq-type{display:inline-block;padding:1px 7px;border-radius:99px;font-size:10px;border:1px solid;white-space:nowrap}
+#rq-spread{margin-bottom:16px}
 .rq-coverage{border:1px solid var(--border);border-left:3px solid var(--sky);border-radius:8px;background:var(--surface);padding:13px 16px;margin-bottom:16px}
 .rq-cov-top{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .rq-cov-l{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
@@ -103,6 +104,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .rq-seg{flex:1;min-width:140px;padding:9px 12px;background:rgba(255,255,255,.04);border-radius:7px}
 .rq-seg-n{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
 .rq-seg-l{font-size:11px;margin-top:3px}
+.rq-spread-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;padding:14px 15px 11px}
+.rq-sp{display:flex;flex-direction:column;align-items:center;gap:6px}
+.rq-sp-n{font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
+.rq-sp-bar{width:100%;max-width:54px;height:54px;display:flex;align-items:flex-end;background:rgba(255,255,255,.05);border-radius:4px;overflow:hidden}
+.rq-sp-bar>div{width:100%;border-radius:4px}
+.rq-sp-l{font-size:9.5px;color:var(--muted);text-align:center;line-height:1.25}
+@media(max-width:620px){.rq-spread-grid{grid-template-columns:repeat(3,1fr);row-gap:12px}}
 
 /* ── Regional Requests ── */
 .rg-sect{border:1px solid var(--border);border-radius:9px;margin-bottom:16px;overflow:hidden}
@@ -801,6 +809,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="rq-stats" id="rq-stats"></div>
   </div>
   <div class="rq-coverage" id="rq-coverage"></div>
+  <div id="rq-spread"></div>
   <div class="rq-breakdowns" id="rq-breakdowns"></div>
   <div class="rq-controls">
     <input id="rq-search" class="rq-search" type="search" placeholder="Filter by code, name, POD or requester…" oninput="renderRequests()">
@@ -963,6 +972,12 @@ const RQ_TYPE_COL={'Roadmap':'#6C8EF5','Micro (BAU)':'#4CAF8A','XCF initiative':
 // Waiting ones are still live and will measure themselves once the status flips;
 // missed ones are past the point where setting it would record a truthful date;
 // cancelled ones leave the denominator entirely.
+// Each start signal says something different about how trustworthy the date is.
+const RQ_SIGNAL_COL={'In Progress':'#4CAF8A','On Track':'#6C8EF5','Stakeholder Review':'#CF89FE','Skipped In Progress':'#F5A623'};
+const RQ_SIGNAL_NOTE={
+  'Stakeholder Review':'In Progress was never set \u2014 dated from when it reached Stakeholder Review, so the wait is an upper bound',
+  'Skipped In Progress':'In Progress was never set \u2014 dated from completion, so the wait is an upper bound',
+};
 const RQ_WAITING=['New Request','Additional Information','On Hold','Backlog'];
 const RQ_CANCELLED=['Cancelled'];
 function rqBuckets(){
@@ -1044,9 +1059,9 @@ function renderRequests(){
   const CAUSE_ORDER=['Access & permissions','Brief & scoping','Capacity queue','Approval cycle',
     'Requester-side','Creative iteration','Misrouted','Dropped','No blocker','Unexplained'];
   document.getElementById('rq-breakdowns').innerHTML=
-    rqBreakdown('Median wait by quarter',r=>r.quarter,quarters)+
-    rqBreakdown('Median wait by project type',r=>r.projectType,['Roadmap','Micro (BAU)','XCF initiative','Unset'])+
-    (caused.length?rqBreakdown('Median wait by cause — '+caused.length+' classified'+rqCauseStamp(caused),r=>r.cause,CAUSE_ORDER,caused):'');
+    rqBreakdown('Mid-point wait by quarter',r=>r.quarter,quarters)+
+    rqBreakdown('Mid-point wait by project type',r=>r.projectType,['Roadmap','Micro (BAU)','XCF initiative','Unset'])+
+    (caused.length?rqBreakdown('Mid-point wait by cause — '+caused.length+' classified'+rqCauseStamp(caused),r=>r.cause,CAUSE_ORDER,caused):'');
 
   const measured=REQUESTS_DATA.filter(r=>r.durationHours!==null&&r.durationHours!==undefined);
   // The median is computed from genuine start signals only. Completion-derived rows
@@ -1056,15 +1071,19 @@ function renderRequests(){
   // shift the median by 0.1d (6.9 vs 7.0), so splitting them bought precision
   // nobody could act on while adding a caveat to every reading of the number.
   const viaComplete=measured.filter(r=>!r.isRealStart);
-  const median=rqMedian(measured.map(r=>r.durationHours));
+  // Rows dated from completion or stakeholder review sit well after work began, and
+  // there are now enough of them to matter: blending moves the median 7.4d -> 10.8d.
+  // The headline stays on clean starts; the all-in figure sits beside it as an
+  // upper bound so neither number is hidden.
+  const median=rqMedian(measured.filter(r=>r.isRealStart).map(r=>r.durationHours));
+  const medianAll=rqMedian(measured.map(r=>r.durationHours));
   const overDay=measured.filter(r=>r.durationHours>24);
   const sameDay=measured.length-overDay.length;
   const slow=measured.filter(r=>r.durationHours>=168).length;
   stats.innerHTML=
-    '<div class="rq-stat"><div class="rq-stat-l">Median wait</div><div class="rq-stat-v">'+(median!==null?(median/24).toFixed(1)+'d':'—')+'</div></div>'+
-    '<div class="rq-stat"><div class="rq-stat-l">Over 24 hrs</div><div class="rq-stat-v">'+overDay.length+'</div></div>'+
-    '<div class="rq-stat"><div class="rq-stat-l">Over 7 days</div><div class="rq-stat-v" style="color:'+(slow?'var(--red)':'var(--txt)')+'">'+slow+'</div></div>'+
-    '<div class="rq-stat" title="Live projects not yet marked In Progress — these measure themselves once the status flips"><div class="rq-stat-l">Awaiting</div><div class="rq-stat-v" style="color:#F5A623">'+rqBuckets().waiting.length+'</div></div>';
+    '<div class="rq-stat"><div class="rq-stat-l">Tracked</div><div class="rq-stat-v">'+measured.length+'</div></div>'+
+    '<div class="rq-stat" title="Live projects not yet marked In Progress \u2014 these measure themselves once the status flips"><div class="rq-stat-l">Awaiting</div><div class="rq-stat-v" style="color:#F5A623">'+rqBuckets().waiting.length+'</div></div>'+
+    '<div class="rq-stat" title="Took longer than a week from submission to work starting"><div class="rq-stat-l">Over a week</div><div class="rq-stat-v" style="color:'+(slow?'var(--red)':'var(--txt)')+'">'+slow+'</div></div>';
 
   // Coverage is the adoption metric, not a footnote: a request only becomes
   // measurable once its project gets an On Track status update, so this climbs
@@ -1083,6 +1102,20 @@ function renderRequests(){
   // Three states, not one coverage percentage. "Awaiting In Progress" is work still
   // in flight that becomes measurable the moment the status flips — reporting it as
   // unmeasured made a normal pipeline look like a tracking failure.
+  // A median implies a typical case, and there isn't one — the spread is almost
+  // flat from same-day to over a month, so collapsing it to one figure described
+  // almost no actual request. The distribution is shown instead.
+  const SPREAD=[['Same day',0,24,'#3eccff'],['1-3 days',24,72,'#4CAF8A'],['3-7 days',72,168,'#FDCC08'],
+    ['1-2 weeks',168,336,'#F5A623'],['2-4 weeks',336,672,'#FF719B'],['Over a month',672,Infinity,'#d55181']];
+  const spread=SPREAD.map(([label,lo,hi,col])=>({label,col,n:measured.filter(r=>r.durationHours>=lo&&r.durationHours<hi).length}));
+  const spreadMax=Math.max(1,...spread.map(b=>b.n));
+  document.getElementById('rq-spread').innerHTML=
+    '<div class="rq-bd"><div class="rq-bd-h">How long requests waited — '+measured.length+' tracked</div>'+
+    '<div class="rq-spread-grid">'+spread.map(b=>
+      '<div class="rq-sp"><div class="rq-sp-n" style="color:'+b.col+'">'+b.n+'</div>'+
+      '<div class="rq-sp-bar"><div style="height:'+Math.max(3,Math.round(b.n/spreadMax*100))+'%;background:'+b.col+'"></div></div>'+
+      '<div class="rq-sp-l">'+b.label+'</div></div>').join('')+'</div></div>';
+
   const buckets=rqBuckets();
   const pool=measured.length+buckets.waiting.length+buckets.missed.length;
   const accounted=pool?Math.round((measured.length+buckets.waiting.length)/pool*100):0;
@@ -1172,7 +1205,7 @@ function renderRequests(){
         '<td>'+pod+'</td>'+
         '<td>'+rqFmtWhen(r.submittedAt)+'</td>'+
         '<td'+(r.onTrackAt&&!r.isRealStart?' title="No start was recorded on this project, so this is the completion date — the duration is an upper bound, not the wait before work began"':'')+'>'+(r.onTrackAt
-          ? rqFmtWhen(r.onTrackAt)+'<span style="font-size:9.5px;color:'+(!r.isRealStart?'#8b9abf':r.startedBy==='In Progress'?'#4CAF8A':'#6C8EF5')+'">'+(!r.isRealStart?'from completion':(r.startedBy||''))+'</span>'
+          ? rqFmtWhen(r.onTrackAt)+'<span style="font-size:9.5px;color:'+(RQ_SIGNAL_COL[r.startedBy]||'#8b9abf')+'">'+(r.startedBy||'')+'</span>'
           : '<span class="rq-none">—</span>')+'</td>'+
         '<td>'+rqFmtDur(r.durationHours,r.isRealStart)+'</td>'+
         '<td class="rq-sum">'+why+'</td>'+

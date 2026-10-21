@@ -6,6 +6,12 @@ const REQUESTS_PROJECT_GID = '1215906401561993'; // XCF | Requests
 const PM_PORTFOLIO_GID = '1217210785824637';     // XCF | Projects
 const STATUS_FIELD_GID = '1211986892220398';     // Status (XCF)
 const IN_PROGRESS_GID = '1211986892220400';      // Status (XCF) → "In Progress"
+const STAKEHOLDER_REVIEW_GID = '1213322493108394'; // Status (XCF) → "SR - Stakeholder Review"
+const COMPLETE_GID = '1211986892220404';         // Status (XCF) → "Complete"
+
+// Internal projects that should not be counted in cycle time at all — they are not
+// business requests, so they distort both coverage and the median.
+const EXCLUDED_CODES = new Set(['XCF-11710']); // Canva XCF approvals — internal
 const XCF_CODE_FIELD_GID = '1213726159416934';   // "XCF" text field, e.g. XCF-18696
 const PODS_FIELD_GID = '1211165589636938';       // PODS (XCF)
 const REQUESTER_FIELD_GID = '1218344624492289';  // Requester (XCF)
@@ -105,30 +111,39 @@ async function fetchProjectStart(client, projectGid) {
   );
   const firstInProgressAt = ip ? ip.created_at : null;
 
-  // Completion is a fallback only. It proves work happened but not when it began —
-  // measured against projects carrying both dates it runs ~2.6x the real start time
-  // (14.2d vs 5.4d median). So it counts toward coverage, is flagged as an upper
-  // bound, and is kept out of the headline median.
+  // Fallbacks in descending order of how well they approximate "work started".
+  // Stakeholder Review and Complete both prove work happened but date it later than
+  // it began, so they are labelled distinctly rather than passed off as a clean start.
+  const srStory = stories.find(s =>
+    s.resource_subtype === 'enum_custom_field_changed' &&
+    s.custom_field?.gid === STATUS_FIELD_GID &&
+    s.new_enum_value?.gid === STAKEHOLDER_REVIEW_GID
+  );
+  const firstReviewAt = srStory ? srStory.created_at : null;
+
+  // Match on gid, not name — the stories fetch only requests new_enum_value.gid, so
+  // a name comparison here silently never matched and lost every completed project.
   const compStory = stories.find(s =>
     s.resource_subtype === 'enum_custom_field_changed' &&
     s.custom_field?.gid === STATUS_FIELD_GID &&
-    s.new_enum_value?.name === 'Complete'
+    s.new_enum_value?.gid === COMPLETE_GID
   );
   const compUpdate = asc.find(u => u.color === 'complete');
   const firstCompleteAt = [compStory?.created_at, compUpdate?.created_at].filter(Boolean).sort()[0] || null;
 
   const realStart = [firstOnTrackAt, firstInProgressAt].filter(Boolean).sort()[0] || null;
-  const startedAt = realStart || firstCompleteAt;
+  const startedAt = realStart || firstReviewAt || firstCompleteAt;
 
   return {
     firstOnTrackAt,
     firstInProgressAt,
+    firstReviewAt,
     firstCompleteAt,
     startedAt,
     startedBy: !startedAt ? null
       : realStart ? (realStart === firstInProgressAt ? 'In Progress' : 'On Track')
-      : 'Completed',
-    // False for completion-derived rows, so the median can exclude them.
+      : startedAt === firstReviewAt ? 'Stakeholder Review'
+      : 'Skipped In Progress',
     isRealStart: !!realStart,
     firstStatusAt: asc.length ? asc[0].created_at : null,
   };
@@ -186,7 +201,8 @@ async function buildRequestsData() {
     return [];
   }
 
-  requests = requests.filter(t => t.created_at && t.created_at >= since);
+  requests = requests.filter(t => t.created_at && t.created_at >= since)
+    .filter(t => !EXCLUDED_CODES.has(extractCode(textValue(t, XCF_CODE_FIELD_GID) || t.name)));
 
   const projectByCode = {};
   for (const p of projects) {
@@ -216,7 +232,7 @@ async function buildRequestsData() {
   const projectsToFetch = matched
     .map(m => m.project)
     .filter((p, i, arr) => arr.findIndex(x => x.gid === p.gid) === i)
-    .filter(p => !cache.projects[p.gid]?.startedAt);
+    .filter(p => !cache.projects[p.gid]?.startedAt || cache.projects[p.gid]?.firstReviewAt === undefined);
 
   const projectTiming = {};
   const pErrs = {};
