@@ -32,9 +32,13 @@ Then deploy the generated file via `mcp__Xero_Deploy__deploy_app`.
 src/index.js           — orchestrator: runs all data builders in parallel, calls saveReport
 src/asana.js           — all Asana API calls (7 data builders)
 src/slackUpdates.js    — Slack PM updates fetcher + cache
+src/requestTiming.js   — Request Cycle Time builder + timing/summary cache
+src/regionalRequests.js— Regional Requests builder
 src/report.js          — injects data arrays into template.html, writes reports/xcf-report-YYYY-MM-DD.html
 template.html          — self-rendering single-file dashboard (all JS/CSS inline)
 slack-pm-updates-cache.json — persists Slack data + manually-added executive summaries
+request-timing-cache.json   — project start dates + hand-written summaries and causes
+                              COMMIT THIS. The summaries are not reproducible.
 reports/               — generated daily HTML files
 ```
 
@@ -62,6 +66,13 @@ writes `reports/xcf-report-YYYY-MM-DD.html` → deploy that file.
 | Performance BAU board | `1212446476552313` |
 | Leave project | `LEAVE_PROJECT_GID` (in .env) |
 | Slack PM updates channel | `C0B3YCKT0JV` |
+| Status (XCF) → In Progress | `1211986892220400` |
+| Status (XCF) → SR - Stakeholder Review | `1213322493108394` |
+| Status (XCF) → Complete | `1211986892220404` |
+| Applicable Regions (Roadmap) | `1212086752729219` |
+| Regions (XCF) (Micro BAU) | `1213486033990545` |
+| Business Group (XCF) | `1211914438576356` |
+| SH Cost centre (XCF) | `1213093222630048` |
 | XCF \| Requests project | `1215906401561993` |
 | Status (XCF) field | `1211986892220398` (In Progress = `1211986892220400`) |
 | XCF code text field | `1213726159416934` |
@@ -130,13 +141,47 @@ writes `reports/xcf-report-YYYY-MM-DD.html` → deploy that file.
 ### 9. Request Cycle Time Tab
 **Data builder:** `buildRequestsData()` in `src/requestTiming.js`
 **Source:** XCF | Requests (`1215906401561993`) + XCF | Projects portfolio
-**Measures:** Request `created_at` → whichever of these the linked project hits first:
-1. its first **On Track** status update (`project_statuses` entry with `color: green`)
-2. its **`Status (XCF)` set to In Progress** (`enum_custom_field_changed` in project stories)
+**Window:** fixed start of **1 Jul 2026** (top of FY27 Q2), not a rolling window. A rolling
+window made coverage incomparable week to week — older requests fell off the back, so the
+number could drop while adoption improved. Set by `WINDOW_START`.
 
-**Shows:** Coverage box, median wait broken down by fiscal quarter and project type,
-then a filterable table (sortable by duration) with a written explanation of each wait.
-The "Work started" column labels which of the two signals fired.
+**Measures:** Request `created_at` → the earliest of four signals on the linked project,
+in descending order of how well each approximates "work started":
+
+| Signal | Where | Label shown |
+|---|---|---|
+| `Status (XCF)` → In Progress | project stories | `In Progress` |
+| First **On Track** status update (`color: green`) | `project_statuses` | `On Track` |
+| `Status (XCF)` → SR - Stakeholder Review | project stories | `Stakeholder Review` |
+| `Status (XCF)` → Complete | project stories / `color: complete` | `Skipped In Progress` |
+
+The last two date work *later* than it began, so they are labelled distinctly rather than
+passed off as clean starts. `isRealStart` is true only for the first two.
+
+**Shows:** a four-state coverage panel, a **distribution** of wait lengths, breakdowns by
+quarter / project type / delay cause, a filterable sortable table with a written
+explanation per row, and a worklist of projects with no start date.
+
+**There is no median on this tab, deliberately.** The spread is almost flat — roughly 28
+same-day, 10, 21, 25, 34, 23 over a month — with the two largest groups at opposite ends.
+A median implied a typical request that does not exist and hid the shape of the data. The
+breakdown panels say "mid-point wait" rather than "median" for the same reason: they are
+for comparing groups against each other, not for describing a typical case.
+
+**Coverage is four states, not one percentage.** Reporting a single figure made a normal
+pipeline look like a tracking failure:
+
+| State | Meaning |
+|---|---|
+| **Measured** | A start date was captured |
+| **Awaiting In Progress** | Live project not yet marked — measures itself once the status flips. Statuses: New Request, Additional Information, On Hold, Backlog |
+| **Missed** | Moved past In Progress without it being set; no truthful date recoverable |
+| **Cancelled** | Excluded from the denominator entirely |
+
+**The denominator is projects, not requests.** Of ~507 requests, ~315 never became projects —
+BAU finished straight off the request, where cycle time does not apply. Counting them made
+coverage read 23% when it was 61% of trackable work. The funnel is shown on the tab so the
+315 stay visible rather than looking trimmed away.
 
 **Projects DO have an activity log — don't repeat this mistake.** An earlier version of
 this skill claimed a project's custom-field history was unobtainable, reasoning from
@@ -149,9 +194,14 @@ exists** and records `enum_custom_field_changed` with timestamps, exactly like t
   → 2026-09-06T11:14  enum_custom_field_changed  Status (XCF)  →  In Progress
 ```
 
-Adding that signal took coverage from 48 to 94 of 411 requests. In Progress is the
-**stronger** of the two, dating 59 requests against On Track's 35. When reaching for
-project history, test `/projects/{gid}/stories` before concluding anything is unavailable.
+Adding that signal took coverage from 48 to 94. In Progress is the **strongest** signal,
+dating ~77 requests against On Track's ~35. When reaching for project history, test
+`/projects/{gid}/stories` before concluding anything is unavailable.
+
+**Match story enum values on `gid`, never on `name`.** The stories fetch requests
+`new_enum_value.gid` in its `opt_fields`, so `s.new_enum_value?.name === 'Complete'`
+silently never matches and loses every completed project. This cost 9 projects before it
+was spotted. If a signal mysteriously finds nothing, check the opt_fields first.
 
 **`Status (XCF) = In Progress` is a PROJECT value, not a request one.** On request tasks it
 is never used — 0 of 100 sampled. Requests only ever move New Request → Hero Awareness /
@@ -162,31 +212,104 @@ task is converted to a project. The join is the `XCF-####` code appearing in bot
 Of 428 projects: 254 use `XCF-####` (matchable), 94 use `XCFP-###`, 49 use `XCFT-###`,
 31 have no code. Roughly 40% can never be matched.
 
-**Coverage is deliberately prominent.** Only ~94 of ~411 requests have a measurable cycle.
-The coverage box at the top of the tab states this in plain numbers, split by which signal
-dated each one, so the medians are never read as covering everything. It is an adoption
-metric — it rises as the team posts project status updates and sets Status (XCF).
+**CACHING — the rule that matters.** Cache a project only once it **has** a start date;
+that value never changes. A project with no start yet must be re-checked on **every**
+build.
 
-**Caching note:** the cached project entry is keyed on `startedAt`. If you add or change a
-start signal, clear `cache.projects` (keep `cache.requests` — the summaries live there) so
-every project is re-evaluated. The staleness check is `startedAt === undefined`, not a
-truthiness test, so a genuine "no start date" result stays cached rather than refetching
-forever.
+An earlier version cached the *absence* of a start (`startedAt === undefined`), which froze
+coverage permanently — once a project was recorded as unstarted it was never looked at
+again, so projects the team had since marked In Progress stayed invisible and the number
+could never climb. That defeats the entire purpose of the tab. Thirteen projects were
+hidden this way; measured went 117 → 130 the moment it was fixed. The check is now:
 
-**Comment summaries** live in `request-timing-cache.json` under `requests[gid].summary`,
-hand-written (see "Regenerate the request summaries" below). The builder preserves them
-across rebuilds.
+```js
+.filter(p => !cache.projects[p.gid]?.startedAt)
+```
 
-**Caching:** a project's first green never changes, so resolved lookups are cached
-permanently. First run costs hundreds of API calls; later runs are near-free.
+If you add or change a start signal, also clear `cache.projects` so every project is
+re-evaluated — but keep `cache.requests`, which holds the hand-written summaries.
 
-### 10. BAU Tab (Design + Performance) — orphaned
+**Internal projects** are excluded via `EXCLUDED_CODES` in `src/requestTiming.js`
+(currently `XCF-11710`, Canva XCF approvals). They are not business requests and distort
+both coverage and the distribution.
+
+**Comment summaries and delay causes** live in `request-timing-cache.json` under
+`requests[gid].summary`, `.cause` and `.causedAt`. Hand-written — see "Regenerate the
+request cycle-time summaries" below. The builder preserves them across rebuilds, and a
+scheduled task tops up new ones weekly.
+
+**The cause taxonomy** is fixed — do not invent new values:
+`Access & permissions`, `Brief & scoping`, `Capacity queue`, `Approval cycle`,
+`Requester-side`, `Creative iteration`, `Misrouted`, `Dropped`, `No blocker`, `Unexplained`.
+
+Keep *Creative iteration* separate from the delay causes — those days are active design
+rounds, not waiting, and lumping them in overstates the problem. Tags carry a `causedAt`
+date shown on the tab, because they are a point-in-time read and go stale.
+
+**What the causes show** (92 classified, as of 20 Oct 2026): clean briefs resolve in
+~2.4 days against ~26.9 for *Brief & scoping* — an eleven-fold gap, and the largest
+actionable category. *Capacity queue* is only 7 of 92, which is useful evidence that the
+bottleneck sits upstream of the team rather than within it.
+
+### 10. Regional Requests Tab
+**Data builder:** `buildRegionalData()` in `src/regionalRequests.js`
+**Source:** XCF | Requests, FY27 Q2 + Q3, **cancelled requests excluded**
+**Shows:** six sections — Region / Business Group / Cost Centre, each split Roadmap vs
+Micro (BAU), with FY27 Q2 and Q3 side by side.
+
+**Fields differ by project type:** Roadmap region comes from `Applicable Regions`
+(`1212086752729219`), Micro BAU from `Regions (XCF)` (`1213486033990545`). Both are
+multi-enum, so a request tagged with several regions counts once per region and region
+totals exceed the request count.
+
+**Horizontal bars, not pie charts.** The original ask was pies. The palette validator
+fails all-pairs colour separation past **three** slices — worst pair ΔE 10.6 for normal
+vision (below the 15 floor) and 1.6 under deuteranopia — so six regions encoded by colour
+alone would be indistinguishable, including for full-colour readers. Bars label each row
+directly, need no legend, and read identically at 6 or 20 categories. Run
+`scripts/validate_palette.js` from the `dataviz` skill before reaching for colour-coded
+categories anywhere.
+
+**Two breakdowns have no data and say so.** Business Group and Cost Centre are set on
+**1 of 59** Roadmap requests. Those sections render an explicit "not captured" panel naming
+the gap and pointing at intake, rather than a one-slice chart or a silent omission. The
+`notCaptured` flag fires when every panel has `withValue <= 1`.
+
+**Cost centre is free text.** Values are collapsed on their leading numeric code, since the
+same centre appears as `3071` and `3071 Digital Customer Engagement`. Anything without a
+code is listed with Asana links so it can be corrected at source. That list went from 79 to
+0 in a day once it was clickable — the same pattern works for any data-quality gap.
+
+### 11. BAU Tab (Design + Performance) — orphaned
 **Data builder:** `buildBAUData()` in `src/asana.js`
 **Source:** Design BAU board + Performance BAU board
 **Note:** `buildBAUData()` still runs and `BAU_DATA` is still injected, but the nav button
 was removed, so `renderBAU()` is unreachable. Harmless; safe to delete.
 
 ---
+
+## Scheduled tasks
+
+Two live tasks in `~/.claude/scheduled-tasks/`:
+
+| Task | When | Does |
+|---|---|---|
+| `xcf-capacity-report-daily` | 8am NZT daily | Build, sanity-check, deploy |
+| `xcf-summarise-request-waits` | 8am NZT Mondays | Summarise anything unsummarised, rebuild, deploy |
+
+`xcf-capacity-report-friday` is **paused** — it duplicated the daily and ran at 11pm when
+nobody could approve Okta.
+
+**8am is deliberate.** Deploys need an interactive Okta device-code approval, so an
+unattended 2am run could only ever build. Both tasks now report the `verification_uri` and
+`user_code` and stop cleanly if Okta is needed, rather than failing.
+
+**Both prompts were rewritten in Oct 2026.** The originals still described the pre-August
+manual Slack workflow — reading the channel via MCP, grouping into weeks, injecting with
+Python — and looked for a `PM_UPDATES_DATA = []` placeholder the build had already filled,
+so they errored. Runs took 35–95 minutes for what is a 3–5 minute job. If you ever see a
+scheduled task doing manual Slack work, it is stale: `node src/index.js --once` does all
+of it.
 
 ## How to Deploy
 
@@ -317,3 +440,46 @@ You can use these as a starting point when making similar changes.
 **Build hangs (ECONNRESET on Asana calls):**
 - This is a known intermittent issue in `getTasksForUser` — retry the build
 - If it fails 3 times in a row, wait and try again later (VPN/proxy timeout issue)
+
+**Request Cycle Time coverage never moves, even though statuses are being set:**
+- The caching bug. Only projects *with* a start date may be cached; see the caching
+  section above. If the staleness check caches the absence of a start, coverage freezes.
+
+**A start signal finds nothing / a whole status disappears:**
+- Check the `opt_fields` on the stories fetch. Matching `new_enum_value.name` when only
+  `.gid` was requested fails silently and returns nothing. Match on gid.
+
+**Deploy refused with `load_skill_first`:**
+- Pass `skill: "dashboard-accelerator@2.14"` on `deploy_app`. Required since Oct 2026.
+
+**Deploy returns `needs_external_confirmation`:**
+- Something in the page references an external domain. Request comments are the usual
+  culprit — people paste Canva, Figma, Miro and Frame.io links. `stripCommentUrls()` in
+  `src/report.js` removes them. Do **not** pass `allow_external_review` to get past it.
+
+**Scheduled task runs for 35+ minutes or reports "nothing was deployed":**
+- Its prompt is stale and still doing the pre-August manual Slack injection. Rewrite it to
+  build → sanity-check → deploy. See the Scheduled tasks section.
+
+## Lessons worth not relearning
+
+Things that cost real time in this codebase:
+
+- **Test the endpoint before declaring data unavailable.** Project custom-field history was
+  recorded here as unobtainable, inferred from an audit-log 403. `/projects/{gid}/stories`
+  had it all along. That wrong note sat in this skill and shaped a whole design.
+- **Check the premise against the data before building.** "Measure to Status (XCF) = In
+  Progress" was specified against request tasks, where 0 of 100 ever used it. It is a
+  *project* value. Sampling first would have caught it in minutes.
+- **Silent failure counters hide the cause.** A `catch { fails++ }` reported 171 failures
+  that looked like rate limiting; logging the actual error showed `IN_PROGRESS_GID is not
+  defined` in one run.
+- **Check the denominator before redesigning the presentation.** A coverage figure of 23%
+  looked alarming and was really 61% — the denominator included 315 requests the metric
+  does not apply to.
+- **A statistic can be the wrong shape entirely.** The median described a typical request
+  that does not exist; the distribution is almost flat. Look at the spread before choosing
+  a summary statistic.
+- **Clickable fix lists get fixed.** 79 bad cost centres went to zero in a day once they
+  were a list with links. Prefer a worklist over a statistic whenever the gap is
+  actionable.
