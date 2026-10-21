@@ -173,11 +173,11 @@
     },
     "1219467920598195": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-21T02:16:04.317Z",
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-21T02:16:04.317Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219530647329863": {
@@ -255,11 +255,11 @@
     "1219294685543005": {
       "firstOnTrackAt": null,
       "firstInProgressAt": null,
-      "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
+      "firstCompleteAt": "2026-10-21T02:13:57.221Z",
+      "startedAt": "2026-10-21T02:13:57.221Z",
+      "startedBy": "Completed",
       "isRealStart": false,
-      "firstStatusAt": null
+      "firstStatusAt": "2026-10-21T02:13:57.221Z"
     },
     "1219345030360555": {
       "firstOnTrackAt": null,
@@ -272,11 +272,11 @@
     },
     "1219294438465618": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-21T02:12:43.322Z",
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-21T02:12:43.322Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219294161307720": {
@@ -488,11 +488,11 @@
     },
     "1219085779536537": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-21T02:08:29.432Z",
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-21T02:08:29.432Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219050867527478": {
@@ -632,11 +632,11 @@
     },
     "1218849670425809": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-21T02:07:10.855Z",
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-21T02:07:10.855Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1218853610373875": {
@@ -740,11 +740,11 @@
     },
     "1218760805056188": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-21T02:05:45.781Z",
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-21T02:05:45.781Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1218727874930126": {
@@ -812,11 +812,11 @@
     },
     "1218689017352863": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-21T02:05:17.895Z",
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-21T02:05:17.895Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1218700497176554": {
@@ -884,11 +884,11 @@
     },
     "1218610237203433": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-21T02:04:23.570Z",
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-21T02:04:23.570Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1218525552197140": {
@@ -1019,11 +1019,11 @@
     },
     "1218416827710983": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-21T02:03:27.926Z",
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-21T02:03:27.926Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": "2026-09-13T23:25:37.023Z"
     },
     "1218383044585069": {
@@ -1037,11 +1037,11 @@
     },
     "1218379768822733": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-21T01:58:45.047Z",
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-21T01:58:45.047Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1218383138594557": {
@@ -1064,11 +1064,11 @@
     },
     "1218378501186965": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-21T01:58:05.013Z",
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-21T01:58:05.013Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1218350706556295": {
@@ -1622,11 +1622,11 @@
     },
     "1218206738852555": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-21T01:57:06.350Z",
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-21T01:57:06.350Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1218206912583525": {
@@ -1658,11 +1658,11 @@
     },
     "1218206738852485": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-21T01:49:29.167Z",
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-21T01:49:29.167Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1218206801881982": {

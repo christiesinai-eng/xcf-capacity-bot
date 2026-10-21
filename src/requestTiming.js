@@ -209,11 +209,14 @@ async function buildRequestsData() {
     `${matched.length} matched`
   );
 
-  // A project's first green never changes once set, so only look up ones we haven't resolved.
+  // Cache a project only once it HAS a start date — that value never changes.
+  // A project with no start yet must be re-checked every build, because the whole
+  // point is that coverage climbs as the team sets statuses. Caching the absence
+  // froze the answer and made newly-started projects invisible forever.
   const projectsToFetch = matched
     .map(m => m.project)
     .filter((p, i, arr) => arr.findIndex(x => x.gid === p.gid) === i)
-    .filter(p => cache.projects[p.gid]?.firstCompleteAt === undefined);
+    .filter(p => !cache.projects[p.gid]?.startedAt);
 
   const projectTiming = {};
   const pErrs = {};

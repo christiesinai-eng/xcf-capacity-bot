@@ -100,6 +100,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .rq-fun-l{font-size:11px;color:var(--muted);line-height:1.3}
 .rq-fun-s{font-size:9.5px;color:#7a8296;line-height:1.3;margin-top:2px}
 .rq-fun-hi{color:var(--sky)}
+.rq-seg{flex:1;min-width:140px;padding:9px 12px;background:rgba(255,255,255,.04);border-radius:7px}
+.rq-seg-n{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+.rq-seg-l{font-size:11px;margin-top:3px}
 
 /* ── Regional Requests ── */
 .rg-sect{border:1px solid var(--border);border-radius:9px;margin-bottom:16px;overflow:hidden}
@@ -956,6 +959,22 @@ function rqFmtDur(h,isRealStart){
   return'<span class="rq-dur" style="color:'+col+'">'+txt+'</span>';
 }
 const RQ_TYPE_COL={'Roadmap':'#6C8EF5','Micro (BAU)':'#4CAF8A','XCF initiative':'#F5A623','Unset':'#8b9abf'};
+// Projects with no start date fall into three groups that mean different things.
+// Waiting ones are still live and will measure themselves once the status flips;
+// missed ones are past the point where setting it would record a truthful date;
+// cancelled ones leave the denominator entirely.
+const RQ_WAITING=['New Request','Additional Information','On Hold','Backlog'];
+const RQ_CANCELLED=['Cancelled'];
+function rqBuckets(){
+  const out={waiting:[],missed:[],cancelled:[]};
+  REQUESTS_DATA.filter(r=>r.matched&&(r.durationHours===null||r.durationHours===undefined)).forEach(r=>{
+    const s=r.projectStatus||'(status unset)';
+    if(RQ_CANCELLED.includes(s))out.cancelled.push(r);
+    else if(RQ_WAITING.includes(s))out.waiting.push(r);
+    else out.missed.push(r);
+  });
+  return out;
+}
 function rqShortDate(iso){
   if(!iso)return'';
   return new Date(iso+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'});
@@ -1044,7 +1063,8 @@ function renderRequests(){
   stats.innerHTML=
     '<div class="rq-stat"><div class="rq-stat-l">Median wait</div><div class="rq-stat-v">'+(median!==null?(median/24).toFixed(1)+'d':'—')+'</div></div>'+
     '<div class="rq-stat"><div class="rq-stat-l">Over 24 hrs</div><div class="rq-stat-v">'+overDay.length+'</div></div>'+
-    '<div class="rq-stat"><div class="rq-stat-l">Over 7 days</div><div class="rq-stat-v" style="color:'+(slow?'var(--red)':'var(--txt)')+'">'+slow+'</div></div>';
+    '<div class="rq-stat"><div class="rq-stat-l">Over 7 days</div><div class="rq-stat-v" style="color:'+(slow?'var(--red)':'var(--txt)')+'">'+slow+'</div></div>'+
+    '<div class="rq-stat" title="Live projects not yet marked In Progress — these measure themselves once the status flips"><div class="rq-stat-l">Awaiting</div><div class="rq-stat-v" style="color:#F5A623">'+rqBuckets().waiting.length+'</div></div>';
 
   // Coverage is the adoption metric, not a footnote: a request only becomes
   // measurable once its project gets an On Track status update, so this climbs
@@ -1060,27 +1080,37 @@ function renderRequests(){
   const byOnTrack=measured.filter(r=>r.startedBy==='On Track').length;
   const byInProgress=measured.filter(r=>r.startedBy==='In Progress').length;
   const byComplete=viaComplete.length;
-  const step=(n,label,note,strong)=>
-    '<div class="rq-fun"><div class="rq-fun-n'+(strong?' rq-fun-hi':'')+'">'+n+'</div>'+
-    '<div><div class="rq-fun-l'+(strong?' rq-fun-hi':'')+'">'+label+'</div><div class="rq-fun-s">'+note+'</div></div></div>';
+  // Three states, not one coverage percentage. "Awaiting In Progress" is work still
+  // in flight that becomes measurable the moment the status flips — reporting it as
+  // unmeasured made a normal pipeline look like a tracking failure.
+  const buckets=rqBuckets();
+  const pool=measured.length+buckets.waiting.length+buckets.missed.length;
+  const accounted=pool?Math.round((measured.length+buckets.waiting.length)/pool*100):0;
+  const seg=(n,p,col,label,note)=>
+    '<div class="rq-seg"><div class="rq-seg-n" style="color:'+col+'">'+n+'</div>'+
+    '<div class="rq-seg-l">'+label+'</div><div class="rq-fun-s">'+note+'</div></div>';
   document.getElementById('rq-coverage').innerHTML=
     '<div class="rq-cov-top">'+
-      '<div><div class="rq-cov-l">Measurement coverage</div>'+
-      '<div class="rq-cov-big">'+measured.length+' <em>of '+matchedCount+' projects</em></div></div>'+
-      '<div style="text-align:right"><div class="rq-cov-l">Tracked</div><div class="rq-cov-pct">'+pct+'%</div></div>'+
+      '<div><div class="rq-cov-l">Request to In Progress</div>'+
+      '<div class="rq-cov-big">'+measured.length+' <em>measured · '+buckets.waiting.length+' awaiting</em></div></div>'+
+      '<div style="text-align:right"><div class="rq-cov-l">Accounted for</div><div class="rq-cov-pct">'+accounted+'%</div></div>'+
     '</div>'+
-    '<div class="rq-cov-track"><div class="rq-cov-fill" style="width:'+Math.max(pct,1)+'%"></div></div>'+
+    '<div class="rq-cov-track" style="display:flex;gap:2px;background:none">'+
+      '<div style="width:'+(measured.length/pool*100)+'%;background:#3eccff;border-radius:3px"></div>'+
+      '<div style="width:'+(buckets.waiting.length/pool*100)+'%;background:#F5A623;border-radius:3px"></div>'+
+      '<div style="width:'+(buckets.missed.length/pool*100)+'%;background:#5a6478;border-radius:3px"></div>'+
+    '</div>'+
     '<div class="rq-funnel">'+
-      step(total,'requests submitted','since 1 Jul 2026',false)+
-      step(direct,'handled directly','no project created — cycle time does not apply',false)+
-      step(matchedCount,'became a project','these are trackable',false)+
-      step(measured.length,'have a start date',pct+'% of projects',true)+
+      seg(measured.length,0,'#3eccff','Measured','submitted → In Progress captured')+
+      seg(buckets.waiting.length,0,'#F5A623','Awaiting In Progress','in flight — measures once the status flips')+
+      seg(buckets.missed.length,0,'#8b9abf','Missed','finished or advanced without it being set')+
+      seg(buckets.cancelled.length,0,'#8b9abf','Cancelled','excluded — will never have a start')+
     '</div>'+
-    '<div class="rq-cov-note">A project counts as started once it posts an <span style="color:#6C8EF5">On Track</span> status update or has '+
-      '<span style="color:#4CAF8A">Status (XCF)</span> set to In Progress — whichever comes first ('+byOnTrack+' via On Track, '+byInProgress+' via In Progress'+
-      (byComplete?'; '+byComplete+' had neither recorded and are dated from completion instead, so those durations are an upper bound':'')+'). '+
-      'The '+direct+' handled directly are mostly BAU finished straight off the request — they are out of scope rather than a gap. '+
-      'Coverage climbs as projects get their status set when work begins.</div>';
+    '<div class="rq-cov-note">Measured means the linked project posted an <span style="color:#6C8EF5">On Track</span> update or had '+
+      '<span style="color:#4CAF8A">Status (XCF)</span> set to In Progress ('+byOnTrack+' via On Track, '+byInProgress+' via In Progress'+
+      (byComplete?'; '+byComplete+' dated from completion instead, so those are an upper bound':'')+'). '+
+      'A further <strong>'+total+' − '+matchedCount+' = '+direct+' requests</strong> were handled directly without a project, mostly BAU finished straight off the request — out of scope rather than a gap. '+
+      'Of the '+pool+' projects that can carry a cycle time, <strong>'+accounted+'% are either measured or still in flight</strong>; only the '+buckets.missed.length+' missed are unrecoverable.</div>';
 
   const q=(document.getElementById('rq-search').value||'').toLowerCase().trim();
   // Same-day conversions are the system working, not a finding — default the table
@@ -1174,35 +1204,46 @@ function renderUntracked(){
     'New Request':'Set Status (XCF) to In Progress when work starts',
     'Additional Information':'Blocked with the requester — set In Progress once it resumes',
     'On Hold':'Set In Progress when it comes off hold',
-    'Complete':'Finished without passing through In Progress',
-    'Cancelled':'No action — cancelled projects will never have a start',
-    'SR - Stakeholder Review':'Already past the start — In Progress was skipped',
     'Backlog':'Set In Progress when it leaves the backlog',
+    'Complete':'Finished without passing through In Progress',
+    'SR - Stakeholder Review':'Already past the start — In Progress was skipped',
     'In Progress':'Set now but no transition recorded — re-set the field to log it',
+    'Cancelled':'No action needed',
   };
-  const groups={};
-  stuck.forEach(r=>{const k=r.projectStatus||'(status unset)';(groups[k]=groups[k]||[]).push(r);});
-  const order=Object.keys(groups).sort((a,b)=>groups[b].length-groups[a].length);
-  let h='<div class="rg-fix" style="margin-top:16px"><div class="rg-fix-h">'+
-    '<div class="rg-sect-t">Projects with no start date — '+stuck.length+'</div>'+
-    '<div class="rg-sect-s">These became projects but were never marked On Track or In Progress, so they have no cycle time. '+
-    'Closing these takes coverage from '+Math.round((REQUESTS_DATA.filter(r=>r.durationHours!==null).length)/(REQUESTS_DATA.filter(r=>r.matched).length)*100)+'% to 100%.</div></div>';
-  order.forEach(k=>{
-    h+='<div style="padding:9px 15px;background:rgba(255,255,255,.04);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">'+
-       '<span style="font-size:11.5px;font-weight:700">'+rgEscape(k)+'</span> '+
-       '<span style="font-size:11px;color:var(--muted)">· '+groups[k].length+' project'+(groups[k].length===1?'':'s')+
-       (FIX[k]?' · '+rgEscape(FIX[k]):'')+'</span></div>';
-    h+='<div class="rg-fix-list">';
-    groups[k].sort((a,b)=>(a.code||'').localeCompare(b.code||'')).forEach(r=>{
-      h+='<div class="rg-fix-row" style="grid-template-columns:95px 1fr auto">'+
-         '<div class="rq-code">'+rgEscape(r.code||'—')+'</div>'+
-         '<a href="'+rgEscape(r.projectUrl||r.url)+'" target="_blank" rel="noopener" title="Open the project in Asana">'+
-         rgEscape((r.projectName||r.name||'').replace(/^\s*XCF-\d+\s*\|?\s*/i,''))+'</a>'+
-         '<div class="rq-val">'+rgEscape(r.quarter||'')+'</div></div>';
+  const B=rqBuckets();
+  function block(title,colour,subtitle,rows){
+    if(!rows.length)return'';
+    const groups={};
+    rows.forEach(r=>{const k=r.projectStatus||'(status unset)';(groups[k]=groups[k]||[]).push(r);});
+    let h='<div class="rg-fix" style="margin-top:16px;border-left-color:'+colour+'">'+
+      '<div class="rg-fix-h"><div class="rg-sect-t" style="color:'+colour+'">'+title+' — '+rows.length+'</div>'+
+      '<div class="rg-sect-s">'+subtitle+'</div></div>';
+    Object.keys(groups).sort((a,b)=>groups[b].length-groups[a].length).forEach(k=>{
+      h+='<div style="padding:9px 15px;background:rgba(255,255,255,.04);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">'+
+         '<span style="font-size:11.5px;font-weight:700">'+rgEscape(k)+'</span> '+
+         '<span style="font-size:11px;color:var(--muted)">· '+groups[k].length+
+         (FIX[k]?' · '+rgEscape(FIX[k]):'')+'</span></div><div class="rg-fix-list">';
+      groups[k].sort((a,b)=>(a.code||'').localeCompare(b.code||'')).forEach(r=>{
+        h+='<div class="rg-fix-row" style="grid-template-columns:95px 1fr auto">'+
+           '<div class="rq-code">'+rgEscape(r.code||'—')+'</div>'+
+           '<a href="'+rgEscape(r.projectUrl||r.url)+'" target="_blank" rel="noopener" title="Open the project in Asana">'+
+           rgEscape((r.projectName||r.name||'').replace(/^\s*XCF-\d+\s*\|?\s*/i,''))+'</a>'+
+           '<div class="rq-val">'+rgEscape(r.quarter||'')+'</div></div>';
+      });
+      h+='</div>';
     });
-    h+='</div>';
-  });
-  el.innerHTML=h+'</div>';
+    return h+'</div>';
+  }
+  const measuredNow=REQUESTS_DATA.filter(r=>r.durationHours!==null).length;
+  el.innerHTML=
+    block('Awaiting In Progress','#F5A623',
+      'Live projects that have not been marked In Progress yet. Each one starts measuring itself the moment the status flips — nothing to backfill. '+
+      'Clearing these would take measured from '+measuredNow+' to '+(measuredNow+B.waiting.length)+'.',B.waiting)+
+    block('Missed','#8b9abf',
+      'These moved past In Progress without it ever being set, so no truthful start date can be recovered. Setting it now would record today, not when work began. '+
+      'Treat as a prompt for the workflow rather than a backlog to clear.',B.missed)+
+    block('Cancelled','#5a6478',
+      'Excluded from the measurable pool entirely — these will never have a start date and are not counted against coverage.',B.cancelled);
 }
 
 /* ── REGIONAL REQUESTS ── */
