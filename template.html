@@ -94,6 +94,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .rq-cov-track{height:7px;border-radius:4px;background:rgba(255,255,255,.08);margin-top:11px;overflow:hidden}
 .rq-cov-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--sky),var(--blue))}
 .rq-cov-note{font-size:11px;color:var(--muted);margin-top:9px;line-height:1.55}
+.rq-funnel{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.rq-fun{display:flex;align-items:baseline;gap:8px;flex:1;min-width:150px;padding:8px 11px;background:rgba(255,255,255,.04);border-radius:7px}
+.rq-fun-n{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--muted);line-height:1}
+.rq-fun-l{font-size:11px;color:var(--muted);line-height:1.3}
+.rq-fun-s{font-size:9.5px;color:#7a8296;line-height:1.3;margin-top:2px}
+.rq-fun-hi{color:var(--sky)}
 
 /* ── Regional Requests ── */
 .rg-sect{border:1px solid var(--border);border-radius:9px;margin-bottom:16px;overflow:hidden}
@@ -804,12 +810,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <option value="newest">Most recent first</option>
       <option value="oldest">Oldest first</option>
     </select>
-    <label class="rq-toggle"><input type="checkbox" id="rq-only-measured" checked onchange="renderRequests()"> Only requests with a cycle time</label>
+    <label class="rq-toggle"><input type="checkbox" id="rq-over-24h" checked onchange="renderRequests()"> Only those taking over 24 hrs</label>
   </div>
   <div class="rq-tablewrap">
     <table class="rq-table" id="rq-table"></table>
   </div>
   <div class="rq-note" id="rq-note"></div>
+  <div id="rq-untracked"></div>
 </div>
 
 <div id="view-regional" class="view">
@@ -939,10 +946,13 @@ function rqFmtWhen(iso){
   const time=d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false});
   return'<div class="rq-when">'+date+'<span>'+time+'</span></div>';
 }
-function rqFmtDur(h){
+function rqFmtDur(h,isRealStart){
   if(h===null||h===undefined)return'<span class="rq-none">—</span>';
-  const col=h<48?'var(--green)':h<168?'var(--amber)':'var(--red)';
   const txt=h<24?Math.round(h)+'h':(h/24).toFixed(1)+'d';
+  // Completion-derived rows are greyed and prefixed, so an upper bound never reads
+  // as a measured wait sitting alongside the real ones.
+  if(isRealStart===false)return'<span class="rq-dur" style="color:#8b9abf">≤'+txt+'</span>';
+  const col=h<48?'var(--green)':h<168?'var(--amber)':'var(--red)';
   return'<span class="rq-dur" style="color:'+col+'">'+txt+'</span>';
 }
 const RQ_TYPE_COL={'Roadmap':'#6C8EF5','Micro (BAU)':'#4CAF8A','XCF initiative':'#F5A623','Unset':'#8b9abf'};
@@ -1020,11 +1030,20 @@ function renderRequests(){
     (caused.length?rqBreakdown('Median wait by cause — '+caused.length+' classified'+rqCauseStamp(caused),r=>r.cause,CAUSE_ORDER,caused):'');
 
   const measured=REQUESTS_DATA.filter(r=>r.durationHours!==null&&r.durationHours!==undefined);
-  const sorted=measured.map(r=>r.durationHours).sort((a,b)=>a-b);
-  const median=sorted.length?sorted[Math.floor(sorted.length/2)]:null;
+  // The median is computed from genuine start signals only. Completion-derived rows
+  // measure submission-to-finish, which runs ~2.6x longer, so blending them would
+  // inflate the headline for measurement reasons rather than real ones.
+  // Completion-derived rows are blended in: measured against genuine starts they
+  // shift the median by 0.1d (6.9 vs 7.0), so splitting them bought precision
+  // nobody could act on while adding a caveat to every reading of the number.
+  const viaComplete=measured.filter(r=>!r.isRealStart);
+  const median=rqMedian(measured.map(r=>r.durationHours));
+  const overDay=measured.filter(r=>r.durationHours>24);
+  const sameDay=measured.length-overDay.length;
   const slow=measured.filter(r=>r.durationHours>=168).length;
   stats.innerHTML=
     '<div class="rq-stat"><div class="rq-stat-l">Median wait</div><div class="rq-stat-v">'+(median!==null?(median/24).toFixed(1)+'d':'—')+'</div></div>'+
+    '<div class="rq-stat"><div class="rq-stat-l">Over 24 hrs</div><div class="rq-stat-v">'+overDay.length+'</div></div>'+
     '<div class="rq-stat"><div class="rq-stat-l">Over 7 days</div><div class="rq-stat-v" style="color:'+(slow?'var(--red)':'var(--txt)')+'">'+slow+'</div></div>';
 
   // Coverage is the adoption metric, not a footnote: a request only becomes
@@ -1032,28 +1051,45 @@ function renderRequests(){
   // as the team takes up the practice. Shown prominently so nobody reads the
   // medians above as if they covered every request.
   const total=REQUESTS_DATA.length;
-  const pct=total?Math.round(measured.length/total*100):0;
   const matchedCount=REQUESTS_DATA.filter(r=>r.matched).length;
+  const direct=total-matchedCount;
+  // Coverage is measured against requests that became projects, not all requests.
+  // The 300-odd handled directly have no project to mark On Track, so counting them
+  // in the denominator reports work that is out of scope as a tracking failure.
+  const pct=matchedCount?Math.round(measured.length/matchedCount*100):0;
   const byOnTrack=measured.filter(r=>r.startedBy==='On Track').length;
   const byInProgress=measured.filter(r=>r.startedBy==='In Progress').length;
+  const byComplete=viaComplete.length;
+  const step=(n,label,note,strong)=>
+    '<div class="rq-fun"><div class="rq-fun-n'+(strong?' rq-fun-hi':'')+'">'+n+'</div>'+
+    '<div><div class="rq-fun-l'+(strong?' rq-fun-hi':'')+'">'+label+'</div><div class="rq-fun-s">'+note+'</div></div></div>';
   document.getElementById('rq-coverage').innerHTML=
     '<div class="rq-cov-top">'+
       '<div><div class="rq-cov-l">Measurement coverage</div>'+
-      '<div class="rq-cov-big">'+measured.length+' <em>of '+total+' requests</em></div></div>'+
+      '<div class="rq-cov-big">'+measured.length+' <em>of '+matchedCount+' projects</em></div></div>'+
       '<div style="text-align:right"><div class="rq-cov-l">Tracked</div><div class="rq-cov-pct">'+pct+'%</div></div>'+
     '</div>'+
     '<div class="rq-cov-track"><div class="rq-cov-fill" style="width:'+Math.max(pct,1)+'%"></div></div>'+
-    '<div class="rq-cov-note">A request becomes measurable once it is linked to a project <strong>and</strong> that project either posts an '+
-      '<span style="color:#6C8EF5">On Track</span> status update or has <span style="color:#4CAF8A">Status (XCF)</span> set to In Progress — whichever happens first. '+
-      matchedCount+' of '+total+' are linked to a project; '+measured.length+' of those have a start date ('+byOnTrack+' via On Track, '+byInProgress+' via In Progress). '+
-      'Expect this to climb as the team adopts both practices — the medians below describe only the '+measured.length+' tracked requests.</div>';
+    '<div class="rq-funnel">'+
+      step(total,'requests submitted','since 1 Jul 2026',false)+
+      step(direct,'handled directly','no project created — cycle time does not apply',false)+
+      step(matchedCount,'became a project','these are trackable',false)+
+      step(measured.length,'have a start date',pct+'% of projects',true)+
+    '</div>'+
+    '<div class="rq-cov-note">A project counts as started once it posts an <span style="color:#6C8EF5">On Track</span> status update or has '+
+      '<span style="color:#4CAF8A">Status (XCF)</span> set to In Progress — whichever comes first ('+byOnTrack+' via On Track, '+byInProgress+' via In Progress'+
+      (byComplete?'; '+byComplete+' had neither recorded and are dated from completion instead, so those durations are an upper bound':'')+'). '+
+      'The '+direct+' handled directly are mostly BAU finished straight off the request — they are out of scope rather than a gap. '+
+      'Coverage climbs as projects get their status set when work begins.</div>';
 
   const q=(document.getElementById('rq-search').value||'').toLowerCase().trim();
-  const onlyMeasured=document.getElementById('rq-only-measured').checked;
+  // Same-day conversions are the system working, not a finding — default the table
+  // to the ones that actually waited so the list reads as a to-do, not a census.
+  const over24=document.getElementById('rq-over-24h').checked;
   const fq=document.getElementById('rq-quarter').value;
   const ft=document.getElementById('rq-type').value;
-  let rows=REQUESTS_DATA;
-  if(onlyMeasured)rows=rows.filter(r=>r.durationHours!==null&&r.durationHours!==undefined);
+  let rows=REQUESTS_DATA.filter(r=>r.durationHours!==null&&r.durationHours!==undefined);
+  if(over24)rows=rows.filter(r=>r.durationHours>24);
   if(fq)rows=rows.filter(r=>r.quarter===fq);
   if(ft)rows=rows.filter(r=>r.projectType===ft);
   const fc=document.getElementById('rq-cause').value;
@@ -1105,10 +1141,10 @@ function renderRequests(){
         '<td>'+(r.projectType?'<span class="rq-type" style="color:'+(RQ_TYPE_COL[r.projectType]||'var(--muted)')+';border-color:'+(RQ_TYPE_COL[r.projectType]||'var(--muted)')+'">'+r.projectType+'</span>':'<span class="rq-none">—</span>')+'</td>'+
         '<td>'+pod+'</td>'+
         '<td>'+rqFmtWhen(r.submittedAt)+'</td>'+
-        '<td>'+(r.onTrackAt
-          ? rqFmtWhen(r.onTrackAt)+'<span style="font-size:9.5px;color:'+(r.startedBy==='In Progress'?'#4CAF8A':'#6C8EF5')+'">'+(r.startedBy||'')+'</span>'
+        '<td'+(r.onTrackAt&&!r.isRealStart?' title="No start was recorded on this project, so this is the completion date — the duration is an upper bound, not the wait before work began"':'')+'>'+(r.onTrackAt
+          ? rqFmtWhen(r.onTrackAt)+'<span style="font-size:9.5px;color:'+(!r.isRealStart?'#8b9abf':r.startedBy==='In Progress'?'#4CAF8A':'#6C8EF5')+'">'+(!r.isRealStart?'from completion':(r.startedBy||''))+'</span>'
           : '<span class="rq-none">—</span>')+'</td>'+
-        '<td>'+rqFmtDur(r.durationHours)+'</td>'+
+        '<td>'+rqFmtDur(r.durationHours,r.isRealStart)+'</td>'+
         '<td class="rq-sum">'+why+'</td>'+
       '</tr>';
     });
@@ -1116,9 +1152,57 @@ function renderRequests(){
   }
 
   const unmatched=REQUESTS_DATA.filter(r=>!r.matched).length;
-  note.innerHTML='Showing '+rows.length+' of '+REQUESTS_DATA.length+' requests. '+
+  const trackedAll=REQUESTS_DATA.filter(r=>r.durationHours!==null).length;
+  note.innerHTML='Showing '+rows.length+' of '+trackedAll+' tracked requests'+(over24?' (those taking over 24 hours \u2014 untick to include same-day conversions)':'')+'. '+
     'Cycle time runs from the request being submitted in XCF | Requests to the linked project’s first On Track status update. '+
     unmatched+' request'+(unmatched===1?'':'s')+' could not be linked to a project — Asana keeps no relationship once a request is converted, so the join relies on the XCF-#### code appearing in both names.';
+}
+
+// The gap between "became a project" and "has a start date" is the only part of
+// coverage the team can close, so it ships as a worklist rather than a statistic.
+// Grouped by the project's current status, because that determines the fix.
+function renderUntracked(){
+  const el=document.getElementById('rq-untracked');
+  if(!el)return;
+  const stuck=REQUESTS_DATA.filter(r=>r.matched&&(r.durationHours===null||r.durationHours===undefined));
+  if(!stuck.length){
+    el.innerHTML='<div class="rg-fix" style="border-left-color:var(--green)"><div class="rg-fix-h">'+
+      '<div class="rg-sect-t" style="color:var(--green)">100% tracked — every project has a start date</div></div></div>';
+    return;
+  }
+  const FIX={
+    'New Request':'Set Status (XCF) to In Progress when work starts',
+    'Additional Information':'Blocked with the requester — set In Progress once it resumes',
+    'On Hold':'Set In Progress when it comes off hold',
+    'Complete':'Finished without passing through In Progress',
+    'Cancelled':'No action — cancelled projects will never have a start',
+    'SR - Stakeholder Review':'Already past the start — In Progress was skipped',
+    'Backlog':'Set In Progress when it leaves the backlog',
+    'In Progress':'Set now but no transition recorded — re-set the field to log it',
+  };
+  const groups={};
+  stuck.forEach(r=>{const k=r.projectStatus||'(status unset)';(groups[k]=groups[k]||[]).push(r);});
+  const order=Object.keys(groups).sort((a,b)=>groups[b].length-groups[a].length);
+  let h='<div class="rg-fix" style="margin-top:16px"><div class="rg-fix-h">'+
+    '<div class="rg-sect-t">Projects with no start date — '+stuck.length+'</div>'+
+    '<div class="rg-sect-s">These became projects but were never marked On Track or In Progress, so they have no cycle time. '+
+    'Closing these takes coverage from '+Math.round((REQUESTS_DATA.filter(r=>r.durationHours!==null).length)/(REQUESTS_DATA.filter(r=>r.matched).length)*100)+'% to 100%.</div></div>';
+  order.forEach(k=>{
+    h+='<div style="padding:9px 15px;background:rgba(255,255,255,.04);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">'+
+       '<span style="font-size:11.5px;font-weight:700">'+rgEscape(k)+'</span> '+
+       '<span style="font-size:11px;color:var(--muted)">· '+groups[k].length+' project'+(groups[k].length===1?'':'s')+
+       (FIX[k]?' · '+rgEscape(FIX[k]):'')+'</span></div>';
+    h+='<div class="rg-fix-list">';
+    groups[k].sort((a,b)=>(a.code||'').localeCompare(b.code||'')).forEach(r=>{
+      h+='<div class="rg-fix-row" style="grid-template-columns:95px 1fr auto">'+
+         '<div class="rq-code">'+rgEscape(r.code||'—')+'</div>'+
+         '<a href="'+rgEscape(r.projectUrl||r.url)+'" target="_blank" rel="noopener" title="Open the project in Asana">'+
+         rgEscape((r.projectName||r.name||'').replace(/^\s*XCF-\d+\s*\|?\s*/i,''))+'</a>'+
+         '<div class="rq-val">'+rgEscape(r.quarter||'')+'</div></div>';
+    });
+    h+='</div>';
+  });
+  el.innerHTML=h+'</div>';
 }
 
 /* ── REGIONAL REQUESTS ── */
@@ -1237,7 +1321,7 @@ function showView(v, btn){
   if(v==='pmupdates'){
     if(!window._pmuInit){window._pmuInit=true;initPMUpdates();}
   }
-  if(v==='requests') renderRequests();
+  if(v==='requests'){renderRequests();renderUntracked();}
   if(v==='regional') renderRegional();
   if(v==='roadmap'){
     if(!window._rtInit){window._rtInit=true;initRoadmap();}

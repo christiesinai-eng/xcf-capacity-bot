@@ -105,16 +105,31 @@ async function fetchProjectStart(client, projectGid) {
   );
   const firstInProgressAt = ip ? ip.created_at : null;
 
-  const candidates = [firstOnTrackAt, firstInProgressAt].filter(Boolean).sort();
-  const startedAt = candidates[0] || null;
+  // Completion is a fallback only. It proves work happened but not when it began —
+  // measured against projects carrying both dates it runs ~2.6x the real start time
+  // (14.2d vs 5.4d median). So it counts toward coverage, is flagged as an upper
+  // bound, and is kept out of the headline median.
+  const compStory = stories.find(s =>
+    s.resource_subtype === 'enum_custom_field_changed' &&
+    s.custom_field?.gid === STATUS_FIELD_GID &&
+    s.new_enum_value?.name === 'Complete'
+  );
+  const compUpdate = asc.find(u => u.color === 'complete');
+  const firstCompleteAt = [compStory?.created_at, compUpdate?.created_at].filter(Boolean).sort()[0] || null;
+
+  const realStart = [firstOnTrackAt, firstInProgressAt].filter(Boolean).sort()[0] || null;
+  const startedAt = realStart || firstCompleteAt;
 
   return {
     firstOnTrackAt,
     firstInProgressAt,
+    firstCompleteAt,
     startedAt,
-    startedBy: startedAt
-      ? (startedAt === firstInProgressAt ? 'In Progress' : 'On Track')
-      : null,
+    startedBy: !startedAt ? null
+      : realStart ? (realStart === firstInProgressAt ? 'In Progress' : 'On Track')
+      : 'Completed',
+    // False for completion-derived rows, so the median can exclude them.
+    isRealStart: !!realStart,
     firstStatusAt: asc.length ? asc[0].created_at : null,
   };
 }
@@ -198,7 +213,7 @@ async function buildRequestsData() {
   const projectsToFetch = matched
     .map(m => m.project)
     .filter((p, i, arr) => arr.findIndex(x => x.gid === p.gid) === i)
-    .filter(p => cache.projects[p.gid]?.startedAt === undefined);
+    .filter(p => cache.projects[p.gid]?.firstCompleteAt === undefined);
 
   const projectTiming = {};
   const pErrs = {};
@@ -263,6 +278,7 @@ async function buildRequestsData() {
       submittedAt,
       onTrackAt,
       startedBy: timing.startedBy || null,
+      isRealStart: timing.isRealStart === undefined ? !!onTrackAt : timing.isRealStart,
       durationHours,
       commentCount: comments.length,
       comments,
@@ -291,11 +307,12 @@ async function buildRequestsData() {
   try { fs.writeFileSync(CACHE_PATH, JSON.stringify(nextCache, null, 2)); }
   catch (err) { console.warn('[Requests] Could not write cache:', err.message); }
 
-  const resolved = rows.filter(r => r.durationHours !== null);
+  const resolved = rows.filter(r => r.durationHours !== null && r.isRealStart);
+  const viaComplete = rows.filter(r => r.durationHours !== null && !r.isRealStart);
   if (resolved.length) {
     const sorted = resolved.map(r => r.durationHours).sort((a, b) => a - b);
     const median = sorted[Math.floor(sorted.length / 2)];
-    console.log(`[Requests] ${rows.length} rows | ${resolved.length} with a cycle time | median ${(median / 24).toFixed(1)}d`);
+    console.log(`[Requests] ${rows.length} rows | ${resolved.length} real-start (median ${(median / 24).toFixed(1)}d) + ${viaComplete.length} completion-only = ${resolved.length + viaComplete.length} tracked`);
   } else {
     console.log(`[Requests] ${rows.length} rows | none with a measurable cycle time yet`);
   }
