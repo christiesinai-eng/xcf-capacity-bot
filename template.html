@@ -1256,11 +1256,16 @@ function renderUntracked(){
          '<span style="font-size:11.5px;font-weight:700">'+rgEscape(k)+'</span> '+
          '<span style="font-size:11px;color:var(--muted)">· '+groups[k].length+
          (FIX[k]?' · '+rgEscape(FIX[k]):'')+'</span></div><div class="rg-fix-list">';
-      groups[k].sort((a,b)=>(a.code||'').localeCompare(b.code||'')).forEach(r=>{
-        h+='<div class="rg-fix-row" style="grid-template-columns:95px 1fr auto">'+
+      // Assignee sits next to the link so the list can be worked through by person
+      // — it is the one column that turns this from a report into a to-do.
+      groups[k].sort((a,b)=>(a.assignee||'￿').localeCompare(b.assignee||'￿')||(a.code||'').localeCompare(b.code||'')).forEach(r=>{
+        h+='<div class="rg-fix-row" style="grid-template-columns:95px 1fr 135px auto">'+
            '<div class="rq-code">'+rgEscape(r.code||'—')+'</div>'+
            '<a href="'+rgEscape(r.projectUrl||r.url)+'" target="_blank" rel="noopener" title="Open the project in Asana">'+
            rgEscape((r.projectName||r.name||'').replace(/^\s*XCF-\d+\s*\|?\s*/i,''))+'</a>'+
+           '<div class="rq-val" style="text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"'+
+           (r.assignee?'':' title="No assignee on the request"')+'>'+
+           (r.assignee?rgEscape(r.assignee):'<span class="rq-none">unassigned</span>')+'</div>'+
            '<div class="rq-val">'+rgEscape(r.quarter||'')+'</div></div>';
       });
       h+='</div>';

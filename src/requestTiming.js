@@ -187,7 +187,7 @@ async function buildRequestsData() {
       paginate(client, '/tasks', {
         project: REQUESTS_PROJECT_GID,
         opt_fields: [
-          'gid,name,created_at,completed,permalink_url',
+          'gid,name,created_at,completed,permalink_url,assignee.name',
           'custom_fields.gid,custom_fields.enum_value.name',
           'custom_fields.text_value,custom_fields.people_value.name',
         ].join(','),
@@ -284,6 +284,7 @@ async function buildRequestsData() {
       url: requestUrl(r.gid),
       pod: enumValue(r, PODS_FIELD_GID),
       requester: peopleValue(r, REQUESTER_FIELD_GID),
+      assignee: r.assignee?.name || null,
       requestStatus: enumValue(r, STATUS_FIELD_GID),
       quarter: fiscalQuarter(r.created_at),
       // Requests usually carry the type; fall back to the converted project's value.
