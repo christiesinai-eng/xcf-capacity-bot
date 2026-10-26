@@ -190,7 +190,6 @@ const MANUAL_POD = {
   'Christie Sinai': 'Campaign Ops',
   'Pete Montgomery': 'Design',
   'Ben Smith': 'Campaign',
-  'James Blow': 'Campaign',
 };
 
 // Manual OOO overrides — for members whose OOO can't be set in Asana (e.g. long leave)
@@ -205,6 +204,8 @@ const EXCLUDED_MEMBERS = [
   'Gabrielle GeorgeTo', // typo'd duplicate account in Asana
   'Natalie Wei Jia Lee',
   'Brad Holland',
+  'Sherry Choe',
+  'James Blow',
   'Christie Sinai',
   'Sha Edalati',
   'Chris Larcombe',
@@ -224,6 +225,8 @@ const OOO_EXCLUDED = new Set([
   'Gabrielle GeorgeTo',
   'Natalie Wei Jia Lee',
   'Brad Holland',
+  'Sherry Choe',
+  'James Blow',
   'mikeohall@me.com',
 ]);
 
@@ -234,10 +237,8 @@ const MISSING_EXCLUDED_MEMBERS = [
   'Tom Gregson',
   'Christie Sinai',
   'Becky Sharp',
-  'Sherry Choe',
   'Sandeep Garcha',
   'mikeohall@me.com',
-  'James Blow',
 ];
 
 const EXCLUDED_PROJECTS = [
@@ -499,7 +500,6 @@ const PROJECT_TYPE_FIELD_GID = '1217575429570978'; // Project type (XCF): Roadma
 // Only these PMs appear on the PM Team tab
 const PM_ALLOWED_MEMBERS = [
   'Quincey Brinker',
-  'Sherry Choe',
   'Deepak Aujla',
   'Logen Stent',
   'Naomi Lawson',

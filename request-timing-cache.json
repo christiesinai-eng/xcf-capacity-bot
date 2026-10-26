@@ -12,12 +12,12 @@
     },
     "1219726045877627": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-24T03:33:41.031Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-24T03:33:41.031Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219717746621732": {
@@ -122,32 +122,32 @@
     },
     "1219605440328248": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-24T03:39:35.344Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-24T03:39:35.344Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219609925088309": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-24T03:39:41.845Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-24T03:39:41.845Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219607131636928": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-24T03:39:32.263Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-24T03:39:32.263Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219598730744089": {
@@ -158,7 +158,7 @@
       "startedAt": null,
       "startedBy": null,
       "isRealStart": false,
-      "firstStatusAt": null
+      "firstStatusAt": "2026-10-23T00:21:46.771Z"
     },
     "1219599443571155": {
       "firstOnTrackAt": "2026-10-19T04:10:00.834Z",
@@ -263,10 +263,10 @@
     "1219432258156962": {
       "firstOnTrackAt": null,
       "firstInProgressAt": null,
-      "firstReviewAt": null,
+      "firstReviewAt": "2026-10-24T03:39:09.013Z",
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
+      "startedAt": "2026-10-24T03:39:09.013Z",
+      "startedBy": "Stakeholder Review",
       "isRealStart": false,
       "firstStatusAt": null
     },
@@ -1078,7 +1078,7 @@
       "startedAt": null,
       "startedBy": null,
       "isRealStart": false,
-      "firstStatusAt": null
+      "firstStatusAt": "2026-10-23T00:42:07.499Z"
     },
     "1218471221267059": {
       "firstOnTrackAt": null,
@@ -1158,7 +1158,7 @@
       "startedAt": null,
       "startedBy": null,
       "isRealStart": false,
-      "firstStatusAt": null
+      "firstStatusAt": "2026-10-23T00:42:16.401Z"
     },
     "1218383044585069": {
       "firstOnTrackAt": null,
@@ -1658,7 +1658,7 @@
       "startedAt": null,
       "startedBy": null,
       "isRealStart": false,
-      "firstStatusAt": null
+      "firstStatusAt": "2026-10-23T00:39:17.357Z"
     },
     "1218207370361213": {
       "firstOnTrackAt": null,
@@ -1919,6 +1919,106 @@
       "startedBy": "On Track",
       "isRealStart": true,
       "firstStatusAt": "2026-09-07T22:54:43.164Z"
+    },
+    "1219765118849885": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1219871893660898": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1219894199484761": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-10-26T19:42:11.175Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-10-26T19:42:11.175Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
+      "firstStatusAt": null
+    },
+    "1219872825535149": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1219831630558168": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1219832223345771": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1219831259426128": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1219822369739228": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1219829537174744": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1219915557634553": {
+      "firstOnTrackAt": "2026-10-26T20:09:31.213Z",
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-10-26T20:09:31.213Z",
+      "startedBy": "On Track",
+      "isRealStart": true,
+      "firstStatusAt": "2026-10-26T20:09:31.213Z"
     }
   },
   "requests": {
@@ -2038,9 +2138,9 @@
           "text": "Potential duplicate identified. Please review before proceeding:\n\n• https://app.asana.com/0/0/1218502491378821/f - Nearly identical campaign concept with same messaging theme, products, and audience. Status: In Progress.\n\nBoth tasks focus on the 'Smarter tools, working together' campaign targeting SBs and ABs with smart document capture, auto bank rec, and analytics. Please confirm whether this is a duplicate, a regional variant, or a separate phase of the same campaign."
         }
       ],
-      "summary": null,
-      "cause": null,
-      "causedAt": null
+      "summary": "**Automated duplicate flag only.** Asana flagged it on 16 Oct as a near-duplicate of another in-progress SmarterTools campaign task and asked whether it is a duplicate, a regional variant or a later phase. No human has replied in the thread, so the wait is not explained.",
+      "cause": "Unexplained",
+      "causedAt": "2026-10-27"
     },
     "1219605439802073": {
       "code": "XCF-18449",
@@ -2215,9 +2315,9 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1207584863261789 are you able to share the copy for this one when ready? Thanks 🙂"
         }
       ],
-      "summary": null,
-      "cause": null,
-      "causedAt": null
+      "summary": "**Unexplained, and the request is marked ON HOLD.** The only human comment is a single chaser from Hannah Boekhorst on 18 Oct asking for the copy \"when ready\". The thread does not say who owns the copy or why the setup stalled at its 60-day checkpoint.",
+      "cause": "Unexplained",
+      "causedAt": "2026-10-27"
     },
     "1219429695821149": {
       "code": "XCF-18042",
@@ -2630,7 +2730,7 @@
     },
     "1219094074159186": {
       "code": "XCF-17237",
-      "name": "XCF-17237 | DETAILS TO COME – UP1627 Grow>Comp SDC Upgrade Nudge",
+      "name": "XCF-17237 | ON HOLD TIL Q4 – UP1627 Grow>Comp SDC Upgrade Nudge",
       "comments": [
         {
           "author": "Unknown",
@@ -2644,7 +2744,7 @@
     },
     "1219093908677972": {
       "code": "XCF-17230",
-      "name": "XCF-17230 | DETAILS TO COME – UP1633 Time Based Upgrade Nudge Iteration",
+      "name": "XCF-17230 | ON HOLD TIL Q4 – UP1633 Time Based Upgrade Nudge Iteration",
       "comments": [
         {
           "author": "Unknown",
@@ -7315,6 +7415,104 @@
           "text": "A related task has been identified that may require coordination:\n\nRelated Task: XCFT-585 | [Lifecycle] Updated colour of GIF background\nhttps://app.asana.com/0/0/1212850507431254\n\nBoth this task (XCF-18736) and XCFT-585 involve updating GIF background colours for email campaigns within the Lifecycle & customer engagement business group. While XCFT-585 is marked as complete, please review to confirm whether this is a new, separate request or a follow-up iteration for a different campaign (ABR vs. the previous Lifecycle work). If this is related to the same work, coordination may be needed to avoid duplicate effort."
         }
       ],
+      "summary": "**Automated coordination flag, not a real blocker.** On 21 Oct Asana linked it to XCFT-585 (the Lifecycle GIF background colour update, already complete) and asked whether this is new work or a follow-up. No human discussion followed, and the 3-day wait is short.",
+      "cause": "No blocker",
+      "causedAt": "2026-10-27"
+    },
+    "1219765056782917": {
+      "code": "XCF-18792",
+      "name": "XCF-18792 | CS1614 Inv: 1st Invoice paid manually xsell trigger",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1219894161719288": {
+      "code": "XCF-19023",
+      "name": "XCF-19023 | Tax Season Campaign",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1219872087281729": {
+      "code": "XCF-19010",
+      "name": "XCF-19010 | Meta | 3x3 | BFCM ",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1219871893643271": {
+      "code": "XCF-19003",
+      "name": "XCF-19003 | Meta | SG | ZA | Customer Testimonial | Quotes and Claims Experiment",
+      "comments": [
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-10-26T01:31:29.749Z",
+          "text": "Hey team!\n\nFYI - ZA I am still waiting for the testimonials 🙂 \n\nBut I would still like to get the ball rolling on the templates / SG, thanks!"
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1219832223274210": {
+      "code": "XCF-18997",
+      "name": "XCF-18997 | AI Value Campaign Videos",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1219831451641729": {
+      "code": "XCF-18993",
+      "name": "XCF-18993 | NORTH AMERICA FY 27 EDUCATION MONTH VIDEOS",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1219831442483183": {
+      "code": "XCF-18988",
+      "name": "XCF-18988 | XPAC badge",
+      "comments": [
+        {
+          "author": "Unknown",
+          "at": "2026-10-23T17:31:45.193Z",
+          "text": "Related project identified: https://app.asana.com/0/1215906401561993/1214963880496318 - This was a previous XPAC badge update completed in May 2026 for Singapore and Malaysia regions with the new Xero logo. The current request (XCF-18988) is for a US/Global XPAC badge update. While these are for different regions, please confirm this is a distinct new badge design and not related to the previous XPAC badge project before proceeding."
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1219829332690516": {
+      "code": "XCF-18981",
+      "name": "XCF-18981 | US | Melio | SB, Expense Management statics",
+      "comments": [
+        {
+          "author": "Lee Haider",
+          "at": "2026-10-23T16:29:49.708Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1216496014620082, can we please prioritize this one, this is a top exec priority for Melio. Apologies for the quick turnaround. I was only just briefed on this request. \n\nI’ve left comments on the US SB Cashflow and CA Wagepoint requests noting that we no longer need to support them, so I’d appreciate it if we could shift our focus to getting this moving. Thanks!"
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1219829125985950": {
+      "code": "XCF-18975",
+      "name": "XCF-18975 | Update / new badge requests for global education",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1219915557634544": {
+      "code": "XCF-19031",
+      "name": "BrandHouse - MG Consulting ",
+      "comments": [],
       "summary": null,
       "cause": null,
       "causedAt": null
