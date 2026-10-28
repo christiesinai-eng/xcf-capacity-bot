@@ -162,8 +162,9 @@ constant in `src/asana.js`. GIDs are the long numbers in Asana URLs.
 
 **Hours look wrong versus Asana.** Two usual causes. First, the estimated time field
 stores *minutes*, so every read divides by 60 — if you touched that maths, check it.
-Second, tasks named "placeholder" are deliberately filtered out; without that filter
-everyone looks overbooked.
+Second, generic tasks named "placeholder" (such as "Placeholder studio hours") are
+deliberately left out, because counting them makes the studio look overbooked. A placeholder
+that names a request, like "[Placeholder] AIM - XCF-17305 ...", is counted, as it is in Asana.
 
 **Someone appears twice on the OOO tab with different dates.** Leave data comes from
 three sources: manual entries, Asana vacation dates, and the leave project. A manual

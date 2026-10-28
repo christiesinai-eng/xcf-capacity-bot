@@ -137,9 +137,13 @@ was pinned to a literal date string, which quietly made the Project Forecaster's
 "In Market" counter read 0 once that date passed. Use
 `(()=>{const d=new Date();d.setHours(0,0,0,0);return d;})()`.
 
-**Placeholder tasks inflate capacity.** Tasks whose name matches `/placeholder/i` are
-filtered out in `buildMemberData()`. Removing that filter makes everyone look
-overbooked.
+**Generic placeholder tasks inflate capacity; named ones are real.** `buildMemberData()`
+skips tasks with "placeholder" in the name — *unless* the name also contains a request code
+(`XCF-####`). "Placeholder studio hours" is unbooked time and, counted, adds 30h a week to
+the person; removing the filter makes the studio look overbooked. But
+"[Placeholder] AIM - XCF-17305 | ..." is a tentative booking against a real request, and
+Asana's own workload counts it, so the report does too (changed 29 Oct 2026 after Nicole Wu
+showed 3.4h against Asana's 6.1h).
 
 **Don't delete `slack-pm-updates-cache.json`.** It holds the hand-written
 `executiveSummary` for each week, keyed by `weekStart` (the Monday date). The Slack

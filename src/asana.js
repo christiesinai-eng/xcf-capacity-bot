@@ -329,8 +329,11 @@ async function buildMemberData() {
       // Skip completed tasks (belt-and-suspenders on top of completed_since:now)
       if (t.completed === true) continue;
 
-      // Skip placeholder capacity tasks — they represent unbooked time, not actual work
-      if (/placeholder/i.test(t.name)) continue;
+      // Skip generic placeholder tasks ("Placeholder studio hours") — they represent
+      // unbooked time, not actual work, and counting them inflated people by 30h a week.
+      // A placeholder that NAMES a request (e.g. "[Placeholder] AIM - XCF-17305 | ...") is a
+      // tentative booking against real work, and Asana's own workload counts it, so it stays in.
+      if (/placeholder/i.test(t.name) && !/XCF[PT]?-\d+/i.test(t.name)) continue;
 
       const estMinutes = getCustomFieldNumber(t, estGid);
       const estimatedHours = estMinutes ? estMinutes / 60 : null;

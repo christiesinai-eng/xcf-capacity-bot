@@ -100,7 +100,7 @@ writes `reports/xcf-report-YYYY-MM-DD.html` → deploy that file.
 - Estimated time field is in minutes → divide by 60 for hours
 - `EXCLUDED_MEMBERS` list keeps admin/non-creative people off the tab
 - `CAPACITY_GAP_MEMBERS` set (in template.html) marks members whose Asana hours are known to gap
-- Placeholder tasks excluded by name filter: `/placeholder/i`
+- Generic placeholder tasks excluded by name (`/placeholder/i`), **but a placeholder that names a request (`XCF-####`) is counted** — it is a tentative booking against real work and Asana's workload includes it. Without the carve-out Nicole Wu showed 3.4h against Asana's 6.1h
 
 ### 2. POD Summary Tab
 **Data:** Derived from the same `MEMBERS` array as Capacity
@@ -453,7 +453,8 @@ You can use these as a starting point when making similar changes.
 ## Troubleshooting
 
 **Report shows wrong hours / discrepancies with Asana:**
-- Check for placeholder tasks (tasks named like "Placeholder studio hours") — these should be excluded by the `/placeholder/i` filter
+- Check for placeholder tasks. "Placeholder studio hours" must stay excluded; a placeholder naming a request (`XCF-####`) must be counted. If the report is *lower* than Asana, look for a placeholder or a task in a project not starting with X/8/9; if *higher*, look for generic placeholders slipping through.
+- To reconcile one person: list their open tasks from Asana, apply the report's rules by hand (qualifying project, placeholder rule, estimate÷working days between start and due), and the gap is almost always one task.
 - Check `EXCLUDED_MEMBERS` — someone may have been removed who shouldn't be
 - Verify `ASANA_FIELD_GID_ESTIMATED_TIME` is correct and values are in minutes
 

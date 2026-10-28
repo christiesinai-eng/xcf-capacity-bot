@@ -2021,14 +2021,14 @@
       "firstStatusAt": "2026-10-26T20:09:31.213Z"
     },
     "1219962252500395": {
-      "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstOnTrackAt": "2026-10-28T06:49:04.256Z",
+      "firstInProgressAt": "2026-10-28T06:50:45.930Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
-      "firstStatusAt": null
+      "startedAt": "2026-10-28T06:49:04.256Z",
+      "startedBy": "On Track",
+      "isRealStart": true,
+      "firstStatusAt": "2026-10-28T06:49:04.256Z"
     },
     "1219959169758169": {
       "firstOnTrackAt": null,
