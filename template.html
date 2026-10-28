@@ -72,6 +72,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .rq-sum strong{color:var(--txt);font-weight:600}
 .rq-pill{display:inline-block;padding:1px 7px;border-radius:99px;font-size:10px;border:1px solid}
 .rq-none{color:var(--muted);font-style:italic}
+.rq-reg{max-width:170px;line-height:1.9}
+.rq-ubar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.rq-ubar-l{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.rq-ubar-c{font-size:11.5px;color:var(--muted);margin-left:auto}
+.rg-fix-list{overflow-x:auto}
+.rg-fix-list .rg-fix-row{min-width:790px}
+.rg-fix-head{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:rgba(255,255,255,.03);padding-top:6px;padding-bottom:6px}
+.rg-fix-head:hover{background:rgba(255,255,255,.03)!important}
+.rq-chip{display:inline-block;padding:0 6px;margin:0 3px 3px 0;border-radius:4px;font-size:10.5px;background:rgba(255,255,255,.08);color:var(--txt);white-space:nowrap}
+.rq-chip-more{background:transparent;border:1px solid var(--border);color:var(--muted)}
 .rq-note{margin-top:12px;font-size:11px;color:var(--muted);line-height:1.6}
 .rq-select{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 9px;color:var(--txt);font-size:12px;font-family:inherit;cursor:pointer}
 .rq-select:focus{outline:2px solid var(--blue);outline-offset:1px}
@@ -990,6 +1000,16 @@ function rqBuckets(){
   });
   return out;
 }
+// Regions are a multi-select, so a request can carry several. Show the first few and
+// fold the rest into "+n" (full list on hover) so one row never grows tall.
+function rqRegionCell(r,max){
+  const list=(r.regions||[]);
+  if(!list.length)return'<span class="rq-none" title="No region set on this request">\u2014</span>';
+  const m=max||3;
+  const shown=list.slice(0,m).map(x=>'<span class="rq-chip">'+rgEscape(x)+'</span>').join('');
+  const more=list.length>m?'<span class="rq-chip rq-chip-more" title="'+rgEscape(list.join(', '))+'">+'+(list.length-m)+'</span>':'';
+  return shown+more;
+}
 function rqShortDate(iso){
   if(!iso)return'';
   return new Date(iso+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'});
@@ -1157,7 +1177,7 @@ function renderRequests(){
   if(ft)rows=rows.filter(r=>r.projectType===ft);
   const fc=document.getElementById('rq-cause').value;
   if(fc)rows=rows.filter(r=>r.cause===fc);
-  if(q)rows=rows.filter(r=>((r.code||'')+' '+(r.name||'')+' '+(r.pod||'')+' '+(r.requester||'')).toLowerCase().includes(q));
+  if(q)rows=rows.filter(r=>((r.code||'')+' '+(r.name||'')+' '+(r.pod||'')+' '+(r.requester||'')+' '+(r.regions||[]).join(' ')).toLowerCase().includes(q));
 
   // Unmeasured rows have no duration to rank by, so they always sink to the bottom
   // of a duration sort rather than being treated as zero.
@@ -1177,7 +1197,7 @@ function renderRequests(){
     tbl.innerHTML='<tr><td><div class="rq-empty">No requests match this filter.</div></td></tr>';
   }else{
     let h='<thead><tr>'+
-      '<th>Request</th><th>Quarter</th><th>Type</th><th>POD</th><th>Submitted</th><th>Work started</th><th>Duration</th><th>Why</th>'+
+      '<th>Request</th><th>Quarter</th><th>Type</th><th>Region</th><th>POD</th><th>Submitted</th><th>Work started</th><th>Duration</th><th>Why</th>'+
       '</tr></thead><tbody>';
     rows.forEach(r=>{
       const pod=r.pod?'<span class="rq-pill" style="color:var(--sky);border-color:var(--sky)">'+r.pod+'</span>':'<span class="rq-none">—</span>';
@@ -1202,6 +1222,7 @@ function renderRequests(){
           (proj&&proj.toLowerCase()!==title.toLowerCase()?'<span class="rq-proj">→ '+proj+'</span>':'')+'</td>'+
         '<td style="white-space:nowrap;font-variant-numeric:tabular-nums">'+(r.quarter||'<span class="rq-none">—</span>')+'</td>'+
         '<td>'+(r.projectType?'<span class="rq-type" style="color:'+(RQ_TYPE_COL[r.projectType]||'var(--muted)')+';border-color:'+(RQ_TYPE_COL[r.projectType]||'var(--muted)')+'">'+r.projectType+'</span>':'<span class="rq-none">—</span>')+'</td>'+
+        '<td class="rq-reg">'+rqRegionCell(r)+'</td>'+
         '<td>'+pod+'</td>'+
         '<td>'+rqFmtWhen(r.submittedAt)+'</td>'+
         '<td'+(r.onTrackAt&&!r.isRealStart?' title="No start was recorded on this project, so this is the completion date — the duration is an upper bound, not the wait before work began"':'')+'>'+(r.onTrackAt
@@ -1244,25 +1265,60 @@ function renderUntracked(){
     'Cancelled':'No action needed',
   };
   const B=rqBuckets();
-  function block(title,colour,subtitle,rows){
-    if(!rows.length)return'';
+  const everything=[...B.waiting,...B.missed,...B.cancelled];
+
+  // The filter bar is built once and kept, so a chosen filter survives the tab being
+  // redrawn every time it is opened. Only the lists underneath are rebuilt.
+  if(!document.getElementById('rq-u-body')){
+    const regions=[...new Set(everything.flatMap(r=>r.regions||[]))].sort((a,b)=>a.localeCompare(b));
+    const types=['Micro (BAU)','XCF initiative','Roadmap','Unset'].filter(t=>everything.some(r=>r.projectType===t));
+    const opt=(v,l)=>'<option value="'+rgEscape(v)+'">'+rgEscape(l||v)+'</option>';
+    el.innerHTML='<div class="rq-ubar"><span class="rq-ubar-l">Filter the lists below</span>'+
+      '<select id="rq-u-region" class="rq-select" onchange="renderUntracked()"><option value="">All regions</option>'+
+        regions.map(x=>opt(x)).join('')+opt('__none','No region set')+'</select>'+
+      '<select id="rq-u-type" class="rq-select" onchange="renderUntracked()"><option value="">All project types</option>'+
+        types.map(x=>opt(x)).join('')+'</select>'+
+      '<span id="rq-u-count" class="rq-ubar-c"></span></div><div id="rq-u-body"></div>';
+  }
+  const fr=document.getElementById('rq-u-region').value;
+  const ft=document.getElementById('rq-u-type').value;
+  const filtered=!!(fr||ft);
+  const keep=r=>{
+    if(ft&&r.projectType!==ft)return false;
+    if(fr==='__none')return !(r.regions||[]).length;
+    if(fr&&!(r.regions||[]).includes(fr))return false;
+    return true;
+  };
+
+  const COLS='95px minmax(0,1fr) 112px 175px 130px 70px';
+  const typePill=t=>(!t||t==='Unset')?'<span class="rq-none">Unset</span>'
+    :'<span class="rq-type" style="color:'+(RQ_TYPE_COL[t]||'var(--muted)')+';border-color:'+(RQ_TYPE_COL[t]||'var(--muted)')+'">'+rgEscape(t)+'</span>';
+
+  function block(title,colour,subtitle,allRows){
+    if(!allRows.length)return'';
+    const rows=allRows.filter(keep);
+    const count=filtered?rows.length+' of '+allRows.length:allRows.length;
+    let h='<div class="rg-fix" style="margin-top:16px;border-left-color:'+colour+'">'+
+      '<div class="rg-fix-h"><div class="rg-sect-t" style="color:'+colour+'">'+title+' — '+count+'</div>'+
+      '<div class="rg-sect-s">'+subtitle+'</div></div>';
+    if(!rows.length)return h+'<div class="rg-empty" style="padding:12px 15px">Nothing in this list matches the filter.</div></div>';
     const groups={};
     rows.forEach(r=>{const k=r.projectStatus||'(status unset)';(groups[k]=groups[k]||[]).push(r);});
-    let h='<div class="rg-fix" style="margin-top:16px;border-left-color:'+colour+'">'+
-      '<div class="rg-fix-h"><div class="rg-sect-t" style="color:'+colour+'">'+title+' — '+rows.length+'</div>'+
-      '<div class="rg-sect-s">'+subtitle+'</div></div>';
     Object.keys(groups).sort((a,b)=>groups[b].length-groups[a].length).forEach(k=>{
       h+='<div style="padding:9px 15px;background:rgba(255,255,255,.04);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">'+
          '<span style="font-size:11.5px;font-weight:700">'+rgEscape(k)+'</span> '+
          '<span style="font-size:11px;color:var(--muted)">· '+groups[k].length+
-         (FIX[k]?' · '+rgEscape(FIX[k]):'')+'</span></div><div class="rg-fix-list">';
-      // Assignee sits next to the link so the list can be worked through by person
+         (FIX[k]?' · '+rgEscape(FIX[k]):'')+'</span></div><div class="rg-fix-list">'+
+         '<div class="rg-fix-row rg-fix-head" style="grid-template-columns:'+COLS+'"><div>Request</div><div>Project</div><div>Type</div><div>Region</div><div>Assignee</div><div>Quarter</div></div>';
+      // Assignee sits beside the link so the list can be worked through by person
       // — it is the one column that turns this from a report into a to-do.
       groups[k].sort((a,b)=>(a.assignee||'￿').localeCompare(b.assignee||'￿')||(a.code||'').localeCompare(b.code||'')).forEach(r=>{
-        h+='<div class="rg-fix-row" style="grid-template-columns:95px 1fr 135px auto">'+
+        h+='<div class="rg-fix-row" style="grid-template-columns:'+COLS+'">'+
            '<div class="rq-code">'+rgEscape(r.code||'—')+'</div>'+
            '<a href="'+rgEscape(r.projectUrl||r.url)+'" target="_blank" rel="noopener" title="Open the project in Asana">'+
            rgEscape((r.projectName||r.name||'').replace(/^\s*XCF-\d+\s*\|?\s*/i,''))+'</a>'+
+           '<div>'+typePill(r.projectType)+'</div>'+
+           '<div class="rq-reg">'+rqRegionCell(r,2)+'</div>'+
            '<div class="rq-val" style="text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"'+
            (r.assignee?'':' title="No assignee on the request"')+'>'+
            (r.assignee?rgEscape(r.assignee):'<span class="rq-none">unassigned</span>')+'</div>'+
@@ -1272,11 +1328,14 @@ function renderUntracked(){
     });
     return h+'</div>';
   }
+
   const measuredNow=REQUESTS_DATA.filter(r=>r.durationHours!==null).length;
-  el.innerHTML=
+  const shown=everything.filter(keep).length;
+  document.getElementById('rq-u-count').textContent=filtered?'Showing '+shown+' of '+everything.length:everything.length+' projects';
+  document.getElementById('rq-u-body').innerHTML=
     block('Awaiting In Progress','#F5A623',
       'Live projects that have not been marked In Progress yet. Each one starts measuring itself the moment the status flips — nothing to backfill. '+
-      'Clearing these would take measured from '+measuredNow+' to '+(measuredNow+B.waiting.length)+'.',B.waiting)+
+      'Clearing all '+B.waiting.length+' would take measured from '+measuredNow+' to '+(measuredNow+B.waiting.length)+'.',B.waiting)+
     block('Missed','#8b9abf',
       'These moved past In Progress without it ever being set, so no truthful start date can be recovered. Setting it now would record today, not when work began. '+
       'Treat as a prompt for the workflow rather than a backlog to clear.',B.missed)+

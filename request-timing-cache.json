@@ -2019,6 +2019,26 @@
       "startedBy": "On Track",
       "isRealStart": true,
       "firstStatusAt": "2026-10-26T20:09:31.213Z"
+    },
+    "1219962252500395": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1219959169758169": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
     }
   },
   "requests": {
@@ -3891,7 +3911,7 @@
     },
     "1218487790595325": {
       "code": "XCF-14138",
-      "name": "XCF delivery support | ABE 2027 ",
+      "name": "XCF-14138 XCF delivery support | ABE 2027 ",
       "comments": [
         {
           "author": "Quincey Brinker",
@@ -7513,6 +7533,34 @@
       "code": "XCF-19031",
       "name": "BrandHouse - MG Consulting ",
       "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1219962096154488": {
+      "code": "XCF-19095",
+      "name": "XCF-19095 | AB Pricing Decision Tree update",
+      "comments": [
+        {
+          "author": "Unknown",
+          "at": "2026-10-27T23:08:59.764Z",
+          "text": "Potential duplicate identified. Please review the following related tasks before proceeding:\n\n• https://app.asana.com/0/0/1214720834060735/f (Completed May 2026) - UK Decision Tree and Pricing PDF updates\n\n• https://app.asana.com/0/0/1217766528709424/f (Completed Aug 28 2026) - UK Pricing PDF & Decision Tree with updated prices and effective dates\n\nBoth tasks involve UK pricing decision tree updates. XCF-10272 was completed recently and may contain the current version. Please confirm this request is for a new iteration with the Syft feature copy changes before proceeding."
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1219958979395098": {
+      "code": "XCF-19087",
+      "name": "XCF-19087 | US | SB + AB | 1099 Tax messaging",
+      "comments": [
+        {
+          "author": "Unknown",
+          "at": "2026-10-27T20:42:41.537Z",
+          "text": "Potential related work identified:\n\n• https://app.asana.com/0/1215906401561993/1212712090563583 - Completed SB-focused 1099 messaging\n• https://app.asana.com/0/1215906401561993/1212700691789374 - Completed AB-focused 1099 messaging\n\nThis new request (XCF-19087) combines both SB and AB audiences for 1099 tax messaging. The previous tasks addressed these audiences separately and are now complete. Please review to confirm this is a new consolidated effort rather than a duplicate of existing work."
+        }
+      ],
       "summary": null,
       "cause": null,
       "causedAt": null

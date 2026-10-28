@@ -237,6 +237,25 @@ re-evaluated — but keep `cache.requests`, which holds the hand-written summari
 (currently `XCF-11710`, Canva XCF approvals). They are not business requests and distort
 both coverage and the distribution.
 
+**Sprint buckets are excluded too**, by name, via `EXCLUDED_NAME_PATTERNS` — anything shaped
+like `Sprint | 7th - 11th Sep`. They are weekly planning containers, not requests; they were
+created and set to In Progress immediately, so they counted as measured and made the XCF
+initiative figures meaningless (9 of its 10 measured rows). The pattern needs `Sprint |`
+followed by a date, so it deliberately does **not** catch `Studio BAU - Sprints and project
+management` (a different set of tasks, handled directly with no project). Excluding items
+is Christie's call — it changes the headline numbers — so ask before adding more.
+
+**Region columns.** Both tables show a Region. Which Asana field supplies it depends on the
+project type: **Roadmap → `Applicable Regions`** (`1212086752729219`); **Micro (BAU) and XCF
+initiative → `Regions (XCF)`** (`1213486033990545`). A request with no project type yet takes
+whichever field is filled. The project type itself comes from the request, falling back to the
+linked project. This is deliberately strict: a Micro request with its region typed into the
+Roadmap field shows no region, which is how a wrongly-filled field gets noticed.
+
+**The bottom lists (awaiting / missed / cancelled) have a filter bar** — Region and Project
+type — plus Type and Region columns. The bar is built once so a chosen filter survives the tab
+being redrawn; only the lists underneath are rebuilt on change.
+
 **Comment summaries and delay causes** live in `request-timing-cache.json` under
 `requests[gid].summary`, `.cause` and `.causedAt`. Hand-written — see "Regenerate the
 request cycle-time summaries" below. The builder preserves them across rebuilds, and a

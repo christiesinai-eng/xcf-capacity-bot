@@ -12,10 +12,21 @@ const COMPLETE_GID = '1211986892220404';         // Status (XCF) → "Complete"
 // Internal projects that should not be counted in cycle time at all — they are not
 // business requests, so they distort both coverage and the median.
 const EXCLUDED_CODES = new Set(['XCF-11710']); // Canva XCF approvals — internal
+
+// Weekly planning buckets named like "Sprint | 7th - 11th Sep". They are containers for a
+// week's work, not requests, and they were being counted as measured (created and set to In
+// Progress straight away), which made the XCF initiative figures meaningless — 9 of its 10
+// measured rows were sprint buckets. Matches "Sprint |" followed by a date, so a genuine
+// request that merely mentions the word is not caught, and so "Studio BAU - Sprints and
+// project management" is left alone.
+const EXCLUDED_NAME_PATTERNS = [/(^|\|)\s*sprint\s*\|\s*\d/i];
+const isExcludedName = (name) => EXCLUDED_NAME_PATTERNS.some(rx => rx.test(name || ''));
 const XCF_CODE_FIELD_GID = '1213726159416934';   // "XCF" text field, e.g. XCF-18696
 const PODS_FIELD_GID = '1211165589636938';       // PODS (XCF)
 const REQUESTER_FIELD_GID = '1218344624492289';  // Requester (XCF)
 const PROJECT_TYPE_FIELD_GID = '1217575429570978'; // Project type (XCF)
+const REGIONS_ROADMAP_FIELD_GID = '1212086752729219'; // "Applicable Regions" — used for Roadmap
+const REGIONS_XCF_FIELD_GID = '1213486033990545';     // "Regions (XCF)" — used for Micro (BAU) and XCF initiative
 
 // Xero's financial year starts 1 April, so FY27 Q1 is Apr-Jun 2026. Matches the
 // "FY27 Q2" labels used by the Quarter (Mkt Planning) field in Asana.
@@ -69,6 +80,22 @@ function requestUrl(taskGid) {
 
 function enumValue(t, gid) { return t.custom_fields?.find(f => f.gid === gid)?.enum_value?.name || null; }
 function textValue(t, gid) { return t.custom_fields?.find(f => f.gid === gid)?.text_value || null; }
+function multiValues(t, gid) {
+  return (t.custom_fields?.find(f => f.gid === gid)?.multi_enum_values || [])
+    .map(v => (v.name || '').trim())
+    .filter(Boolean);
+}
+
+// Which region field applies depends on the project type, because Roadmap requests use a
+// different field from everything else. A request with no project type yet (older ones)
+// takes whichever field is filled in, preferring Regions (XCF).
+function regionsFor(t, projectType) {
+  if (projectType === 'Roadmap') return multiValues(t, REGIONS_ROADMAP_FIELD_GID);
+  if (projectType === 'Micro (BAU)' || projectType === 'XCF initiative') return multiValues(t, REGIONS_XCF_FIELD_GID);
+  const x = multiValues(t, REGIONS_XCF_FIELD_GID);
+  return x.length ? x : multiValues(t, REGIONS_ROADMAP_FIELD_GID);
+}
+
 function peopleValue(t, gid) { return t.custom_fields?.find(f => f.gid === gid)?.people_value?.[0]?.name || null; }
 
 async function paginate(client, url, params) {
@@ -190,6 +217,7 @@ async function buildRequestsData() {
           'gid,name,created_at,completed,permalink_url,assignee.name',
           'custom_fields.gid,custom_fields.enum_value.name',
           'custom_fields.text_value,custom_fields.people_value.name',
+          'custom_fields.multi_enum_values.name',
         ].join(','),
       }),
       paginate(client, `/portfolios/${PM_PORTFOLIO_GID}/items`, {
@@ -202,7 +230,8 @@ async function buildRequestsData() {
   }
 
   requests = requests.filter(t => t.created_at && t.created_at >= since)
-    .filter(t => !EXCLUDED_CODES.has(extractCode(textValue(t, XCF_CODE_FIELD_GID) || t.name)));
+    .filter(t => !EXCLUDED_CODES.has(extractCode(textValue(t, XCF_CODE_FIELD_GID) || t.name)))
+    .filter(t => !isExcludedName(t.name));
 
   const projectByCode = {};
   for (const p of projects) {
@@ -271,6 +300,11 @@ async function buildRequestsData() {
     const timing = m ? (projectTiming[m.project.gid] || cache.projects[m.project.gid] || {}) : {};
     const comments = freshComments[r.gid] || priorReq.comments || [];
 
+    // Requests usually carry the type; fall back to the converted project's value.
+    const projectType = enumValue(r, PROJECT_TYPE_FIELD_GID)
+      || (m ? enumValue(m.project, PROJECT_TYPE_FIELD_GID) : null)
+      || 'Unset';
+
     const submittedAt = r.created_at;
     const onTrackAt = timing.startedAt || null;
     const durationHours = onTrackAt
@@ -287,10 +321,8 @@ async function buildRequestsData() {
       assignee: r.assignee?.name || null,
       requestStatus: enumValue(r, STATUS_FIELD_GID),
       quarter: fiscalQuarter(r.created_at),
-      // Requests usually carry the type; fall back to the converted project's value.
-      projectType: enumValue(r, PROJECT_TYPE_FIELD_GID)
-        || (m ? enumValue(m.project, PROJECT_TYPE_FIELD_GID) : null)
-        || 'Unset',
+      projectType,
+      regions: regionsFor(r, projectType),
       matched: !!m,
       projectName: m ? m.project.name : null,
       projectUrl: m ? m.project.permalink_url : null,
