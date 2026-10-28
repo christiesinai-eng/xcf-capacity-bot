@@ -7,7 +7,8 @@
 // itself: the requests are applied by whatever has access (the Sheets connector in a Claude session
 // today), and the sheet's own Checks tab proves afterwards that the write landed.
 //
-//   node src/sheetSync.js plan   [--data file] [--checks file]   decide what to write
+//   node src/sheetSync.js plan   [--data file] [--checks file] [--skip Tab,Tab] [--force-shrink Tab]
+//                                                                  decide what to write
 //   node src/sheetSync.js verify <checks file>                   confirm it landed, then remember it
 //   node src/sheetSync.js setup                                  one-off: Checks + Sync_Log tabs
 //   node src/sheetSync.js meta <get_spreadsheet file>            learn tab ids and grid sizes
@@ -253,6 +254,18 @@ function notesToAdd(requestCache, slackCache, existingKeys) {
   return rows;
 }
 
+// Tabs another writer owns (for example a Glean agent) are left out of the plan entirely: not written, not
+// checked. Ownership goes back by running the plan without them, after which the sync rewrites them once.
+function dropTabs(tables, skip) {
+  const out = { ...tables };
+  for (const name of skip) {
+    if (!out[name]) throw new Error(`--skip names "${name}", which is not a tab the sync writes`);
+    delete out[name];
+    console.log(`${name.padEnd(22)} not managed here (--skip)`);
+  }
+  return out;
+}
+
 // ───────────────────────────── state ──────────────────────────────────────────
 
 function loadState(file = STATE_PATH) {
@@ -371,7 +384,7 @@ function cmdPlan() {
   const data = readJson(dataFile);
   const state = loadState();
   const observed = arg('--checks') ? parseObservedChecks(readJson(arg('--checks'))) : null;
-  const tables = buildTables(data);
+  const tables = dropTabs(buildTables(data), (arg('--skip') || '').split(',').filter(Boolean));
   const forceShrink = (arg('--force-shrink') || '').split(',').filter(Boolean);
   const plans = planAll(tables, state, observed, { failures: data.failures || [], forceShrink });
 
@@ -481,4 +494,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { notesToAdd, saveData, hashRow, diffRows, runs, planTab, planAll, batches, expectedChecks, checksFormulas, parseObservedChecks, checksMatch, apiRows, colLetter, MIN_TRAILING_BLANK_ROWS };
+module.exports = { dropTabs, notesToAdd, saveData, hashRow, diffRows, runs, planTab, planAll, batches, expectedChecks, checksFormulas, parseObservedChecks, checksMatch, apiRows, colLetter, MIN_TRAILING_BLANK_ROWS };

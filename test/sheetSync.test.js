@@ -251,3 +251,14 @@ test('notes: only summaries that are not yet in the sheet are added, and nothing
   ]);
   assert.deepEqual(sync.notesToAdd(cache, slack, ['1001', '1002', '2026-10-19']), []);
 });
+
+test('tabs another writer owns can be left out of the plan, and a wrong name is an error', () => {
+  const tables = { A: table([]), B: table([]), C: table([]) };
+  const log = console.log;
+  console.log = () => {};
+  try {
+    assert.deepEqual(Object.keys(sync.dropTabs(tables, ['B'])), ['A', 'C']);
+    assert.deepEqual(Object.keys(sync.dropTabs(tables, [])), ['A', 'B', 'C']);
+    assert.throws(() => sync.dropTabs(tables, ['Nope']), /not a tab the sync writes/);
+  } finally { console.log = log; }
+});

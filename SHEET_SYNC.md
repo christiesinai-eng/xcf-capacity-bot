@@ -62,7 +62,7 @@ This is what the scheduled Claude task does. It needs the Google Sheets connecto
 2. **Build.** `node src/index.js --once`. This writes the report and `reports/xcf-data-DATE.json`. If Asana
    fails for a dataset the build records it in `failures`; the sync then leaves those tabs alone.
 3. **Plan.** `node src/sheetSync.js plan --checks sheet-sync/observed.json`. It prints one line per tab and lists
-   the request files to apply, in order. A tab whose checks do not match what the last sync wrote is treated as
+   the request files to apply, in order. Add `--skip Tab,Tab` for tabs another writer owns (see `GLEAN_SYNC.md`). A tab whose checks do not match what the last sync wrote is treated as
    changed by someone and is rewritten. A tab that would lose more than half its rows is held back
    (`SKIPPED`); add `--force-shrink Tab` if that is real.
 4. **Apply.** For each listed file in order, read it and send its `requests` to `update_spreadsheet` for the
