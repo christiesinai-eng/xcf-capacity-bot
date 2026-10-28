@@ -55,7 +55,9 @@ ahead of UTC. Week totals were about 30% low.)
 
 ## Daily refresh
 
-This is what the scheduled Claude task does. It needs the Google Sheets connector enabled.
+This is what the scheduled Claude task does. It needs the Google Sheets connector enabled (a scheduled run was
+tested on 29 Oct and could read the sheet). The exact task prompts are in `scheduled-tasks/`, with how to apply them;
+they are not live until the dashboard has been switched over.
 
 1. **Read the sheet's checks.** `get_values` on `Checks!A1:E18` of the spreadsheet above. Save the reply as
    `sheet-sync/observed.json` (the whole reply, or just its `values`).
@@ -125,6 +127,12 @@ Things that went wrong while building this and are worth not repeating:
 - A fetch that fails quietly must not turn into an empty tab. `requestTiming.js` now throws, and the sync holds
   back a dataset that failed.
 
+## Trying the page against the real sheet before switching
+
+The live dashboard can stay as it is. A separate app, `xcf-sheet-test`, can carry the new page with the sheet attached
+(`deploy_app` with `sheets`, then `connect_sheet`), open only to named people. Its header should read "Data: live
+from the Google Sheet". Archive it when done (the app's Manage panel in the Dashboard Directory, or `archive_app`).
+
 ## Switching the dashboard to the sheet (one-off)
 
 Done once, after the owner agrees. The page already contains the loader; this is only the deploy.
@@ -139,8 +147,11 @@ Done once, after the owner agrees. The page already contains the loader; this is
    `sheet_status` until `connected: true`.
 5. Open the page: the header should read "Data: live from the Google Sheet". Compare a few numbers with the
    previous version.
-6. Change the daily scheduled task from "build and deploy" to the refresh above. Deploy only when the page
-   itself changes.
+6. Change the two scheduled tasks to the prompts in `scheduled-tasks/` (the daily one stops deploying and writes the
+   sheet; the Monday one also adds new summaries to `Notes`), then click **Run now** once on each and approve the
+   Google Sheets tools when asked. Deploy only when the page itself changes. Use `skill: dashboard-accelerator@3.4`
+   for deploys (the daily task's old prompt says 2.14).
+7. Optional: a Glean agent can fill the four task tabs from Asana, see `GLEAN_SYNC.md`.
 
 ## Checks you can run
 
