@@ -3513,7 +3513,7 @@
     },
     "1218760805056183": {
       "code": "XCF-14661",
-      "name": "XCF Business Review Deck",
+      "name": "XCF-14661 |  [Converted to project] XCF Business Review Deck",
       "comments": [],
       "summary": null,
       "cause": null,
@@ -7503,9 +7503,9 @@
           "text": "Related project identified: https://app.asana.com/0/1215906401561993/1214963880496318 - This was a previous XPAC badge update completed in May 2026 for Singapore and Malaysia regions with the new Xero logo. The current request (XCF-18988) is for a US/Global XPAC badge update. While these are for different regions, please confirm this is a distinct new badge design and not related to the previous XPAC badge project before proceeding."
         }
       ],
-      "summary": null,
-      "cause": null,
-      "causedAt": null
+      "summary": "**No human discussion, and a weekend in the middle.** The only comment is an automated flag pointing at a May 2026 XPAC badge update for Singapore and Malaysia, asking whether this US/Global badge is a new design. Submitted Friday afternoon (US time), started Tuesday.",
+      "cause": "No blocker",
+      "causedAt": "2026-10-28"
     },
     "1219829332690516": {
       "code": "XCF-18981",
@@ -7517,9 +7517,9 @@
           "text": "Hey https://app.asana.com/1/41261904390129/profile/1216496014620082, can we please prioritize this one, this is a top exec priority for Melio. Apologies for the quick turnaround. I was only just briefed on this request. \n\nI’ve left comments on the US SB Cashflow and CA Wagepoint requests noting that we no longer need to support them, so I’d appreciate it if we could shift our focus to getting this moving. Thanks!"
         }
       ],
-      "summary": null,
-      "cause": null,
-      "causedAt": null
+      "summary": "**Mostly a weekend.** Submitted on a Friday afternoon (US time) and marked In Progress on the Tuesday. The requester flagged it as a top executive priority and withdrew two other Melio and Wagepoint requests to make room; nothing else held it up.",
+      "cause": "No blocker",
+      "causedAt": "2026-10-28"
     },
     "1219829125985950": {
       "code": "XCF-18975",

@@ -17,9 +17,13 @@ const EXCLUDED_CODES = new Set(['XCF-11710']); // Canva XCF approvals — intern
 // week's work, not requests, and they were being counted as measured (created and set to In
 // Progress straight away), which made the XCF initiative figures meaningless — 9 of its 10
 // measured rows were sprint buckets. Matches "Sprint |" followed by a date, so a genuine
-// request that merely mentions the word is not caught, and so "Studio BAU - Sprints and
-// project management" is left alone.
-const EXCLUDED_NAME_PATTERNS = [/(^|\|)\s*sprint\s*\|\s*\d/i];
+// request that merely mentions the word is not caught. "Studio BAU - Sprints and project
+// management" hours buckets are excluded as well, by their own pattern (added once Christie
+// confirmed they are buckets too).
+const EXCLUDED_NAME_PATTERNS = [
+  /(^|\|)\s*sprint\s*\|\s*\d/i,        // "Sprint | 7th - 11th Sep"
+  /studio bau\s*[-\u2013\u2014]\s*sprints/i, // "Studio BAU - Sprints and project management" (hyphen or en dash)
+];
 const isExcludedName = (name) => EXCLUDED_NAME_PATTERNS.some(rx => rx.test(name || ''));
 const XCF_CODE_FIELD_GID = '1213726159416934';   // "XCF" text field, e.g. XCF-18696
 const PODS_FIELD_GID = '1211165589636938';       // PODS (XCF)

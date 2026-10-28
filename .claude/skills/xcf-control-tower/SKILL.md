@@ -240,10 +240,12 @@ both coverage and the distribution.
 **Sprint buckets are excluded too**, by name, via `EXCLUDED_NAME_PATTERNS` — anything shaped
 like `Sprint | 7th - 11th Sep`. They are weekly planning containers, not requests; they were
 created and set to In Progress immediately, so they counted as measured and made the XCF
-initiative figures meaningless (9 of its 10 measured rows). The pattern needs `Sprint |`
-followed by a date, so it deliberately does **not** catch `Studio BAU - Sprints and project
-management` (a different set of tasks, handled directly with no project). Excluding items
-is Christie's call — it changes the headline numbers — so ask before adding more.
+initiative figures meaningless (9 of its 10 measured rows). The `Sprint |` pattern needs a
+date after it, so a real request that merely mentions the word is not caught. The
+`Studio BAU - Sprints and project management` hours buckets (hyphen or en dash) are excluded
+by a second pattern, at Christie's request. The tab carries a visible disclaimer saying
+sprint projects have been removed — keep it in step if the exclusions change. Excluding more
+items changes the headline numbers, so ask Christie first.
 
 **Region columns.** Both tables show a Region. Which Asana field supplies it depends on the
 project type: **Roadmap → `Applicable Regions`** (`1212086752729219`); **Micro (BAU) and XCF
