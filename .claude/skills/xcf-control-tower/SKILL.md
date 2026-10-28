@@ -254,9 +254,14 @@ whichever field is filled. The project type itself comes from the request, falli
 linked project. This is deliberately strict: a Micro request with its region typed into the
 Roadmap field shows no region, which is how a wrongly-filled field gets noticed.
 
-**The bottom lists (awaiting / missed / cancelled) have a filter bar** — Region and Project
-type — plus Type and Region columns. The bar is built once so a chosen filter survives the tab
-being redrawn; only the lists underneath are rebuilt on change.
+**Filters.** The measured table filters by quarter, project type, region, POD, assignee and
+delay cause (plus a sort, the over-24-hours toggle, and a search box that also matches region
+and assignee), and has an Assignee column. The bottom lists (awaiting / missed / cancelled)
+have their own bar — Region, Project type, Assignee and Quarter — plus Type, Region and
+Assignee columns. Every selected filter must hold, so they narrow together; each dropdown only
+offers values that exist in the rows it filters, and a "No X set" / "Unassigned" entry appears
+only when some row really lacks the value. The bottom bar is built once so a chosen filter
+survives the tab being redrawn; only the lists underneath are rebuilt on change.
 
 **Comment summaries and delay causes** live in `request-timing-cache.json` under
 `requests[gid].summary`, `.cause` and `.causedAt`. Hand-written — see "Regenerate the
