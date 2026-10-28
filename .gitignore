@@ -2,3 +2,6 @@
 reports/
 node_modules/
 logs/
+.DS_Store
+.claude/settings.local.json
+.claude/worktrees/
