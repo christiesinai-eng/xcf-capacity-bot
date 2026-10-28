@@ -3,6 +3,11 @@
 Read [AGENTS.md](AGENTS.md) first — it covers what this app is, how it's built, the
 configuration constants, and the gotchas. This file adds the Claude-specific workflow.
 
+The dashboard's data also lives in a Google Sheet that the build keeps current; the page reads it live and
+falls back to the data built into it. How that works, the daily refresh procedure and the one-off switch-over
+are in [SHEET_SYNC.md](SHEET_SYNC.md). Read it before touching `template.html`'s data handling, the sheet, or
+the scheduled refresh.
+
 ## The skill
 
 This repo ships a skill at `.claude/skills/xcf-control-tower/SKILL.md` covering the
@@ -95,7 +100,8 @@ standalone `roadmap-timeline.html` file, not for the main report.
 | Task | File |
 |---|---|
 | Who appears on which tab | `src/asana.js` — the constants block, lines ~189–232 and ~481–505 |
-| Capacity arithmetic | `src/asana.js` — `hoursOnDate`, `sumHoursOverRange`, `workingDaysBetween` |
+| Capacity arithmetic | `src/capacityMath.js` — `hoursOnDate`, `sumHoursOverRange`, `windows` (shared with the page) |
+| Google Sheet tabs and columns | `src/sheetSchema.js` (write side), `src/sheetAdapter.js` (page side) — see `SHEET_SYNC.md` |
 | Which Asana portfolio or field feeds a tab | `src/asana.js` — the `*_GID` constants |
 | How data reaches the HTML | `src/report.js` — `replaceArray`, `replaceString` |
 | Markdown rendering for exec summaries | `src/report.js` — `mdToHtml` |

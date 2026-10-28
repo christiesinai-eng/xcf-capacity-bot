@@ -5,12 +5,16 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "report": "node src/index.js --once"
+    "report": "node src/index.js --once",
+    "test": "node --test test/*.test.js"
   },
   "dependencies": {
     "@slack/web-api": "^7.3.4",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "jsdom": "^30.1.3"
   }
 }

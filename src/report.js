@@ -29,55 +29,8 @@ function replaceString(html, name, value) {
   return updated;
 }
 
-// Lightweight markdown → HTML for executive summaries
-function mdToHtml(md) {
-  if (!md) return '';
-  const lines = md.split('\n');
-  const out = [];
-  let inUl = false, inTable = false, tableHasHead = false;
-
-  function flushUl() { if (inUl) { out.push('</ul>'); inUl = false; } }
-  function flushTable() { if (inTable) { out.push('</tbody></table>'); inTable = false; tableHasHead = false; } }
-  function flushAll() { flushUl(); flushTable(); }
-
-  function inline(t) {
-    return t
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
-      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*([^*]+)\*/g, '<em>$1</em>');
-  }
-
-  for (let i = 0; i < lines.length; i++) {
-    const raw = lines[i];
-    const line = raw.trimEnd();
-
-    if (/^\s*$/.test(line)) { flushAll(); out.push('<div style="margin:.4em 0"></div>'); continue; }
-    if (/^---+$/.test(line)) { flushAll(); out.push('<hr style="border:none;border-top:1px solid rgba(255,255,255,.1);margin:.8em 0">'); continue; }
-    if (/^## /.test(line)) { flushAll(); out.push(`<h2 class="exec-h2">${inline(line.slice(3))}</h2>`); continue; }
-    if (/^### /.test(line)) { flushAll(); out.push(`<h3 class="exec-h3">${inline(line.slice(4))}</h3>`); continue; }
-    if (/^> /.test(line)) { flushAll(); out.push(`<blockquote class="exec-bq">${inline(line.slice(2))}</blockquote>`); continue; }
-    if (/^\* /.test(line) || /^- /.test(line)) {
-      flushTable();
-      if (!inUl) { out.push('<ul class="exec-ul">'); inUl = true; }
-      out.push(`<li>${inline(line.slice(2))}</li>`);
-      continue;
-    }
-    if (/^\|/.test(line)) {
-      flushUl();
-      const cells = line.split('|').slice(1, -1).map(c => c.trim());
-      if (/^[\s|:-]+$/.test(line)) { tableHasHead = true; continue; }
-      if (!inTable) { out.push('<table class="exec-tbl"><tbody>'); inTable = true; }
-      const tag = (!tableHasHead) ? 'th' : 'td';
-      out.push(`<tr>${cells.map(c=>`<${tag}>${inline(c)}</${tag}>`).join('')}</tr>`);
-      if (tag === 'th') tableHasHead = true;
-      continue;
-    }
-    flushAll();
-    out.push(`<p class="exec-p">${inline(line)}</p>`);
-  }
-  flushAll();
-  return out.join('\n');
-}
+// mdToHtml lives in markdown.js so the dashboard page can use the very same code.
+const { mdToHtml } = require('./markdown');
 
 // Strip external domain URLs from Slack message text so the deploy scanner
 // doesn't flag them. Keeps the link label text for readability.
@@ -115,45 +68,76 @@ function stripCommentUrls(text) {
     .trim();
 }
 
-function generateReport({ members, missingTasks, overdueTasks, pmData, scopeCreepData, oooData, pmUpdatesData, roadmapData, bauData, requestsData, regionalData }) {
-  if (!fs.existsSync(TEMPLATE_PATH)) {
-    throw new Error(`HTML template not found at ${TEMPLATE_PATH}`);
-  }
-
-  // NZT timestamp at generation time
-  const generatedAt = new Date().toLocaleString('en-NZ', {
+// NZT timestamp shown in the report header, e.g. "29 Oct 2026, 07:27 am NZT"
+function nztStamp() {
+  return new Date().toLocaleString('en-NZ', {
     timeZone: 'Pacific/Auckland',
     day: 'numeric', month: 'short', year: 'numeric',
     hour: '2-digit', minute: '2-digit',
     hour12: true,
   }) + ' NZT';
+}
+
+// Everything the template is filled with, in the shape the page expects. Also what the Google Sheet
+// adapter has to reproduce (see scripts/check-sheet-parity.js).
+function templateDatasets({ members, missingTasks, overdueTasks, pmData, scopeCreepData, oooData, pmUpdatesData, roadmapData, bauData, requestsData, regionalData }) {
+  return {
+    MEMBERS: members,
+    MISSING_TASKS: missingTasks,
+    OVERDUE_TASKS: overdueTasks,
+    PM_DATA: pmData || [],
+    SCOPE_CREEP_DATA: scopeCreepData || [],
+    OOO_DATA: oooData || [],
+    PM_UPDATES_DATA: (pmUpdatesData || []).map(w => ({
+      ...w,
+      messages: (w.messages || []).map(m => ({ ...m, text: stripExternalUrls(m.text) })),
+      executiveSummaryHtml: w.executiveSummary ? mdToHtml(w.executiveSummary) : null,
+    })),
+    RT_RAW_TASKS: roadmapData || [],
+    BAU_DATA: bauData || [],
+    REQUESTS_DATA: (requestsData || []).map(r => ({
+      ...r,
+      comments: (r.comments || []).map(c => ({ ...c, text: stripCommentUrls(c.text) })),
+      summaryHtml: r.summary ? mdToHtml(r.summary) : null,
+    })),
+    REGIONAL_DATA: regionalData || {},
+  };
+}
+
+function generateReport(data) {
+  if (!fs.existsSync(TEMPLATE_PATH)) {
+    throw new Error(`HTML template not found at ${TEMPLATE_PATH}`);
+  }
+
+  const generatedAt = nztStamp();
+  const d = templateDatasets(data);
 
   let html = fs.readFileSync(TEMPLATE_PATH, 'utf8');
-  html = replaceArray(html, 'MEMBERS', members);
-  html = replaceArray(html, 'MISSING_TASKS', missingTasks);
-  html = replaceArray(html, 'OVERDUE_TASKS', overdueTasks);
-  html = replaceArray(html, 'PM_DATA', pmData || []);
-  html = replaceArray(html, 'SCOPE_CREEP_DATA', scopeCreepData || []);
-  html = replaceArray(html, 'OOO_DATA', oooData || []);
-  const pmUpdatesWithHtml = (pmUpdatesData || []).map(w => ({
-    ...w,
-    messages: (w.messages || []).map(m => ({ ...m, text: stripExternalUrls(m.text) })),
-    executiveSummaryHtml: w.executiveSummary ? mdToHtml(w.executiveSummary) : null,
-  }));
-  html = replaceArray(html, 'PM_UPDATES_DATA', pmUpdatesWithHtml);
-  html = replaceArray(html, 'RT_RAW_TASKS', roadmapData || []);
-  html = replaceArray(html, 'BAU_DATA', bauData || []);
-  const requestsWithHtml = (requestsData || []).map(r => ({
-    ...r,
-    comments: (r.comments || []).map(c => ({ ...c, text: stripCommentUrls(c.text) })),
-    summaryHtml: r.summary ? mdToHtml(r.summary) : null,
-  }));
-  html = replaceArray(html, 'REQUESTS_DATA', requestsWithHtml);
+  html = replaceArray(html, 'MEMBERS', d.MEMBERS);
+  html = replaceArray(html, 'MISSING_TASKS', d.MISSING_TASKS);
+  html = replaceArray(html, 'OVERDUE_TASKS', d.OVERDUE_TASKS);
+  html = replaceArray(html, 'PM_DATA', d.PM_DATA);
+  html = replaceArray(html, 'SCOPE_CREEP_DATA', d.SCOPE_CREEP_DATA);
+  html = replaceArray(html, 'OOO_DATA', d.OOO_DATA);
+  html = replaceArray(html, 'PM_UPDATES_DATA', d.PM_UPDATES_DATA);
+  html = replaceArray(html, 'RT_RAW_TASKS', d.RT_RAW_TASKS);
+  html = replaceArray(html, 'BAU_DATA', d.BAU_DATA);
+  html = replaceArray(html, 'REQUESTS_DATA', d.REQUESTS_DATA);
   // Placeholder is an array literal but the payload is an object — replaceArray
   // only cares about the declaration shape it is replacing.
-  html = replaceArray(html, 'REGIONAL_DATA', regionalData || {});
+  html = replaceArray(html, 'REGIONAL_DATA', d.REGIONAL_DATA);
   html = replaceString(html, 'GENERATED_AT', generatedAt);
+  // Last, so the placeholder patterns above can never match inside the library code.
+  html = html.replace('/*__SHEET_LIBS__*/', () => sheetLibs());
   return html;
+}
+
+// The browser-side libraries, in load order: arithmetic, markdown, the sheet adapter, then the loader that uses them.
+function sheetLibs() {
+  const read = (f) => fs.readFileSync(path.join(__dirname, f), 'utf8');
+  const code = ['capacityMath.js', 'markdown.js', 'sheetAdapter.js', 'sheetLoader.js'].map(read).join('\n');
+  if (/<\/script/i.test(code)) throw new Error('a browser library contains </script>, which would end the inline script early');
+  return code;
 }
 
 function saveReport(data) {
@@ -170,4 +154,4 @@ function saveReport(data) {
   return reportPath;
 }
 
-module.exports = { saveReport, generateReport };
+module.exports = { saveReport, generateReport, templateDatasets, nztStamp, mdToHtml, stripExternalUrls, stripCommentUrls };

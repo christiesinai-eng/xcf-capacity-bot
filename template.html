@@ -660,6 +660,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <span class="dot"></span> <span id="task-count">—</span> tasks across all pages
     <span class="dot"></span> PODs: XCF Utilisation
     <span class="dot"></span> Includes due-date-only tasks
+    <span class="dot"></span> <span id="data-source" title="">Data: built into this page</span>
   </div>
 </div>
 
@@ -684,7 +685,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <span class="tt">Today</span><span class="ts" id="tab-today-date">19 May 2026</span>
     </button>
     <button class="time-tab" onclick="setTab('week',this)">
-      <span class="tt">Next 7 days</span><span class="ts" id="tab-week-date">→ 27 May</span>
+      <span class="tt">Next 5 working days</span><span class="ts" id="tab-week-date">→ 27 May</span>
     </button>
     <button class="time-tab" onclick="setTab('month',this)">
       <span class="tt">Next month</span><span class="ts" id="tab-month-date">→ 17 Jun</span>
@@ -868,6 +869,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   Formula: est time ÷ working days (start→due); no start date = all hours on due date &nbsp;·&nbsp; 6h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation
 </div>
 
+<script>/*__SHEET_LIBS__*/</script>
 <script>
 const BRAND={
   'Performance':   {bg:'#2a2200',fg:'#FDCC08',bar:'#FDCC08',dot:'#FDCC08'},
@@ -918,6 +920,21 @@ const BAU_DATA=[];
 const REQUESTS_DATA=[];
 const REGIONAL_DATA=[];
 
+/* ── DATA FROM THE GOOGLE SHEET ──
+   The loader above has already read the sheet (if it could). When it did, the datasets are filled from it
+   in place and the build-time data stays as the fallback. */
+const NZ_TODAY=new Date().toLocaleDateString('en-CA',{timeZone:'Pacific/Auckland'});
+const WIN=CapacityMath.windows(NZ_TODAY);   // week = next 5 working days, month = one calendar month
+(function useSheetData(){
+  const S=window.__SHEET__; if(!S) return;
+  const swap=(arr,rows)=>{arr.length=0;rows.forEach(x=>arr.push(x));};
+  swap(MEMBERS,S.MEMBERS); swap(MISSING_TASKS,S.MISSING_TASKS); swap(OVERDUE_TASKS,S.OVERDUE_TASKS);
+  swap(PM_DATA,S.PM_DATA); swap(SCOPE_CREEP_DATA,S.SCOPE_CREEP_DATA); swap(OOO_DATA,S.OOO_DATA);
+  swap(PM_UPDATES_DATA,S.PM_UPDATES_DATA); swap(REQUESTS_DATA,S.REQUESTS_DATA);
+  Object.keys(REGIONAL_DATA).forEach(k=>{delete REGIONAL_DATA[k];}); Object.assign(REGIONAL_DATA,S.REGIONAL_DATA);
+})();
+const GEN_AT=(window.__SHEET__&&window.__SHEET__.GENERATED_AT)||GENERATED_AT;
+
 const TODAY = new Date('2026-05-19');
 
 function daysSince(dateStr){
@@ -929,13 +946,13 @@ let tab='today', openId=null, currentView='capacity';
 
 /* ── INIT: update dynamic elements ── */
 (function initDates(){
-  const now = new Date();
+  const now = new Date(NZ_TODAY+'T00:00:00');   // the New Zealand date, whatever time zone the viewer is in
   const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function fmt(d){ return d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear(); }
   function fmtShort(d){ return d.getDate()+' '+months[d.getMonth()]; }
   function addD(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
 
-  const in7=addD(now,7), in21=addD(now,21);
+  const in7=new Date(WIN.weekTo+'T00:00:00'), in21=new Date(WIN.monthTo+'T00:00:00');
   document.querySelector('title').textContent='XCF Capacity Report · '+fmt(now);
   document.getElementById('tab-today-date').textContent=fmt(now);
   document.getElementById('tab-week-date').textContent='→ '+fmtShort(in7);
@@ -947,7 +964,21 @@ let tab='today', openId=null, currentView='capacity';
 
   // top-meta: NZT generation timestamp injected at build time
   const genEl=document.getElementById('generated-at');
-  if(genEl) genEl.textContent=GENERATED_AT;
+  if(genEl) genEl.textContent=GEN_AT;
+  // Where the numbers came from, and a warning if the sheet is behind
+  const srcEl=document.getElementById('data-source');
+  if(srcEl){
+    const S=window.__SHEET__;
+    if(S){
+      const age=S.sync&&S.sync.syncedAt?(Date.now()-new Date(S.sync.syncedAt).getTime())/3600000:null;
+      let txt='Data: live from the Google Sheet', warn=false;
+      if(S.sync&&S.sync.skipped){txt+=' · not refreshed this run: '+S.sync.skipped;warn=true;}
+      if(age!==null&&age>36){txt+=' · sheet last synced '+Math.round(age/24*10)/10+' days ago';warn=true;}
+      srcEl.textContent=txt; if(warn){srcEl.style.color='#FDCC08';}
+    }else if(window.__SHEET_ERROR__){
+      srcEl.textContent='Data: built into this page (the sheet could not be read)'; srcEl.style.color='#FDCC08'; srcEl.title=window.__SHEET_ERROR__;
+    }
+  }
   const taskCountEl=document.getElementById('task-count');
   if(taskCountEl){
     const total=MEMBERS.reduce((s,m)=>s+(m.qualifying||0)+(m.missing||0)+(m.overdue||0),0);
@@ -958,13 +989,13 @@ let tab='today', openId=null, currentView='capacity';
   const footer=document.getElementById('footer-bar');
   if(footer){
     const total=MEMBERS.reduce((s,m)=>s+(m.qualifying||0)+(m.missing||0)+(m.overdue||0),0);
-    footer.innerHTML='XCF Capacity Report &nbsp;·&nbsp; Updated: '+GENERATED_AT+' &nbsp;·&nbsp; '+total+' tasks (all pages) &nbsp;·&nbsp; Formula: est time &divide; working days (start&rarr;due); no start date = all hours on due date &nbsp;·&nbsp; 6h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation';
+    footer.innerHTML='XCF Capacity Report &nbsp;·&nbsp; Updated: '+GEN_AT+' &nbsp;·&nbsp; '+total+' tasks (all pages) &nbsp;·&nbsp; Formula: est time &divide; working days (start&rarr;due); no start date = all hours on due date &nbsp;·&nbsp; 6h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation';
   }
 
   // capacity table header date label
   const dlabels={
     today:'Today — '+fmt(now),
-    week:'Next 7 days — to '+fmtShort(in7),
+    week:'Next 5 working days — to '+fmtShort(in7),
     month:'Next month — to '+fmtShort(in21)
   };
   window._dlabels=dlabels;
@@ -1519,7 +1550,7 @@ function showView(v, btn){
 /* ── HELPERS ── */
 function statusChip(h,t,cap){
   cap=cap||6;
-  const wCap=cap*5,mCap=cap*21;
+  const wCap=cap*WIN.weekWorkdays,mCap=cap*WIN.monthWorkdays;
   if(t==='today'){if(h>=cap)return{cls:'chip-over',label:'Over capacity'};if(h>=1)return{cls:'chip-under',label:'Under capacity'};return{cls:'chip-avail',label:'Available'};}
   if(t==='week'){if(h>=wCap)return{cls:'chip-over',label:'Over capacity'};if(h>=wCap*0.5)return{cls:'chip-under',label:'Under capacity'};return{cls:'chip-avail',label:'Available'};}
   if(h>=mCap)return{cls:'chip-over',label:'Over capacity'};if(h>=mCap*0.5)return{cls:'chip-under',label:'Under capacity'};return{cls:'chip-avail',label:'Available'};
@@ -1545,7 +1576,7 @@ function setTab(t,btn){
 
 function render(){
   const key=tab;
-  const dlabels=window._dlabels||{today:'Today',week:'Next 7 days',month:'Next month'};
+  const dlabels=window._dlabels||{today:'Today',week:'Next 5 working days',month:'Next month'};
   document.getElementById('tbl-date').innerHTML=dlabels[key]+' <span>Click row to expand tasks</span>';
   let over=0,at=0,under=0,avail=0,ooo=0;
   MEMBERS.forEach(m=>{
@@ -1568,7 +1599,7 @@ function render(){
   sorted.forEach(m=>{
     const h=m[key],b=BRAND[m.pod]||BRAND['Campaign'];
     const cap=memberCap(m.name);
-    const maxH=key==='today'?cap:key==='week'?cap*5:cap*21;
+    const maxH=key==='today'?cap:key==='week'?cap*WIN.weekWorkdays:cap*WIN.monthWorkdays;
     const pct=Math.min(100,(h/maxH)*100);
     const bc=barCol(h,key,b.bar,cap);
     const sc=m.ooo?{cls:'chip-ooo',label:'Out of Office'}:statusChip(h,key,cap);
@@ -1638,7 +1669,7 @@ function renderFindResource(){
           ${sorted.map(m=>{
             const h=m[range];
             const cap=memberCap(m.name);
-            const maxH=range==='today'?cap:range==='week'?cap*5:cap*21;
+            const maxH=range==='today'?cap:range==='week'?cap*WIN.weekWorkdays:cap*WIN.monthWorkdays;
             const used=Math.min(100,(h/maxH)*100);
             const free=100-used;
             const sc=m.ooo?{cls:'chip-ooo',label:'Out of Office'}:statusChip(h,range,cap);
@@ -1792,7 +1823,7 @@ function renderPMTeam(){
         </div>
         <div class="pm-hours">
           <span class="pm-h-badge"><span class="pm-h-label">Today</span><strong style="color:${capCol}">${pm.today}h</strong></span>
-          <span class="pm-h-badge"><span class="pm-h-label">7 days</span><strong>${pm.week}h</strong></span>
+          <span class="pm-h-badge"><span class="pm-h-label">Week</span><strong>${pm.week}h</strong></span>
           <span class="pm-h-badge"><span class="pm-h-label">Month</span><strong>${pm.month}h</strong></span>
           ${roadmapProj.length?`<span class="pm-h-badge"><span class="pm-h-label" style="color:#6C8EF5">Roadmap</span><strong style="color:#6C8EF5">${roadmapProj.length}</strong></span>`:''}
           ${microProj.length?`<span class="pm-h-badge"><span class="pm-h-label" style="color:#4CAF8A">Micro</span><strong style="color:#4CAF8A">${microProj.length}</strong></span>`:''}
@@ -1825,7 +1856,7 @@ function renderPMTeam(){
           const taskItems=p.pmTasks.map(t=>`
             <div class="pm-task-item">
               <div class="pm-task-name">${t.name}<div style="font-size:10px;color:var(--muted);margin-top:2px">due ${fmtDate(t.due)}</div></div>
-              <div class="pm-task-hrs">Today <strong>${t.th.toFixed(1)}h</strong><br>7 days <strong>${t.wh.toFixed(1)}h</strong><br>Month <strong>${t.mh.toFixed(1)}h</strong></div>
+              <div class="pm-task-hrs">Today <strong>${t.th.toFixed(1)}h</strong><br>Week <strong>${t.wh.toFixed(1)}h</strong><br>Month <strong>${t.mh.toFixed(1)}h</strong></div>
             </div>`).join('');
           rows+=`<tr class="pm-task-row-expand" data-pmsect="${sId}"><td colspan="4"><div id="${panelId}" class="pm-tasks-panel"><div class="pm-tasks-panel-label">PM Time Tracking</div>${taskItems}</div></td></tr>`;
         }
@@ -2367,6 +2398,7 @@ function filterOOOPod(pod){
 
 const RT_RAW_TASKS = [];
 window.RT_RAW_TASKS = RT_RAW_TASKS;
+if(window.__SHEET__){RT_RAW_TASKS.length=0;window.__SHEET__.RT_RAW_TASKS.forEach(x=>RT_RAW_TASKS.push(x));}
 function initRoadmap(){
 const RT_RAW_TASKS = window.RT_RAW_TASKS;
 

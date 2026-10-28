@@ -229,8 +229,10 @@ async function buildRequestsData() {
       }),
     ]);
   } catch (err) {
+    // Throw rather than return []: an empty list is indistinguishable from "no requests" and would be
+    // published as such. index.js records the failure and the sheet sync leaves these tabs alone.
     console.warn('[Requests] Fetch failed:', err.message);
-    return [];
+    throw err;
   }
 
   requests = requests.filter(t => t.created_at && t.created_at >= since)

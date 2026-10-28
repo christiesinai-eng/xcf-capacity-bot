@@ -6,6 +6,10 @@ For anyone picking up maintenance of the XCF capacity dashboard.
 - **Code:** https://github.com/christiesinai-eng/xcf-capacity-bot
 - **Owner:** Christie Sinai
 
+> **Data in a Google Sheet.** The page can read its numbers from a Google Sheet that the daily build keeps
+> current, so data changes need no deploy. Joiners, leavers, manual leave and hand-written summaries are edited
+> in the sheet (the `People`, `OOO_Manual` and `Notes` tabs). See `SHEET_SYNC.md`.
+
 ## Start here: where the app lives
 
 The working copy lives in the shared Drive folder:

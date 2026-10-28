@@ -113,75 +113,9 @@ function getCustomFieldText(task, fieldGid) {
   return field.enum_value?.name ?? field.display_value ?? null;
 }
 
-// Count Mon–Fri working days between two YYYY-MM-DD strings, inclusive
-function workingDaysBetween(startStr, endStr) {
-  const start = new Date(startStr + 'T00:00:00');
-  const end = new Date(endStr + 'T00:00:00');
-  if (start > end) return 1;
-  let count = 0;
-  const cur = new Date(start);
-  while (cur <= end) {
-    const dow = cur.getDay();
-    if (dow !== 0 && dow !== 6) count++;
-    cur.setDate(cur.getDate() + 1);
-  }
-  return Math.max(count, 1);
-}
-
-// Hours this task contributes on a single calendar date.
-// Uses even-spread: estimatedHours ÷ working days from effective start to due.
-// Tasks starting on or after the next working day contribute 0 for the target day.
-function hoursOnDate(estimatedHours, startDate, dueDate, targetStr) {
-  if (!estimatedHours || !dueDate) return 0;
-
-  const target = new Date(targetStr + 'T00:00:00');
-  const due = new Date(dueDate + 'T00:00:00');
-
-  if (target > due) return 0;
-  if (target.getDay() === 0 || target.getDay() === 6) return 0;
-
-  if (!startDate) {
-    // No start date: all hours fall on the due date
-    return due.toDateString() === target.toDateString() ? estimatedHours : 0;
-  }
-
-  const start = new Date(startDate + 'T00:00:00');
-
-  // Tasks starting on or after the next working day contribute 0 for today
-  if (start > target) {
-    const nextWorkingDay = new Date(target);
-    do {
-      nextWorkingDay.setDate(nextWorkingDay.getDate() + 1);
-    } while (nextWorkingDay.getDay() === 0 || nextWorkingDay.getDay() === 6);
-
-    if (start >= nextWorkingDay) return 0;
-  }
-
-  // Use original date strings (not toISOString) to avoid NZT→UTC timezone shift
-  const effectiveStartStr = start > target ? targetStr : startDate;
-  return estimatedHours / workingDaysBetween(effectiveStartStr, dueDate);
-}
-
-// Sum of daily hours for a task over a date range [fromStr, toStr] inclusive
-function sumHoursOverRange(estimatedHours, startDate, dueDate, fromStr, toStr) {
-  let total = 0;
-  const cur = new Date(fromStr + 'T00:00:00');
-  const end = new Date(toStr + 'T00:00:00');
-  while (cur <= end) {
-    const dow = cur.getDay();
-    if (dow !== 0 && dow !== 6) {
-      total += hoursOnDate(estimatedHours, startDate, dueDate, cur.toISOString().slice(0, 10));
-    }
-    cur.setDate(cur.getDate() + 1);
-  }
-  return total;
-}
-
-function addDays(dateStr, n) {
-  const d = new Date(dateStr + 'T00:00:00');
-  d.setDate(d.getDate() + n);
-  return d.toISOString().slice(0, 10);
-}
+// Date and capacity arithmetic lives in capacityMath.js so the dashboard page uses the very same code.
+// (It replaces local-Date arithmetic that shifted dates by a day on a machine ahead of UTC.)
+const { hoursOnDate, sumHoursOverRange, addDays, dayNumber, windows: capacityWindows } = require('./capacityMath');
 
 function round1(n) { return Math.round(n * 10) / 10; }
 function round2(n) { return Math.round(n * 100) / 100; }
@@ -256,8 +190,8 @@ async function buildMemberData() {
 
   // Use NZT (Auckland) date so OOO/due-date logic matches the team's timezone
   const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Pacific/Auckland' });
-  const in7 = addDays(today, 7);
-  const in21 = addDays(today, 21);
+  // Week = the next 5 working days from today; month = today up to the day before the same date next month.
+  const win = capacityWindows(today);
 
   const workspaceMembers = await getWorkspaceMembers();
   // Set of team member GIDs — used to filter out tasks created by people outside the team
@@ -428,9 +362,7 @@ async function buildMemberData() {
 
       if (isOverdue) {
         // Skip tasks overdue beyond the cutoff — stale subtasks from old/closed projects
-        const daysOverdue = Math.floor(
-          (new Date(today + 'T00:00:00') - new Date(dueDate + 'T00:00:00')) / 86400000
-        );
+        const daysOverdue = dayNumber(today) - dayNumber(dueDate);
         if (daysOverdue > maxOverdueDays) continue;
 
         overdueCount++;
@@ -457,7 +389,7 @@ async function buildMemberData() {
 
       // Qualifying, non-overdue task — compute per-task hour contributions
       const th = round2(hoursOnDate(estimatedHours, startDate, dueDate, today));
-      const wh = round2(sumHoursOverRange(estimatedHours, startDate, dueDate, today, in7));
+      const wh = round2(sumHoursOverRange(estimatedHours, startDate, dueDate, win.weekFrom, win.weekTo));
 
       memberTasks.push({
         name: t.name,
@@ -475,7 +407,7 @@ async function buildMemberData() {
     const hoursToday = isOoo ? 0 : round1(activeTasks.reduce((s, t) => s + t.th, 0));
     const hours7Days = isOoo ? 0 : round1(activeTasks.reduce((s, t) => s + t.wh, 0));
     const hours21Days = isOoo ? 0 : round1(
-      activeTasks.reduce((s, t) => s + sumHoursOverRange(t.est, t.start, t.due, today, in21), 0)
+      activeTasks.reduce((s, t) => s + sumHoursOverRange(t.est, t.start, t.due, win.monthFrom, win.monthTo), 0)
     );
 
     members.push({
@@ -527,8 +459,7 @@ async function buildPMData() {
   const estGid = process.env.ASANA_FIELD_GID_ESTIMATED_TIME;
 
   const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Pacific/Auckland' });
-  const in7   = addDays(today, 7);
-  const in21  = addDays(today, 21);
+  const win   = capacityWindows(today);
   const cutoffDate = addDays(today, -60);
 
   const teamMembers = await getWorkspaceMembers();
@@ -650,8 +581,8 @@ async function buildPMData() {
 
         const startDate = t.start_on || null;
         const th = round2(hoursOnDate(est, startDate, t.due_on, today));
-        const wh = round2(sumHoursOverRange(est, startDate, t.due_on, today, in7));
-        const mh = round2(sumHoursOverRange(est, startDate, t.due_on, today, in21));
+        const wh = round2(sumHoursOverRange(est, startDate, t.due_on, win.weekFrom, win.weekTo));
+        const mh = round2(sumHoursOverRange(est, startDate, t.due_on, win.monthFrom, win.monthTo));
 
         // Nest task under the project
         project.pmTasks.push({ name: t.name, start: startDate, due: t.due_on, est, th, wh, mh });
@@ -778,9 +709,6 @@ async function buildOOOData() {
   const podMap = loadPodMap();
 
   const workspaceMembers = await getWorkspaceMembers();
-  const memberByName = {};
-  workspaceMembers.forEach(m => { memberByName[m.name] = m; });
-
   const entries = [];
   const seen = new Set();
 
@@ -800,7 +728,7 @@ async function buildOOOData() {
     if (manualOooNames.has(member.name)) continue;
     const vd = member.vacation_dates;
     if (vd?.start_on && vd?.end_on) {
-      const pod = MANUAL_POD[member.name] || podMap[member.gid] || 'Unknown';
+      const pod = MANUAL_POD[member.name] || podMap[member.name] || 'Unknown';
       addEntry(member.name, pod, vd.start_on, vd.end_on, 'asana');
     }
   }
@@ -809,7 +737,7 @@ async function buildOOOData() {
   for (const entry of MANUAL_OOO) {
     const member = workspaceMembers.find(m => m.name.startsWith(entry.name));
     if (!member) continue;
-    const pod = MANUAL_POD[member.name] || podMap[member.gid] || 'Unknown';
+    const pod = MANUAL_POD[member.name] || podMap[member.name] || 'Unknown';
     addEntry(member.name, pod, entry.start, entry.end, 'manual');
   }
 
@@ -834,8 +762,7 @@ async function buildOOOData() {
       const name = task.assignee?.name;
       if (!name) continue;
       if (manualOooNames.has(name)) continue; // manual entry takes priority
-      const member = memberByName[name];
-      const pod = MANUAL_POD[name] || (member ? (podMap[member.gid] || 'Unknown') : 'Unknown');
+      const pod = MANUAL_POD[name] || podMap[name] || 'Unknown';
       addEntry(name, pod, task.start_on || task.due_on, task.due_on, 'project');
     }
   } catch (err) {

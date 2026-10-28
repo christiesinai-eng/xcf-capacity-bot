@@ -1,5 +1,7 @@
 .env
 reports/
+sheet-sync/
+sheet-sync-state.json
 node_modules/
 logs/
 .DS_Store

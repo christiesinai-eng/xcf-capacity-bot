@@ -9,7 +9,7 @@ dashboard for The Creative Foundry at Xero. It is live at
 https://xcf-capacity-report.dashboard.xero.dev (Xero VPN needed). This folder is the project.
 
 Before doing anything:
-1. Read CLAUDE.md, then AGENTS.md, then RUNBOOK.md. The xcf-control-tower skill covers
+1. Read CLAUDE.md, then AGENTS.md, then RUNBOOK.md, then SHEET_SYNC.md (the Google Sheet the page reads). The xcf-control-tower skill covers
    every tab, the Asana field ids and the mistakes already made. Use it.
 2. Check my credentials exist at ~/.xcf-lighthouse.env. Never create credentials inside
    this folder, because the whole team can read it. If the file is missing, walk me

@@ -16,7 +16,7 @@ Ten tabs, each answering a different planning question:
 
 | Tab | Question it answers |
 |---|---|
-| Capacity report | How booked is each person today / next 7 days / next month? |
+| Capacity report | How booked is each person today / over the next 5 working days / over the next month? |
 | POD summary | Which PODs are over or under capacity? |
 | Missing fields | Which tasks are missing an estimate or due date? |
 | PM Team | What is each PM carrying, split by Roadmap / Micro BAU / XCF Initiative? |
@@ -29,20 +29,30 @@ Ten tabs, each answering a different planning question:
 
 ## Architecture
 
-No framework, no build step, no bundler, no tests. Plain CommonJS Node.js writing a
-static HTML file.
+No framework, no build step, no bundler. Plain CommonJS Node.js writing a static HTML file.
+The date arithmetic and the Google Sheet sync have unit tests: `npm test`.
 
 ```
 src/index.js          Orchestrator. Runs 7 data builders in Promise.all, calls saveReport.
 src/asana.js          All Asana API access — 6 builders, ~1000 lines. The heart of the app.
 src/slackUpdates.js   Slack PM updates builder, with cache fallback.
 src/report.js         Injects data into template.html, writes the dated report file.
+src/capacityMath.js   Hours today / week / month. Shared by the build and the page; time-zone proof.
+src/markdown.js       Markdown -> HTML for summaries. Shared by the build and the page.
+src/sheetSchema.js    The Google Sheet tabs and columns: the contract with the page.
+src/sheetSync.js      Works out the smallest change that makes the sheet match the build (see SHEET_SYNC.md).
+src/sheetAdapter.js   In the page: turns the sheet's rows back into the datasets the page draws from.
+src/sheetLoader.js    In the page: reads /api/sheet before anything is drawn; falls back to the built-in data.
 template.html         The entire dashboard — all CSS and JS inline, self-rendering.
 slack-pm-updates-cache.json   Slack history + hand-written executive summaries.
 reports/              Generated output (gitignored).
 ```
 
 ### Data flow
+
+The page can also read its data from a Google Sheet that the build keeps up to date, so a data refresh needs no
+deploy. See `SHEET_SYNC.md`. The flow below is what the build does either way, and what the page falls back to.
+
 
 ```
 Asana REST API ─┐
@@ -193,5 +203,8 @@ supports headings, lists, tables, blockquotes, bold, italic, and links.
 **Repoint a tab at a different Asana portfolio or field** — change the relevant GID
 constant in `src/asana.js`. GIDs are visible in Asana URLs.
 
-**Change capacity maths** — `hoursOnDate()` and `sumHoursOverRange()` in `src/asana.js`
-spread a task's estimate evenly across its working days (weekends excluded).
+**Change capacity maths** — `src/capacityMath.js` (`hoursOnDate`, `sumHoursOverRange`, `windows`).
+It spreads a task's estimate evenly across its working days (Mon-Fri) and defines the windows: week = the next
+5 working days from today, month = today up to the day before the same date next month, with the month's
+working days as the capacity. It is used by the build and, unchanged, by the page, and does its sums on whole
+day numbers so the machine's time zone cannot change the answer. Run `npm test` after touching it.

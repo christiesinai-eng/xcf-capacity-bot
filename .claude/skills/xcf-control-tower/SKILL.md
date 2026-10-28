@@ -39,12 +39,29 @@ src/slackUpdates.js    — Slack PM updates fetcher + cache
 src/requestTiming.js   — Request Cycle Time builder + timing/summary cache
 src/regionalRequests.js— Regional Requests builder
 src/report.js          — injects data arrays into template.html, writes reports/xcf-report-YYYY-MM-DD.html
+src/capacityMath.js    — hours today / week / month (shared with the page; time-zone proof)
+src/sheetSchema.js     — the Google Sheet's tabs and columns (what the build writes)
+src/sheetSync.js       — plans the smallest change that makes the sheet match the build; verifies it
+src/sheetAdapter.js    — in the page: sheet rows -> the datasets the page draws from
+src/sheetLoader.js     — in the page: reads /api/sheet first, falls back to the built-in data
+SHEET_SYNC.md          — how the Google Sheet layer works: read it before touching the sheet or the refresh
 template.html          — self-rendering single-file dashboard (all JS/CSS inline)
 slack-pm-updates-cache.json — persists Slack data + manually-added executive summaries
 request-timing-cache.json   — project start dates + hand-written summaries and causes
                               COMMIT THIS. The summaries are not reproducible.
 reports/               — generated daily HTML files
 ```
+
+**The Google Sheet layer.** The page reads its data from the sheet "XCF Lighthouse - Dashboard Data" through
+`/api/sheet` and falls back to the data built into it. The build also saves its datasets to
+`reports/xcf-data-DATE.json`, and `node src/sheetSync.js plan` turns that into a small set of
+`update_spreadsheet` requests (applied with the Sheets connector, then proven with the `Checks` tab). People,
+leave typed by hand and written summaries live in the `People`, `OOO_Manual` and `Notes` tabs and are never
+overwritten. Everything about it, including the daily procedure, is in `SHEET_SYNC.md`.
+
+**Capacity windows (agreed 29 Oct 2026):** today; week = the next 5 working days from today; month = today up
+to the day before the same date next month, compared with that span's working days. All in
+`src/capacityMath.js`, which the page uses as well, and `npm test` covers it.
 
 **Data flow:** `src/index.js` calls 7 async builders in parallel → `src/report.js` injects
 them into `template.html` as named JS arrays (`MEMBERS`, `PM_DATA`, `OOO_DATA`, etc.) →
@@ -514,3 +531,13 @@ Things that cost real time in this codebase:
 - **Clickable fix lists get fixed.** 79 bad cost centres went to zero in a day once they
   were a list with links. Prefer a worklist over a statistic whenever the gap is
   actionable.
+- **Dates in local time are a trap.** The capacity sums used `new Date()` and `toISOString()` on local
+  midnights. On a machine ahead of UTC that moves every date back a day, so Mondays counted as zero and the week
+  total was about 30% low, and it gave different answers on different machines. Nothing looked wrong until the
+  same code was run under another `TZ`. Do date sums on whole day numbers (`src/capacityMath.js`) and test them
+  under several time zones.
+- **A fetch that fails must not become an empty dataset.** A network error in the request builder returned `[]`
+  and the report would have shipped an empty Request Cycle Time tab. Throw, record it, and keep the last good
+  data.
+- **Sheets parses what you write.** `update_values` turns an ISO date into a date and a 16-digit id into a
+  rounded number. Write typed cells through `update_spreadsheet`.
