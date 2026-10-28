@@ -2,7 +2,7 @@
  * Run once to list all Asana projects in your workspace.
  * Usage: node scripts/list-projects.js
  */
-require('dotenv').config();
+require('../src/loadEnv');
 const axios = require('axios');
 
 async function listProjects() {

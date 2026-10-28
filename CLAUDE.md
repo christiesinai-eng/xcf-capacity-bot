@@ -51,6 +51,24 @@ inside inline `<script>` blocks. Two things to respect:
   one occurrence produced a bug that looked fixed locally. Grep for every occurrence
   before editing, and use `replace_all` when the change should be uniform.
 
+## Working in the shared folder
+
+This project's working copy lives in the shared Drive folder
+`Shared drives/XCF @ Xero/Platforms Licences/Claude/xcf-capacity-bot`
+(the absolute prefix differs per person — `/Users/<you>/Library/CloudStorage/GoogleDrive-<your email>/`).
+The path contains spaces and an `@`, so quote it in every shell command.
+
+- **Credentials stay out of the folder.** They live in `~/.xcf-lighthouse.env`. If a build
+  says `No ASANA_TOKEN found`, help the user create that file from `.env.example`.
+- **Who is in which POD is `config/pod-map.json`**, a shared file. A new joiner needs an
+  entry or they show as "Unknown".
+- **Warn before editing code.** Other people use this folder; two machines saving the same
+  file creates conflict copies. Ask the user whether anyone else is mid-change.
+- **Commit and push after each change.** Do git operations from one machine at a time.
+- **Never upload files into the folder via the Drive API or website** — it converts `.html`
+  and `.md` to Google Docs stubs. Writing through the local folder is fine.
+- **Deploying needs maintainer rights** on the app and an Okta approval from the user.
+
 **Don't commit generated output or secrets.** `reports/`, `.env`, `node_modules/`, and
 `logs/` are gitignored and should stay that way. `slack-pm-updates-cache.json` is
 *not* ignored and *should* be committed — it carries the hand-written executive

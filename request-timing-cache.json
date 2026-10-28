@@ -1981,33 +1981,33 @@
       "firstStatusAt": null
     },
     "1219831259426128": {
-      "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstOnTrackAt": "2026-10-26T23:28:39.689Z",
+      "firstInProgressAt": "2026-10-26T23:33:08.276Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
-      "firstStatusAt": null
+      "startedAt": "2026-10-26T23:28:39.689Z",
+      "startedBy": "On Track",
+      "isRealStart": true,
+      "firstStatusAt": "2026-10-26T23:28:39.689Z"
     },
     "1219822369739228": {
-      "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstOnTrackAt": "2026-10-26T23:40:45.017Z",
+      "firstInProgressAt": "2026-10-26T23:42:07.202Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
-      "firstStatusAt": null
+      "startedAt": "2026-10-26T23:40:45.017Z",
+      "startedBy": "On Track",
+      "isRealStart": true,
+      "firstStatusAt": "2026-10-26T23:40:45.017Z"
     },
     "1219829537174744": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-27T00:00:56.361Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-27T00:00:56.361Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219915557634553": {
@@ -2777,7 +2777,7 @@
     },
     "1219093873968513": {
       "code": "XCF-17216",
-      "name": "XCF-17216 | DETAILS TO COME – UP1629 AI Automate for Bank Rec Ignite Users",
+      "name": "XCF-17216 | DETAILS TO COME – AI Automate Imagery",
       "comments": [
         {
           "author": "Unknown",

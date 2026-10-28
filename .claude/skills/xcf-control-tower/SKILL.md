@@ -17,7 +17,11 @@ at Xero. It pulls live data from Asana and Slack, injects it into a self-renderi
 and deploys to an internal Xero dashboard URL via the Xero Deploy MCP tool.
 
 **Live URL:** https://xcf-capacity-report.dashboard.xero.dev (Xero VPN required)
-**Repo:** `/Users/christie.sinai/Documents/xcf-capacity-bot/` (private, internal)
+**Working copy:** the shared Drive folder `Shared drives/XCF @ Xero/Platforms Licences/Claude/xcf-capacity-bot`
+(absolute prefix differs per person: `/Users/<you>/Library/CloudStorage/GoogleDrive-<email>/`;
+quote the path — it has spaces and an `@`). **History/backup:** GitHub
+`christiesinai-eng/xcf-capacity-bot` (private, internal). A kick-off prompt for new
+maintainers is in `PICKUP_PROMPT.md`.
 **Deploy command:**
 ```
 node src/index.js --once
@@ -46,12 +50,12 @@ reports/               — generated daily HTML files
 them into `template.html` as named JS arrays (`MEMBERS`, `PM_DATA`, `OOO_DATA`, etc.) →
 writes `reports/xcf-report-YYYY-MM-DD.html` → deploy that file.
 
-**Key env vars (in `.env`):**
+**Key env vars (in `~/.xcf-lighthouse.env` — private, NEVER in the shared folder):**
 - `ASANA_WORKSPACE_GID=41261904390129`
 - `ASANA_TEAM_GID=1211868948534506` — "The Creative Foundry" (34 members)
 - `ASANA_FIELD_GID_ESTIMATED_TIME=1203387567618671` — stored in **minutes**, divide by 60
 - `SLACK_TOKEN=xoxb-...` — needs `groups:history` + `users:read` scopes
-- `ASANA_POD_MAP` — JSON string mapping member GID → POD name
+- POD membership is **not** an env var any more: it is `config/pod-map.json` in the shared folder (name → POD). A new joiner needs an entry there.
 
 ---
 

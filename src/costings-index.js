@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('./loadEnv');
 const { buildCostingsData } = require('./costings-data');
 const { saveCostingsReport } = require('./costings-report');
 

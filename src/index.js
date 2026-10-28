@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('./loadEnv');
 const cron = require('node-cron');
 const { buildMemberData, buildPMData, buildScopeCreepData, buildOOOData, buildRoadmapData, buildBAUData } = require('./asana');
 const { saveReport } = require('./report');

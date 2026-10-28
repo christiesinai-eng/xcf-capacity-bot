@@ -12,7 +12,7 @@ New to the project and just need to run and deploy it? Read `RUNBOOK.md` instead
 
 ## What it does
 
-Eight tabs, each answering a different planning question:
+Ten tabs, each answering a different planning question:
 
 | Tab | Question it answers |
 |---|---|
@@ -24,6 +24,8 @@ Eight tabs, each answering a different planning question:
 | Project Forecaster | Gantt view of Roadmap projects — production, in-market, brief due |
 | OOO | Who is away, and when? |
 | PM Project Updates | Weekly PM updates from Slack, with executive summaries |
+| Request Cycle Time | How long requests wait before work starts, and why |
+| Regional Requests | Requests by region, business group and cost centre |
 
 ## Architecture
 
@@ -78,8 +80,11 @@ is a deliberate manual step.
 
 ### Environment
 
-Secrets live in `.env` (gitignored) locally, and in GitHub Actions secrets for CI.
-See `.env.example` for the shape.
+Secrets live in **`~/.xcf-lighthouse.env`** — in each person's own home folder, never in
+the shared Drive folder — and in GitHub Actions secrets for CI. `src/loadEnv.js` reads
+`$XCF_ENV_FILE`, then `~/.xcf-lighthouse.env`, then a legacy `.env` beside the code. See
+`.env.example` for the shape. Only three values are actually secret (`ASANA_TOKEN`,
+`SLACK_TOKEN`, `SLACK_WEBHOOK_URL`); the rest are ids.
 
 | Variable | Notes |
 |---|---|
@@ -87,8 +92,15 @@ See `.env.example` for the shape.
 | `ASANA_WORKSPACE_GID` | Xero workspace |
 | `ASANA_TEAM_GID` | The Creative Foundry team |
 | `ASANA_FIELD_GID_ESTIMATED_TIME` | **Stores minutes, not hours** |
-| `ASANA_POD_MAP` | JSON string, member name → POD name |
 | `SLACK_TOKEN` | Bot token; needs `groups:history` + `users:read` |
+
+### Who is in which POD
+
+`config/pod-map.json` — member display name → POD name. It is a plain lookup, not a secret,
+so it lives in the shared folder where every maintainer and the scheduled build see the
+same answer. (It used to be an `ASANA_POD_MAP` variable in a private `.env`, so a person
+added by one maintainer showed as "Unknown" on everyone else's build. The env variable is
+now only a fallback if the file is missing.) A new joiner needs an entry here.
 
 ## Configuration lives in code, not config files
 
@@ -142,10 +154,14 @@ flags external links, so this is load-bearing.
 **Week labels are offset.** Weeks are keyed by Monday but *labelled* by the Friday of
 that week. A cache entry with `weekStart: "2026-09-07"` displays as "11 Sep".
 
-**Don't keep a working copy in Google Drive.** Drive rewrites `.html` and `.md` files
-into Google Docs pointer stubs. An attempt to store the app in Drive on 15 Sep 2026
-reduced `template.html` from 130 KB to a 178-byte link and dropped `src/` and `.git`
-entirely. GitHub is the only source of truth.
+**Add files to the shared Drive folder by copying them in on your Mac, never by uploading
+through the Drive website or API.** Those paths convert `.html` and `.md` into Google Docs
+pointer stubs: the 15 Sep copy had `template.html` reduced from 130 KB to a 178-byte link and
+`src/` and `.git` missing. Copying through the folder is byte-for-byte (tested 28 Oct 2026).
+This file previously blamed Drive itself; that was wrong, and untested.
+
+**Never put credentials in the shared folder.** It is readable by the whole team. Tokens go
+in `~/.xcf-lighthouse.env`.
 
 ## Known dead code
 

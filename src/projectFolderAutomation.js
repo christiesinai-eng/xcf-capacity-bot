@@ -1,5 +1,5 @@
 const axios = require('axios');
-require('dotenv').config({ path: `${__dirname}/../.env` });
+require('./loadEnv');
 
 const BASE_URL = 'https://app.asana.com/api/1.0';
 const PM_PORTFOLIO_GID = '1217210785824637'; // XCF | Projects

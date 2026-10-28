@@ -6,15 +6,30 @@ For anyone picking up maintenance of the XCF capacity dashboard.
 - **Code:** https://github.com/christiesinai-eng/xcf-capacity-bot
 - **Owner:** Christie Sinai
 
-## Start here: the code lives on GitHub
+## Start here: where the app lives
 
-Clone it from GitHub. Do not keep a working copy of this app in Google Drive.
+The working copy lives in the shared Drive folder:
 
-Drive converts `.html` and `.md` files into Google Docs pointer stubs. An attempt to
-store the app in Drive on 15 Sep left `template.html` — the 130 KB file containing the
-entire dashboard UI — as a 178-byte link, and dropped the `src/` folder and git history
-entirely. The app in that folder cannot build. Drive is fine for documents like this
-one; it is not a filesystem.
+`Shared drives/XCF @ Xero/Platforms Licences/Claude/xcf-capacity-bot`
+
+Open that folder in Claude Code (or Cowork) and the project instructions and the
+`xcf-control-tower` skill load automatically. GitHub
+(`christiesinai-eng/xcf-capacity-bot`) holds the version history and is the backup.
+There is also a ready-made kick-off prompt in `PICKUP_PROMPT.md` in that folder.
+
+Four rules make a shared folder safe to work in:
+
+1. **Credentials never go in the folder.** Each person keeps their own
+   `~/.xcf-lighthouse.env` in their home directory. The folder is readable by the whole
+   team.
+2. **One person edits at a time.** Say so in the team channel before changing code. Two
+   machines saving the same file creates `file (1).js` conflict copies.
+3. **Commit and push to GitHub after every change**, so there is always a version you can
+   roll back to.
+4. **Add files by copying them in through the folder on your Mac.** Uploading through the
+   Drive website converts `.html` and `.md` into Google Docs pointer stubs. A copy made
+   that way on 15 Sep left `template.html` as a 178-byte link. Copying through the
+   folder keeps files byte-for-byte (tested 28 Oct).
 
 ## What the app does
 
@@ -23,40 +38,36 @@ person, and writes a single self-contained HTML file. That file is then deployed
 Xero dashboard platform. There is no database, no server, and no build step — just a
 Node script that produces an HTML file.
 
-Eight tabs: Capacity report, POD summary, Missing fields, PM Team, Scope Creep & FAA,
-Project Forecaster, OOO, and PM Project Updates.
+Ten tabs: Capacity report, POD summary, Missing fields, PM Team, Scope Creep & FAA,
+Project Forecaster, OOO, PM Project Updates, Request Cycle Time, and Regional Requests.
 
 ## One-time setup
 
 **1. Install Node.js 20 or newer.** Check with `node --version`.
 
-**2. Clone the repo.**
+**2. Open the shared folder** (path above) in Claude Code. There is nothing to clone, and
+`node_modules/` is already in the folder, so there is no `npm install` either.
+
+**3. Create your private credentials file.** Copy `.env.example` to `~/.xcf-lighthouse.env`
+(your home folder, **not** the shared folder) and fill in the three secrets:
 
 ```bash
-git clone https://github.com/christiesinai-eng/xcf-capacity-bot
-cd xcf-capacity-bot
+cp .env.example ~/.xcf-lighthouse.env
+chmod 600 ~/.xcf-lighthouse.env
 ```
-
-**3. Install dependencies.**
-
-```bash
-npm install
-```
-
-**4. Create your `.env` file.** Copy `.env.example` to `.env` and fill in the values.
-Ask Christie for these — they are credentials and are deliberately not in the repo.
 
 | Variable | What it is |
 |---|---|
-| `ASANA_TOKEN` | Asana personal access token — create your own, don't share one |
-| `ASANA_WORKSPACE_GID` | Xero workspace ID |
-| `ASANA_TEAM_GID` | The Creative Foundry team ID |
-| `ASANA_FIELD_GID_ESTIMATED_TIME` | Estimated time custom field ID |
-| `ASANA_POD_MAP` | JSON mapping of person to POD |
-| `SLACK_TOKEN` | Slack bot token, needs `groups:history` and `users:read` |
+| `ASANA_TOKEN` | **Your own** Asana personal access token (Settings → Apps → Developer console). Using someone else's puts their name on every API call. |
+| `SLACK_TOKEN` | The shared Slack bot token (needs `groups:history` and `users:read`). Ask Christie for it privately. |
+| `SLACK_WEBHOOK_URL` | Optional, legacy. |
 
-Create your own Asana token at asana.com under Settings → Apps → Developer console.
-Using someone else's means their name is on every API call.
+The other values in `.env.example` are ids, not secrets, and are already filled in.
+**Who is in which POD is not set here any more** — see `config/pod-map.json` below.
+
+**4. Get added as a maintainer** of the dashboard app, so you can deploy. Ask Christie —
+she adds you with `set_maintainers`. You also need Okta access to the `creative-foundry`
+team.
 
 **5. Verify it works.**
 
@@ -99,6 +110,19 @@ file ships stale numbers with no warning.
 
 Nearly all configuration is constants near the top of `src/asana.js`. Edit, rebuild,
 redeploy.
+
+**A new person joins.** Add them to `config/pod-map.json` using their exact Asana display
+name and one of the seven POD names (`Performance`, `Design`, `Design Studio`, `Campaign`,
+`AI & Media`, `Campaign Ops`, `GM Creative`):
+
+```json
+"Max Bengtsson": "Campaign",
+```
+
+Rebuild and check nobody shows as POD "Unknown". They then appear on the Capacity, POD
+summary and OOO tabs automatically. This file is shared, so everyone's builds — including
+the 8am scheduled one — agree. Only add them to `PM_ALLOWED_MEMBERS` in `src/asana.js` if
+they are a PM.
 
 **Someone leaves the business.** Add their exact Asana display name to
 `EXCLUDED_MEMBERS` in `src/asana.js`. That removes them from every tab. Also remove

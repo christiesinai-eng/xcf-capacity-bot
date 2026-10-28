@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { loadPodMap } = require('./podMap');
 
 const BASE_URL = 'https://app.asana.com/api/1.0';
 
@@ -249,7 +250,7 @@ const EXCLUDED_PROJECTS = [
 
 async function buildMemberData() {
   const estGid = process.env.ASANA_FIELD_GID_ESTIMATED_TIME;
-  const podMap = process.env.ASANA_POD_MAP ? JSON.parse(process.env.ASANA_POD_MAP) : {};
+  const podMap = loadPodMap();
   // Hide overdue tasks older than this many days (stale subtasks from closed projects)
   const maxOverdueDays = parseInt(process.env.ASANA_OVERDUE_CUTOFF_DAYS ?? '30', 10);
 
@@ -771,7 +772,7 @@ const LEAVE_PROJECT_GID = '1212867822525791';
 
 async function buildOOOData() {
   const client = asanaClient();
-  const podMap = process.env.ASANA_POD_MAP ? JSON.parse(process.env.ASANA_POD_MAP) : {};
+  const podMap = loadPodMap();
 
   const workspaceMembers = await getWorkspaceMembers();
   const memberByName = {};
