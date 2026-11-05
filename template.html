@@ -369,6 +369,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .oo-today-line{position:absolute;top:0;bottom:0;width:2px;background:var(--amber);z-index:10;pointer-events:none}
 .oo-today-lbl{position:absolute;top:4px;transform:translateX(-50%);font-size:9px;font-weight:700;color:var(--amber);white-space:nowrap}
 .oo-grid-line{position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,0.04);pointer-events:none}
+.oo-scale{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.oo-scale button{background:var(--surface2);color:var(--muted);border:0;padding:6px 12px;font-size:13px;cursor:pointer}
+.oo-scale button.active{background:var(--amber);color:#000;font-weight:600}
+.oo-bar.narrow{overflow:visible;padding:0}
+.oo-bar-out{position:absolute;left:calc(100% + 6px);top:50%;transform:translateY(-50%);color:var(--txt);font-size:10px;font-weight:600;white-space:nowrap;pointer-events:none}
 .oo-empty{padding:60px;text-align:center;color:var(--muted);font-size:14px}
 
 /* ── PM PROJECT UPDATES ── */
@@ -738,6 +743,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="oo-hdr-sub">Out of office periods by POD — Asana vacation dates &amp; leave tracker</div>
     </div>
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-left:auto">
+      <div class="oo-scale" id="oo-scale">
+        <button type="button" class="active" data-scale="weeks" onclick="setOOOScale('weeks')">Weeks</button>
+        <button type="button" data-scale="months" onclick="setOOOScale('months')">Months</button>
+      </div>
       <select id="oo-pod-filter" onchange="filterOOOPod(this.value)" style="background:var(--surface2);color:var(--txt);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:13px;cursor:pointer">
         <option value="">All PODs</option>
       </select>
@@ -2231,28 +2240,52 @@ function renderPMWeek(idx){
   }).join('');
 }
 
+function setOOOScale(mode){
+  window._ooScale=mode;
+  document.querySelectorAll('#oo-scale button').forEach(b=>b.classList.toggle('active',b.dataset.scale===mode));
+  initOOO();
+}
+
 function initOOO(){
+  const MODE=window._ooScale||'weeks';
   const OO_MONTH_PX=110;
+  const OO_DAY_PX=14; // weeks view: 98px a week, so even a single day is a visible block
+  const DAY_MS=86400000;
   const MONTH_NAMES=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const today=new Date();
+  const today0=new Date(today.getFullYear(),today.getMonth(),today.getDate());
 
-  // Range: 2 months back → Dec 2027
-  const rangeStart=new Date(today.getFullYear(),today.getMonth()-2,1);
-  const rangeEnd=new Date(2027,11,31);
-
-  // Build months array
-  const months=[];
-  let mc=new Date(rangeStart);
-  while(mc<=rangeEnd){months.push(new Date(mc));mc=new Date(mc.getFullYear(),mc.getMonth()+1,1);}
-  const totalWidth=months.length*OO_MONTH_PX;
-
-  // Pixel position from range start (month-aligned for perfect header sync)
-  function ooPx(d){
-    const clamped=new Date(Math.max(rangeStart,Math.min(rangeEnd,d)));
-    const monthIdx=(clamped.getFullYear()-rangeStart.getFullYear())*12+(clamped.getMonth()-rangeStart.getMonth());
-    const dayFrac=(clamped.getDate()-1)/new Date(clamped.getFullYear(),clamped.getMonth()+1,0).getDate();
-    return Math.round((monthIdx+dayFrac)*OO_MONTH_PX);
+  let rangeStart,rangeEnd,cellPx,ooPx;
+  const cells=[];
+  if(MODE==='weeks'){
+    // Range: the Monday 4 weeks back → 60 weekly columns
+    rangeStart=new Date(today0.getFullYear(),today0.getMonth(),today0.getDate()-((today0.getDay()+6)%7)-28);
+    const nWeeks=60;
+    rangeEnd=new Date(rangeStart.getFullYear(),rangeStart.getMonth(),rangeStart.getDate()+nWeeks*7-1);
+    for(let i=0;i<nWeeks;i++)cells.push(new Date(rangeStart.getFullYear(),rangeStart.getMonth(),rangeStart.getDate()+i*7));
+    cellPx=7*OO_DAY_PX;
+    // Pixel position from range start in whole days (the day after rangeEnd is the right-hand edge)
+    ooPx=function(d){
+      const lo=rangeStart.getTime(),hi=rangeEnd.getTime()+DAY_MS;
+      const clamped=Math.max(lo,Math.min(hi,d.getTime()));
+      return Math.round(Math.round((clamped-lo)/DAY_MS)*OO_DAY_PX);
+    };
+  }else{
+    // Range: 2 months back → Dec 2027
+    rangeStart=new Date(today.getFullYear(),today.getMonth()-2,1);
+    rangeEnd=new Date(2027,11,31);
+    let mc=new Date(rangeStart);
+    while(mc<=rangeEnd){cells.push(new Date(mc));mc=new Date(mc.getFullYear(),mc.getMonth()+1,1);}
+    cellPx=OO_MONTH_PX;
+    // Pixel position from range start (month-aligned for perfect header sync)
+    ooPx=function(d){
+      const clamped=new Date(Math.max(rangeStart,Math.min(rangeEnd,d)));
+      const monthIdx=(clamped.getFullYear()-rangeStart.getFullYear())*12+(clamped.getMonth()-rangeStart.getMonth());
+      const dayFrac=(clamped.getDate()-1)/new Date(clamped.getFullYear(),clamped.getMonth()+1,0).getDate();
+      return Math.round((monthIdx+dayFrac)*OO_MONTH_PX);
+    };
   }
+  const totalWidth=cells.length*cellPx;
 
   // Build combined member map: start from all MEMBERS (capacity tab), add OOO_DATA people not in there
   const memberMap={};
@@ -2273,14 +2306,21 @@ function initOOO(){
   });
   Object.values(podGroups).forEach(arr=>arr.sort((a,b)=>a.name.localeCompare(b.name)));
 
-  // Month header
-  const monthCells=months.map(m=>{
+  // Column header: one cell per week (Monday date) or per month
+  const monthCells=cells.map((m,i)=>{
+    if(MODE==='weeks'){
+      const wkEnd=new Date(m.getFullYear(),m.getMonth(),m.getDate()+6);
+      const isNow=today0>=m&&today0<=wkEnd;
+      const hasFirst=wkEnd.getDate()<=7; // this week contains the 1st of a month
+      const showYear=i===0||(hasFirst&&wkEnd.getMonth()===0);
+      return `<div class="oo-month-cell${isNow?' now':''}" style="width:${cellPx}px;min-width:${cellPx}px${hasFirst?';border-left:2px solid rgba(255,255,255,0.15)':''}">${m.getDate()} ${MONTH_NAMES[m.getMonth()]}${showYear?' \''+String(m.getFullYear()).slice(2):''}${isNow?' ●':''}</div>`;
+    }
     const isNow=m.getFullYear()===today.getFullYear()&&m.getMonth()===today.getMonth();
     const isNewYear=m.getMonth()===0;
-    return `<div class="oo-month-cell${isNow?' now':''}" style="width:${OO_MONTH_PX}px;min-width:${OO_MONTH_PX}px${isNewYear?';border-left:2px solid rgba(255,255,255,0.15)':''}">${MONTH_NAMES[m.getMonth()]} '${m.getFullYear().toString().slice(2)}${isNow?' ●':''}</div>`;
+    return `<div class="oo-month-cell${isNow?' now':''}" style="width:${cellPx}px;min-width:${cellPx}px${isNewYear?';border-left:2px solid rgba(255,255,255,0.15)':''}">${MONTH_NAMES[m.getMonth()]} '${m.getFullYear().toString().slice(2)}${isNow?' ●':''}</div>`;
   }).join('');
 
-  const todayPx=ooPx(today);
+  const todayPx=MODE==='weeks'?ooPx(today0)+Math.round(OO_DAY_PX/2):ooPx(today);
 
   // POD order
   const podOrder=['Performance','Brand','Creative','Campaign Ops','GM Creative'];
@@ -2288,8 +2328,10 @@ function initOOO(){
 
   // Populate POD filter dropdown
   const sel=document.getElementById('oo-pod-filter');
+  const keepPod=sel?sel.value:'';
   if(sel){
     sel.innerHTML='<option value="">All PODs</option>'+podsSorted.map(p=>`<option value="${p}">${p}</option>`).join('');
+    sel.value=keepPod;
   }
 
   let rowsHtml='';
@@ -2310,17 +2352,28 @@ function initOOO(){
         const e=new Date(p.end+'T00:00:00');
         if(e<rangeStart||s>rangeEnd)return'';
         const x=ooPx(s);
-        const w=Math.max(10,ooPx(e)-x);
+        // Weeks view counts the last day too, so a one-day absence is a full day wide
+        const w=MODE==='weeks'
+          ?Math.max(OO_DAY_PX,ooPx(new Date(e.getFullYear(),e.getMonth(),e.getDate()+1))-x)
+          :Math.max(10,ooPx(e)-x);
         const sLabel=MONTH_NAMES[s.getMonth()]+' '+s.getDate()+', '+s.getFullYear();
         const eLabel=MONTH_NAMES[e.getMonth()]+' '+e.getDate()+', '+e.getFullYear();
         const label=sLabel+' – '+eLabel;
-        return `<div class="oo-bar" style="left:${x}px;width:${w}px;background:${b.bar||b.fg};color:#000" data-tip="${label}">${label}</div>`;
+        if(MODE!=='weeks')return `<div class="oo-bar" style="left:${x}px;width:${w}px;background:${b.bar||b.fg};color:#000" data-tip="${label}">${label}</div>`;
+        // Weeks view: short label inside the bar, or beside it when the bar is too narrow to hold it
+        const yr=d=>' \''+String(d.getFullYear()).slice(2);
+        const crossYear=s.getFullYear()!==e.getFullYear(); // add years only when the dates would be ambiguous
+        const short=p.start===p.end
+          ?s.getDate()+' '+MONTH_NAMES[s.getMonth()]
+          :s.getDate()+' '+MONTH_NAMES[s.getMonth()]+(crossYear?yr(s):'')+' – '+e.getDate()+' '+MONTH_NAMES[e.getMonth()]+(crossYear?yr(e):'');
+        const narrow=w<short.length*6+16;
+        return `<div class="oo-bar${narrow?' narrow':''}" style="left:${x}px;width:${w}px;background:${b.bar||b.fg};color:#000" data-tip="${label}">${narrow?`<span class="oo-bar-out">${short}</span>`:short}</div>`;
       }).join('');
       rowsHtml+=`<div class="oo-row">
         <div class="oo-member-cell"><div class="oo-member-name">${member.name}</div></div>
         <div class="oo-bars" style="width:${totalWidth}px">
           <div class="oo-today-line" style="left:${todayPx}px"><div class="oo-today-lbl">Today</div></div>
-          ${months.map((_,i)=>`<div class="oo-grid-line" style="left:${i*OO_MONTH_PX}px"></div>`).join('')}
+          ${cells.map((_,i)=>`<div class="oo-grid-line" style="left:${i*cellPx}px"></div>`).join('')}
           ${barsHtml}
         </div>
       </div>`;
@@ -2337,7 +2390,10 @@ function initOOO(){
       ${rowsHtml}
     </div>`;
 
-  // Tooltip on hover
+  if(keepPod)filterOOOPod(keepPod);
+
+  // Tooltip on hover (set up once: switching between weeks and months runs initOOO again)
+  if(!document.getElementById('oo-tip')){
   const tip=document.createElement('div');
   tip.id='oo-tip';
   tip.style.cssText='position:fixed;background:#1a1a2e;color:#fff;border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:6px 10px;font-size:12px;pointer-events:none;z-index:9999;display:none;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.4)';
@@ -2352,6 +2408,7 @@ function initOOO(){
   document.getElementById('oo-body').addEventListener('mouseout',e=>{
     if(!e.target.closest('[data-tip]'))tip.style.display='none';
   });
+  }
 
   // Scroll to today
   requestAnimationFrame(()=>{
