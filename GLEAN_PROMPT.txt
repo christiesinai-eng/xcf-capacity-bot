@@ -111,6 +111,7 @@ Glean_Missing_Tasks: task | task_gid | project | assignee | created_by | pod | m
 Glean_Overdue_Tasks: task | task_gid | project | assignee | pod | due_date
 assignee is the member's name. pod comes from People.
 created_by (Glean_Missing_Tasks) is the creator's name, or the single character "—" when the task has no creator.
+A task whose name is empty in Asana keeps its row with an empty task cell: never skip it and never invent a name.
 Sort Glean_Tasks by assignee, then due_date, then task. Sort Glean_Missing_Tasks by assignee, then task. Sort
 Glean_Overdue_Tasks by due_date, then assignee.
 
@@ -123,8 +124,12 @@ For each of Glean_Overdue_Tasks, Glean_Missing_Tasks and Glean_Tasks, in that or
     dates and ids stay text). If the action cannot use RAW, stop and report that.
  b. Then clear everything below the last row you wrote: A{rows+2} to the last column and row 1000. Never clear
     first and write second: if the run stops half way the tab must still hold complete rows.
- c. Read the tab back: row 2, the last row, and column A. Check the first and last rows are what you wrote (dates
-    and ids still text), and that the number of non-empty cells in column A is rows + 1 (the header).
+ c. Read the tab back: row 2, the last row, and the id column. Check the first and last rows are what you wrote (dates
+    and ids still text), and that the number of non-empty cells in the id column is rows + 1 (the header). The id
+    column is column B (task_gid) for Glean_Missing_Tasks and Glean_Overdue_Tasks, and column A for the other tabs.
+    Do not count column A on those two tabs: a task whose name is EMPTY in Asana is a real task (this has happened:
+    a task created with no title), so its task cell is correctly empty and column A will hold one cell fewer than
+    rows + 1. That is not a failed read-back.
 Do not move on to the next tab until the read-back for this one has passed. If a tab does not pass, say so, stop.
 
 PHASE 6 - GLEAN_OOO (last, and only if you can do it completely)
