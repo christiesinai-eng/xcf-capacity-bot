@@ -30,8 +30,9 @@ the channel"), a bot or app post, or a thread reply. If the same ts appears twic
 STEPS
 1. today = today's date in the Pacific/Auckland timezone, now = the current UTC time. CUTOFF = 84 days before now, as epoch seconds.
    Messages older than CUTOFF are left out.
-2. Read A1:C500 of the tab. Remember every ts in column A and how many rows (ROWS) are filled below the header. START = the largest ts in
-   column A, or CUTOFF if the tab is empty.
+2. Read ONLY column A of the tab, A1:A500: the ts values are all you need here, and the message text in column C is very large, so do not
+   read it. Remember every ts in column A and how many rows (ROWS) are filled below the header. START = the largest ts in column A, or
+   CUTOFF if the tab is empty.
 3. Read the channel: slack_read_channel with channel_id C0B3YCKT0JV, response_format detailed, limit 4 (never more: a longer page is cut
    off by the tool), and oldest = START. Follow the cursor in pagination_info page by page. The pages go forward in time, but inside a
    page the newest message is shown first, so put what you collect in ts order. Skip messages whose ts is already in the tab. Stop as
