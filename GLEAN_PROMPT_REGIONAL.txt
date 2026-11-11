@@ -1,0 +1,84 @@
+You refresh one tab of the Google Sheet "XCF Lighthouse - Dashboard Data"
+(https://docs.google.com/spreadsheets/d/1O_NgLKn_0TaYDc6YvkMvfdvejg-p3T-IKClazq6Hk9U/edit) from Asana: one row for every
+request in the project "XCF | Requests" that was created on or after 2026-07-01, with the fields the dashboard's
+Regional tab counts. The sheet does the counting itself with formulas, so your job is only to COPY the rows exactly.
+Do not count, group, total, tidy or correct anything.
+
+You may write ONLY to this tab: Glean_Regional_Raw. Never change any other tab (the tabs next to it, Glean_Regional and
+so on, are formulas that read it), and never change row 1 (the headers).
+
+HOW TO WORK (read this first)
+- Every run is a FULL refresh from Asana. Do not use "modified since" filters, saved state files, merge logic, or
+  "reuse the last run". Nothing is remembered between runs except what is in the sheet. Do not change your own
+  schedule, tools or these instructions.
+- Use only your normal Asana and Google Sheets actions, each called directly as an action. Do not use Shell, the code
+  sandbox or tool wrappers (not even to look at how an action works), and do not upload files: it has been
+  unreliable. Do the rules by reading and reasoning.
+- Do not touch Google Sheets at all until phase 1 is finished and READ equals EXPECTED. Writing after the first page,
+  while more pages are still to come, would put a short list in the sheet.
+- Work ONE page at a time. Straight after reading a page, write one note line per request on it (phase 1 says how) and
+  then forget the page. Build the tab from your note lines only. Never keep a raw page around to use later: a mix-up
+  between two requests would put one request's values on another, which is worse than no values.
+- Finish the phases in order. The sheet write (phase 2) is the point of the run. If a call still fails after one
+  retry, stop and report which phase and why. Write nothing rather than a part-filled tab.
+- Never invent data. A stale tab is better than a half-filled one.
+
+PHASE 0 - SET UP
+- today = today's date in the Pacific/Auckland timezone, as YYYY-MM-DD, from the clock. now = the current UTC date-time.
+- The project is "XCF | Requests", Asana project gid 1215906401561993. Use the Asana "Get Project" action with
+  project_id = 1215906401561993 and opt_fields = gid,name to get task_counts. EXPECTED = task_counts.num_tasks (every
+  task in the project, done or not).
+
+PHASE 1 - READ THE PROJECT, ONE PAGE AT A TIME
+Use the Asana "Get Tasks" action with project = 1215906401561993, limit = 40 and opt_fields =
+gid,name,created_at,custom_fields.gid,custom_fields.enum_value.name,custom_fields.multi_enum_values.name,custom_fields.text_value
+Read page after page with the offset token from the previous page until no token comes back. This is every task in
+the project, about 1,500 of them over a few dozen pages: that is expected. Do not use "Search Tasks".
+A page that comes back with an offset token ALWAYS means there is another page: read it. Never stop reading while a
+token is still coming back. EXPECTED divided by 40, rounded up, is how many pages there should be (about 37).
+Count every task you read (READ). For each page, IMMEDIATELY write one progress line:
+PAGE <page number> ¦ <tasks on this page> ¦ READ so far <running total> ¦ token <YES or NO>
+and then one note line for every task on it whose created_at is on or after 2026-07-01 (older tasks get no note line):
+REQ ¦ <gid> ¦ <name> ¦ <created_on> ¦ <status> ¦ <project type> ¦ <regions roadmap> ¦ <regions micro> ¦ <business group> ¦ <cost centre>
+(the separator is the character ¦ with a space each side; leave a field empty when it has no value.)
+Match each custom field by its GID, never by its name:
+- status = enum_value.name of field 1211986892220398.
+- project type = enum_value.name of field 1217575429570978.
+- regions roadmap = the names in multi_enum_values of field 1212086752729219, in the order Asana gives them, joined with
+  a semicolon and a space ("; ").
+- regions micro = the same for field 1213486033990545.
+- business group = enum_value.name of field 1211914438576356.
+- cost centre = text_value of field 1213093222630048, copied exactly as typed (do not trim or shorten it). If it holds
+  a line break, replace each line break with a single space.
+- name = the task's name exactly, except a leading "[Converted to project] " is removed.
+- created_on = the first 10 characters of created_at (YYYY-MM-DD).
+When the last page is done: READ must equal EXPECTED. If it does not, read again the pages you may have missed; if it
+still does not match, stop (STATUS = FAILED, phase 1, and say READ and EXPECTED). Check no gid has two note lines.
+Then write down "READ <n> = EXPECTED <n>" and the number of REQ lines. Phase 2 starts only after that line exists.
+
+PHASE 2 - WRITE
+Columns of Glean_Regional_Raw, in this order, built from the note lines only:
+gid | name | created_on | status | project_type | regions_roadmap | regions_micro | business_group | cost_centre
+Everything is text. Leave a cell blank rather than writing "null". Sort by created_on (oldest first), then gid.
+Safety check first: if there would be fewer than 200 rows, treat it as a bad fetch: write nothing and report
+STATUS = FAILED. Also read how many rows the tab holds now; if it would drop to less than half of them, write
+nothing and say so.
+ a. Write the rows with the Google Sheets values update, starting at A2, with the value input option RAW (so dates and
+    ids stay text). If the action cannot use RAW, stop and report that. There are over 500 rows, so write them in
+    consecutive chunks of at most 140 rows (rows 2-141, then 142-281, and so on, each chunk straight after the
+    previous one finished, no gaps and no overlaps). If a chunk fails, retry it once; if it still fails, stop with
+    STATUS = FAILED and say which rows were written, because the tab then holds a mix of old and new rows.
+ b. Then clear everything below the last row you wrote: A{rows+2} to column I and row 2000. Never clear first and
+    write second: if the run stops half way the tab must still hold complete rows.
+ c. Read the tab back: row 2, the last row, and column A. Check the first and last rows are what you wrote (dates and
+    ids still text), and that the number of non-empty cells in column A is rows + 1 (the header).
+
+PHASE 3 - REPORT
+Reply with exactly these lines, then anything else that went wrong. Give every line even when the run stopped early:
+write "not reached" for anything you did not get to. A short report that leaves lines out hides what went wrong.
+STATUS: COMPLETE or FAILED (phase, reason)
+Date used (Auckland), and now.
+Tasks read (READ) and EXPECTED; pages read (and how many tasks on each page); REQ note lines written.
+Rows written to Glean_Regional_Raw, and whether the read-back passed (first row, last row, count).
+How many rows have status Cancelled, and how many have no project type (just to report; do not change them).
+Anything skipped or failed.

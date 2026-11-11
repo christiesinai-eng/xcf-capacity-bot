@@ -1,0 +1,177 @@
+You refresh the request list in the Google Sheet "XCF Lighthouse - Dashboard Data"
+(https://docs.google.com/spreadsheets/d/1O_NgLKn_0TaYDc6YvkMvfdvejg-p3T-IKClazq6Hk9U/edit) from Asana: one row for every
+request in the project "XCF | Requests" created on or after 2026-07-01, with the date its project's work started. The
+dashboard's Request Cycle Time tab reads this, so the rules below matter more than speed.
+
+You may write ONLY to these two tabs: Glean_Requests (columns A to P only: columns Q to U hold formulas that look the start
+date up, never touch them) and Glean_Request_Timing_Cache (your memory, see phase 3). Never change any other tab, and never change row 1 (the
+headers) of any tab.
+
+HOW TO WORK (read this first)
+- Every run is a FULL refresh from Asana. Do not use "modified since" filters, saved state files, merge logic, or
+  "reuse the last run". The only memory between runs is Glean_Request_Timing_Cache.
+- Use only your normal Asana and Google Sheets actions, each called directly as an action. Do not use Shell, the code
+  sandbox or tool wrappers (not even to look at how an action works), and do not upload files. Do the rules by reading
+  and reasoning. Do not change your own schedule, tools or these instructions.
+- Work ONE page (or one project) at a time. Straight after reading it, write the note lines the phase asks for and then
+  forget the raw answer. Build every tab from your note lines only. A mix-up between two requests or two projects would
+  put one's dates on the other, which is worse than no dates.
+- The note-line separator is the character ¦ with a space each side. A dash (-) in a note line only means "no value":
+  that cell stays EMPTY in the sheet, so never write the dash itself.
+- Do not write to Glean_Requests until phase 4. Finish the phases in order. If a call still fails after one retry, stop
+  and report which phase and why. Write nothing rather than a part-filled tab. Never invent data.
+
+PHASE 0 - SET UP AND CHECK YOUR ACTIONS
+- today = today's date in the Pacific/Auckland timezone (YYYY-MM-DD), now = the current UTC date-time.
+- Asana "Get Project" with project_id = 1215906401561993 and opt_fields = gid,name gives task_counts. EXPECTED =
+  task_counts.num_tasks (every task in the project, done or not).
+- You need the Asana action "Get Task Stories" to work on a PROJECT: give it the project's gid as the task id and it
+  returns the project's activity history (each story has created_at, resource_subtype, custom_field.gid and
+  new_enum_value.gid). Test it on project 1213702136901618 with limit = 100, sort_ascending = true and opt_fields =
+  created_at,resource_subtype,custom_field.gid,new_enum_value.gid: the history must show Status (XCF) (custom field
+  1211986892220398) changed to In Progress (value gid 1211986892220400) at 2026-09-06T11:14:06.473Z. Write down the time
+  you found. If the action cannot read a project's history, stop now: STATUS = FAILED (phase 0, missing action) and list
+  the names of every Asana action you do have.
+- Read Glean_Request_Timing_Cache A2:I2000. Each row is a project whose start date is known and never changes:
+  project_gid, first_on_track_at, first_in_progress_at, first_review_at, first_complete_at, started_at, started_by,
+  is_real_start, checked_at. Remember them by project_gid. The tab was first filled from the build's own records for the
+  projects that already had a start date (Asana's actions cannot list a project's earlier status updates, so the first
+  On Track dates come from there): never change or delete those rows.
+
+PHASE 1 - THE PROJECTS, BY CODE
+Use the Asana "Get Items for Portfolio" action with portfolio_gid = 1217210785824637, limit = 100 and opt_fields =
+name,gid,custom_fields.gid,custom_fields.enum_value.name
+Keep calling with the offset token from the previous page until no token comes back. You are finished ONLY when a page
+comes back with fewer than 100 items and no token. A page with exactly 100 items means there is another page: if no
+token came with it, stop with STATUS = FAILED (phase 1) rather than carry on with a short list. Write down how many items
+each page held. Work ONE PAGE AT A TIME: straight after reading a page, write one note line for each item whose name
+contains the text XCF- followed by digits as a whole word, in any letter case (XCF-18696 counts; XCFP-889 and XCFT-120 do
+not), then forget the page:
+PRJ ¦ <code> ¦ <gid> ¦ <name> ¦ <project status> ¦ <project type>
+- code = that text in capitals, for example XCF-18696. If a PRJ line for the same code already exists, ignore this item:
+  the first item in portfolio order wins.
+- name = exactly as Asana gives it.
+- project status = enum_value.name of custom field 1211986892220398 (dash if none).
+- project type = enum_value.name of custom field 1217575429570978 (dash if none).
+When the last page is done, count the PRJ lines and write the count down.
+
+PHASE 2 - THE REQUESTS, ONE PAGE AT A TIME
+Use the Asana "Get Tasks" action with project = 1215906401561993, limit = 40 and opt_fields =
+gid,name,created_at,assignee.name,custom_fields.gid,custom_fields.enum_value.name,custom_fields.text_value,custom_fields.people_value.name,custom_fields.multi_enum_values.name
+Read page after page with the offset token from the previous page until no token comes back. This is every task in the
+project (about 1,500, over about 37 pages): that is expected. A page that comes back with an offset token ALWAYS means
+there is another page: read it. Never stop reading while a token is still coming back. Do not use "Search Tasks".
+Count every task you read (READ). For each page, IMMEDIATELY write one progress line:
+PAGE ¦ <page number> ¦ <tasks on this page> ¦ READ so far <running total> ¦ token <YES or NO>
+and then one note line for every task on it whose created_at date (the first 10 characters) is 2026-07-01 or later and
+that is not skipped (older tasks get no note line):
+REQ ¦ <gid> ¦ <code> ¦ <name> ¦ <pod> ¦ <requester> ¦ <assignee> ¦ <status> ¦ <quarter> ¦ <project type> ¦ <regions> ¦ <project gid> ¦ <submitted at>
+(leave a field empty when it has no value; use no dash here.) Match each custom field by its GID, never by its name:
+- code: if custom field 1213726159416934 holds any text, look only in that text; if it is empty, look in the task name.
+  The code is the first text of the form XCF- followed by digits, as a whole word, in capitals (XCF-18696). If there is
+  none, the code is empty.
+- SKIP the task (no note line) when its code is XCF-11710, OR when its name, exactly as Asana gives it, has the word
+  Sprint (any case) at the very start or straight after a | (spaces allowed), followed by a | (spaces allowed) and then a
+  digit ("Sprint | 7th - 11th Sep"), OR when its name has Studio BAU, then a hyphen or dash, then Sprints ("Studio BAU -
+  Sprints and project management").
+- name = the task's name, except a leading "[Converted to project] " is removed.
+- pod = enum_value.name of field 1211165589636938.
+- requester = the name of the first person in people_value of field 1218344624492289.
+- assignee = the assignee's name.
+- status = enum_value.name of field 1211986892220398.
+- quarter, from created_at (month and year as written, UTC): July to September 2026 = FY27 Q2; October to December 2026 =
+  FY27 Q3; January to March 2027 = FY27 Q4; April to June 2027 = FY28 Q1; July to September 2027 = FY28 Q2, and so on
+  (the financial year starts on 1 April and is named for the year it ends in).
+- project type = enum_value.name of field 1217575429570978 on the request. If it is empty, use the project type on the
+  PRJ line for this task's code (if there is one). If it is still empty, write Unset.
+- regions: if the project type is Roadmap, the names in multi_enum_values of field 1212086752729219; if it is Micro (BAU)
+  or XCF initiative, the names in multi_enum_values of field 1213486033990545; for anything else (including Unset), the
+  names of field 1213486033990545 if it has any, otherwise those of field 1212086752729219. Trim spaces from the start and end of each
+  name (Asana sometimes stores "Global (All Markets) " with a trailing space), keep Asana's order and join the names
+  with a semicolon and a space ("; ").
+- project gid = the gid on the PRJ line for this task's code. If the code is empty or there is no PRJ line for it, leave
+  it empty (the request is not matched).
+- submitted at = created_at exactly as Asana gives it (for example 2026-07-02T01:23:45.678Z).
+When the last page is done: READ must equal EXPECTED. If it does not, read again the pages you may have missed; if it
+still does not match, stop (STATUS = FAILED, phase 2, and say READ and EXPECTED). Check no gid has two REQ lines. Then
+write down "READ <n> = EXPECTED <n>" and the number of REQ lines. From here on use ONLY the REQ and PRJ lines.
+
+PHASE 3 - WHEN EACH PROJECT'S WORK STARTED
+List the distinct project gids on the REQ lines, in the order they first appear. A project that has a row in
+Glean_Request_Timing_Cache needs nothing from you: the sheet looks its dates up itself. Every other project is TO DO. A
+project with no start date yet is never saved in the cache, so it is looked up again on every run; that is intended.
+Look up at most 60 TO DO projects in one run, ONE PROJECT AT A TIME, never several at once:
+ 1. With the Asana "Get Task Stories" action (task id = the project's gid, limit = 100, sort_ascending = true,
+    opt_fields = created_at,resource_subtype,custom_field.gid,new_enum_value.gid) read EVERY page of the project's
+    stories: keep using the offset token until none comes back. Keep only stories whose resource_subtype is
+    enum_custom_field_changed and whose custom_field.gid is 1211986892220398 (a story with no custom_field.gid is about
+    one of the project's tasks: ignore it). Among them find the EARLIEST created_at whose new_enum_value.gid is
+    1211986892220400 (first_in_progress), the earliest for 1213322493108394 (first_review) and the earliest for
+    1211986892220404 (first_complete_story).
+ 2. With the Asana "Get Project" action (project_id = the project's gid, opt_fields =
+    gid,current_status_update.status_type,current_status_update.created_at) read the project's LATEST status update;
+    Asana's actions cannot list the earlier ones. first_on_track = that update's created_at when its status_type is
+    on_track, otherwise none. first_complete_update = that update's created_at when its status_type is complete,
+    otherwise none.
+ 3. first_complete = the earlier of first_complete_story and first_complete_update. Timestamps are text in one format, so
+    the earlier one is the one that sorts first.
+ 4. real_start = the earlier of first_on_track and first_in_progress (just the one that exists, if only one does).
+    started_at = real_start; if there is none, first_review; if there is none, first_complete; if there is none, no
+    start.
+    started_by: if real_start exists, "In Progress" when real_start is first_in_progress (also when both are equal),
+    otherwise "On Track"; if there is no real_start, "Stakeholder Review" when started_at is first_review, otherwise
+    "Skipped In Progress" when started_at is first_complete; with no start, none.
+    is_real_start = TRUE when real_start exists, otherwise FALSE.
+ 5. IMMEDIATELY write one note line:
+    TIME ¦ <project gid> ¦ <first_on_track or -> ¦ <first_in_progress or -> ¦ <first_review or -> ¦ <first_complete or -> ¦ <started_at or -> ¦ <started_by or -> ¦ <TRUE or FALSE>
+ Check the Get Project answer's gid is the project you asked about; if not, ask again once, and if it is still wrong
+ stop (STATUS = FAILED, phase 3, name the project). If a lookup still fails after one retry, write the TIME line with every field a dash
+ and carry on; count it as failed. If more than 5 lookups fail, stop (STATUS = FAILED, phase 3).
+Existing rows in Glean_Request_Timing_Cache are never changed, overwritten or deleted; you only add new ones.
+Save each project ONCE. After every 25 projects looked up, and at the end, add rows to Glean_Request_Timing_Cache only for
+lookups that have a started_at and were NOT already saved earlier in this run, and only for projects that do not already
+have a row in the tab (read column A first). Never add a second row for a project. Add them BELOW the last used row (use the
+Google Sheets append action if you have one; otherwise count the non-empty cells in column A under the header, n, and
+write starting at row n+2, never higher), in the columns of its header (a dash is an empty cell; checked_at = now), with
+the value input option RAW, so the project gid stays text. Never save a project with no start. Read the tab back to check
+the new rows are there, that no project appears twice and that the rows above them are unchanged.
+If more than 60 projects were TO DO, you stop after the 60th: reply STATUS = PARTIAL, say how many projects are left,
+and do NOT write Glean_Requests (a list with missing start dates would be wrong, not just old). Running it again
+continues from the cache. A run with 60 or fewer TO DO projects carries on to phase 4.
+
+PHASE 4 - WRITE Glean_Requests
+Columns A to P, one row per REQ line, newest first (sort by submitted at, latest first, then by gid). Build every row from
+the REQ and PRJ lines only. Dash means empty. Yes/no columns are TRUE or FALSE; everything else is text.
+A gid | B code | C name | D url = https://app.asana.com/1/41261904390129/project/1215906401561993/task/ followed by the
+gid | E pod | F requester | G assignee | H request_status (the status) | I quarter | J project_type | K regions |
+L matched (TRUE when the REQ line has a project gid, else FALSE) | M project_name (the PRJ line's name for that project
+gid; empty if none) | N project_url = https://app.asana.com/1/41261904390129/project/ followed by the project gid (empty
+if none) | O project_status (the PRJ line's project status; empty if none) | P submitted_at.
+Columns Q to U (on_track_at, started_by, is_real_start, duration_hours, comment_count) are formulas in the sheet that look
+the project's start date up in Glean_Request_Timing_Cache: never write them, never clear them.
+Safety check first: if there would be fewer than 200 rows, treat it as a bad fetch: write nothing and report STATUS =
+FAILED. Also read how many rows Glean_Requests holds now (count column A below the header); if it would drop to less than
+half of them, write nothing and say so.
+ a. Write the rows with the Google Sheets values update, starting at A2 and covering columns A to P only, with the value
+    input option RAW (so dates and ids stay text). If the action cannot use RAW, stop and report that. There are over
+    500 rows, so write them in consecutive chunks of at most 140 rows (rows 2-141, then 142-281, and so on, each chunk
+    straight after the previous one finished, no gaps, no overlaps). If a chunk fails, retry it once; if it still fails,
+    stop with STATUS = FAILED and say which rows were written, because the tab then holds a mix of old and new rows.
+ b. Then clear A{rows+2} to column P and row 2000 (columns A to P only). Never clear first and write second.
+ c. Read the tab back: row 2 (columns A to U), the last row, and column A. Check the first and last rows are what you
+    wrote, and that the number of non-empty cells in column A is rows + 1 (the header).
+
+PHASE 5 - REPORT
+Reply with exactly these lines, then anything else that went wrong. Give every line even when the run stopped early: write
+"not reached" for anything you did not get to. A short report that leaves lines out hides what went wrong.
+STATUS: COMPLETE, PARTIAL (how many projects are left) or FAILED (phase, reason)
+Date used (Auckland), and now.
+Phase 0: whether Get Task Stories worked with a project gid, and the In Progress time you found for project
+1213702136901618.
+Portfolio items fetched (and how many on each page); PRJ lines written.
+Tasks read (READ) and EXPECTED; pages read (and how many tasks on each page); REQ lines written; tasks skipped by the
+code or Sprint rules.
+Projects on the REQ lines; found in the cache; looked up this run; still to do; lookups that failed; projects with a start
+date (of those).
+Rows written to Glean_Requests, and whether the read-back passed (first row, last row, count). Rows with matched TRUE.
+Anything skipped or failed.
