@@ -491,18 +491,16 @@ async function buildPMData() {
     !p.archived
   );
 
-  // Fetch task completion counts in batches to avoid Asana 429 rate limits
-  // (Asana REST API has no summary field — count tasks directly)
+  // Fetch task completion counts in batches to avoid Asana 429 rate limits.
+  // task_counts gives the true totals. (Counting the first page of /tasks, as this did until 2 Nov 2026,
+  // capped any project over 100 tasks at 100, so progress for the biggest projects was wrong.)
   const taskCountResults = await batchedMap(
     qualifying,
     p =>
-      client.get('/tasks', {
-        params: { project: p.gid, opt_fields: 'gid,completed', limit: 100 },
+      client.get(`/projects/${p.gid}/task_counts`, {
+        params: { opt_fields: 'num_tasks,num_completed_tasks' },
       })
-        .then(r => {
-          const tasks = r.data.data;
-          return { gid: p.gid, done: tasks.filter(t => t.completed).length, total: tasks.length };
-        })
+        .then(r => ({ gid: p.gid, done: r.data.data.num_completed_tasks, total: r.data.data.num_tasks }))
         .catch(() => ({ gid: p.gid, done: 0, total: 0 })),
     5,   // 5 requests at a time
     500  // 500ms between batches
