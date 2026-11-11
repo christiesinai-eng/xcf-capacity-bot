@@ -8,7 +8,7 @@
       "startedAt": null,
       "startedBy": null,
       "isRealStart": false,
-      "firstStatusAt": null
+      "firstStatusAt": "2026-10-30T01:20:25.705Z"
     },
     "1219726045877627": {
       "firstOnTrackAt": null,
@@ -42,32 +42,32 @@
     },
     "1219674283071380": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-29T06:28:02.288Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-29T06:28:02.288Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219675469580121": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-11-06T02:21:18.775Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-11-06T02:21:18.775Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219658120344920": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-11-06T03:50:41.778Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-11-06T03:50:41.778Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219669571402190": {
@@ -92,22 +92,22 @@
     },
     "1219600496766949": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-29T06:28:11.116Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-29T06:28:11.116Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219609925882014": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-11-06T02:21:04.999Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-11-06T02:21:04.999Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219628085912745": {
@@ -172,22 +172,22 @@
     },
     "1219590261991090": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-11-08T06:32:30.528Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-11-08T06:32:30.528Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219589615927396": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-11-08T06:32:27.776Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-11-08T06:32:27.776Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219530647329863": {
@@ -462,12 +462,12 @@
     },
     "1219097477031844": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-11-08T06:32:37.889Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-11-08T06:32:37.889Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219097541115249": {
@@ -492,22 +492,22 @@
     },
     "1219093742957254": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-11-08T06:33:34.119Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-11-08T06:33:34.119Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219093743402576": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-11-08T06:33:36.972Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-11-08T06:33:36.972Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219089747341738": {
@@ -522,12 +522,12 @@
     },
     "1219104161106925": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-29T18:33:50.345Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-29T18:33:50.345Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219093873637548": {
@@ -1678,7 +1678,7 @@
       "startedAt": null,
       "startedBy": null,
       "isRealStart": false,
-      "firstStatusAt": null
+      "firstStatusAt": "2026-11-02T00:01:00.905Z"
     },
     "1218207505676288": {
       "firstOnTrackAt": null,
@@ -1922,22 +1922,22 @@
     },
     "1219765118849885": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-11-06T02:21:11.347Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-11-06T02:21:11.347Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219871893660898": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-11-06T02:21:14.956Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-11-06T02:21:14.956Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219894199484761": {
@@ -1952,12 +1952,12 @@
     },
     "1219872825535149": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-10-29T06:27:55.361Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-10-29T06:27:55.361Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219831630558168": {
@@ -1968,7 +1968,7 @@
       "startedAt": null,
       "startedBy": null,
       "isRealStart": false,
-      "firstStatusAt": null
+      "firstStatusAt": "2026-11-09T23:02:58.042Z"
     },
     "1219832223345771": {
       "firstOnTrackAt": null,
@@ -2031,6 +2031,246 @@
       "firstStatusAt": "2026-10-28T06:49:04.256Z"
     },
     "1219959169758169": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1220002363221284": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-10-29T03:29:17.026Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": "2026-11-01T04:14:50.174Z",
+      "startedAt": "2026-10-29T03:29:17.026Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
+      "firstStatusAt": null
+    },
+    "1220044182236072": {
+      "firstOnTrackAt": "2026-11-04T02:20:12.799Z",
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-11-04T02:20:12.799Z",
+      "startedBy": "On Track",
+      "isRealStart": true,
+      "firstStatusAt": "2026-11-04T02:20:12.799Z"
+    },
+    "1220005197547046": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1219995936020392": {
+      "firstOnTrackAt": "2026-10-29T03:11:00.440Z",
+      "firstInProgressAt": "2026-10-29T03:11:11.839Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-10-29T03:11:00.440Z",
+      "startedBy": "On Track",
+      "isRealStart": true,
+      "firstStatusAt": "2026-10-29T03:11:00.440Z"
+    },
+    "1220111790828645": {
+      "firstOnTrackAt": "2026-11-02T02:30:31.374Z",
+      "firstInProgressAt": "2026-11-02T02:30:42.156Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-11-02T02:30:31.374Z",
+      "startedBy": "On Track",
+      "isRealStart": true,
+      "firstStatusAt": "2026-11-02T02:30:31.374Z"
+    },
+    "1220107864535099": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1220108132864196": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": "2026-11-04T04:41:16.362Z",
+      "startedAt": "2026-11-04T04:41:16.362Z",
+      "startedBy": "Skipped In Progress",
+      "isRealStart": false,
+      "firstStatusAt": "2026-11-04T04:41:16.362Z"
+    },
+    "1220106953772157": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1220107733184070": {
+      "firstOnTrackAt": "2026-11-06T01:09:16.293Z",
+      "firstInProgressAt": "2026-11-06T01:53:54.314Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-11-06T01:09:16.293Z",
+      "startedBy": "On Track",
+      "isRealStart": true,
+      "firstStatusAt": "2026-11-06T01:09:16.293Z"
+    },
+    "1220195650310957": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": "2026-11-04T02:54:43.802Z"
+    },
+    "1220179624036784": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-11-06T02:20:59.641Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-11-06T02:20:59.641Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
+      "firstStatusAt": null
+    },
+    "1220194424043746": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1220235118902736": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": "2026-11-08T19:00:58.775Z",
+      "startedAt": "2026-11-08T19:00:58.775Z",
+      "startedBy": "Skipped In Progress",
+      "isRealStart": false,
+      "firstStatusAt": "2026-11-08T19:00:58.775Z"
+    },
+    "1220236049118099": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1220298686925888": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1220293261431343": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1220287329353843": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": "2026-11-09T01:45:19.085Z"
+    },
+    "1220288582597506": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1220340652099050": {
+      "firstOnTrackAt": "2026-11-10T02:19:40.824Z",
+      "firstInProgressAt": "2026-11-10T00:29:16.494Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-11-10T00:29:16.494Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
+      "firstStatusAt": "2026-11-10T02:19:40.824Z"
+    },
+    "1220340072418235": {
+      "firstOnTrackAt": "2026-11-10T00:28:59.716Z",
+      "firstInProgressAt": "2026-11-10T00:29:45.948Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-11-10T00:28:59.716Z",
+      "startedBy": "On Track",
+      "isRealStart": true,
+      "firstStatusAt": "2026-11-10T00:28:59.716Z"
+    },
+    "1220336878294660": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1220378921001526": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1220372417440299": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1220423114355546": {
       "firstOnTrackAt": null,
       "firstInProgressAt": null,
       "firstReviewAt": null,
@@ -2716,7 +2956,7 @@
     },
     "1219097160118414": {
       "code": "XCF-17305",
-      "name": "XCF-17305 | SU1567 -  Analytics: Reporting onboarding \"use demo data\"",
+      "name": "XCF-17305 | SU1567 - Analytics: Reporting onboarding \"use demo data\"",
       "comments": [
         {
           "author": "Deepak Aujla",
@@ -2778,7 +3018,7 @@
     },
     "1219093874227120": {
       "code": "XCF-17223",
-      "name": "XCF-17223 | DETAILS TO COME – CS1622 Cash-flow manager/Analytics Xsell trigger",
+      "name": "XCF-17223 | CS: Bill Payments Trigger in 1st Analytics Use & 1st Bank Feed Connected Journeys",
       "comments": [
         {
           "author": "Halle Mitchell",
@@ -2797,7 +3037,7 @@
     },
     "1219093873968513": {
       "code": "XCF-17216",
-      "name": "XCF-17216 | DETAILS TO COME – AI Automate Imagery",
+      "name": "XCF-17216 | UP: AI Automate Imagery (UP1629, UP1625, CS1639)",
       "comments": [
         {
           "author": "Unknown",
@@ -7561,6 +7801,266 @@
           "text": "Potential related work identified:\n\n• https://app.asana.com/0/1215906401561993/1212712090563583 - Completed SB-focused 1099 messaging\n• https://app.asana.com/0/1215906401561993/1212700691789374 - Completed AB-focused 1099 messaging\n\nThis new request (XCF-19087) combines both SB and AB audiences for 1099 tax messaging. The previous tasks addressed these audiences separately and are now complete. Please review to confirm this is a new consolidated effort rather than a duplicate of existing work."
         }
       ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220045090721759": {
+      "code": "XCF-19357",
+      "name": "XCF-19357 | LinkedIn banners",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220005364272237": {
+      "code": "XCF-19270",
+      "name": "XCF-19270 | Meta | SG | SB | Compliance-led acquisition",
+      "comments": [
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-10-29T02:48:34.312Z",
+          "text": "When do you need this done by?: REVISIONS NEED TO BE SENT\nNov 16, 2026\n\nWhat is the in-market date?: MUST BE LIVE \nDec 1, 2026 – Dec 1, 2026"
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220002580707532": {
+      "code": "XCF-19278",
+      "name": "XCF-19278 | IE | SB | Display | Static | News Article Banners",
+      "comments": [
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-10-29T03:17:12.322Z",
+          "text": "Assets created by https://app.asana.com/1/41261904390129/profile/1214337880499305."
+        },
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-10-29T03:28:56.621Z",
+          "text": "https://app.asana.com/1/41261904390129/profile/1211026264666242 Are we okay to close this quick request?"
+        },
+        {
+          "author": "Jenna Oakley",
+          "at": "2026-10-29T20:20:51.953Z",
+          "text": "Yep! good to close! thanks team!! https://app.asana.com/1/41261904390129/profile/1216496014620082"
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1219995935807007": {
+      "code": "XCF-19190",
+      "name": "XCF-19190 | Xero DAM headers update",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220110731924965": {
+      "code": "XCF-19501",
+      "name": "XCF-19501 | Canva NEW Xero Brand Kit guidelines setup",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220108132842340": {
+      "code": "XCF-19492",
+      "name": "XCF-19492 | Request for SVG of a DAM illustration",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220107643036555": {
+      "code": "XCF-19484",
+      "name": "XCF-19484 | Meta | MPP Refresh V2 | US | UK | Nov 26",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220107021634120": {
+      "code": "XCF-19477",
+      "name": "XCF-19477 | High Value SB V2 | Meta | AU | Brief",
+      "comments": [
+        {
+          "author": "Unknown",
+          "at": "2026-11-01T22:09:58.337Z",
+          "text": "Potential duplicate identified for review:\n\n• https://app.asana.com/0/1215906401561993/1214961992933125 - Completed task for AU/NZ regions\n\nNote: The new task is labeled 'High Value SB V2' with a different XCF reference (XCF-19477 vs XCF-1556), suggesting this is an intentional new iteration. However, please verify this is not an unintended duplicate before proceeding, as both target the same regions (AU/NZ) for Meta campaigns."
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220015274058037": {
+      "code": "XCF-19343",
+      "name": "XCF-19343 | [no value] | XCF delivery support | UK DIT Whitepaper",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220195418002909": {
+      "code": "XCF-19643",
+      "name": "XCF-19643 | Email Design System | Figma Block Mockup Needed ",
+      "comments": [
+        {
+          "author": "Unknown",
+          "at": "2026-11-04T01:32:15.055Z",
+          "text": "Related project identified: This task builds on previous Email Design System work:\n\n• XCF-17507 - Email Design System | Canva Templates (Completed Aug 24 2026) - https://app.asana.com/0/0/1219196558096552\n• XCF-9567 - Email Design System | Global Newsletter Image Templates (Canva) (Completed Aug 2026) - https://app.asana.com/0/0/1217222098921368\n\nWhile this request (XCF-19643) is related to the Email Design System and from the same requester, it addresses a distinct deliverable: Figma file tweaks and content block mockups for the Ecosystem Platform team, rather than Canva templates. This appears to be a new phase of the Email Design System development. Please confirm this is new work and not a scope addition to the previous requests before proceeding."
+        },
+        {
+          "author": "Christie Sinai",
+          "at": "2026-11-04T01:40:00.064Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1204783047017636assigning this one your way. Could this sit with studio?"
+        },
+        {
+          "author": "Christie Sinai",
+          "at": "2026-11-04T02:54:09.058Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1204783047017636confirming Jacquii has cancelled this request. Thanks!"
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220194424007383": {
+      "code": "XCF-19639",
+      "name": "XCF-19639 | Partners - Digital ordering landing page video",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220179783280956": {
+      "code": "XCF-19614",
+      "name": "XCF-19614 | AB | Cash flow messaging",
+      "comments": [
+        {
+          "author": "Lee Haider",
+          "at": "2026-11-03T15:55:43.617Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1216496014620082, can we please prioritize getting these ads and copy ready for stakeholder review by 11/12. Thank you! 🙏"
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220235118858443": {
+      "code": "XCF-19673",
+      "name": "XCF-19673 | Sorren Raffle QR Code",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220235955630986": {
+      "code": "XCF-19680",
+      "name": "XCF-19680 | InBeat Upload ",
+      "comments": [
+        {
+          "author": "Briana Ruggiero",
+          "at": "2026-11-04T22:39:55.410Z",
+          "text": "Hi team \nThese just need to be uploaded to Smartly please"
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220298814714633": {
+      "code": "XCF-19944",
+      "name": "XCF-19944 | Milton Keynes signage and brand concept package",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220293287781445": {
+      "code": "XCF-19934",
+      "name": "XCF-19934 | Resize product UI for social media educational video content - as part of The Long and Short of It Q2 wrapped campaign currently live in market.",
+      "comments": [
+        {
+          "author": "Unknown",
+          "at": "2026-11-06T06:21:51.732Z",
+          "text": "Potential related task identified: https://app.asana.com/0/1214995822919449/1214995822919449 - This task was also requested by Hayley Connolly for The Long and Short of It campaign and is marked Complete. Please review to confirm this new request (XCF-19934) is not a duplicate and represents distinct work for the Q2 wrapped campaign currently live in market."
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220287640318126": {
+      "code": "XCF-19755",
+      "name": "XCF-19755 | Creating social tiles for November's monthly headlines",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1218348238031527": {
+      "code": "XCF-13763",
+      "name": "XCF delivery support | Medium+ Customer Story videos",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220340652084755": {
+      "code": "XCF-19997",
+      "name": "XCF-19997 | Request to update Tap to Pay Android imagery and tutorial video",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220340184973021": {
+      "code": "XCF-19993",
+      "name": "XCF-19993 | Xero creative for Harvey Norman in store promotion (acquisition driver)",
+      "comments": [
+        {
+          "author": "Christie Sinai",
+          "at": "2026-11-09T18:12:20.365Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1204783047017636 assigning you this one to run via the studio. Thanks!"
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220336714857525": {
+      "code": "XCF-19957",
+      "name": "XCF-19957 |  XCF Proactive Customer Story Edits",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220379025032432": {
+      "code": "XCF-20042",
+      "name": "XCF-20042 | Xero Tax BAS & Job Workflow Webinar",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220372555602554": {
+      "code": "XCF-20017",
+      "name": "XCF-20017 | Update Xero Pride assets",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220426432558077": {
+      "code": "XCF-20199",
+      "name": "XCF-20199 | US | Melio PMAX",
+      "comments": [],
       "summary": null,
       "cause": null,
       "causedAt": null
