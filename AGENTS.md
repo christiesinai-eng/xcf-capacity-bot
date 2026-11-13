@@ -12,7 +12,7 @@ New to the project and just need to run and deploy it? Read `RUNBOOK.md` instead
 
 ## What it does
 
-Ten tabs, each answering a different planning question:
+Eleven tabs, each answering a different planning question:
 
 | Tab | Question it answers |
 |---|---|
@@ -26,6 +26,7 @@ Ten tabs, each answering a different planning question:
 | PM Project Updates | Weekly PM updates from Slack, with executive summaries |
 | Request Cycle Time | How long requests wait before work starts, and why |
 | Regional Requests | Requests by region, business group and cost centre |
+| Platform spend and usage | What does XCF pay for its platforms (annual cost, NZD), month by month, and how much is each one used? |
 
 ## Architecture
 
@@ -39,6 +40,9 @@ src/slackUpdates.js   Slack PM updates builder, with cache fallback.
 src/report.js         Injects data into template.html, writes the dated report file.
 template.html         The entire dashboard — all CSS and JS inline, self-rendering.
 slack-pm-updates-cache.json   Slack history + hand-written executive summaries.
+src/platformSpend.js          Platform spend and usage tab: reads platform-spend-data.json, adds totals and month-on-month changes.
+platform-spend-data.json      A copy of the "XCF Platform spend and usage tracker" Google Sheet (the build has no Google login).
+                              Refresh it by asking Claude to "sync the platform spend data" (see scripts/platform-spend-from-sheet.js).
 reports/              Generated output (gitignored).
 ```
 

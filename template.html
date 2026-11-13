@@ -155,6 +155,107 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .rg-fix-row a:hover{text-decoration:underline}
 .rq-empty{padding:28px;text-align:center;color:var(--muted)}
 
+/* ── Platform spend and usage ──
+   Two scope colours (blue = Shared, purple = XCF only) and every row also carries the scope as text, so colour is never
+   the only signal. Cost up = amber, cost down = mint, always with an arrow and a sign. */
+.plt-wrap{padding:18px 24px 6px}
+.plt-bar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.plt-pills{display:flex;gap:8px;flex-wrap:wrap}
+.plt-pill{font-size:12px;font-weight:600;padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--txt);cursor:pointer;font-family:inherit;transition:background .15s}
+.plt-pill:hover{background:var(--surface2)}
+.plt-pill[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.plt-pill:focus-visible,.plt-col:focus-visible,.plt-th-btn:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
+.plt-sync{margin-left:auto;font-size:11px;color:var(--muted)}
+.plt-warn{border:1px solid var(--border);border-left:3px solid var(--amber);background:rgba(253,204,8,.06);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:14px}
+.plt-warn strong{color:var(--txt)}
+.plt-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:12px;margin-bottom:16px}
+.plt-kpi{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--kc,var(--border));border-radius:10px;padding:13px 15px}
+.plt-kpi-l{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.plt-kpi-v{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-top:4px;line-height:1.1;font-variant-numeric:tabular-nums}
+.plt-kpi-s{font-size:11px;color:var(--muted);margin-top:7px;line-height:1.6}
+.plt-chip{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:10px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.plt-up{background:rgba(253,204,8,.14);color:var(--amber)}
+.plt-down{background:rgba(106,234,170,.14);color:var(--mint)}
+.plt-flat{background:var(--surface2);color:var(--muted)}
+.plt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:14px;margin-bottom:16px}
+.plt-start{align-items:start}
+.plt-panel{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:0}
+.plt-grid .plt-panel{margin-bottom:0}
+.plt-full{margin-bottom:16px}
+.plt-panel-h{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:11px 15px;background:var(--surface);border-bottom:1px solid var(--border)}
+.plt-panel-t{font-size:13.5px;font-weight:700}
+.plt-panel-s{font-size:10.5px;color:var(--muted)}
+.plt-panel-b{padding:14px 15px}
+.plt-muted{color:var(--muted)}
+.plt-sub{font-size:10.5px;color:var(--muted);margin-top:2px;line-height:1.4}
+.plt-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:12px}
+.plt-legend i,.plt-sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.plt-trend{display:flex;gap:10px;align-items:flex-end;overflow-x:auto;padding:2px}
+.plt-col{flex:1 0 78px;max-width:150px;display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:1px solid transparent;border-radius:8px;padding:8px 4px 7px;cursor:pointer;color:var(--txt);font-family:inherit}
+.plt-col:hover{background:var(--surface)}
+.plt-col[aria-pressed="true"]{border-color:var(--blue);background:rgba(31,101,214,.14)}
+.plt-col-v{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.plt-col-plot{height:130px;display:flex;align-items:flex-end}
+.plt-stack{display:flex;flex-direction:column;width:46px;border-radius:4px 4px 0 0;overflow:hidden}
+.plt-stack span{display:block;width:100%}
+.plt-col-l{font-size:11px;color:var(--muted)}
+.plt-col[aria-pressed="true"] .plt-col-l{color:var(--txt);font-weight:700}
+.plt-use-bar{display:flex;height:30px;border-radius:6px;overflow:hidden;margin-bottom:14px;gap:2px}
+.plt-use-bar div{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#000;min-width:4px}
+.plt-use-row{display:grid;grid-template-columns:14px 1fr auto;gap:10px;align-items:start;padding:8px 0;border-top:1px solid rgba(255,255,255,.06)}
+.plt-use-row:first-of-type{border-top:none}
+.plt-use-row .plt-sw{margin:3px 0 0}
+.plt-use-h{font-size:12px}
+.plt-use-tools{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
+.plt-use-v{text-align:right;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.plt-use-v span{display:block;font-size:10.5px;color:var(--muted)}
+.plt-ctrl{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.plt-ctrl .plt-pill{padding:5px 13px;font-size:11.5px}
+.plt-tablewrap{overflow-x:auto}
+.plt-table{width:100%;border-collapse:collapse;font-size:12px;min-width:1000px}
+.plt-table th{text-align:left;padding:9px 12px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap;font-weight:600}
+.plt-th-btn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:4px;text-transform:uppercase;letter-spacing:.06em}
+.plt-th-btn:hover{color:var(--txt)}
+.plt-table th[aria-sort] .plt-th-btn{color:var(--txt)}
+.plt-table td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:middle}
+.plt-table tbody tr:hover{background:rgba(255,255,255,.03)}
+.plt-table tfoot td{border-top:1px solid var(--border);border-bottom:none;font-weight:700;background:var(--surface)}
+.plt-tool-n{font-weight:600;font-size:12.5px}
+.plt-scope{display:inline-block;font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:10px;border:1px solid var(--sc,var(--border));color:var(--sc,var(--txt));white-space:nowrap}
+.plt-cost{font-weight:700;font-variant-numeric:tabular-nums;min-width:150px}
+.plt-cost-v{display:block;margin-bottom:5px}
+.plt-track{height:7px;border-radius:4px;background:rgba(255,255,255,.07);overflow:hidden}
+.plt-fill{height:100%;border-radius:4px}
+.plt-num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.plt-c-up{color:var(--amber);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.plt-c-down{color:var(--mint);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.plt-meter{display:inline-flex;gap:2px;margin-right:7px;vertical-align:-1px}
+.plt-meter i{width:5px;height:11px;border-radius:1px;background:rgba(255,255,255,.16)}
+.plt-notes{color:var(--muted);font-size:11.5px;line-height:1.45;max-width:260px}
+.plt-out{border-top:1px solid var(--border);padding:12px 15px;background:rgba(255,255,255,.02)}
+.plt-out-h{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
+.plt-out-row{display:grid;grid-template-columns:minmax(120px,170px) auto auto 1fr;gap:12px;align-items:baseline;font-size:12px;padding:5px 0;color:var(--muted)}
+.plt-out-row b{color:var(--txt)}
+.plt-net{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.plt-net-v{font-size:22px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.plt-ch-row{display:grid;grid-template-columns:62px minmax(110px,1.1fr) minmax(120px,1fr) minmax(110px,1.2fr) 92px;gap:10px;align-items:center;padding:7px 0;border-top:1px solid rgba(255,255,255,.06);font-size:12px}
+.plt-ch-row:first-of-type{border-top:none}
+.plt-ch-ft{color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums}
+.plt-ch-d{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.plt-k{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 7px;border-radius:4px;text-align:center}
+.plt-k-new{background:rgba(253,204,8,.16);color:var(--amber)}
+.plt-k-up{background:rgba(253,204,8,.10);color:var(--amber)}
+.plt-k-down,.plt-k-dropped{background:rgba(106,234,170,.12);color:var(--mint)}
+.plt-div{display:grid;grid-template-columns:1fr 1fr;height:8px}
+.plt-div>div{display:flex}
+.plt-div .l{justify-content:flex-end;border-right:1px solid rgba(255,255,255,.3)}
+.plt-div i{display:block;height:100%}
+.plt-how{padding:4px 15px 12px}
+.plt-how summary{cursor:pointer;font-size:12.5px;font-weight:600;padding:10px 0;list-style-position:inside}
+.plt-how-row{display:grid;grid-template-columns:minmax(110px,150px) 1fr;gap:12px;font-size:11.5px;padding:6px 0;border-top:1px solid rgba(255,255,255,.06);line-height:1.5}
+.plt-how-row b{font-weight:600}
+@media(max-width:620px){.plt-wrap{padding:14px 12px 6px}.plt-ch-row{grid-template-columns:56px 1fr 84px}.plt-ch-ft,.plt-div{display:none}.plt-out-row{grid-template-columns:1fr;gap:3px;padding:8px 0}.plt-how-row{grid-template-columns:1fr;gap:2px}}
+
 /* ── VIEWS ── */
 .view{display:none;padding:0 0 20px}
 .view.active{display:block}
@@ -680,6 +781,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <button class="nav-btn" onclick="showView('pmupdates',this)">PM Project Updates</button>
   <button class="nav-btn" onclick="showView('requests',this)">Request Cycle Time</button>
   <button class="nav-btn" onclick="showView('regional',this)">Regional Requests</button>
+  <button class="nav-btn" onclick="showView('platform',this)">Platform spend and usage</button>
 </div>
 
 <!-- ══════════════ VIEW: CAPACITY REPORT ══════════════ -->
@@ -873,6 +975,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="rq-note" id="rg-note"></div>
 </div>
 
+<div id="view-platform" class="view">
+  <div class="plt-wrap">
+    <div class="rq-hdr">
+      <div>
+        <div class="rq-hdr-title">Platform spend and usage</div>
+        <div class="rq-hdr-sub">What XCF pays for its platforms (annual cost, NZD, as recorded each month) and how much each one is used · pick a month to see its totals</div>
+      </div>
+    </div>
+  </div>
+  <div id="plt-body"></div>
+  <div class="rq-note" id="plt-note" style="padding:0 24px"></div>
+</div>
+
 <div class="footer" id="footer-bar">
   XCF Capacity Report &nbsp;·&nbsp; 19 May 2026 &nbsp;·&nbsp; 446 tasks (all pages) &nbsp;·&nbsp;
   Formula: est time ÷ working days (start→due); no start date = all hours on due date &nbsp;·&nbsp; 6h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation
@@ -927,6 +1042,7 @@ const PM_UPDATES_DATA=[];
 const BAU_DATA=[];
 const REQUESTS_DATA=[];
 const REGIONAL_DATA=[];
+const PLATFORM_DATA=[];
 
 const TODAY = new Date('2026-05-19');
 
@@ -1485,6 +1601,185 @@ function renderRegional(){
     'Shown as bars rather than pies: a pie separates categories by colour alone, which stops working past about three slices — bars label each row directly and stay readable at any count.';
 }
 
+/* ── PLATFORM SPEND AND USAGE ── */
+// Figures are ANNUAL cost in NZD as recorded for each month in the sheet, not what was paid in that month.
+// Totals count only platforms marked "In total" in the sheet; the rest are listed underneath, never mixed in.
+const PLT_SCOPE_COLOR={'Shared':'#3987e5','XCF only':'#CF89FE'};
+const PLT_USE_COLOR={'High':'#3eccff','Medium':'#4a86b0','Low':'#FDCC08','New tool':'#CF89FE'};
+const PLT_USE_ON={'High':3,'Medium':2,'Low':1,'New tool':0};
+const PLT_SCOPES=['All','Shared','XCF only'];
+const PLT={month:null,scope:'All',sort:'cost',dir:'desc'};
+function pltEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function pltMoney(n){
+  const small=Math.abs(n)<1000&&Math.abs(n%1)>0.004;
+  return '$'+n.toLocaleString('en-NZ',{minimumFractionDigits:small?2:0,maximumFractionDigits:small?2:0});
+}
+function pltCompact(n){
+  if(n>=1e6)return '$'+(n/1e6).toFixed(2)+'M';
+  if(n>=1e3)return '$'+Math.round(n/1e3)+'K';
+  return '$'+Math.round(n);
+}
+function pltSigned(n){return (n>0?'+':n<0?'−':'')+pltMoney(Math.abs(n));}
+function pltPct(part,whole){return whole?Math.round(part/whole*1000)/10:0;}
+function pltShare(part,whole){const p=pltPct(part,whole);return p>0?p.toFixed(1)+'%':(part>0?'<0.1%':'0%');}
+function pltChip(delta,old,vs){
+  if(!vs)return'';
+  if(Math.round(delta*100)===0)return'<span class="plt-chip plt-flat">no change vs '+pltEsc(vs)+'</span>';
+  const up=delta>0, p=old?Math.abs(pltPct(delta,old)):null;
+  return'<span class="plt-chip '+(up?'plt-up':'plt-down')+'">'+(up?'▲ ':'▼ ')+pltSigned(delta)+(p!==null?' · '+(up?'+':'−')+p.toFixed(1)+'%':'')+' vs '+pltEsc(vs)+'</span>';
+}
+function pltMeter(level){
+  const on=PLT_USE_ON[level]||0, c=PLT_USE_COLOR[level]||'#fff';
+  if(level==='New tool')return'<span style="color:'+c+';font-weight:700">New tool</span>';
+  return'<span class="plt-meter" aria-hidden="true">'+[1,2,3].map(i=>'<i'+(i<=on?' style="background:'+c+'"':'')+'></i>').join('')+'</span>'+pltEsc(level);
+}
+function pltScopeChip(scope){return'<span class="plt-scope" style="--sc:'+(PLT_SCOPE_COLOR[scope]||'#fff')+'">'+pltEsc(scope)+'</span>';}
+function pltSetMonth(k){PLT.month=k;renderPlatform();}
+function pltSetScope(i){PLT.scope=PLT_SCOPES[i];renderPlatform();}
+function pltSort(k){
+  if(PLT.sort===k){PLT.dir=PLT.dir==='desc'?'asc':'desc';}
+  else{PLT.sort=k;PLT.dir=(k==='tool'||k==='usage')?'asc':'desc';}
+  renderPlatform();
+}
+function pltChange(r,prevLabel){
+  const c=r.change;
+  if(!c)return'<span class="plt-muted">—</span>';
+  if(c.kind==='same')return'<span class="plt-muted">no change</span>';
+  if(c.kind==='new')return'<span class="plt-chip plt-up">NEW</span> <span class="plt-c-up">'+pltSigned(c.delta)+'</span><div class="plt-sub">not listed in '+pltEsc(prevLabel)+'</div>';
+  const up=c.kind==='up';
+  return'<span class="'+(up?'plt-c-up':'plt-c-down')+'">'+(up?'▲ ':'▼ ')+pltSigned(c.delta)+'</span><div class="plt-sub">from '+pltMoney(c.prev)+(c.prevName?' (was '+pltEsc(c.prevName)+')':'')+'</div>';
+}
+function pltRow(r,maxCost,total,prevLabel){
+  return'<tr><td><div class="plt-tool-n">'+pltEsc(r.tool)+'</div><div class="plt-sub">'+pltEsc(r.category)+'</div></td>'+
+    '<td>'+pltScopeChip(r.scope)+'</td>'+
+    '<td class="plt-num plt-muted">'+pltEsc(r.seats)+'</td>'+
+    '<td class="plt-cost"><span class="plt-cost-v">'+pltMoney(r.annual)+'</span><div class="plt-track"><div class="plt-fill" style="width:'+Math.max(1.5,r.annual/maxCost*100)+'%;background:'+(PLT_SCOPE_COLOR[r.scope]||'#fff')+'"></div></div></td>'+
+    '<td class="plt-num">'+pltShare(r.annual,total)+'</td>'+
+    '<td>'+pltChange(r,prevLabel)+'</td>'+
+    '<td class="plt-num">'+pltMeter(r.usage)+'</td>'+
+    '<td class="plt-notes">'+pltEsc(r.notes)+'</td></tr>';
+}
+function renderPlatform(){
+  const body=document.getElementById('plt-body');
+  if(!body)return;
+  const D=PLATFORM_DATA;
+  if(!D||!D.months||!D.months.length){
+    body.innerHTML='<div class="rq-empty">No platform data yet. Ask Claude to “sync the platform spend data” and it will copy it across from the Google Sheet.</div>';
+    return;
+  }
+  const months=D.months;
+  if(!PLT.month||!months.some(m=>m.key===PLT.month))PLT.month=months[months.length-1].key;
+  const mi=months.findIndex(m=>m.key===PLT.month), M=months[mi], T=M.totals, C=M.changes;
+  const prev=mi>0?months[mi-1]:null, vs=prev?prev.label:null;
+  const synced=new Date(D.syncedAt).toLocaleDateString('en-NZ',{day:'numeric',month:'short',year:'numeric',timeZone:'Pacific/Auckland'});
+  const meaning={};(D.usageKey||[]).forEach(k=>{meaning[k.level]=k.meaning;});
+
+  let h='<div class="plt-wrap">';
+  if(D.stale)h+='<div class="plt-warn"><strong>This data is '+D.ageDays+' days old.</strong> It is a copy of the Google Sheet taken on '+synced+'. Ask Claude to “sync the platform spend data” to bring it up to date.</div>';
+  if(D.mismatches&&D.mismatches.length)h+='<div class="plt-warn"><strong>These totals do not match the sheet’s own Summary tab.</strong> '+D.mismatches.map(pltEsc).join(' · ')+'</div>';
+
+  // Month switcher
+  h+='<div class="plt-bar"><div class="plt-pills" role="group" aria-label="Month">'+
+    months.map(m=>'<button class="plt-pill" aria-pressed="'+(m.key===M.key)+'" onclick="pltSetMonth(\''+m.key+'\')">'+pltEsc(m.label)+'</button>').join('')+
+    '</div><div class="plt-sync">Copied from the Google Sheet on '+synced+'</div></div>';
+
+  // Totals for the month
+  const low=M.byUsage.find(u=>u.level==='Low')||{total:0,tools:[]};
+  const kpi=(label,val,sub,color)=>'<div class="plt-kpi" style="--kc:'+color+'"><div class="plt-kpi-l">'+label+'</div><div class="plt-kpi-v">'+val+'</div><div class="plt-kpi-s">'+sub+'</div></div>';
+  h+='<div class="plt-kpis">'+
+    kpi('Total yearly cost · '+pltEsc(M.label),pltMoney(T.total),pltChip(T.total-(prev?prev.totals.total:0),prev?prev.totals.total:0,vs)+(prev?'':'First month in the sheet')+'<br>NZD per year, platforms in the total','#3eccff')+
+    kpi('Shared platforms',pltMoney(T.shared),pltShare(T.shared,T.total)+' of the total<br>'+pltChip(T.shared-(prev?prev.totals.shared:0),prev?prev.totals.shared:0,vs),PLT_SCOPE_COLOR['Shared'])+
+    kpi('XCF-only platforms',pltMoney(T.xcf),pltShare(T.xcf,T.total)+' of the total<br>'+pltChip(T.xcf-(prev?prev.totals.xcf:0),prev?prev.totals.xcf:0,vs),PLT_SCOPE_COLOR['XCF only'])+
+    kpi('Platforms in the total',String(T.toolCount),T.notInTotalCount?T.notInTotalCount+' more listed but left out ('+pltMoney(T.notInTotal)+')':'None left out','#6AEAAA')+
+    kpi('Low-usage spend',pltMoney(low.total),low.tools.length?pltEsc(low.tools.join(', '))+' · used quarterly or less':'No low-usage platforms this month','#FDCC08')+
+    '</div>';
+
+  // Trend by month, and cost by how much each platform is used
+  const maxTotal=Math.max(...months.map(m=>m.totals.total),1);
+  const trend='<div class="plt-trend">'+months.map(m=>{
+    const sh=m.totals.total?m.totals.shared/m.totals.total*100:0;
+    return'<button class="plt-col" aria-pressed="'+(m.key===M.key)+'" onclick="pltSetMonth(\''+m.key+'\')" title="'+pltEsc(m.label)+': '+pltMoney(m.totals.total)+' (Shared '+pltMoney(m.totals.shared)+', XCF only '+pltMoney(m.totals.xcf)+')">'+
+      '<span class="plt-col-v">'+pltCompact(m.totals.total)+'</span>'+
+      '<span class="plt-col-plot"><span class="plt-stack" style="height:'+Math.max(4,Math.round(m.totals.total/maxTotal*130))+'px">'+
+      '<span style="height:'+(100-sh)+'%;background:'+PLT_SCOPE_COLOR['XCF only']+'"></span><span style="height:'+sh+'%;background:'+PLT_SCOPE_COLOR['Shared']+'"></span></span></span>'+
+      '<span class="plt-col-l">'+pltEsc(m.label)+'</span></button>';
+  }).join('')+'</div>'+
+  '<div class="plt-legend"><span><i style="background:'+PLT_SCOPE_COLOR['Shared']+'"></i>Shared</span><span><i style="background:'+PLT_SCOPE_COLOR['XCF only']+'"></i>XCF only</span><span>Click a month to switch to it</span></div>';
+
+  const useRows=M.byUsage.filter(u=>u.total>0);
+  const useBar='<div class="plt-use-bar" role="img" aria-label="Cost by usage level">'+useRows.map(u=>{
+    const p=pltPct(u.total,T.total);
+    return'<div style="flex:'+u.total+' 0 0;background:'+PLT_USE_COLOR[u.level]+'" title="'+pltEsc(u.level)+': '+pltMoney(u.total)+'">'+(p>=9?p.toFixed(0)+'%':'')+'</div>';
+  }).join('')+'</div>';
+  const useList=useRows.map(u=>{
+    const shown=u.tools.slice(0,7).join(', ')+(u.tools.length>7?' +'+(u.tools.length-7)+' more':'');
+    return'<div class="plt-use-row"><span class="plt-sw" style="background:'+PLT_USE_COLOR[u.level]+'"></span>'+
+      '<div><div class="plt-use-h"><b>'+pltEsc(u.level)+'</b>'+(meaning[u.level]?' <span class="plt-muted">· used '+pltEsc(meaning[u.level])+'</span>':'')+'</div><div class="plt-use-tools">'+pltEsc(shown)+'</div></div>'+
+      '<div class="plt-use-v"><b>'+pltMoney(u.total)+'</b><span>'+pltShare(u.total,T.total)+' · '+u.count+' platform'+(u.count===1?'':'s')+'</span></div></div>';
+  }).join('');
+
+  h+='<div class="plt-grid">'+
+    '<div class="plt-panel"><div class="plt-panel-h"><div class="plt-panel-t">Total yearly cost by month</div><div class="plt-panel-s">NZD per year · Shared and XCF only stacked</div></div><div class="plt-panel-b">'+trend+'</div></div>'+
+    '<div class="plt-panel"><div class="plt-panel-h"><div class="plt-panel-t">Cost by how much it is used · '+pltEsc(M.label)+'</div><div class="plt-panel-s">share of the total</div></div><div class="plt-panel-b">'+useBar+useList+'</div></div>'+
+    '</div>';
+
+  // Platform table for the month
+  let rows=M.rows.filter(r=>r.inTotal&&(PLT.scope==='All'||r.scope===PLT.scope));
+  const keyFn={tool:r=>r.tool.toLowerCase(),cost:r=>r.annual,change:r=>r.change?r.change.delta:0,usage:r=>{const i=['High','Medium','Low','New tool'].indexOf(r.usage);return i<0?9:i;}}[PLT.sort];
+  rows.sort((a,b)=>{const x=keyFn(a),y=keyFn(b);const c=x<y?-1:x>y?1:0;return (PLT.dir==='asc'?c:-c)||a.tool.localeCompare(b.tool);});
+  const maxCost=Math.max(...rows.map(r=>r.annual),1);
+  const shownTotal=rows.reduce((s,r)=>s+r.annual,0);
+  const th=(label,key)=>'<th'+(PLT.sort===key?' aria-sort="'+(PLT.dir==='asc'?'ascending':'descending')+'"':'')+'><button class="plt-th-btn" onclick="pltSort(\''+key+'\')">'+label+(PLT.sort===key?(PLT.dir==='asc'?' ▲':' ▼'):'')+'</button></th>';
+  const sc=PLT.scope==='Shared'?{d:C&&C.sharedDelta,o:prev&&prev.totals.shared}:PLT.scope==='XCF only'?{d:C&&C.xcfDelta,o:prev&&prev.totals.xcf}:{d:C&&C.delta,o:prev&&prev.totals.total};
+  h+='<div class="plt-panel plt-full"><div class="plt-panel-h"><div class="plt-panel-t">Platforms · '+pltEsc(M.label)+'</div>'+
+    '<div class="plt-ctrl" role="group" aria-label="Show">'+PLT_SCOPES.map((s,i)=>'<button class="plt-pill" aria-pressed="'+(PLT.scope===s)+'" onclick="pltSetScope('+i+')">'+(s==='All'?'All platforms':pltEsc(s))+'</button>').join('')+'</div></div>'+
+    '<div class="plt-tablewrap"><table class="plt-table"><thead><tr>'+th('Platform','tool')+'<th>Scope</th><th>Seats</th>'+th('Annual cost (NZD)','cost')+'<th>Share</th>'+th(prev?'vs '+pltEsc(prev.label):'Change','change')+th('Usage','usage')+'<th>Notes</th></tr></thead><tbody>'+
+    (rows.length?rows.map(r=>pltRow(r,maxCost,T.total,vs)).join(''):'<tr><td colspan="8" class="plt-muted">No platforms in this view.</td></tr>')+
+    '</tbody><tfoot><tr><td colspan="3">Total · '+(PLT.scope==='All'?'all platforms in the total':pltEsc(PLT.scope))+' · '+rows.length+' platform'+(rows.length===1?'':'s')+'</td>'+
+    '<td class="plt-num">'+pltMoney(shownTotal)+'</td><td class="plt-num">'+pltShare(shownTotal,T.total)+'</td><td>'+(prev?pltChip(sc.d,sc.o,vs):'')+'</td><td colspan="2"></td></tr></tfoot></table></div>';
+  const out=M.rows.filter(r=>!r.inTotal);
+  h+=(out.length?'<div class="plt-out"><div class="plt-out-h">Listed in the sheet but not in the total</div>'+out.map(r=>
+      '<div class="plt-out-row"><b>'+pltEsc(r.tool)+'</b><span>'+pltMoney(r.annual)+' · '+pltEsc(r.scope)+'</span><span>'+pltMeter(r.usage)+'</span><span>'+pltEsc(r.notes)+(r.howToCheck?' · To check usage: '+pltEsc(r.howToCheck):'')+'</span></div>').join('')+'</div>':'')+'</div>';
+
+  // What changed since the month before. The items add up to the change in the total.
+  let changes='';
+  if(C){
+    const maxD=Math.max(...C.items.map(i=>Math.abs(i.delta)),1);
+    const label={new:'New',up:'Up',down:'Down',dropped:'Dropped'};
+    changes='<div class="plt-panel"><div class="plt-panel-h"><div class="plt-panel-t">What changed since '+pltEsc(prev.label)+'</div><div class="plt-panel-s">adds up to the change in the total</div></div><div class="plt-panel-b">'+
+      '<div class="plt-net"><span class="plt-net-v '+(C.delta>0?'plt-c-up':C.delta<0?'plt-c-down':'')+'">'+(C.delta>0?'▲ ':C.delta<0?'▼ ':'')+pltSigned(C.delta)+'</span>'+
+      (C.pct!==null?'<span class="plt-chip '+(C.delta>0?'plt-up':'plt-down')+'">'+(C.delta>0?'+':'−')+Math.abs(C.pct).toFixed(1)+'%</span>':'')+
+      '<span class="plt-panel-s">Shared '+pltSigned(C.sharedDelta)+' · XCF only '+pltSigned(C.xcfDelta)+'</span></div>'+
+      (C.items.length?C.items.map(i=>{
+        const w=Math.max(3,Math.abs(i.delta)/maxD*100), neg=i.delta<0;
+        const colour=neg?'var(--mint)':'var(--amber)';
+        return'<div class="plt-ch-row"><span class="plt-k plt-k-'+i.kind+'">'+label[i.kind]+'</span>'+
+          '<div><b>'+pltEsc(i.tool)+'</b><div class="plt-sub">'+pltEsc(i.scope)+'</div></div>'+
+          '<div class="plt-ch-ft">'+pltMoney(i.from)+' → '+pltMoney(i.to)+'</div>'+
+          '<div class="plt-div"><div class="l">'+(neg?'<i style="width:'+w+'%;background:'+colour+'"></i>':'')+'</div><div>'+(neg?'':'<i style="width:'+w+'%;background:'+colour+'"></i>')+'</div></div>'+
+          '<div class="plt-ch-d '+(neg?'plt-c-down':'plt-c-up')+'">'+pltSigned(i.delta)+'</div></div>';
+      }).join(''):'<div class="plt-muted">No platform changed cost.</div>')+
+      '</div></div>';
+  }else{
+    changes='<div class="plt-panel"><div class="plt-panel-h"><div class="plt-panel-t">What changed</div></div><div class="plt-panel-b plt-muted">This is the first month in the sheet, so there is nothing to compare it with yet.</div></div>';
+  }
+
+  // How to check usage, platform by platform
+  const how=(D.usageHowTo||[]).map(x=>'<div class="plt-how-row"><b>'+pltEsc(x.tool)+'</b><span>'+pltEsc(x.how)+'</span></div>').join('');
+  const howPanel='<div class="plt-panel"><details class="plt-how"><summary>How to check usage, platform by platform</summary>'+
+    ((D.usageKey||[]).length?'<div class="plt-sub" style="margin-bottom:6px">'+D.usageKey.map(k=>pltEsc(k.level)+' = '+pltEsc(k.meaning)).join(' · ')+'</div>':'')+
+    (how||'<div class="plt-muted">No instructions recorded in the sheet.</div>')+'</details></div>';
+
+  h+='<div class="plt-grid plt-start">'+changes+howPanel+'</div></div>';
+  body.innerHTML=h;
+
+  const renamedNote=(D.renamed||[]).map(x=>pltEsc(x.from)+' and '+pltEsc(x.to)+' are treated as the same platform.').join(' ');
+  document.getElementById('plt-note').innerHTML=
+    'Figures are the <strong>annual cost</strong> of each platform in NZD as recorded for the month in the sheet “'+pltEsc(D.sourceTitle||'Platform spend and usage tracker')+'”, not what was paid in that month. '+
+    'Totals count only platforms marked “In total” in the sheet. '+(renamedNote?renamedNote+' ':'')+
+    'This tab is a copy of the sheet taken on '+synced+'. To refresh it, ask Claude to “sync the platform spend data”.';
+}
+
 /* ── VIEW SWITCHER ── */
 function showView(v, btn){
   document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
@@ -1506,6 +1801,7 @@ function showView(v, btn){
   }
   if(v==='requests'){renderRequests();renderUntracked();}
   if(v==='regional') renderRegional();
+  if(v==='platform') renderPlatform();
   if(v==='roadmap'){
     if(!window._rtInit){window._rtInit=true;initRoadmap();}
     else{

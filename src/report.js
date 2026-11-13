@@ -15,7 +15,9 @@ function replaceArray(html, name, data) {
     throw new Error(`Could not find "const ${name} = [...];" in template.html`);
   }
   const replacement = `const ${name} = ${JSON.stringify(data, null, 2)};`;
-  return html.replace(regex, replacement);
+  // A function, not the string itself: String.replace reads "$&", "$'" and "$$" inside a replacement string as
+  // patterns, so any data containing them (a "$$" in a note, say) would be silently changed.
+  return html.replace(regex, () => replacement);
 }
 
 // Replace a named JS string literal in the template: const NAME = "...";
@@ -115,7 +117,7 @@ function stripCommentUrls(text) {
     .trim();
 }
 
-function generateReport({ members, missingTasks, overdueTasks, pmData, scopeCreepData, oooData, pmUpdatesData, roadmapData, bauData, requestsData, regionalData }) {
+function generateReport({ members, missingTasks, overdueTasks, pmData, scopeCreepData, oooData, pmUpdatesData, roadmapData, bauData, requestsData, regionalData, platformData }) {
   if (!fs.existsSync(TEMPLATE_PATH)) {
     throw new Error(`HTML template not found at ${TEMPLATE_PATH}`);
   }
@@ -152,6 +154,8 @@ function generateReport({ members, missingTasks, overdueTasks, pmData, scopeCree
   // Placeholder is an array literal but the payload is an object — replaceArray
   // only cares about the declaration shape it is replacing.
   html = replaceArray(html, 'REGIONAL_DATA', regionalData || {});
+  // Same trick: the placeholder is `const PLATFORM_DATA=[];` and the payload is an object (null = no snapshot yet)
+  html = replaceArray(html, 'PLATFORM_DATA', platformData || {});
   html = replaceString(html, 'GENERATED_AT', generatedAt);
   return html;
 }

@@ -38,6 +38,8 @@ src/asana.js           — all Asana API calls (7 data builders)
 src/slackUpdates.js    — Slack PM updates fetcher + cache
 src/requestTiming.js   — Request Cycle Time builder + timing/summary cache
 src/regionalRequests.js— Regional Requests builder
+src/platformSpend.js   — Platform spend and usage builder (reads platform-spend-data.json, no network)
+platform-spend-data.json — copy of the "XCF Platform spend and usage tracker" Google Sheet. COMMIT THIS.
 src/report.js          — injects data arrays into template.html, writes reports/xcf-report-YYYY-MM-DD.html
 template.html          — self-rendering single-file dashboard (all JS/CSS inline)
 slack-pm-updates-cache.json — persists Slack data + manually-added executive summaries
@@ -310,7 +312,38 @@ same centre appears as `3071` and `3071 Digital Customer Engagement`. Anything w
 code is listed with Asana links so it can be corrected at source. That list went from 79 to
 0 in a day once it was clickable — the same pattern works for any data-quality gap.
 
-### 11. BAU Tab (Design + Performance) — orphaned
+### 11. Platform spend and usage Tab
+**Data builder:** `buildPlatformData()` in `src/platformSpend.js`
+**Source:** the Google Sheet "XCF Platform spend and usage tracker"
+(`17Nvu94HFXskwKG97-ZYbHlKp7ZBAtS2J7tcMxkNhAmA`): tabs `Platforms` (one row per tool per month), `Summary`
+(the sheet's own totals) and `How to view usage`.
+**Shows:** a month switcher, totals cards (total, Shared, XCF only, count, low-usage spend), cost by month, cost by
+how much each tool is used, a sortable table with a Shared / XCF only filter, what changed since the previous month, and
+how to check usage tool by tool.
+
+**The figures are ANNUAL cost in NZD as recorded for each month, not what was paid that month.** Say so on the page
+(it does). Totals count only rows with `In total` = Yes; a tool marked No (Magnific, not yet live) is listed underneath.
+
+**The build has no Google login**, so it cannot read the sheet. The tab is built from `platform-spend-data.json`, a
+copy of the sheet, refreshed by Claude:
+1. Read the three ranges with the Google Sheets connector (`Platforms!A1:Z200`, `Summary!A1:Z100`,
+   `'How to view usage'!A1:Z100`) and save them as `{ "spreadsheetId", "title", "platforms": {"values"}, "summary": {"values"}, "howto": {"values"} }`.
+2. `node scripts/platform-spend-from-sheet.js raw.json` writes `platform-spend-data.json`. It **refuses** (exit 1,
+   nothing written) if a header changed, a cost is not a number, a scope or usage word is unknown, a tool is listed
+   twice in a month, or the totals it works out from the rows differ from the sheet's `Summary` tab to the cent.
+3. Rebuild. The build warns, and the tab shows a banner, when the snapshot is over 35 days old.
+Ask the user for a re-sync when a new month is added to the sheet.
+
+**Renamed tools:** `TOOL_ALIASES` in `src/platformSpend.js` treats "Chat GPT" (Sep 2026) and "Open AI" (Oct 2026) as one
+tool, so the month view shows a cost change rather than one tool dropped and one added. The page footnotes it. Add a
+line there when the sheet renames another tool.
+
+**Deploy scan:** any external link in the page sends a deploy to manual review, so the tab shows no URLs and strips
+email addresses from the sheet's text (the snapshot file keeps the sheet's words exactly).
+
+**Do not use the `ps-` prefix** for new CSS: the POD summary tab already owns it. This tab uses `plt-` / `plt`.
+
+### 12. BAU Tab (Design + Performance) — orphaned
 **Data builder:** `buildBAUData()` in `src/asana.js`
 **Source:** Design BAU board + Performance BAU board
 **Note:** `buildBAUData()` still runs and `BAU_DATA` is still injected, but the nav button

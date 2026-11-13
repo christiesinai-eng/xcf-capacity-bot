@@ -100,4 +100,5 @@ standalone `roadmap-timeline.html` file, not for the main report.
 | How data reaches the HTML | `src/report.js` — `replaceArray`, `replaceString` |
 | Markdown rendering for exec summaries | `src/report.js` — `mdToHtml` |
 | Slack fetching and week grouping | `src/slackUpdates.js` |
+| Platform spend and usage tab (data comes from a copy of a Google Sheet; "sync the platform spend data" refreshes it) | `src/platformSpend.js`, `platform-spend-data.json`, `scripts/platform-spend-from-sheet.js` |
 | Everything visual | `template.html` |

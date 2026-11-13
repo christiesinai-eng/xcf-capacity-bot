@@ -1,0 +1,428 @@
+{
+  "source": {
+    "title": "XCF Platform spend and usage tracker",
+    "spreadsheetId": "17Nvu94HFXskwKG97-ZYbHlKp7ZBAtS2J7tcMxkNhAmA",
+    "tabs": [
+      "Platforms",
+      "Summary",
+      "How to view usage"
+    ]
+  },
+  "syncedAt": "2026-11-13T20:38:41.446Z",
+  "months": [
+    {
+      "key": "2026-09",
+      "label": "Sep 2026",
+      "rows": [
+        {
+          "tool": "Artlist",
+          "scope": "Shared",
+          "category": "Music & video stock library, AI VOs",
+          "seats": "19 x full seats",
+          "seatCount": 19,
+          "annual": 51000,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Canva",
+          "scope": "Shared",
+          "category": "Branded template design/production",
+          "seats": "350 x full seats",
+          "seatCount": 350,
+          "annual": 141000,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Frameio",
+          "scope": "Shared",
+          "category": "Video proofing",
+          "seats": "40 x full seats",
+          "seatCount": 40,
+          "annual": 41635,
+          "usage": "Medium",
+          "inTotal": true,
+          "notes": "Cost split with other Xeros"
+        },
+        {
+          "tool": "Wistia",
+          "scope": "Shared",
+          "category": "Video hosting",
+          "seats": "Unlimited seats",
+          "seatCount": null,
+          "annual": 51000,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Elevenlabs",
+          "scope": "Shared",
+          "category": "Voice overs",
+          "seats": "15 x full seats",
+          "seatCount": 15,
+          "annual": 35000,
+          "usage": "Medium",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "YunoJuno",
+          "scope": "Shared",
+          "category": "Freelancer bookings",
+          "seats": "Unlimited",
+          "seatCount": null,
+          "annual": 384000,
+          "usage": "High",
+          "inTotal": true,
+          "notes": "Marked * on slide"
+        },
+        {
+          "tool": "Webflow",
+          "scope": "XCF only",
+          "category": "Brand.xero.com",
+          "seats": "7 x full seats",
+          "seatCount": 7,
+          "annual": 8200,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Hume",
+          "scope": "XCF only",
+          "category": "Voice overs",
+          "seats": "1 x full seat",
+          "seatCount": 1,
+          "annual": 230,
+          "usage": "Medium",
+          "inTotal": true,
+          "notes": "Kept for kiwi voice. Based on average monthly spend"
+        },
+        {
+          "tool": "Wispr Flow",
+          "scope": "XCF only",
+          "category": "Voice to text dictation",
+          "seats": "1 x full seat",
+          "seatCount": 1,
+          "annual": 238,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Chat GPT",
+          "scope": "XCF only",
+          "category": "Writer assistant",
+          "seats": "1 x full seat",
+          "seatCount": 1,
+          "annual": 34,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Anthropic",
+          "scope": "XCF only",
+          "category": "Inc Claude Design",
+          "seats": "2 x full seats",
+          "seatCount": 2,
+          "annual": 584,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Magnific",
+          "scope": "XCF only",
+          "category": "Creative assets (icons, stock)",
+          "seats": "15 x full seats",
+          "seatCount": 15,
+          "annual": 25537,
+          "usage": "New tool",
+          "inTotal": false,
+          "notes": "Not yet live, not included for Sep"
+        },
+        {
+          "tool": "Dropbox",
+          "scope": "XCF only",
+          "category": "Storage & sharing",
+          "seats": "55 x full seats",
+          "seatCount": 55,
+          "annual": 26294,
+          "usage": "Low",
+          "inTotal": true,
+          "notes": "Won't renew in Nov"
+        },
+        {
+          "tool": "Flora Enterprise",
+          "scope": "XCF only",
+          "category": "AI asset creation",
+          "seats": "22 x full seats",
+          "seatCount": 22,
+          "annual": 26400,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Every io",
+          "scope": "XCF only",
+          "category": "AI newsletter",
+          "seats": "1 x seat",
+          "seatCount": 1,
+          "annual": 53.3,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "key": "2026-10",
+      "label": "Oct 2026",
+      "rows": [
+        {
+          "tool": "Artlist",
+          "scope": "Shared",
+          "category": "Music & video stock library, AI VOs",
+          "seats": "19 x full seats",
+          "seatCount": 19,
+          "annual": 51000,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Canva",
+          "scope": "Shared",
+          "category": "Branded template design/production",
+          "seats": "350 x full seats",
+          "seatCount": 350,
+          "annual": 141000,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Frameio",
+          "scope": "Shared",
+          "category": "Video proofing",
+          "seats": "45 x full seats",
+          "seatCount": 45,
+          "annual": 103545,
+          "usage": "Medium",
+          "inTotal": true,
+          "notes": "Cost split with other Xeros"
+        },
+        {
+          "tool": "Wistia",
+          "scope": "Shared",
+          "category": "Video hosting",
+          "seats": "Unlimited seats",
+          "seatCount": null,
+          "annual": 50825,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Elevenlabs",
+          "scope": "Shared",
+          "category": "Voice overs",
+          "seats": "15 x full seats",
+          "seatCount": 15,
+          "annual": 36310,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "YunoJuno",
+          "scope": "Shared",
+          "category": "Freelancer bookings",
+          "seats": "Unlimited",
+          "seatCount": null,
+          "annual": 254000,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Xero DAM",
+          "scope": "Shared",
+          "category": "Digital asset management",
+          "seats": "Mix of seats",
+          "seatCount": null,
+          "annual": 374243,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Webflow",
+          "scope": "XCF only",
+          "category": "Brand.xero.com",
+          "seats": "7 x full seats",
+          "seatCount": 7,
+          "annual": 8200,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Wispr Flow",
+          "scope": "XCF only",
+          "category": "Voice to text dictation",
+          "seats": "1 x full seat",
+          "seatCount": 1,
+          "annual": 238,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Open AI",
+          "scope": "XCF only",
+          "category": "Writer assistant",
+          "seats": "1 x full seat",
+          "seatCount": 1,
+          "annual": 600,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Anthropic",
+          "scope": "XCF only",
+          "category": "Inc Claude Design",
+          "seats": "2 x full seats",
+          "seatCount": 2,
+          "annual": 584,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Magnific",
+          "scope": "XCF only",
+          "category": "Creative assets (icons, stock)",
+          "seats": "15 x full seats",
+          "seatCount": 15,
+          "annual": 26834,
+          "usage": "New tool",
+          "inTotal": false,
+          "notes": "Not yet live, not included for Oct"
+        },
+        {
+          "tool": "Dropbox",
+          "scope": "XCF only",
+          "category": "Storage & sharing",
+          "seats": "55 x full seats",
+          "seatCount": 55,
+          "annual": 26294,
+          "usage": "Low",
+          "inTotal": true,
+          "notes": "Won't renew end of Nov"
+        },
+        {
+          "tool": "Flora Enterprise",
+          "scope": "XCF only",
+          "category": "AI asset creation",
+          "seats": "22 x full seats",
+          "seatCount": 22,
+          "annual": 46854,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        },
+        {
+          "tool": "Every io",
+          "scope": "XCF only",
+          "category": "AI newsletter",
+          "seats": "1 x seat",
+          "seatCount": 1,
+          "annual": 53.3,
+          "usage": "High",
+          "inTotal": true,
+          "notes": ""
+        }
+      ]
+    }
+  ],
+  "sheetSummary": [
+    {
+      "key": "2026-09",
+      "label": "Sep 2026",
+      "shared": 703635,
+      "xcf": 62033.3,
+      "total": 765668.3
+    },
+    {
+      "key": "2026-10",
+      "label": "Oct 2026",
+      "shared": 1010923,
+      "xcf": 82823.3,
+      "total": 1093746.3
+    }
+  ],
+  "usageHowTo": [
+    {
+      "tool": "Artlist",
+      "how": "Laura Ozeri (laura.o@artlist.io) emails a monthly report. Check last login for each user (message Laura to create the report)"
+    },
+    {
+      "tool": "Canva",
+      "how": "Check each team's usage report under settings"
+    },
+    {
+      "tool": "Elevenlabs",
+      "how": "Developers > Analytics > Usage"
+    },
+    {
+      "tool": "Frameio",
+      "how": "Users > Last login"
+    },
+    {
+      "tool": "Flora Enterprise",
+      "how": "When Enterprise is active, check how to get usage"
+    },
+    {
+      "tool": "Magnific",
+      "how": "When active, check how to get usage"
+    },
+    {
+      "tool": "Wistia",
+      "how": "Settings > Team activity"
+    },
+    {
+      "tool": "YunoJuno",
+      "how": "Look at contracts created for team members"
+    },
+    {
+      "tool": "Webflow",
+      "how": "Brand.xero.com"
+    },
+    {
+      "tool": "Hume",
+      "how": "Kept for kiwi voice"
+    }
+  ],
+  "usageKey": [
+    {
+      "level": "High",
+      "meaning": "daily"
+    },
+    {
+      "level": "Medium",
+      "meaning": "regular"
+    },
+    {
+      "level": "Low",
+      "meaning": "quarterly"
+    }
+  ]
+}
