@@ -778,9 +778,6 @@ async function buildOOOData() {
   const podMap = loadPodMap();
 
   const workspaceMembers = await getWorkspaceMembers();
-  const memberByName = {};
-  workspaceMembers.forEach(m => { memberByName[m.name] = m; });
-
   const entries = [];
   const seen = new Set();
 
@@ -800,7 +797,7 @@ async function buildOOOData() {
     if (manualOooNames.has(member.name)) continue;
     const vd = member.vacation_dates;
     if (vd?.start_on && vd?.end_on) {
-      const pod = MANUAL_POD[member.name] || podMap[member.gid] || 'Unknown';
+      const pod = MANUAL_POD[member.name] || podMap[member.name] || 'Unknown';
       addEntry(member.name, pod, vd.start_on, vd.end_on, 'asana');
     }
   }
@@ -809,7 +806,7 @@ async function buildOOOData() {
   for (const entry of MANUAL_OOO) {
     const member = workspaceMembers.find(m => m.name.startsWith(entry.name));
     if (!member) continue;
-    const pod = MANUAL_POD[member.name] || podMap[member.gid] || 'Unknown';
+    const pod = MANUAL_POD[member.name] || podMap[member.name] || 'Unknown';
     addEntry(member.name, pod, entry.start, entry.end, 'manual');
   }
 
@@ -834,8 +831,7 @@ async function buildOOOData() {
       const name = task.assignee?.name;
       if (!name) continue;
       if (manualOooNames.has(name)) continue; // manual entry takes priority
-      const member = memberByName[name];
-      const pod = MANUAL_POD[name] || (member ? (podMap[member.gid] || 'Unknown') : 'Unknown');
+      const pod = MANUAL_POD[name] || podMap[name] || 'Unknown';
       addEntry(name, pod, task.start_on || task.due_on, task.due_on, 'project');
     }
   } catch (err) {
