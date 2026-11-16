@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { inlineBrand } = require('./brandAssets');
 
 const TEMPLATE_PATH = path.join(__dirname, '..', 'template.html');
 const REPORTS_DIR = path.join(__dirname, '..', 'reports');
@@ -130,7 +131,9 @@ function generateReport({ members, missingTasks, overdueTasks, pmData, scopeCree
     hour12: true,
   }) + ' NZT';
 
-  let html = fs.readFileSync(TEMPLATE_PATH, 'utf8');
+  // the look (fonts, logos, styles, overview script) is inlined first, so the report stays one self-contained file
+  // and nothing in the data can be mistaken for a placeholder
+  let html = inlineBrand(fs.readFileSync(TEMPLATE_PATH, 'utf8'));
   html = replaceArray(html, 'MEMBERS', members);
   html = replaceArray(html, 'MISSING_TASKS', missingTasks);
   html = replaceArray(html, 'OVERDUE_TASKS', overdueTasks);

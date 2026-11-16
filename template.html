@@ -41,6 +41,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .nav-btn{font-size:12px;font-weight:500;padding:7px 16px;border-radius:6px;border:1px solid var(--border);cursor:pointer;background:var(--surface);color:var(--txt);transition:all .15s;white-space:nowrap}
 .nav-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
 .nav-btn:hover:not(.active){background:var(--surface2)}
+/* Work-in-progress tabs: greyed out but still clickable (and still readable when selected) */
+.nav-btn.nav-wip{color:var(--muted);opacity:.55;border-style:dashed}
+.nav-btn.nav-wip:hover{opacity:.85}
+.nav-btn.nav-wip.active{background:#5a6478;border-color:#5a6478;border-style:solid;color:#fff;opacity:1}
 
 /* ── Request Cycle Time ── */
 .rq-hdr{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:14px}
@@ -746,44 +750,100 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   #view-forecaster .rt-legend{display:none}
 }
 </style>
+<style id="brand">{{BRAND_CSS}}</style>
+<script>try{if(localStorage.getItem('xcf-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
 </head>
 <body>
 
-<!-- CONTROL TOWER BANNER -->
-<div class="ct-banner">
-  <div class="ct-banner-title">XCF Lighthouse</div>
-  <div class="ct-banner-sub">Creative Foundry · Reporting Suite</div>
-</div>
+<div class="app">
 
-<!-- TOP BAR -->
-<div class="top-bar">
-  <div class="top-row">
-    <span class="xcf-badge">XCF</span>
-    <span class="top-title">Creative Foundry <span class="top-subtitle">· Capacity Report</span></span>
+<!-- SIDEBAR: name placeholder, grouped links, theme switch -->
+<aside class="nav-bar" aria-label="Report sections">
+  <div class="nav-brand">{{BRAND_LOGO}}</div>
+  <div class="nav-grp">
+    <a class="nav-btn active" href="#overview"><i class="dot d-blue"></i>Overview</a>
+    <a class="nav-btn" href="#assets"><i class="dot d-sky"></i>Assets delivered</a>
+  </div>
+  <div class="nav-grp"><span class="nav-grp-label">People and capacity</span>
+    <a class="nav-btn" href="#capacity"><i class="dot d-coral"></i>Capacity</a>
+    <a class="nav-btn" href="#pods"><i class="dot d-gold"></i>Pod summary</a>
+    <a class="nav-btn" href="#pmteam"><i class="dot d-sky"></i>PM team</a>
+    <a class="nav-btn" href="#ooo"><i class="dot d-purple"></i>Out of office</a>
+  </div>
+  <div class="nav-grp"><span class="nav-grp-label">Work in flight</span>
+    <a class="nav-btn" href="#forecaster"><i class="dot d-mint"></i>Project forecaster</a>
+    <a class="nav-btn" id="nav-missing" href="#missing"><i class="dot d-gold"></i>Tasks needing attention<b id="nav-missing-count">69</b></a>
+    <a class="nav-btn" href="#scope"><i class="dot d-coral"></i>Scope creep and FAA</a>
+    <a class="nav-btn" href="#updates"><i class="dot d-sky"></i>PM updates</a>
+  </div>
+  <div class="nav-grp"><span class="nav-grp-label">Speed and spend</span>
+    <a class="nav-btn" href="#cycle"><i class="dot d-mint"></i>Request cycle time</a>
+    <a class="nav-btn" href="#spend"><i class="dot d-gold"></i>Platform spend and usage</a>
+    <button class="nav-btn nav-wip" type="button" data-more="regional" title="Work in progress"><i class="dot d-grey"></i>Regional Requests - WIP</button>
+  </div>
+  <button class="theme" id="theme-toggle" type="button">Switch to dark mode</button>
+</aside>
+
+<main class="ct-main mk">
+
+<!-- PAGE HEADER -->
+<header class="top-bar" id="overview">
+  <div class="top-left">
+    <h1 class="top-title">Overview</h1>
+    <p class="top-lead">Creative Foundry capacity report</p>
+    <div class="accent" aria-hidden="true"><i style="width:56px;background:var(--xero-blue)"></i><i style="width:28px;background:var(--coral)"></i><i style="width:18px;background:var(--gold)"></i><i style="width:10px;background:var(--mint)"></i></div>
   </div>
   <div class="top-meta">
-    Updated: <strong style="color:#fff" id="generated-at">—</strong>
-    <span class="dot"></span> <span id="task-count">—</span> tasks across all pages
-    <span class="dot"></span> PODs: XCF Utilisation
-    <span class="dot"></span> Includes due-date-only tasks
+    <span>Updated: <strong id="generated-at">—</strong></span>
+    <span><span id="task-count">—</span> tasks across all pages · PODs: XCF Utilisation · Includes due-date-only tasks</span>
   </div>
+</header>
+
+<!-- THE ONE-PAGE OVERVIEW: every card is drawn by brand/workflow.js from the report's own data -->
+<section class="grp" style="margin-top:32px" aria-label="Overview"><div class="grid" id="kpiGrid"></div></section>
+
+<section class="grp" aria-label="People and capacity">
+  <h2 class="t-sec">People and capacity</h2>
+  <p class="t-sub">Who has room, who is stretched, and who is away.</p>
+  <div class="grid">
+    <article class="card s7" id="capacity"></article>
+    <article class="card s5" id="over"></article>
+    <article class="card s12" id="pods"></article>
+    <article class="card s7" id="pmteam"></article>
+    <article class="card s5" id="ooo"></article>
+  </div>
+</section>
+
+<section class="grp" aria-label="Work in flight">
+  <h2 class="t-sec">Work in flight</h2>
+  <p class="t-sub">What is in production, what needs fixing, and what the PMs say.</p>
+  <div class="grid">
+    <article class="card s12" id="forecaster"></article>
+    <article class="card s4" id="missing"></article>
+    <article class="card s4" id="scope"></article>
+    <article class="card s4" id="updates"></article>
+  </div>
+</section>
+
+<section class="grp" aria-label="Speed and spend">
+  <h2 class="t-sec">Speed and spend</h2>
+  <p class="t-sub">How long requests wait, and what the platforms cost.</p>
+  <div class="grid">
+    <article class="card s12" id="cycle"></article>
+    <article class="card s12" id="spend"></article>
+  </div>
+</section>
+
+<div class="footer" id="footer-bar">
+  XCF Capacity Report &nbsp;·&nbsp; 19 May 2026 &nbsp;·&nbsp; 446 tasks (all pages) &nbsp;·&nbsp;
+  Formula: est time ÷ working days (start→due); no start date = all hours on due date &nbsp;·&nbsp; 6h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation
 </div>
 
-<!-- NAV -->
-<div class="nav-bar">
-  <button class="nav-btn active" onclick="showView('capacity',this)">Capacity report</button>
-  <button class="nav-btn" onclick="showView('podsummary',this)">POD summary</button>
-  <button class="nav-btn" id="nav-missing" onclick="showView('missing',this)">Missing fields (69)</button>
-  <button class="nav-btn" onclick="showView('pmteam',this)">PM Team</button>
-  <button class="nav-btn" onclick="showView('scopecreep',this)">Scope Creep &amp; FAA</button>
-  <button class="nav-btn" onclick="showView('forecaster',this)">Project Forecaster</button>
-  <button class="nav-btn" onclick="showView('ooo',this)">OOO</button>
-  <button class="nav-btn" onclick="showView('pmupdates',this)">PM Project Updates</button>
-  <button class="nav-btn" onclick="showView('requests',this)">Request Cycle Time</button>
-  <button class="nav-btn" onclick="showView('regional',this)">Regional Requests</button>
-  <button class="nav-btn" onclick="showView('platform',this)">Platform spend and usage</button>
+</main>
 </div>
 
+<!-- The report's detailed tabs. They are kept whole and opened from "See more" in the window below. -->
+<div id="ct-store" hidden>
 <!-- ══════════════ VIEW: CAPACITY REPORT ══════════════ -->
 <div id="view-capacity" class="view active">
   <div class="time-tabs">
@@ -818,7 +878,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- ══════════════ VIEW: MISSING FIELDS ══════════════ -->
 <div id="view-missing" class="view">
   <div class="tbl-wrap">
-    <div class="section-title">Missing fields <span>Tasks with no estimated time or no due date — excluded from capacity calculations</span></div>
+    <div class="section-title">Tasks needing attention <span>Tasks with no estimated time or no due date — excluded from capacity calculations</span></div>
     <div class="tbl-head mf-head" style="grid-template-columns:2fr 1fr 1fr 110px">
       <span>Task / Project</span><span>Assignee</span><span>Created by</span><span>Missing</span>
     </div>
@@ -841,7 +901,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="view-ooo" class="view">
   <div class="oo-hdr">
     <div>
-      <div class="oo-hdr-title">Team OOO</div>
+      <div class="oo-hdr-title">Team out of office</div>
       <div class="oo-hdr-sub">Out of office periods by POD — Asana vacation dates &amp; leave tracker</div>
     </div>
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-left:auto">
@@ -853,7 +913,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <option value="">All PODs</option>
       </select>
       <div class="oo-legend">
-        <div class="oo-legend-item"><span class="oo-legend-dot" style="background:var(--amber)"></span>OOO Period</div>
+        <div class="oo-legend-item"><span class="oo-legend-dot" style="background:var(--amber)"></span>Out of office period</div>
         <div class="oo-legend-item"><span style="display:inline-block;width:12px;height:2px;background:var(--amber);border-radius:1px"></span>Today</div>
       </div>
     </div>
@@ -966,7 +1026,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="view-regional" class="view">
   <div class="rq-hdr">
     <div>
-      <div class="rq-hdr-title">Regional Requests</div>
+      <div class="rq-hdr-title">Regional Requests - WIP</div>
       <div class="rq-hdr-sub">XCF | Requests by region, business group and cost centre · cancelled requests excluded</div>
     </div>
     <div class="rq-stats" id="rg-stats"></div>
@@ -988,20 +1048,51 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="rq-note" id="plt-note" style="padding:0 24px"></div>
 </div>
 
-<div class="footer" id="footer-bar">
-  XCF Capacity Report &nbsp;·&nbsp; 19 May 2026 &nbsp;·&nbsp; 446 tasks (all pages) &nbsp;·&nbsp;
-  Formula: est time ÷ working days (start→due); no start date = all hours on due date &nbsp;·&nbsp; 6h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation
 </div>
+
+<!-- "See more" window, in the mockup's format: summary figures, then tables and bars. Filled by brand/workflow.js -->
+<dialog id="ct-detail" class="mk" aria-labelledby="dTitle">
+  <div class="ct-dhead">
+    <div><h2 class="t-sec" id="dTitle"></h2><p class="t-sub" id="dSub"></p></div>
+    <div class="ct-dact"><a id="dJump" class="link" href="#" hidden>Go to this section</a><button type="button" class="ct-dclose" id="dClose" aria-label="Close expanded view">✕</button></div>
+  </div>
+  <div id="dBody"></div>
+</dialog>
+
+<!-- The report's original detailed tab, shown whole (opened from the link at the foot of each window) -->
+<dialog id="ct-orig" aria-labelledby="oTitle">
+  <div class="ct-dhead">
+    <div><h2 id="oTitle"></h2><p id="oSub"></p></div>
+    <div class="ct-dact"><button type="button" class="ct-dclose" id="oClose" aria-label="Close">✕</button></div>
+  </div>
+  <div id="oBody"></div>
+</dialog>
+
+<script>
+/* light / dark switch (light is the default; the choice is remembered in this browser) */
+(function(){
+  var KEY='xcf-theme',root=document.documentElement,btn=document.getElementById('theme-toggle');
+  if(!btn)return;
+  function isDark(){return root.getAttribute('data-theme')==='dark';}
+  function label(){btn.textContent=isDark()?'Switch to light mode':'Switch to dark mode';}
+  label();
+  btn.addEventListener('click',function(){
+    root.setAttribute('data-theme',isDark()?'light':'dark');
+    try{localStorage.setItem(KEY,isDark()?'dark':'light');}catch(e){}
+    label();
+  });
+})();
+</script>
 
 <script>
 const BRAND={
-  'Performance':   {bg:'#2a2200',fg:'#FDCC08',bar:'#FDCC08',dot:'#FDCC08'},
-  'Design':        {bg:'#1e1535',fg:'#a78bfa',bar:'#a78bfa',dot:'#a78bfa'},
-  'Design Studio': {bg:'#062318',fg:'#6aeaaa',bar:'#6aeaaa',dot:'#6aeaaa'},
-  'Campaign':      {bg:'#0d1a2e',fg:'#60a5fa',bar:'#1f65d6',dot:'#1f65d6'},
-  'AI & Media':    {bg:'#002233',fg:'#3eccff',bar:'#3eccff',dot:'#3eccff'},
-  'Campaign Ops':  {bg:'#1d0d33',fg:'#CF89FE',bar:'#CF89FE',dot:'#CF89FE'},
-  'GM Creative':   {bg:'#0a0c1a',fg:'#8b9abf',bar:'#4a5580',dot:'#4a5580'},
+  'Performance':   {bg:'var(--pb-perf)',fg:'var(--pf-perf)',bar:'#FDCC08',dot:'#FDCC08'},
+  'Design':        {bg:'var(--pb-design)',fg:'var(--pf-design)',bar:'#a78bfa',dot:'#a78bfa'},
+  'Design Studio': {bg:'var(--pb-studio)',fg:'var(--pf-studio)',bar:'#6aeaaa',dot:'#6aeaaa'},
+  'Campaign':      {bg:'var(--pb-campaign)',fg:'var(--pf-campaign)',bar:'#1f65d6',dot:'#1f65d6'},
+  'AI & Media':    {bg:'var(--pb-aim)',fg:'var(--pf-aim)',bar:'#3eccff',dot:'#3eccff'},
+  'Campaign Ops':  {bg:'var(--pb-ops)',fg:'var(--pf-ops)',bar:'#CF89FE',dot:'#CF89FE'},
+  'GM Creative':   {bg:'var(--pb-gm)',fg:'var(--pf-gm)',bar:'#4a5580',dot:'#4a5580'},
 };
 const PODS=['Performance','Design','Design Studio','Campaign','AI & Media','Campaign Ops','GM Creative'];
 const MEMBER_CAPACITY={'Chris Bull':4.5,'Blair Williams':4.5};
@@ -1069,7 +1160,7 @@ let tab='today', openId=null, currentView='capacity';
 
   const missingCt=MISSING_TASKS.length;
   const teamCt=MEMBERS.length;
-  document.getElementById('nav-missing').textContent='Missing fields ('+missingCt+')';
+  {const nmc=document.getElementById("nav-missing-count");if(nmc)nmc.textContent=missingCt;}
 
   // top-meta: NZT generation timestamp injected at build time
   const genEl=document.getElementById('generated-at');
@@ -1680,7 +1771,7 @@ function renderPlatform(){
 
   // Month switcher
   h+='<div class="plt-bar"><div class="plt-pills" role="group" aria-label="Month">'+
-    months.map(m=>'<button class="plt-pill" aria-pressed="'+(m.key===M.key)+'" onclick="pltSetMonth(\''+m.key+'\')">'+pltEsc(m.label)+'</button>').join('')+
+    months.slice().reverse().map(m=>'<button class="plt-pill" aria-pressed="'+(m.key===M.key)+'" onclick="pltSetMonth(\''+m.key+'\')">'+pltEsc(m.label)+'</button>').join('')+
     '</div><div class="plt-sync">Copied from the Google Sheet on '+synced+'</div></div>';
 
   // Totals for the month
@@ -1998,7 +2089,7 @@ function renderPodSummary(){
           <span class="ps-pod-count">${members.length} members</span>
         </div>
         <div class="ps-metrics">
-          <div class="ps-metric"><div class="mv" style="color:#fff">${totalToday.toFixed(1)}h</div><div class="ml">Today</div></div>
+          <div class="ps-metric"><div class="mv" style="color:var(--ink)">${totalToday.toFixed(1)}h</div><div class="ml">Today</div></div>
         </div>
         <div class="ps-members">
           ${sorted.map(m=>{
@@ -2032,11 +2123,11 @@ function renderMissing(){
     html+=`
       <div class="tbl-row no-expand" style="grid-template-columns:2fr 1fr 1fr 110px">
         <div>
-          <a href="${asanaUrl}" target="_blank" rel="noopener" style="font-size:13px;font-weight:500;color:#fff;margin-bottom:2px;text-decoration:none;display:block" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${t.name} ↗</a>
+          <a href="${asanaUrl}" target="_blank" rel="noopener" style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;text-decoration:none;display:block" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${t.name} ↗</a>
           <div style="font-size:11px;color:var(--muted)">${t.proj}</div>
         </div>
         <div>
-          <div style="font-size:13px;color:#fff;margin-bottom:2px">${t.assignee}</div>
+          <div style="font-size:13px;color:var(--ink);margin-bottom:2px">${t.assignee}</div>
           <span class="pod-pill" style="background:${b.bg};color:${b.fg}">${t.pod}</span>
         </div>
         <div style="font-size:13px;color:var(--muted)">${t.createdBy||'—'}</div>
@@ -2639,7 +2730,7 @@ function initOOO(){
         <span class="oo-pod-dot" style="background:${b.fg}"></span>
         <span style="color:${b.fg}">${pod}</span>
       </div>
-      <div class="oo-pod-hdr-timeline" style="width:${totalWidth}px;background:${b.bg}20"></div>
+      <div class="oo-pod-hdr-timeline" style="width:${totalWidth}px;background:color-mix(in srgb,${b.bg} 14%,transparent)"></div>
     </div>`;
 
     podGroups[pod].forEach(member=>{
@@ -3139,6 +3230,9 @@ window._pfcScrollToday=function(){
 requestAnimationFrame(window._pfcScrollToday);
 
 } // end initForecaster
+</script>
+<script>
+{{BRAND_JS}}
 </script>
 </body>
 </html>

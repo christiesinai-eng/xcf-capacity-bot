@@ -1,0 +1,146 @@
+/* ══════════════════════════════════════════════════════════════════════════════════════════════════════
+   XCF Control Tower: Xero brand layer.
+   Look and feel only. It changes fonts, colours, shapes and artwork. It never changes data, the order of the tabs
+   or where anything sits. Tokens and components follow the "Brand Refresh Drop" page (midnight, Xero blue,
+   Special Gothic, pill shapes, 16px cards, charms).
+   ══════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+@font-face{font-family:'Special Gothic';font-weight:400;font-style:normal;font-display:swap;src:url({{asset:special-gothic-400.ttf}}) format('truetype')}
+@font-face{font-family:'Special Gothic';font-weight:500 700;font-style:normal;font-display:swap;src:url({{asset:special-gothic-500-700.ttf}}) format('truetype')}
+@font-face{font-family:'Special Gothic Condensed One';font-weight:400 700;font-style:normal;font-display:swap;src:url({{asset:special-gothic-condensed-one-400-700.ttf}}) format('truetype')}
+
+:root{
+  /* Xero brand palette */
+  --midnight:#000856;--xero-blue:#3ECCFF;--xui-blue:#1F65D6;--coral:#FF719B;--gold:#FDCC08;--mint:#6AEAAA;--purple:#CF89FE;
+  /* brand dark theme */
+  --b-bg:#00063A;--b-surface:#0A1270;--b-surface2:#111B8C;--b-line:#1B2590;--b-muted:#C9CDF0;--b-chip:#16228F;--b-chip-text:#BFD3FF;
+  --head:'Special Gothic Condensed One','Arial Narrow',Arial,sans-serif;
+  --body:'Special Gothic',Helvetica,Arial,sans-serif;
+  --b-shadow:0 6px 18px rgba(0,0,0,.35);
+  /* point the report's existing tokens at the brand ones, so every tab picks the palette up */
+  --mid:var(--midnight);--surface:var(--b-surface);--surface2:var(--b-surface2);--border:var(--b-line);
+  --muted:var(--b-muted);--txt:#fff;--blue:var(--xui-blue);--sky:var(--xero-blue);
+}
+
+html{background:var(--midnight)}
+body{font-family:var(--body);background:var(--b-bg);color:#fff;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font-family:var(--body)}
+
+/* ── Banner ── */
+.ct-banner{position:relative;overflow:hidden;min-height:190px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+  padding:26px 32px;text-align:left;border-bottom:0;
+  background:var(--midnight) url({{asset:texture-hero.png}}) right bottom/cover no-repeat}
+.ct-logo{position:absolute;left:32px;top:22px;width:84px;height:24px;display:block}
+.ct-banner-text{display:flex;flex-direction:column-reverse;gap:10px;padding-top:34px;position:relative;z-index:1}
+.ct-banner-sub{font-family:var(--head);font-weight:400;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:var(--xero-blue);margin:0}
+.ct-banner-title{font-family:var(--head);font-weight:700;-webkit-text-stroke:.025em currentColor;paint-order:stroke fill;
+  font-size:clamp(46px,6.2vw,80px);letter-spacing:-.02em;line-height:.92;color:#fff}
+.ct-banner-art{position:relative;flex:0 0 auto;width:min(470px,44vw);height:150px}
+.ct-banner-art img{position:absolute;display:block;filter:drop-shadow(0 12px 22px rgba(0,0,0,.35))}
+.ct-sticker{width:210px;right:128px;bottom:10px;transform:rotate(-3deg)}
+.ct-charm.c-runner{height:150px;right:0;bottom:0;animation:ct-float 6s ease-in-out infinite}
+.ct-charm.c-bulb{height:88px;right:318px;top:-8px;animation:ct-float 7s ease-in-out infinite .6s}
+.ct-charm.c-heart{height:58px;right:92px;top:6px;animation:ct-float 5.5s ease-in-out infinite 1.2s}
+@keyframes ct-float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-9px) rotate(1deg)}}
+.ct-sticker{animation:none}
+@media (prefers-reduced-motion:reduce){.ct-banner-art img{animation:none!important}}
+@media (max-width:860px){.ct-banner-art{display:none}.ct-banner{min-height:150px;padding:22px 20px}.ct-logo{left:20px}}
+
+/* ── Top bar ── */
+.top-bar{background:var(--midnight);border-bottom:1px solid var(--b-line);padding:18px 32px 0}
+.top-row{gap:16px}
+.xcf-badge{background:transparent;border:1px solid rgba(255,255,255,.28);color:#fff;font-family:var(--head);font-weight:400;font-size:15px;
+  letter-spacing:.06em;padding:5px 15px;border-radius:9999px}
+.top-title{font-family:var(--head);font-weight:700;-webkit-text-stroke:.02em currentColor;paint-order:stroke fill;font-size:34px;letter-spacing:-.01em;line-height:1}
+.top-subtitle{font-family:var(--body);font-weight:400;font-size:15px;letter-spacing:0;-webkit-text-stroke:0;color:var(--b-muted)}
+.top-meta{color:var(--b-muted);border-top-color:var(--b-line);font-size:12px}
+.top-meta .dot{background:var(--b-muted)}
+.stat-pill{border-radius:16px;background:var(--b-surface);border-color:var(--b-line)}
+.stat-pill .sv{font-family:var(--head);font-weight:700;font-size:30px}
+.stat-pill .sl{color:var(--b-muted)}
+.stat-pill.blue{border-color:var(--b-line);background:var(--b-surface)}
+
+/* ── Navigation: pills ── */
+.nav-bar{background:var(--midnight);border-bottom:1px solid var(--b-line);padding:14px 32px;gap:10px}
+.nav-btn{font-family:var(--body);font-weight:500;font-size:14px;padding:8px 18px;border-radius:9999px;background:transparent;
+  border:1px solid rgba(255,255,255,.28);color:#fff}
+.nav-btn:hover:not(.active){background:rgba(62,204,255,.12);border-color:var(--xero-blue)}
+.nav-btn.active{background:var(--xero-blue);border-color:var(--xero-blue);color:var(--midnight)}
+.nav-btn:focus-visible{outline:3px solid #fff;outline-offset:2px}
+
+/* ── Footer ── */
+.footer{background:var(--midnight);border-top:1px solid var(--b-line);color:var(--b-muted)}
+
+/* ══ Typography ══════════════════════════════════════════════════════════════════════════════════════ */
+/* View titles and section titles: Special Gothic Condensed, bold, tight (as the brand headlines) */
+.rq-hdr-title,.oo-hdr-title,.pmu-hdr-title,#view-roadmap .rt-hdr-title,#view-forecaster .rt-hdr-title{
+  font-family:var(--head);font-weight:700;-webkit-text-stroke:.02em currentColor;paint-order:stroke fill;font-size:32px;letter-spacing:-.01em;line-height:1}
+.section-title,.rg-sect-t,.plt-panel-t,.ps-pod-name,.pm-name,.bau-card-title,.pmu-pm-name,.pmu-proj-hdr,.exec-summary .exec-h2{
+  font-family:var(--head);font-weight:700;-webkit-text-stroke:.015em currentColor;paint-order:stroke fill;letter-spacing:0;line-height:1.05}
+.section-title,.rg-sect-t,.plt-panel-t{font-size:21px}
+.ps-pod-name,.pm-name,.pmu-pm-name,.bau-card-title{font-size:19px}
+.pmu-proj-hdr,.exec-summary .exec-h2{font-size:18px}
+/* Big numbers: condensed, bold */
+.stat-pill .sv,.rq-stat-v,.rq-cov-big,.rq-cov-pct,.rq-fun-n,.rq-seg-n,.plt-kpi-v,.plt-net-v,.bucket .bv,.ps-metric .mv,
+#view-roadmap .rt-stat .sv,#view-forecaster .rt-stat .sv{
+  font-family:var(--head);font-weight:700;-webkit-text-stroke:.015em currentColor;paint-order:stroke fill;letter-spacing:0}
+.rq-stat-v,.ps-metric .mv{font-size:24px}
+.rq-cov-big,.rq-cov-pct{font-size:32px}
+.plt-kpi-v{font-size:34px}
+.bucket .bv{font-size:36px}
+/* Small uppercase labels and table headers: condensed, spaced */
+.rq-stat-l,.rq-table th,.rq-ubar-l,.rg-fix-head,.rq-bd-h,.rq-cov-l,.rg-col-h,.plt-kpi-l,.plt-table th,.plt-th-btn,.plt-out-h,.tbl-head,
+.fr-pod-label,.pm-cap-label,.pm-h-badge .pm-h-label,.pm-projects-tbl th,.pm-tasks-panel-label,.bau-cols,.oo-name-hdr,.oo-pod-hdr-left,
+.pmu-section-label,.pmu-update-lbl,.exec-summary .exec-h3,#view-roadmap .rt-month-header .rt-row-label,#view-roadmap .rt-fy-cell,
+#view-forecaster .pfc-group-header,#view-forecaster .rt-month-header .rt-row-label{
+  font-family:var(--head);font-weight:400;letter-spacing:.06em;font-size:13px}
+.plt-kpi-l,.rq-stat-l,.rq-cov-l{color:var(--b-muted)}
+
+/* ══ Shapes: 16px cards, pill controls and badges ═════════════════════════════════════════════════════ */
+.time-tabs{border-radius:9999px;border-color:var(--b-line);overflow:hidden}
+.ps-card,.pm-card,.bau-card,.exec-summary,.pmu-card,.bucket,.rg-sect,.rg-fix,.plt-panel,.plt-kpi,.rq-stat,.rq-bd,.rq-coverage,
+.expand-panel,.plt-warn,#view-roadmap .rt-timeline-container,#view-forecaster .rt-timeline-container{
+  border-radius:16px;border-color:var(--b-line);box-shadow:var(--b-shadow)}
+.ps-card,.pm-card,.bau-card,.exec-summary,.pmu-card,.rg-sect,.rg-fix,.plt-panel,.rq-bd,.rq-coverage{background:var(--b-surface)}
+.rq-tablewrap{border-radius:16px;border-color:var(--b-line)}
+.rg-sect-h,.plt-panel-h,.rg-fix-h{background:rgba(255,255,255,.04);border-bottom-color:var(--b-line)}
+/* controls become pills */
+.rq-search,.rq-select,.fr-select,#view-roadmap .rt-search,#view-roadmap .rt-filter-btn,#view-forecaster .rt-search,#view-forecaster .pfc-filter-btn{
+  border-radius:9999px;background:var(--b-surface);border-color:var(--b-line)}
+.rq-search,#view-roadmap .rt-search,#view-forecaster .rt-search{padding-left:16px}
+.rq-search:focus{outline-color:var(--xero-blue)}
+/* badges and chips become pills */
+.pod-pill,.status-chip,.od-badge,.mf-badge,.pfc-region-tag,.pfc-proj-status,.pm-h-badge,.rq-chip,.bau-priority,.bau-status,.plt-chip,.plt-scope{
+  border-radius:9999px}
+
+/* ══ Tables ════════════════════════════════════════════════════════════════════════════════════════════ */
+.rq-table th,.plt-table th,.pm-projects-tbl th{color:var(--b-muted);background:rgba(255,255,255,.04);border-bottom-color:var(--b-line)}
+.rq-table td,.plt-table td{border-bottom-color:rgba(27,37,144,.7)}
+.rq-table tbody tr:hover,.plt-table tbody tr:hover{background:rgba(62,204,255,.06)}
+.plt-table tfoot td{background:rgba(255,255,255,.05);border-top-color:var(--b-line)}
+
+/* ══ Page margins ══════════════════════════════════════════════════════════════════════════════════════ */
+/* only these two tabs ran edge to edge; every other tab already carries its own margin */
+#view-requests,#view-regional{padding:22px 24px 32px}
+
+/* ══ Details ═══════════════════════════════════════════════════════════════════════════════════════════ */
+/* a small hint inside a section title stays in the body face, not the headline face */
+.section-title span{font-family:var(--body);font-weight:400;-webkit-text-stroke:0;letter-spacing:0}
+/* selected pills on the Platform tab match the navigation */
+.plt-pill{border-color:var(--b-line);background:var(--b-surface)}
+.plt-pill[aria-pressed="true"]{background:var(--xero-blue);border-color:var(--xero-blue);color:var(--midnight)}
+.plt-col[aria-pressed="true"]{border-color:var(--xero-blue);background:rgba(62,204,255,.10)}
+.plt-pill:hover{background:var(--b-surface2)}
+.plt-pill[aria-pressed="true"]:hover{background:var(--xero-blue)}
+
+/* ══ Charms: one beside each tab title (decorative, no text) ═══════════════════════════════════════════ */
+.rq-hdr-title::after,.oo-hdr-title::after,.pmu-hdr-title::after,#view-forecaster .rt-hdr-title::after{
+  content:"";display:inline-block;width:48px;height:46px;margin-left:14px;vertical-align:-10px;
+  background:var(--charm) center/contain no-repeat;-webkit-text-stroke:0}
+#view-requests{--charm:url({{asset:charm-check.svg}})}
+#view-regional{--charm:url({{asset:charm-camera.svg}})}
+#view-platform{--charm:url({{asset:charm-coin.svg}})}
+#view-ooo{--charm:url({{asset:charm-runner.svg}})}
+#view-pmupdates{--charm:url({{asset:charm-heart.svg}})}
+#view-forecaster{--charm:url({{asset:charm-bulb.svg}})}
+@media (max-width:700px){.rq-hdr-title::after,.oo-hdr-title::after,.pmu-hdr-title::after,#view-forecaster .rt-hdr-title::after{display:none}}
