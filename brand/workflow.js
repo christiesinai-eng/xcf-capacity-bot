@@ -21,6 +21,42 @@
     function put(id, html) { var el = document.getElementById(id); if (el) el.innerHTML = html; return el; }
     function head(title, sub, right) { return '<div class="ch"><div><h3 class="t-card">' + title + '</h3>' + (sub ? '<p class="t-sub">' + sub + '</p>' : '') + '</div>' + (right || '') + '</div>'; }
     function chip(t, c, st) { return '<span class="chip ' + c + '"' + (st ? ' style="' + st + '"' : '') + '>' + t + '</span>'; }
+    var CHEV_L = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var CHEV_R = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    // Arrows for a card that shows only part of its data, so people can look through the rest without opening it.
+    function pagerHTML(id) { return '<div class="pgr" id="' + id + '"><button type="button" data-d="-1" aria-label="Previous">' + CHEV_L + '</button><span class="pg-n" aria-live="polite"></span><button type="button" data-d="1" aria-label="Next">' + CHEV_R + '</button></div>'; }
+    // A list shown a page at a time: perPage items, arrows move to the next or previous page. The arrows hide themselves when everything fits.
+    function pager(id, perPage, getTotal, onChange, noun, fmt) {
+      var el = document.getElementById(id), st = { start: 0 };
+      if (!el) return { reset: function () {}, paint: function () {}, start: function () { return 0; } };
+      var prev = el.querySelector('[data-d="-1"]'), next = el.querySelector('[data-d="1"]'), n = el.querySelector('.pg-n');
+      function paint() {
+        var total = getTotal(); if (st.start >= total) st.start = 0;
+        el.hidden = total <= perPage;
+        n.textContent = fmt ? fmt(st.start + 1, Math.min(st.start + perPage, total), total) : 'Showing ' + (st.start + 1) + '–' + Math.min(st.start + perPage, total) + ' of ' + total + (noun ? ' ' + noun : '');
+        prev.disabled = st.start <= 0; next.disabled = st.start + perPage >= total;
+      }
+      [prev, next].forEach(function (b) { b.addEventListener('click', function () { st.start = Math.max(0, st.start + (+b.dataset.d) * perPage); onChange(st.start); paint(); }); });
+      return { reset: function () { st.start = 0; paint(); }, paint: paint, start: function () { return st.start; } };
+    }
+    // Cards laid side by side: all of them are in a row that scrolls across; the arrows (and a swipe or trackpad) move along it.
+    function carousel(trackId, pagerId, noun) {
+      var tr = document.getElementById(trackId), el = document.getElementById(pagerId); if (!tr || !el) return;
+      var prev = el.querySelector('[data-d="-1"]'), next = el.querySelector('[data-d="1"]'), n = el.querySelector('.pg-n');
+      function geom() {
+        var first = tr.firstElementChild; if (!first) return { step: 1, vis: 1, total: 0 };
+        var gap = parseFloat(getComputedStyle(tr).columnGap) || 0, step = first.getBoundingClientRect().width + gap;
+        return { step: step, vis: Math.max(1, Math.round((tr.clientWidth + gap) / step)), total: tr.children.length };
+      }
+      function paint() {
+        var g = geom(), i = Math.round(tr.scrollLeft / g.step);
+        el.hidden = g.total <= g.vis;
+        n.textContent = 'Showing ' + (i + 1) + '–' + Math.min(i + g.vis, g.total) + ' of ' + g.total + ' ' + noun;
+        prev.disabled = tr.scrollLeft <= 2; next.disabled = tr.scrollLeft + tr.clientWidth >= tr.scrollWidth - 2;
+      }
+      [prev, next].forEach(function (b) { b.addEventListener('click', function () { var g = geom(); tr.scrollBy({ left: (+b.dataset.d) * g.step * g.vis, behavior: 'smooth' }); }); });
+      tr.addEventListener('scroll', paint, { passive: true }); window.addEventListener('resize', paint); paint();
+    }
     function initials(n) { return String(n).split(/\s+/).map(function (x) { return x[0]; }).join('').slice(0, 2).toUpperCase(); }
     function pretty(raw) {
       var parts = String(raw || '').replace(/^\[Converted to project\]\s*/, '').split(' | ').map(function (x) { return x.trim(); }).filter(function (x) { return x && !/^XCFP?-\d+$/.test(x) && !/^XCFT-\d+$/.test(x) && !/^FY\d+\s*Q\d.*$/.test(x) && !/^20\d\d$/.test(x); });
@@ -94,6 +130,11 @@
     var PD = typeof PLATFORM_DATA !== 'undefined' ? PLATFORM_DATA : null;
     var months = (PD && PD.months) || [];
     var spendIdx = months.length - 1;
+    // overall tool usage: the share of the platforms in the total that are used daily (usage level "High" in the sheet)
+    function usageShare(M) {
+      var hi = (M.byUsage.filter(function (u) { return u.level === 'High'; })[0] || { count: 0 }).count, tot = M.totals.toolCount;
+      return { high: hi, total: tot, pct: tot ? Math.round(hi / tot * 100) : 0 };
+    }
     var capKey = 'today', oooMode = 'weeks';
 
     /* forecaster numbers: the same rules as the Project Forecaster tab */
@@ -142,31 +183,35 @@
       var over = capCounts('today')[0];
       var cur = months[months.length - 1], prev = months.length > 1 ? months[months.length - 2] : null;
       var nm = MISSING_TASKS.length;
-      function k(id, label, inner, more, go) { return '<div class="card kcard s3 clickable" id="' + id + '" data-go="' + go + '"><span class="lbl">' + label + '</span>' + inner + '<div class="cardfoot">' + seeMore(more) + '</div></div>'; }
-      var spend = '';
+      // every top box has the same layout (label, big number, then the chart or chips), so the numbers line up across the row
+      function k(id, label, num, sub, viz, more, go) {
+        return '<div class="card kcard s3 clickable" id="' + id + '" data-go="' + go + '"><span class="lbl">' + label + '</span><div class="knum">' + num + (sub ? '<span class="t-small">' + sub + '</span>' : '') + '</div><div class="kviz">' + viz + '</div><div class="cardfoot">' + seeMore(more) + '</div></div>';
+      }
+      var use;
       if (cur) {
-        var d = prev ? cur.totals.total - prev.totals.total : 0, p = prev && prev.totals.total ? Math.abs(d / prev.totals.total * 100) : 0;
-        spend = k('k-spend', 'Platform spend per year', '<div class="row"><span class="num">' + pltCompact(cur.totals.total) + '</span></div>' +
-          (prev && Math.round(d * 100) !== 0 ? chip((d > 0 ? '▲ ' : '▼ ') + p.toFixed(1) + '% vs ' + esc(prev.label.split(' ')[0]), d > 0 ? 'gold' : 'mint', 'align-self:flex-start') : '<span class="t-small">' + esc(cur.label) + ', NZD</span>'), 'spend', 'spend');
+        var u = usageShare(cur), up = prev ? usageShare(prev) : null, chg = '';
+        if (up) { var dp = u.pct - up.pct, pm = esc(prev.label.split(' ')[0]); chg = dp ? chip((dp > 0 ? '▲ Up' : '▼ Down') + ' from ' + up.pct + '% in ' + pm, dp > 0 ? 'mint' : 'gold') : chip('No change from ' + up.pct + '% in ' + pm, 'grey'); }
+        use = k('k-use', 'Overall tool usage', '<span class="num" style="color:var(--mint-ink)">' + u.pct + '%</span>', u.high + ' of ' + u.total + ' tools used daily', '<div class="ringwrap" id="k5"></div>' + chg, 'usage', 'spend');
       } else {
-        spend = k('k-spend', 'Platform spend per year', '<div class="row"><span class="num">–</span></div><span class="t-small">No platform data yet</span>', 'spend', 'spend');
+        use = k('k-use', 'Overall tool usage', '<span class="num">–</span>', 'No platform data yet', '', 'usage', 'spend');
       }
       put('kpiGrid',
-        k('k-cap', 'People over capacity', '<div class="row"><div class="ringwrap" id="k1"></div><div><span class="num" style="color:var(--coral-ink)">' + over + '</span><div class="t-small">of ' + N + ' people</div></div></div>', 'capacity', 'capacity') +
-        k('k-briefs', 'Briefs in review (WIP)', '<div class="row"><span class="num" style="color:var(--blue-ink)">9</span>' + chip('Waiting on review', 'blue') + '</div><span class="t-small">Sample number</span>', 'briefs', 'forecaster') +
-        k('k-miss', 'Tasks needing attention', '<div class="row"><span class="num" style="color:var(--gold-ink)">' + nm + '</span>' + chip(nm ? 'Needs fixing' : 'All clear', nm ? 'gold' : 'mint') + '</div><span class="t-small">Left out of capacity until filled in</span>', 'missing', 'missing') +
-        k('k-wait', 'Requests waiting over a week', '<div class="row"><div class="ringwrap" id="k3"></div><div><span class="num" style="color:var(--coral-ink)">' + slow + '</span><div class="t-small">of ' + measured.length + ' tracked</div></div></div>', 'cycle', 'cycle') +
-        spend +
+        k('k-cap', 'People over capacity', '<span class="num" style="color:var(--coral-ink)">' + over + '</span>', 'of ' + N + ' people', '<div class="ringwrap" id="k1"></div>', 'capacity', 'capacity') +
+        k('k-briefs', 'Briefs in review (WIP)', '<span class="num" style="color:var(--blue-ink)">9</span>', '', chip('Waiting on review', 'blue') + '<span class="t-small">WIP coming soon</span>', 'briefs', 'forecaster') +
+        k('k-miss', 'Tasks needing attention', '<span class="num" style="color:var(--gold-ink)">' + nm + '</span>', '', chip(nm ? 'Needs fixing' : 'All clear', nm ? 'gold' : 'mint') + '<span class="t-small">Left out of capacity until filled in</span>', 'missing', 'missing') +
+        k('k-wait', 'Requests waiting over a week', '<span class="num" style="color:var(--coral-ink)">' + slow + '</span>', 'of ' + measured.length + ' tracked', '<div class="ringwrap" id="k3"></div>', 'cycle', 'cycle') +
+        use +
         '<article class="card s12 acard" id="assets"></article>');
       mount($('#k1'), 84, 12, { v: [over], t: N, g: 0 }, ['var(--coral)'], '', over + ' of ' + N + ' people over capacity');
       mount($('#k3'), 84, 12, { v: [slow], t: Math.max(measured.length, 1), g: 0 }, ['var(--coral)'], '', slow + ' of ' + measured.length + ' tracked requests waited over a week');
+      if (cur && $('#k5')) { var uu = usageShare(cur); mount($('#k5'), 84, 12, { v: [uu.high], t: Math.max(uu.total, 1), g: 0 }, ['var(--mint)'], '', uu.high + ' of ' + uu.total + ' tools used daily'); }
     }
 
     /* Assets delivered: copied from the mockup with its sample numbers (the report has no asset data yet) */
     var ASSETS = [['US', 96, 'var(--data1)'], ['UK', 64, 'var(--xero-blue)'], ['ANZ', 52, 'var(--mint)'], ['IM', 36, 'var(--purple)']];
     function renderAssets() {
       var tot = ASSETS.reduce(function (a, r) { return a + r[1]; }, 0);
-      put('assets', head('Assets delivered this quarter (WIP)', '248 assets so far in FY27 Q3. The US delivers the most, at 38.7% of the total.', chip('Sample numbers', 'grey')) +
+      put('assets', head('Assets delivered this quarter (WIP)', '248 assets so far in FY27 Q3. The US delivers the most, at 38.7% of the total.', chip('WIP coming soon', 'grey')) +
         '<div class="assets"><div class="panel" style="align-items:center;justify-content:center"><h4>Global</h4><div class="ringwrap" id="assetRing"></div></div><div class="rtiles" id="assetTiles"></div></div><div class="cardfoot">' + seeMore('assets') + '</div>');
       mount($('#assetRing'), 150, 22, { v: ASSETS.map(function (r) { return r[1]; }), t: tot, g: 4 }, ASSETS.map(function (r) { return r[2]; }), '<span class="num" style="font-size:44px">' + tot + '</span><span class="t-small">assets</span>', 'Assets delivered by region');
       $('#assetTiles').innerHTML = ASSETS.map(function (r) {
@@ -208,19 +253,24 @@
     }
 
     function renderOver() {
-      var rows = MEM.filter(function (m) { return !m.ooo; }).map(function (m) { return { m: m, f: m.today / capOf(m) }; })
-        .sort(function (a, b) { return b.f - a.f; }).slice(0, 5);
+      var all = MEM.filter(function (m) { return !m.ooo; }).map(function (m) { return { m: m, f: m.today / capOf(m) }; })
+        .sort(function (a, b) { return b.f - a.f; }), PER = 5;
       var overN = capCounts('today')[0];
       put('over', head('Most over capacity', 'Hours booked today against each person’s daily cap') + '<ul class="ppl" id="overList"></ul>' +
-        '<div class="cardfoot"><button class="link" type="button" data-more="capacity" data-preset="over">See all ' + overN + ' ' + (overN === 1 ? 'person' : 'people') + '</button>' + seeMore('capacity', 'over') + '</div>');
-      rows.forEach(function (r) {
-        var pct = Math.round(r.f * 100), col = pct >= 100 ? 'var(--coral)' : pct >= 50 ? 'var(--gold)' : 'var(--mint)';
-        var li = document.createElement('li');
-        li.appendChild(gauge(pct, 56, 7, col, '<b style="font-size:13px">' + pct + '%</b>'));
-        var w = document.createElement('div'); w.className = 'who'; w.innerHTML = '<b>' + esc(r.m.name) + '</b><span class="t-small">' + esc(r.m.pod) + '</span>'; li.appendChild(w);
-        var h = document.createElement('div'); h.className = 'hrs'; h.innerHTML = r.m.today.toFixed(1) + 'h<span>' + plural(r.m.tasks.length, 'task') + '</span>'; li.appendChild(h);
-        $('#overList').appendChild(li);
-      });
+        '<div class="cardfoot">' + pagerHTML('overPg') + '<button class="link" type="button" data-more="capacity" data-preset="over">See all ' + overN + ' ' + (overN === 1 ? 'person' : 'people') + '</button>' + seeMore('capacity', 'over') + '</div>');
+      function draw(start) {
+        var ul = $('#overList'); ul.innerHTML = '';
+        all.slice(start, start + PER).forEach(function (r) {
+          var pct = Math.round(r.f * 100), col = pct >= 100 ? 'var(--coral)' : pct >= 50 ? 'var(--gold)' : 'var(--mint)';
+          var li = document.createElement('li');
+          li.appendChild(gauge(pct, 56, 7, col, '<b style="font-size:13px">' + pct + '%</b>'));
+          var w = document.createElement('div'); w.className = 'who'; w.innerHTML = '<b>' + esc(r.m.name) + '</b><span class="t-small">' + esc(r.m.pod) + '</span>'; li.appendChild(w);
+          var h = document.createElement('div'); h.className = 'hrs'; h.innerHTML = r.m.today.toFixed(1) + 'h<span>' + plural(r.m.tasks.length, 'task') + '</span>'; li.appendChild(h);
+          ul.appendChild(li);
+        });
+      }
+      var pg = pager('overPg', PER, function () { return all.length; }, draw, 'people');
+      draw(0); pg.paint();
     }
 
     var SHOW_PODS = 4;
@@ -244,8 +294,8 @@
       if (by.room.length) parts.push(by.room.join(', ') + (by.room.length > 1 ? ' have' : ' has') + ' room');
       put('pods', head('Pod summary', esc(parts.join('; ')) + '.',
         '<div class="pills">' + chip('Over 100%', 'coral') + chip('85% or more', 'mint') + chip('Under 85%', 'gold') + '</div>') +
-        '<div class="pods" id="podGrid"></div><div class="cardfoot"><span class="t-small">' + (info.length > SHOW_PODS ? 'Showing ' + SHOW_PODS + ' of ' + info.length + ' pods. ' : '') + 'Pod capacity is each person’s daily cap, for people who are working today.</span>' + seeMore('pods') + '</div>');
-      info.slice(0, SHOW_PODS).forEach(function (p) {
+        '<div class="pods car" id="podGrid"></div><div class="cardfoot">' + pagerHTML('podPg') + '<span class="t-small">Pod capacity is each person’s daily cap, for people who are working today.</span>' + seeMore('pods') + '</div>');
+      info.forEach(function (p) {
         var s = st(p.pct), d = document.createElement('div'); d.className = 'pod';
         d.innerHTML = '<div class="ph"><i class="dot" style="background:' + podDot(p.pod) + '"></i><h4>' + esc(p.pod) + '</h4><span class="t-small">' + plural(p.ms.length, 'member') + '</span></div>';
         var pr = document.createElement('div'); pr.className = 'pr';
@@ -265,6 +315,7 @@
         if (sorted.length > 3) { var li = document.createElement('li'); li.style.gridTemplateColumns = '1fr'; li.innerHTML = '<button class="link" type="button" data-more="pods">+' + (sorted.length - 3) + ' more</button>'; ul.appendChild(li); }
         d.appendChild(ul); $('#podGrid').appendChild(d);
       });
+      carousel('podGrid', 'podPg', 'pods');
     }
 
     var SHOW_PMS = 2;
@@ -278,9 +329,9 @@
       };
     }
     function renderPM() {
-      put('pmteam', head('PM team', 'Capacity booked today and what each PM is carrying') + '<div class="two" id="pmGrid"></div><div class="cardfoot">' + (PM_DATA.length > SHOW_PMS ? '<span class="t-small">Showing ' + SHOW_PMS + ' of ' + PM_DATA.length + ' PMs.</span>' : '') + seeMore('pmteam') + '</div>');
+      put('pmteam', head('PM team', 'Capacity booked today and what each PM is carrying') + '<div class="two car" id="pmGrid"></div><div class="cardfoot">' + pagerHTML('pmPg') + seeMore('pmteam') + '</div>');
       var mixC = ['var(--data1)', 'var(--mint)', 'var(--gold)'], mixN = ['roadmap', 'micro/BAU', 'initiative'];
-      PM_DATA.slice(0, SHOW_PMS).forEach(function (pm) {
+      PM_DATA.forEach(function (pm) {
         var f = pmFacts(pm), mix = [f.roadmap.length, f.micro.length, f.init.length];
         var top = f.active.filter(function (p) { return p.pct !== null; }).sort(function (a, b) { return b.pct - a.pct; }).slice(0, 2);
         var pct = Math.round(pm.today / 6 * 100);
@@ -300,6 +351,7 @@
         }
         $('#pmGrid').appendChild(d);
       });
+      carousel('pmGrid', 'pmPg', 'PMs');
     }
 
     var SHOW_OOO = 4;
@@ -326,21 +378,23 @@
       }).join('');
     }
     function renderOOO() {
+      var pg;
       function paint() {
-        var W = oooWindow(), shown = W.rows.slice(0, SHOW_OOO);
+        var W = oooWindow(), start = pg ? pg.start() : 0, shown = W.rows.slice(start, start + SHOW_OOO);
         var ax = '<div></div><div class="ax">' + W.labels.map(function (l) { return '<span style="left:' + (l[0] / W.D * 100) + '%">' + esc(l[1]) + '</span>'; }).join('') + '</div>';
         var np = (today0.getTime() - W.startT) / DAY / W.D * 100;
         var body = shown.map(function (r) { var col = podDot(r.pod); return '<div class="lab"><i class="dot" style="background:' + col + '"></i>' + esc(r.name) + '</div><div class="trk"><div class="today" style="left:' + np + '%"></div>' + oooBars(r, W, col) + '</div>'; }).join('');
         var pods = {}; shown.forEach(function (r) { pods[r.pod] = 1; });
         $('#oooTl').innerHTML = W.rows.length ? ax + body : '<div style="grid-column:1/-1" class="t-sub">Nobody has time off booked in this window.</div>';
-        $('#oooKey').innerHTML = Object.keys(pods).map(function (p) { return '<span class="chip grey"><i class="dot" style="background:' + podDot(p) + ';width:10px;height:10px"></i>' + esc(p) + '</span>'; }).join('') +
-          '<span class="t-small">Dark line is today' + (W.rows.length > shown.length ? ' · showing ' + shown.length + ' of ' + W.rows.length : '') + '</span>';
+        $('#oooKey').innerHTML = Object.keys(pods).map(function (p) { return '<span class="chip grey"><i class="dot" style="background:' + podDot(p) + ';width:10px;height:10px"></i>' + esc(p) + '</span>'; }).join('') + '<span class="t-small">Dark line is today</span>';
+        if (pg) pg.paint();
       }
       put('ooo', head('Out of office', 'Leave by person, from Asana',
         '<div class="seg" role="group" aria-label="Scale"><button type="button" aria-pressed="true" data-s="weeks">Weeks</button><button type="button" aria-pressed="false" data-s="months">Months</button></div>') +
-        '<div class="tl" id="oooTl"></div><div class="pills cf" id="oooKey"></div><div class="cardfoot">' + seeMore('ooo') + '</div>');
+        '<div class="tl" id="oooTl"></div><div class="pills cf" id="oooKey"></div><div class="cardfoot">' + pagerHTML('oooPg') + seeMore('ooo') + '</div>');
+      pg = pager('oooPg', SHOW_OOO, function () { return oooWindow().rows.length; }, function () { paint(); }, 'people');
       paint();
-      $$('#ooo .seg button').forEach(function (b) { b.addEventListener('click', function () { $$('#ooo .seg button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); oooMode = b.dataset.s; paint(); }); });
+      $$('#ooo .seg button').forEach(function (b) { b.addEventListener('click', function () { $$('#ooo .seg button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); oooMode = b.dataset.s; pg.reset(); paint(); }); });
     }
 
     /* ═════════════ Work in flight ═════════════ */
@@ -356,13 +410,13 @@
         '<div class="seg" id="fcSeg" role="group" aria-label="Show"><button type="button" aria-pressed="true" data-f="all">All</button><button type="button" aria-pressed="false" data-f="active">In production</button><button type="button" aria-pressed="false" data-f="upcoming">Upcoming</button><button type="button" aria-pressed="false" data-f="inmarket">In market</button></div>') +
         '<div class="kpis" style="grid-template-columns:repeat(4,minmax(0,1fr))"><div class="kpi"><span class="num" style="color:var(--purple-ink)">' + cnt.active + '</span><span class="lbl">In production</span></div><div class="kpi"><span class="num" style="color:var(--gold-ink)">' + cnt.upcoming + '</span><span class="lbl">Upcoming</span></div><div class="kpi"><span class="num" style="color:var(--mint-ink)">' + cnt.inmarket + '</span><span class="lbl">In market</span></div><div class="kpi"><span class="num" style="color:var(--muted)">' + cnt.onhold + '</span><span class="lbl">On hold</span></div></div>' +
         '<div class="gscroll"><div id="gantt"></div></div>' +
-        '<div class="pills">' + chip('Production', 'purple') + chip('In market', 'mint') + chip('◆ Project brief due', 'gold') + '<span class="t-small" id="fcNote"></span></div><div class="cardfoot">' + seeMore('forecaster') + '</div>');
+        '<div class="pills">' + chip('Production', 'purple') + chip('In market', 'mint') + chip('◆ Project brief due', 'gold') + '<span class="t-small" id="fcNote"></span></div><div class="cardfoot">' + pagerHTML('fcPg') + seeMore('forecaster') + '</div>');
       $('#fcSub').textContent = plural(cnt.active, 'project is', 'projects are') + ' in production. ' + (cnt.inmarket === 1 ? 'Only 1 is' : cnt.inmarket + ' are') + ' in market so far.';
       function paint() {
         var rows = listed.filter(function (p) { return filter === 'all' || status(p) === filter; });
         var gh = '<div class="gt"><div></div><div class="months">' + Array.apply(null, Array(11)).map(function (_, i) { var d = new Date(w0.getFullYear(), w0.getMonth() + i, 1); var now = d.getFullYear() === today0.getFullYear() && d.getMonth() === today0.getMonth(); return '<span class="' + (now ? 'now' : '') + '">' + MN[d.getMonth()] + (i === 0 || d.getMonth() === 0 ? ' ’' + String(d.getFullYear()).slice(2) : '') + '</span>'; }).join('') + '</div>';
         var np = pos(today0);
-        rows.slice(0, SHOW).forEach(function (p) {
+        rows.slice(pg.start(), pg.start() + SHOW).forEach(function (p) {
           var s = status(p), l = FC_LAB[s] || ['', 'grey'], ps = FC_PS[p.projectStatus];
           var reg = p.regions.length ? chip(esc(p.regions[0]) + (p.regions.length > 1 ? ' +' + (p.regions.length - 1) : ''), 'grey') : '';
           gh += '<div class="gl"><b>' + esc(p.code && p.name.indexOf(p.code) < 0 ? p.code + ': ' + p.name : p.name) + '</b><div class="tags">' + chip(l[0], l[1]) + (ps ? chip(ps[0], ps[1]) : '') + reg + '</div></div><div class="gr"><div class="today" style="left:' + np + '%;top:0;bottom:0"></div>';
@@ -372,10 +426,11 @@
           gh += '</div>';
         });
         $('#gantt').innerHTML = rows.length ? gh + '</div>' : '<p class="t-sub">No projects match this filter.</p>';
-        $('#fcNote').textContent = rows.length > SHOW ? 'Dark line is today · showing ' + SHOW + ' of ' + rows.length + ', the rest are in See more' : 'Dark line is today';
+        $('#fcNote').textContent = 'Dark line is today'; pg.paint();
       }
+      var pg = pager('fcPg', SHOW, function () { return listed.filter(function (p) { return filter === 'all' || status(p) === filter; }).length; }, function () { paint(); }, 'projects');
       paint();
-      $$('#fcSeg button').forEach(function (b) { b.addEventListener('click', function () { $$('#fcSeg button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); filter = b.dataset.f; paint(); }); });
+      $$('#fcSeg button').forEach(function (b) { b.addEventListener('click', function () { $$('#fcSeg button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); filter = b.dataset.f; pg.reset(); paint(); }); });
     }
 
     function missingGroups() {
@@ -402,13 +457,18 @@
     }
     var hrsOf = function (a) { return Math.round(a.reduce(function (s, t) { return s + (t.estHours || 0); }, 0) * 10) / 10; };
     function renderScope() {
-      var S = scopeSets(), sc = S.sc, faa = S.faa, open = sc.concat(faa);
+      var S = scopeSets(), sc = S.sc, faa = S.faa, open = sc.concat(faa), PER = 3;
       put('scope', head('Scope creep and FAA', 'Changes after approval') +
         '<div class="kv"><div class="stat"><span class="num" style="color:' + (sc.length ? 'var(--coral-ink)' : 'var(--mint-ink)') + '">' + sc.length + '</span><span class="lbl">Scope creep</span>' + chip(sc.length ? hrsOf(sc) + 'h estimated' : 'All clear', sc.length ? 'coral' : 'mint', 'margin-top:8px') + '</div>' +
         '<div class="stat"><span class="num" style="color:' + (faa.length ? 'var(--gold-ink)' : 'var(--mint-ink)') + '">' + faa.length + '</span><span class="lbl">Feedback after approval</span>' + chip(faa.length ? hrsOf(faa) + 'h estimated' : 'All clear', faa.length ? 'gold' : 'mint', 'margin-top:8px') + '</div></div>' +
-        open.slice(0, 3).map(function (t) {
+        '<div id="scList" style="display:flex;flex-direction:column;gap:12px"></div><div class="cardfoot">' + pagerHTML('scPg') + seeMore('scope') + '</div>');
+      function draw(start) {
+        $('#scList').innerHTML = open.slice(start, start + PER).map(function (t) {
           return '<div class="task">' + chip(t.status === 'FAA' ? 'FAA' : 'Scope creep', t.status === 'FAA' ? 'gold' : 'coral') + '<div class="tt"><b>' + (t.url ? '<a href="' + esc(t.url) + '" target="_blank" rel="noopener" style="text-decoration:none">' + esc(t.name) + '</a>' : esc(t.name)) + '</b><span class="t-small">' + esc([t.parent, t.assignee].filter(Boolean).join(' · ')) + '</span></div><b>' + (t.estHours ? Math.round(t.estHours * 10) / 10 + 'h' : '') + '</b></div>';
-        }).join('') + '<div class="cardfoot">' + seeMore('scope') + '</div>');
+        }).join('');
+      }
+      var pg = pager('scPg', PER, function () { return open.length; }, draw, 'tasks');
+      draw(0); pg.paint();
     }
 
     function cleanUpdate(text) {
@@ -419,22 +479,25 @@
     function updWhen(m) { return new Date(m.timestamp).toLocaleDateString('en-NZ', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Pacific/Auckland' }); }
     function updPod(m) { var x = (String(m.text).match(/WEEKLY UPDATE\s*[—-]\s*([^_\n]+)/i) || [])[1]; return x ? x.trim() : ''; }
     function renderUpdates() {
-      var U = PM_UPDATES_DATA || [], weeks = U.slice(0, 3), sel = 0;
+      var U = PM_UPDATES_DATA || [], weeks = U.slice(0, 3), sel = 0, PER = 1, pg;
       function excerpt(text) {
         var t = cleanUpdate(text), i = t.search(/Update:/i), body = i >= 0 ? t.slice(i + 7) : t.split('\n').slice(1).join(' ');
         body = body.replace(/\s+/g, ' ').replace(/•/g, '').trim();
-        return body.length > 170 ? body.slice(0, 167).replace(/\s+\S*$/, '') + '…' : body;
+        return body.length > 420 ? body.slice(0, 417).replace(/\s+\S*$/, '') + '…' : body;
       }
-      put('updates', head('PM updates', 'Weekly notes from the PM team') + '<div class="seg" id="updSeg" style="align-self:flex-start"></div><ul class="upd" id="updList"></ul><div class="cardfoot">' + seeMore('updates') + '</div>');
+      function weekMsgs() { return ((weeks[sel] || {}).messages || []).slice().sort(function (a, b) { return String(b.timestamp).localeCompare(String(a.timestamp)); }); }
+      put('updates', head('PM updates', 'Weekly notes from the PM team') + '<div class="seg" id="updSeg" style="align-self:flex-start"></div>' + pagerHTML('updPg') + '<ul class="upd" id="updList"></ul><div class="cardfoot">' + seeMore('updates') + '</div>');
       function paint() {
         $('#updSeg').innerHTML = weeks.map(function (w, i) { return '<button type="button" aria-pressed="' + (i === sel) + '" data-w="' + i + '">' + esc(w.weekLabel) + '</button>'; }).join('');
-        $$('#updSeg button').forEach(function (b) { b.addEventListener('click', function () { sel = +b.dataset.w; paint(); }); });
-        var msgs = ((weeks[sel] || {}).messages || []).slice().sort(function (a, b) { return String(b.timestamp).localeCompare(String(a.timestamp)); }).slice(0, 2);
+        $$('#updSeg button').forEach(function (b) { b.addEventListener('click', function () { sel = +b.dataset.w; pg.reset(); paint(); }); });
+        var msgs = weekMsgs().slice(pg.start(), pg.start() + PER);
         $('#updList').innerHTML = msgs.length ? msgs.map(function (m) {
           var s = updState(m.text), pod = updPod(m);
           return '<li><div class="uh"><span class="av">' + esc(initials(m.name)) + '</span><div><b>' + esc(m.name) + '</b><span class="t-small">' + esc((pod ? pod + ' · ' : '') + updWhen(m)) + '</span></div>' + (s ? chip(s[0], s[1], 'margin-left:auto') : '') + '</div><p>' + esc(excerpt(m.text)) + '</p></li>';
         }).join('') : '<li><p class="t-sub">No updates yet.</p></li>';
+        pg.paint();
       }
+      pg = pager('updPg', PER, function () { return weekMsgs().length; }, function () { paint(); }, 'updates', function (a, b, t) { return 'PM update ' + a + ' of ' + t; });
       if (!weeks.length) { $('#updSeg').remove(); }
       paint();
     }
@@ -456,7 +519,7 @@
       return { causes: causes, byQ: byQ, byT: byT, longest: longest };
     }
     function renderCycle() {
-      var F = cycleFacts(), causes = F.causes.slice(0, 6), byQ = F.byQ;
+      var F = cycleFacts(), causes = F.causes, byQ = F.byQ;
       var spread = [['Same day', 0, 24, 'var(--xero-blue)', 1], ['1–3 days', 24, 72, 'var(--mint)', 1], ['3–7 days', 72, 168, 'var(--gold)', 1], ['1–2 weeks', 168, 336, 'var(--coral)', .55], ['2–4 weeks', 336, 672, 'var(--coral)', .8], ['Over a month', 672, Infinity, 'var(--coral)', 1]]
         .map(function (b) { return { l: b[0], n: measured.filter(function (r) { return r.durationHours >= b[1] && r.durationHours < b[2]; }).length, c: b[3], o: b[4] }; });
       var mx = Math.max.apply(null, spread.map(function (b) { return b.n; }).concat(1));
@@ -466,7 +529,7 @@
       put('cycle', head('Request cycle time', esc(slow + ' of ' + measured.length + ' tracked requests waited over a week.'), chip('Since 1 Jul 2026 (FY27 Q2)', 'grey')) +
         '<div class="cyc"><div class="panel"><h4>Requests accounted for</h4><div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap"><div class="ringwrap" id="cycRing"></div><ul class="lg" style="flex:1;min-width:150px" id="cycLegend"></ul></div></div>' +
         '<div class="panel"><h4>How long requests waited</h4><div class="hist" id="hist"></div><div class="brk"><span>' + slow + ' waited over a week</span></div></div>' +
-        '<div class="panel"><h4>Where the wait comes from</h4><ul class="cause" id="cause"></ul><span class="t-small">Mid-point wait in days, top ' + causes.length + ' causes</span></div></div>' +
+        '<div class="panel"><h4>Where the wait comes from</h4><ul class="cause" id="cause"></ul><div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span class="t-small">Mid-point wait in days</span>' + pagerHTML('causePg') + '</div></div></div>' +
         '<div class="two"><div class="panel" style="flex-direction:row;align-items:center;gap:20px"><span class="num" style="font-size:56px;color:var(--mint-ink)">' + (lastQ ? lastQ[1].toFixed(1) + 'd' : '–') + '</span><div><b style="font-size:17px">Mid-point wait, ' + esc(lastQ ? lastQ[0] : '') + '</b><div class="t-small">' + (prevQ ? (lastQ[1] < prevQ[1] ? 'Down' : lastQ[1] > prevQ[1] ? 'Up' : 'Level') + ' from ' + prevQ[1].toFixed(1) + ' days in ' + esc(prevQ[0]) : '') + '</div></div></div>' +
         '<div class="panel" style="flex-direction:row;align-items:center;gap:20px"><span class="num" style="font-size:56px;color:var(--coral-ink)">' + (longest ? (longest.durationHours / 24).toFixed(1) + 'd' : '–') + '</span><div><b style="font-size:17px">Longest measured wait</b><div class="t-small">' + (longest ? esc(longest.name) : '') + '</div></div></div></div>' +
         '<div class="cardfoot"><button class="link" type="button" data-more="cycle">See the longest waits</button>' + seeMore('cycle') + '</div>');
@@ -474,7 +537,11 @@
         '<span class="num" style="font-size:52px;color:var(--blue-ink)">' + accounted + '%</span>', 'Share of requests accounted for');
       $('#cycLegend').innerHTML = cl.map(function (c) { return '<li><i class="dot" style="background:' + c[2] + '"></i><span>' + c[0] + '</span><b>' + c[1] + '</b></li>'; }).join('');
       $('#hist').innerHTML = spread.map(function (h) { return '<div><b>' + h.n + '</b><i style="height:' + Math.max(3, h.n / mx * 110) + 'px;background:' + h.c + ';opacity:' + h.o + '"></i>' + h.l + '</div>'; }).join('');
-      $('#cause').innerHTML = causes.length ? causes.map(function (c) { var col = c[1] >= 20 ? 'var(--coral)' : 'var(--gold)'; return '<li><span>' + esc(c[0]) + '</span><span class="bar"><i style="width:' + (c[1] / cmax * 100) + '%;background:' + col + '"></i></span><b>' + c[1].toFixed(1) + 'd</b></li>'; }).join('') : '<li class="t-sub">No causes tagged yet.</li>';
+      function drawCauses(start) {
+        $('#cause').innerHTML = causes.length ? causes.slice(start, start + 6).map(function (c) { var col = c[1] >= 20 ? 'var(--coral)' : 'var(--gold)'; return '<li><span>' + esc(c[0]) + '</span><span class="bar"><i style="width:' + (c[1] / cmax * 100) + '%;background:' + col + '"></i></span><b>' + c[1].toFixed(1) + 'd</b></li>'; }).join('') : '<li class="t-sub">No causes tagged yet.</li>';
+      }
+      var cpg = pager('causePg', 6, function () { return causes.length; }, drawCauses, 'causes');
+      drawCauses(0); cpg.paint();
     }
 
     function renderSpend() {
@@ -527,7 +594,7 @@
 
     var SMAP = { over: ['coral', 'Over capacity', 'var(--coral)'], under: ['gold', 'Under capacity', 'var(--gold)'], avail: ['mint', 'Available', 'var(--mint)'], ooo: ['purple', 'Out of office', 'var(--purple)'] };
     var DET = {};
-    var JUMP = { capacity: '#capacity', pods: '#pods', pmteam: '#pmteam', ooo: '#ooo', forecaster: '#forecaster', missing: '#missing', scope: '#scope', updates: '#updates', cycle: '#cycle', spend: '#spend', assets: '#assets', briefs: '#overview' };
+    var JUMP = { capacity: '#capacity', pods: '#pods', pmteam: '#pmteam', ooo: '#ooo', forecaster: '#forecaster', missing: '#missing', scope: '#scope', updates: '#updates', cycle: '#cycle', spend: '#spend', assets: '#assets', briefs: '#overview', usage: '#spend' };
     var ORIG = { capacity: 'capacity', pods: 'podsummary', pmteam: 'pmteam', ooo: 'ooo', forecaster: 'forecaster', missing: 'missing', scope: 'scopecreep', updates: 'pmupdates', cycle: 'requests', spend: 'platform', regional: 'regional' };
     var ORIG_TITLE = { capacity: 'Team capacity', pods: 'Pod summary', pmteam: 'PM team', ooo: 'Out of office', forecaster: 'Project forecaster', missing: 'Tasks needing attention', scope: 'Scope creep and FAA', updates: 'PM updates', cycle: 'Request cycle time', spend: 'Platform spend and usage', regional: 'Regional Requests - WIP' };
 
@@ -704,6 +771,34 @@
       return { t: 'Platform spend and usage', s: 'Annual cost in NZD for ' + M.label + (prev ? ', compared with ' + prev.label : '') + '.', h:
         stats([[pltCompact(T.total), 'Total per year', 'var(--ink)'], [pltCompact(T.shared), 'Shared (' + pltShare(T.shared, T.total) + ')', 'var(--blue-ink)'], [pltCompact(T.xcf), 'XCF only (' + pltShare(T.xcf, T.total) + ')', 'var(--purple-ink)'], [pltCompact(low.total), 'Low-usage spend', 'var(--gold-ink)']]) +
         sec('All platforms', segc('plat', [['all', 'All platforms'], ['shared', 'Shared'], ['xcf', 'XCF only']]) + table(['Platform', 'Scope', 'Seats', 'Annual cost', 'Share', 'Change' + (vs ? ' vs ' + esc(vs) : ''), 'Usage'], rows) + (T.notInTotalCount ? '<p class="note2">' + plural(T.notInTotalCount, 'more platform is', 'more platforms are') + ' listed in the sheet but left out of the total (' + pltMoney(T.notInTotal) + ').</p>' : '')) + orig('spend') };
+    };
+
+    DET.usage = function () {
+      var M = months[months.length - 1]; if (!M) return { t: 'Overall tool usage', s: 'No platform data yet.', h: orig('spend') };
+      var prev = months.length > 1 ? months[months.length - 2] : null, u = usageShare(M), up = prev ? usageShare(prev) : null;
+      var meaning = { High: 'Used daily', Medium: 'Used regularly', Low: 'Used quarterly or less', 'New tool': 'New this month' };
+      ((PD && PD.usageKey) || []).forEach(function (k) { meaning[k.level] = 'Used ' + ({ regular: 'regularly' }[k.meaning] || k.meaning); });
+      var rank = { High: 3, Medium: 2, Low: 1, 'New tool': 0 }, lc = { High: 'blue', Medium: 'gold', Low: 'purple', 'New tool': 'mint' };
+      var count = function (X, lv) { var r = X.byUsage.filter(function (x) { return x.level === lv; })[0]; return r ? r.count : 0; };
+      var pn = prev ? prev.label.split(' ')[0] : null;
+      var levels = ['High', 'Medium', 'Low', 'New tool'].filter(function (lv) { return count(M, lv) || (prev && count(prev, lv)); }).map(function (lv) {
+        var row0 = M.byUsage.filter(function (x) { return x.level === lv; })[0] || { count: 0, tools: [], total: 0 };
+        var d = prev ? count(M, lv) - count(prev, lv) : 0;
+        return row([chip(esc(lv), lc[lv]), esc(meaning[lv] || ''), '<b>' + row0.count + '</b>' + (prev ? '<br><span class="t-small">' + (d ? (d > 0 ? '▲ ' : '▼ ') + Math.abs(d) + ' vs ' + esc(pn) : 'No change vs ' + esc(pn)) + '</span>' : ''), esc(row0.tools.join(', ') || '–'), pltMoney(row0.total)]);
+      });
+      var rows = M.rows.filter(function (r) { return r.inTotal; }).slice().sort(function (a, b) { return (rank[b.usage] || 0) - (rank[a.usage] || 0) || b.annual - a.annual; }).map(function (r) {
+        var pr = prev ? prev.rows.filter(function (x) { return x.toolKey === r.toolKey; })[0] : null, txt = '–', col = 'var(--muted)';
+        if (prev) {
+          if (!pr) { txt = 'New this month'; col = 'var(--mint-ink)'; }
+          else if (pr.usage === r.usage) txt = 'No change';
+          else { var upr = (rank[r.usage] || 0) > (rank[pr.usage] || 0); txt = (upr ? '▲ Up from ' : '▼ Down from ') + esc(pr.usage); col = upr ? 'var(--mint-ink)' : 'var(--gold-ink)'; }
+        }
+        return row(['<b>' + esc(r.tool) + '</b><br><span class="t-small">' + esc(r.category || '') + '</span>', chip(esc(r.usage || '–'), lc[r.usage] || 'grey'), '<span style="font-weight:600;color:' + col + '">' + txt + '</span>', '<b>' + pltMoney(r.annual) + '</b>', '<span class="t-small">' + esc(r.howToCheck || '–') + '</span>']);
+      });
+      return { t: 'Overall tool usage', s: 'How much each platform is used in ' + M.label + (prev ? ', compared with ' + prev.label : '') + '. The headline is the share of platforms used daily.', h:
+        stats([[u.pct + '%', 'Tools used daily', 'var(--mint-ink)'], [u.high + ' of ' + u.total, 'Used daily', 'var(--blue-ink)'], [up ? up.pct + '%' : '–', 'Used daily' + (pn ? ' in ' + esc(pn) : ''), 'var(--muted)'], [up ? (u.pct - up.pct >= 0 ? '+' : '') + (u.pct - up.pct) + ' pts' : '–', 'Change', u.pct >= (up ? up.pct : 0) ? 'var(--mint-ink)' : 'var(--gold-ink)']]) +
+        sec('By how much they are used', table(['Level', 'Meaning', 'Tools', 'Which tools', 'Annual cost'], levels)) +
+        sec('Tool by tool', table(['Platform', 'Usage', 'Change' + (pn ? ' vs ' + esc(pn) : ''), 'Annual cost', 'How usage is checked'], rows), 'Only platforms counted in the total are included.') + orig('spend') };
     };
 
     /* the two work-in-progress cards: the mockup's own sample numbers, shown as sample */

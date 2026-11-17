@@ -177,6 +177,35 @@ button,input,select,textarea{font-family:var(--body)}
 .mk .pods .mem li{grid-template-columns:minmax(0,1fr) 44px 46px;gap:8px;font-size:14px}
 .mk #oooTl{grid-template-columns:150px minmax(0,1fr)}
 .mk .gl b{font-size:15px}
+
+/* top boxes: label, then the big number, then the chart or chips. The five boxes share their rows (a grid inside a grid), so
+   the label, the number and the chart line up across the row however long each label or caption is */
+.mk .grid:has(>.kcard) > .kcard{display:grid;grid-template-rows:subgrid;grid-row:span 4;row-gap:14px;align-content:start}
+.mk .kcard .knum{display:flex;align-items:baseline;gap:6px 10px;flex-wrap:wrap;align-content:flex-start}
+.mk .kcard .knum .num{font-size:48px}
+.mk .kcard .kviz{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.mk .kcard .cardfoot{align-self:end}
+.mk .kviz .chip{white-space:normal;line-height:1.3;font-size:13px;padding:3px 10px;border-radius:16px}
+
+/* arrows on cards that show only part of their data */
+.mk .pgr{display:inline-flex;align-items:center;gap:8px}
+.mk .pgr[hidden]{display:none}
+.mk .pgr button{width:36px;height:36px;border-radius:50%;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;display:grid;place-items:center;padding:0;transition:border-color .12s}
+.mk .pgr button:hover:not(:disabled){border-color:var(--xui);color:var(--blue-ink)}
+.mk .pgr button:disabled{opacity:.35;cursor:default}
+.mk .pgr button:focus-visible{outline:3px solid var(--xui);outline-offset:2px}
+.mk .pgr .pg-n{font-size:14px;color:var(--muted);white-space:nowrap}
+.mk #updates .pgr{align-self:flex-start}
+.mk #updates .pgr .pg-n{min-width:110px;text-align:center}
+/* cards laid side by side sit in a row that scrolls across */
+.mk .car{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;padding-bottom:2px}
+.mk .car::-webkit-scrollbar{display:none}
+.mk .pods.car,.mk .two.car{display:flex}
+.mk .car>.pod{flex:0 0 calc((100% - 60px)/4);min-width:0;scroll-snap-align:start}
+.mk .two.car>.pod{flex:0 0 calc((100% - 20px)/2)}
+@media (max-width:1180px){.mk .car>.pod,.mk .two.car>.pod{flex-basis:calc((100% - 20px)/2)}}
+@media (max-width:720px){.mk .car>.pod,.mk .two.car>.pod{flex-basis:100%}}
+@media (prefers-reduced-motion:reduce){.mk .car{scroll-behavior:auto}}
 :root{--data1:#1F65D6}
 :root[data-theme="dark"]{--data1:#3ECCFF}
 
