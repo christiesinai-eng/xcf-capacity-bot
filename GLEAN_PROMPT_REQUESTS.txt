@@ -83,7 +83,8 @@ REQ ¦ <gid> ¦ <code> ¦ <name> ¦ <pod> ¦ <requester> ¦ <assignee> ¦ <statu
   FY27 Q3; January to March 2027 = FY27 Q4; April to June 2027 = FY28 Q1; July to September 2027 = FY28 Q2, and so on
   (the financial year starts on 1 April and is named for the year it ends in).
 - project type = enum_value.name of field 1217575429570978 on the request. If it is empty, use the project type on the
-  PRJ line for this task's code (if there is one). If it is still empty, write Unset.
+  PRJ line for this task's code (if there is one). A dash on a PRJ line means that project has no type: a dash is NOT a
+  value, so do not copy it. If it is still empty, write Unset. The project_type cell must never hold a dash.
 - regions: if the project type is Roadmap, the names in multi_enum_values of field 1212086752729219; if it is Micro (BAU)
   or XCF initiative, the names in multi_enum_values of field 1213486033990545; for anything else (including Unset), the
   names of field 1213486033990545 if it has any, otherwise those of field 1212086752729219. Trim spaces from the start and end of each
