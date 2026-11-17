@@ -198,6 +198,7 @@ const MANUAL_OOO = [
   { name: 'Aniqah', start: '2026-07-01', end: '2027-07-31' },
   { name: 'Steph Gardner', start: '2026-07-20', end: '2026-08-09' },
   { name: 'Christie Sinai', start: '2026-09-16', end: '2026-10-04' },
+  { name: 'Ciaran Carroll', start: '2026-11-16', end: '2027-05-16' },
 ];
 
 const EXCLUDED_MEMBERS = [
