@@ -24,10 +24,14 @@ PHASE 0 - SET UP
 - today = today's date in the Pacific/Auckland timezone, as YYYY-MM-DD, from the clock. cutoff = the date 60 days
   before today, also YYYY-MM-DD. Say both in your report.
 - now = the current UTC date-time as ISO 8601 (for example 2026-11-02T01:30:00Z).
-- Read the People tab in ONE Google Sheets read, range A1:H200, so you get the whole tab (about fifty rows; the PMs
-  are spread through it and a read that stops early drops people). Columns: name, pod, on_capacity_tab, is_pm,
-  hidden_from_missing_tab, hidden_from_ooo_tab, asana_user_gid, note. PMS = the rows with is_pm = Y. For each PM,
-  their Asana user gid is the asana_user_gid column. Write down how many People rows you read and the PM names.
+- Read the Glean_PM_Worklist tab in ONE Google Sheets read, range A1:E12. The sheet works the PM list out for you from
+  its People tab, so do not read People and do not pick PMs yourself. Columns A and B, from row 2 down, are the PMs
+  (pm_name, asana_user_gid). Columns D and E are checks: E2 pm_count (how many PMs there must be), E3 pm_rows_listed,
+  E4 people_rows, E5 projects_rows_now, E6 tasks_rows_now, E7 scope_rows_now, E8 half_projects, E9 half_tasks,
+  E10 list_status. PMS = every row in A2:B that has a name in column A. If the number of PMs you read is not E2, or E10
+  is not "ok", write nothing and report STATUS = FAILED (the PM list is wrong: a missing PM would write a short tab).
+  Write down pm_count, the PM names, and the three rows-now numbers (E5, E6, E7). Never count the rows of a tab
+  yourself: the rows-now numbers come only from this tab, and each belongs to the tab it is named after.
 - Asana workspace gid 41261904390129. The Estimated time custom field (gid 1203387567618671) is stored in MINUTES.
 
 PHASE 1 - THE PORTFOLIO AND WHICH PROJECTS COUNT
@@ -96,8 +100,10 @@ portfolio order.
 One Glean_PM_Tasks row per PMTASK note line, in the same PM and project order as Glean_PM_Projects (pm_name is the PM
 the task was found under).
 Safety check first: if Glean_PM_Projects would have fewer than 50 rows, treat it as a bad fetch: write nothing and
-report STATUS = FAILED. Also read how many rows each tab holds now; if a tab would drop to less than half its current
-rows, write nothing to it and say so.
+report STATUS = FAILED. Also compare with the rows-now numbers you read in phase 0: if Glean_PM_Projects would have
+fewer rows than half_projects (E8), or Glean_PM_Tasks fewer rows than half_tasks (E9), write nothing to that tab and
+say so. Compare each tab only with its own number (projects with E5/E8, tasks with E6/E9). Also check that you processed
+every PM in pm_count (E2): if not, write nothing and report STATUS = FAILED.
 For each of Glean_PM_Tasks and then Glean_PM_Projects:
  a. Write all the rows in ONE Google Sheets values update, starting at A2, with the value input option RAW (so
     dates and ids stay text). If the action cannot use RAW, stop and report that.
@@ -155,7 +161,7 @@ Reply with exactly these lines, then anything else that went wrong. Give every l
 write "not reached" for anything you did not get to. A short report that leaves lines out hides what went wrong.
 STATUS: COMPLETE or FAILED (phase, reason)
 Date used (Auckland), the cutoff date, and now.
-People rows read; PMs found in People (names). Portfolio items fetched (and how many on each page); projects that count (and how many
+PMs from Glean_PM_Worklist: pm_count (E2), PMs found (names), list_status (E10); rows-now numbers read: projects (E5), tasks (E6), scope (E7). Portfolio items fetched (and how many on each page); projects that count (and how many
 per PM).
 Calls made: project counts / PM task pages. Note lines written: PROJ lines (must equal the projects that count) and
 PMTASK lines. Answers repeated because they were for the wrong project: N.
