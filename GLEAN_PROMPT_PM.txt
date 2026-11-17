@@ -126,10 +126,15 @@ b. For each team user, one at a time, use the Asana "Get Tasks" action with assi
    Keep calling with the offset token until no token comes back. This one list answer holds everything needed: do
    not look any task up again (there is no single-task lookup in this run). Work ONE PAGE AT A TIME: go through its
    tasks, and for each task whose custom field gid 1211986892220398 (Status) has an enum value named exactly one of
-   FAA, Completed FAA, Scope Creep or Completed Scope Creep (a CANDIDATE; most users have none), apply these checks
-   in order and stop at the first that applies (the candidate is then dropped and counted under that number):
+   FAA, Completed FAA, Scope Creep or Completed Scope Creep (a CANDIDATE; most users have none), first write ONE
+   note line IMMEDIATELY, copying the values exactly as the answer gives them (never from memory):
+   CAND <gid> | <task name> | <status> | completed=<true or false> | created_by=<created_by.name exactly, or MISSING> |
+   projects=<every project name on the task, separated by " ;; ">
+   Then apply these checks to that CAND line, in order, and stop at the first that applies (the candidate is then
+   dropped and counted under that number):
    1. completed is true;
-   2. created_by.name is exactly "Christie Sinai";
+   2. created_by on the CAND line is exactly "Christie Sinai" (letter for letter). Any other name (for example
+      Becky Sharp) or MISSING means this check does NOT apply and the candidate goes on to check 3;
    3. the task belongs to at least one project and none of its project names qualifies. A project name qualifies if
       it starts with X, 8 or 9 (any case) and does not start with "XCF: Cost per asset + Asset counter (Roadmap
       Projects & Micro/BAU tasks)". A task in no project at all is kept (a subtask).
@@ -166,5 +171,6 @@ per PM).
 Calls made: project counts / PM task pages. Note lines written: PROJ lines (must equal the projects that count) and
 PMTASK lines. Answers repeated because they were for the wrong project: N.
 Scope creep: team users read (of how many); candidates found; dropped by check 1 / 2 / 3; rows written.
+Every CAND line, copied as written, each followed by KEPT or DROPPED BY CHECK n (normally 0 to 3 lines).
 Rows written to each of the three tabs, and for each tab whether the read-back passed (first row, last row, count).
 Anything skipped or failed.
