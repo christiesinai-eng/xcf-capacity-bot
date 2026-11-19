@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>XCF Capacity Report · 19 May 2026</title>
+<title>XCF Workflow · 19 May 2026</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#000000;color:#fff;min-height:100vh}
@@ -836,7 +836,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </section>
 
 <div class="footer" id="footer-bar">
-  XCF Capacity Report &nbsp;·&nbsp; 19 May 2026 &nbsp;·&nbsp; 446 tasks (all pages) &nbsp;·&nbsp;
+  XCF Workflow &nbsp;·&nbsp; 19 May 2026 &nbsp;·&nbsp; 446 tasks (all pages) &nbsp;·&nbsp;
   Formula: est time ÷ working days (start→due); no start date = all hours on due date &nbsp;·&nbsp; 6h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation
 </div>
 
@@ -1170,7 +1170,7 @@ let tab='today', openId=null, currentView='capacity';
   function addD(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
 
   const in7=new Date(WIN.weekTo+'T00:00:00'), in21=new Date(WIN.monthTo+'T00:00:00');
-  document.querySelector('title').textContent='XCF Capacity Report · '+fmt(now);
+  document.querySelector('title').textContent='XCF Workflow · '+fmt(now);
   document.getElementById('tab-today-date').textContent=fmt(now);
   document.getElementById('tab-week-date').textContent='→ '+fmtShort(in7);
   document.getElementById('tab-month-date').textContent='→ '+fmtShort(in21);
@@ -1206,7 +1206,7 @@ let tab='today', openId=null, currentView='capacity';
   const footer=document.getElementById('footer-bar');
   if(footer){
     const total=MEMBERS.reduce((s,m)=>s+(m.qualifying||0)+(m.missing||0)+(m.overdue||0),0);
-    footer.innerHTML='XCF Capacity Report &nbsp;·&nbsp; Updated: '+GEN_AT+' &nbsp;·&nbsp; '+total+' tasks (all pages) &nbsp;·&nbsp; Formula: est time &divide; working days (start&rarr;due); no start date = all hours on due date &nbsp;·&nbsp; 6h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation';
+    footer.innerHTML='XCF Workflow &nbsp;·&nbsp; Updated: '+GEN_AT+' &nbsp;·&nbsp; '+total+' tasks (all pages) &nbsp;·&nbsp; Formula: est time &divide; working days (start&rarr;due); no start date = all hours on due date &nbsp;·&nbsp; 6h/day baseline &nbsp;·&nbsp; PODs: XCF Utilisation';
   }
 
   // capacity table header date label

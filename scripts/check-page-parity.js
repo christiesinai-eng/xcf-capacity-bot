@@ -97,7 +97,7 @@ function capture({ dom, errors }) {
   if (store) store.remove();
   const src = main.querySelector('#data-source');   // says where the data came from, so it differs by design
   if (src) src.remove();
-  out.overview = clean(main.textContent);
+  out.overview = clean(main.textContent).replace(/Updated:.*?NZT/g, 'Updated: (stamp)');   // generated a little after the build
   // The "Updated" stamp is the moment the page was generated; here the page is generated a little after the build.
   out.header = clean(doc.querySelector('.top-meta').textContent.replace(/Updated:.*?NZT/, '').replace(/Data:[^·]*(·[^·]*)?$/, ''));
   out.tabs = clean(doc.querySelector('.time-tabs').textContent);
