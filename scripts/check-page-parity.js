@@ -65,6 +65,9 @@ function load({ sheet, down }) {
 
 const clean = (s) => s.replace(/\s+/g, ' ').trim();
 const VIEWS = ['capacity', 'podsummary', 'missing', 'pmteam', 'scopecreep', 'forecaster', 'ooo', 'pmupdates', 'requests', 'regional'];
+// A view that shows less than this, or an error, means the check did not really look at the page (it once passed with
+// every view reading "ERROR ..." on both sides, after the one-page design removed the old nav buttons).
+const MIN_VIEW_CHARS = 200;
 
 function capture({ dom, errors }) {
   const w = dom.window;
@@ -72,7 +75,8 @@ function capture({ dom, errors }) {
   const out = {};
   const click = (sel) => doc.querySelector(sel);
   for (const v of VIEWS) {
-    const btn = click(`.nav-btn[onclick*="'${v}'"]`);
+    // The one-page design has no .nav-btn buttons; showView only needs an element to mark active.
+    const btn = click(`.nav-btn[onclick*="'${v}'"]`) || doc.createElement('button');
     try {
       w.showView(v, btn);
       if (v === 'capacity') {
@@ -87,6 +91,13 @@ function capture({ dom, errors }) {
       out[v] = `ERROR ${e.message}`;
     }
   }
+  // The overview page (the cards drawn by brand/workflow.js), without the hidden store of original views.
+  const main = doc.querySelector('.ct-main').cloneNode(true);
+  const store = main.querySelector('#ct-store');
+  if (store) store.remove();
+  const src = main.querySelector('#data-source');   // says where the data came from, so it differs by design
+  if (src) src.remove();
+  out.overview = clean(main.textContent);
   // The "Updated" stamp is the moment the page was generated; here the page is generated a little after the build.
   out.header = clean(doc.querySelector('.top-meta').textContent.replace(/Updated:.*?NZT/, '').replace(/Data:[^·]*(·[^·]*)?$/, ''));
   out.tabs = clean(doc.querySelector('.time-tabs').textContent);
@@ -108,6 +119,14 @@ const b = capture(load({ sheet: true }));
 const c = capture(load({ sheet: false })); // a second embedded load: shows the page is repeatable
 
 let bad = 0;
+for (const [label, cap] of [['built-in', a], ['sheet', b]]) {
+  for (const [k, v] of Object.entries(cap.text)) {
+    if (/^ERROR/.test(v) || (VIEWS.includes(k.split('/')[0]) || k === 'overview') && v.length < MIN_VIEW_CHARS) {
+      bad++;
+      console.log(`EMPTY      ${label} ${k}: ${v.slice(0, 120)}`);
+    }
+  }
+}
 console.log(`Embedded data  : used sheet = ${a.usedSheet}; "${a.source}"`);
 console.log(`Sheet data     : used sheet = ${b.usedSheet}${b.sheetError ? ' (' + b.sheetError + ')' : ''}; "${b.source}"`);
 if (!b.usedSheet) { console.log('The page did not use the sheet, so there is nothing to compare.'); process.exit(1); }

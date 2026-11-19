@@ -173,6 +173,40 @@ test('the sync log says how fresh the sheet is', () => {
   assert.deepEqual(d.sync, { status: 'partial', syncedAt: '2026-10-29T00:00:00.000Z', generatedAt: '29 Oct 2026, 08:32 am NZT', skipped: 'Requests, Request_Comments' });
 });
 
+test('the page reads the Glean_ copies of the agent tabs and still calls them by their page names', () => {
+  assert.equal(SheetAdapter.RANGES.length, 20);                       // the platform allows at most 20
+  assert.equal(new Set(SheetAdapter.RANGES).size, 20);
+  assert.equal(SheetAdapter.RANGES[SheetAdapter.TABS.indexOf('Tasks')], 'Glean_Tasks');
+  assert.equal(SheetAdapter.RANGES[SheetAdapter.TABS.indexOf('Regional_Meta')], 'Glean_Regional_Meta');
+  ['People', 'OOO_Manual', 'Notes', 'Sync_Log'].forEach((t) => assert.equal(SheetAdapter.RANGES[SheetAdapter.TABS.indexOf(t)], t));
+  const tabs = SheetAdapter.parseSheetResponse({
+    ranges: SheetAdapter.RANGES.map((name, i) => ({ range: `'${name}'!A1:B2`, values: [['k'], [name]] })),
+  });
+  assert.deepEqual(Object.keys(tabs).sort(), SheetAdapter.TABS.slice().sort());
+  assert.equal(tabs.Tasks[0].k, 'Glean_Tasks');
+  assert.equal(tabs.People[0].k, 'People');
+});
+
+test('agent stamps in the sync log: the oldest one is shown, and a missing or old one is named', () => {
+  const NOW = Date.parse('2026-11-23T01:00:00Z');
+  const stamps = (over) => [['key', 'value'], ['tasks_at', '2026-11-22T20:05:00Z'], ['pm_at', '2026-11-22T20:20:00Z'], ['roadmap_at', '2026-11-22T20:35:00Z'],
+    ['regional_at', '2026-11-22T20:50:00Z'], ['requests_at', '2026-11-22T21:20:00Z'], ['comments_at', '2026-11-22T22:05:00Z'], ['pm_updates_at', '2026-11-22T19:31:00Z']]
+    .map((r) => (over && over[r[0]] !== undefined ? [r[0], over[r[0]]] : r));
+  const run = (log) => SheetAdapter.buildDatasets(SheetAdapter.parseSheetResponse(reply({ People: [PEOPLE], Sync_Log: log })), TODAY, { nowMs: NOW });
+  const ok = run(stamps());
+  assert.deepEqual(ok.sync, { status: 'ok', syncedAt: '2026-11-22T19:31:00.000Z', generatedAt: '23 Nov 2026, 08:31 am NZT', skipped: '' });
+  assert.equal(ok.GENERATED_AT, '23 Nov 2026, 08:31 am NZT');
+  const old = run(stamps({ roadmap_at: '2026-11-20T20:35:00Z' }));
+  assert.equal(old.sync.status, 'partial');
+  assert.equal(old.sync.skipped, 'Roadmap');
+  assert.equal(old.sync.syncedAt, '2026-11-20T20:35:00.000Z');
+  const missing = run(stamps({ regional_at: '', comments_at: 'not a date' }));
+  assert.equal(missing.sync.skipped, 'Regional, Comments');
+  // with no agent stamp at all the old build-sync fields are used, as before
+  const old2 = run([['key', 'value'], ['status', 'ok'], ['synced_at', '2026-10-29T00:00:00.000Z'], ['generated_at', '29 Oct 2026, 08:32 am NZT']]);
+  assert.equal(old2.sync.syncedAt, '2026-10-29T00:00:00.000Z');
+});
+
 test('a reply missing a tab the page needs is not used', () => {
   const full = SheetAdapter.parseSheetResponse(reply({ People: [PEOPLE] }));
   assert.equal(SheetAdapter.isUsable(full), true);

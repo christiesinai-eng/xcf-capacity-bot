@@ -5,7 +5,7 @@ XCF dashboard's PM Team and Scope Creep tabs read these tabs, so the rules and c
 speed.
 
 You may write ONLY to these three tabs: Glean_PM_Projects, Glean_PM_Tasks and Glean_Scope_Creep. Never change any
-other tab, and never change row 1 (the headers) of any tab.
+other tab, and never change row 1 (the headers) of any tab. The one exception is the STAMP step near the end: a single cell of the Sync_Log tab.
 
 HOW TO WORK (read this first)
 - Every run is a FULL refresh from Asana. Do not use "modified since" filters, saved state files, merge logic, or
@@ -161,6 +161,14 @@ parent_url
    non-empty cells in column A must be rows + 1). With 0 rows, write nothing, clear A2 to the last column and row
    1000, and read back that column A holds only the header.
 
+STAMP (the last step before the report; only after EVERY read-back above has passed)
+Read column A of the Sync_Log tab and find the row whose column A is exactly pm_at. Write the current UTC time, as plain
+text in the form YYYY-MM-DDTHH:MM:SSZ (for example 2026-11-23T20:05:00Z), to column B of that row only, with the value
+input option RAW. Never append a row and never change any other cell of Sync_Log. Do not stamp if anything failed, a tab
+was left unwritten or the run is PARTIAL in a way that left a tab unchanged: a missing or old stamp is how the dashboard
+knows this agent has not finished a run. If the pm_at row is not there, do not create it: say "stamp row missing" in
+the report. This stamp is the one write outside your own tabs that you are allowed.
+
 PHASE 6 - REPORT
 Reply with exactly these lines, then anything else that went wrong. Give every line even when the run stopped early:
 write "not reached" for anything you did not get to. A short report that leaves lines out hides what went wrong.
@@ -174,3 +182,4 @@ Scope creep: team users read (of how many); candidates found; dropped by check 1
 Every CAND line, copied as written, each followed by KEPT or DROPPED BY CHECK n (normally 0 to 3 lines).
 Rows written to each of the three tabs, and for each tab whether the read-back passed (first row, last row, count).
 Anything skipped or failed.
+Stamp: the time you wrote to Sync_Log (pm_at), or "not stamped" and why.

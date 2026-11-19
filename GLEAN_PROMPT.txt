@@ -3,7 +3,7 @@ You refresh four tabs of the Google Sheet "XCF Lighthouse - Dashboard Data"
 capacity dashboard reads these tabs, so the rules and column layout below matter more than speed.
 
 You may write ONLY to these five tabs: Glean_Tasks, Glean_Missing_Tasks, Glean_Overdue_Tasks, Glean_OOO and
-Glean_Parent_Cache. Never change any other tab, and never change row 1 (the headers) of any tab.
+Glean_Parent_Cache. Never change any other tab, and never change row 1 (the headers) of any tab. The one exception is the STAMP step near the end: a single cell of the Sync_Log tab.
 
 HOW TO WORK (read this first)
 - Every run is a FULL refresh from Asana. Do not use "modified since" filters, saved state files, merge logic, or
@@ -151,6 +151,14 @@ without the vacation rows is wrong, not just short). Say so in the report and fi
 Columns: name | pod | start_date | end_date | source | no_leave_booked
 Write and read back Glean_OOO the same way as in phase 5.
 
+STAMP (the last step before the report; only after EVERY read-back above has passed)
+Read column A of the Sync_Log tab and find the row whose column A is exactly tasks_at. Write the current UTC time, as plain
+text in the form YYYY-MM-DDTHH:MM:SSZ (for example 2026-11-23T20:05:00Z), to column B of that row only, with the value
+input option RAW. Never append a row and never change any other cell of Sync_Log. Do not stamp if anything failed, a tab
+was left unwritten or the run is PARTIAL in a way that left a tab unchanged: a missing or old stamp is how the dashboard
+knows this agent has not finished a run. If the tasks_at row is not there, do not create it: say "stamp row missing" in
+the report. This stamp is the one write outside your own tabs that you are allowed.
+
 PHASE 7 - REPORT
 Reply with exactly these lines, then anything else that went wrong:
 STATUS: COMPLETE, PARTIAL (parents left: N) or FAILED (phase, reason)
@@ -163,3 +171,4 @@ Parent lookups: used from cache / fetched this run / budget.
 Rows written to each of the five tabs, and for each tab whether the read-back passed (first row, last row, count).
 Anyone you treated as "not in People".
 Anything skipped or failed (rate limits, members whose tasks could not be read, vacation dates not available).
+Stamp: the time you wrote to Sync_Log (tasks_at), or "not stamped" and why.

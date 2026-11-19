@@ -18,6 +18,22 @@
   const TABS = ['People', 'Tasks', 'Missing_Tasks', 'Overdue_Tasks', 'OOO', 'OOO_Manual', 'PM_Projects', 'PM_Tasks',
     'Roadmap', 'Roadmap_Subtasks', 'Scope_Creep', 'PM_Updates', 'Requests', 'Request_Comments', 'Notes',
     'Regional', 'Regional_Panels', 'Regional_Unrecognised', 'Regional_Meta', 'Sync_Log'];
+  // The sheet tab each logical tab is read from. The Glean agents write the `Glean_` copies, so the page reads those
+  // (formula tabs among them). People, OOO_Manual, Notes and Sync_Log are edited by hand and keep their names.
+  // Still 20 tabs, so still within the platform's limit. RANGES is what `deploy_app` is given as `ranges`.
+  const SOURCE_TAB = {};
+  ['Tasks', 'Missing_Tasks', 'Overdue_Tasks', 'OOO', 'PM_Projects', 'PM_Tasks', 'Roadmap', 'Roadmap_Subtasks', 'Scope_Creep',
+    'PM_Updates', 'Requests', 'Request_Comments', 'Regional', 'Regional_Panels', 'Regional_Unrecognised', 'Regional_Meta']
+    .forEach((t) => { SOURCE_TAB[t] = 'Glean_' + t; });
+  const RANGES = TABS.map((t) => SOURCE_TAB[t] || t);
+  const LOGICAL = {};
+  TABS.forEach((t) => { LOGICAL[t] = t; LOGICAL[SOURCE_TAB[t] || t] = t; });
+
+  // Each agent stamps its own row of Sync_Log (key, value) with the UTC time its last run finished, after its
+  // read-backs passed. The page shows the oldest stamp and warns when one is missing or more than 36 hours old.
+  const AGENT_STAMPS = [['tasks_at', 'Tasks'], ['pm_at', 'PM'], ['roadmap_at', 'Roadmap'], ['regional_at', 'Regional'],
+    ['requests_at', 'Requests'], ['comments_at', 'Comments'], ['pm_updates_at', 'PM updates']];
+  const STALE_HOURS = 36;
   const WEEK_WORKING_DAYS = 5;
 
   // Tabs the dashboard cannot draw anything useful without. If one is missing the page keeps its embedded data.
@@ -43,10 +59,11 @@
   // /api/sheet reply -> { Tab: [ {header: value, ...}, ... ] }. Rows may be shorter than the header
   // (Sheets drops trailing empty cells), so missing cells read as ''.
   function parseSheetResponse(resp, declared) {
-    const names = declared || TABS;
+    const names = declared || RANGES;
     const tabs = {};
     (resp.ranges || []).forEach((r, i) => {
-      const name = names[i] && (!r.range || tabNameOf(r.range) === names[i]) ? names[i] : tabNameOf(r.range);
+      const asked = names[i] && (!r.range || tabNameOf(r.range) === names[i]) ? names[i] : tabNameOf(r.range);
+      const name = LOGICAL[asked] || asked;   // 'Glean_Tasks' and 'Tasks' both come out as Tasks
       const values = r.values || [];
       const headers = (values[0] || []).map(str);
       tabs[name] = values.slice(1)
@@ -118,6 +135,25 @@
         if (!known.has(n)) { known.add(n); extra.push({ name: n, pod: 'Unknown', onCapacity: true, isPm: false, gid: null }); }
       });
     return [...people, ...extra];
+  }
+
+  // How fresh the sheet says it is. Agent stamps win when there are any; otherwise the old build sync's fields.
+  function syncInfo(log, nowMs) {
+    const stamped = AGENT_STAMPS.filter(([k]) => str(log[k]) !== '');
+    if (!stamped.length) {
+      return { status: log.status || null, syncedAt: log.synced_at || null, generatedAt: log.generated_at || null, skipped: log.skipped || '' };
+    }
+    const now = nowMs === undefined ? Date.now() : nowMs;
+    const times = stamped.map(([k]) => ({ k, t: Date.parse(str(log[k])) })).filter((x) => !isNaN(x.t));
+    const oldest = times.length ? Math.min.apply(null, times.map((x) => x.t)) : null;
+    const behind = AGENT_STAMPS.filter(([k]) => {
+      const t = Date.parse(str(log[k]));
+      return isNaN(t) || (now - t) / 3600000 > STALE_HOURS;
+    }).map(([, label]) => label);
+    const label = oldest === null ? null : new Date(oldest).toLocaleString('en-NZ', {
+      timeZone: 'Pacific/Auckland', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true,
+    }) + ' NZT';
+    return { status: behind.length ? 'partial' : 'ok', syncedAt: oldest === null ? null : new Date(oldest).toISOString(), generatedAt: label, skipped: behind.join(', ') };
   }
 
   // ── the datasets ───────────────────────────────────────────────────────────
@@ -257,7 +293,7 @@
     const REGIONAL_DATA = buildRegional(tabs);
 
     // How fresh the sheet says it is (written by the build sync into Sync_Log).
-    const sync = { status: log.status || null, syncedAt: log.synced_at || null, generatedAt: log.generated_at || null, skipped: log.skipped || '' };
+    const sync = syncInfo(log, opts.nowMs);
 
     return {
       MEMBERS, MISSING_TASKS, OVERDUE_TASKS, PM_DATA, SCOPE_CREEP_DATA, OOO_DATA: ooo, PM_UPDATES_DATA, RT_RAW_TASKS, REQUESTS_DATA, REGIONAL_DATA,
@@ -303,5 +339,5 @@
     return REQUIRED.every((n) => Array.isArray(tabs[n]));
   }
 
-  return { TABS, REQUIRED, parseSheetResponse, buildDatasets, isUsable, tabNameOf };
+  return { TABS, RANGES, SOURCE_TAB, REQUIRED, parseSheetResponse, buildDatasets, isUsable, tabNameOf };
 }));

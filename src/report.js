@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { inlineBrand } = require('./brandAssets');
 
 const TEMPLATE_PATH = path.join(__dirname, '..', 'template.html');
 const REPORTS_DIR = path.join(__dirname, '..', 'reports');
@@ -15,7 +16,9 @@ function replaceArray(html, name, data) {
     throw new Error(`Could not find "const ${name} = [...];" in template.html`);
   }
   const replacement = `const ${name} = ${JSON.stringify(data, null, 2)};`;
-  return html.replace(regex, replacement);
+  // A function, not the string itself: String.replace reads "$&", "$'" and "$$" inside a replacement string as
+  // patterns, so any data containing them (a "$$" in a note, say) would be silently changed.
+  return html.replace(regex, () => replacement);
 }
 
 // Replace a named JS string literal in the template: const NAME = "...";
@@ -112,7 +115,9 @@ function generateReport(data) {
   const generatedAt = nztStamp();
   const d = templateDatasets(data);
 
-  let html = fs.readFileSync(TEMPLATE_PATH, 'utf8');
+  // the look (fonts, logos, styles, overview script) is inlined first, so the report stays one self-contained file
+  // and nothing in the data can be mistaken for a placeholder
+  let html = inlineBrand(fs.readFileSync(TEMPLATE_PATH, 'utf8'));
   html = replaceArray(html, 'MEMBERS', d.MEMBERS);
   html = replaceArray(html, 'MISSING_TASKS', d.MISSING_TASKS);
   html = replaceArray(html, 'OVERDUE_TASKS', d.OVERDUE_TASKS);
@@ -126,6 +131,9 @@ function generateReport(data) {
   // Placeholder is an array literal but the payload is an object — replaceArray
   // only cares about the declaration shape it is replacing.
   html = replaceArray(html, 'REGIONAL_DATA', d.REGIONAL_DATA);
+  // Same trick: the placeholder is `const PLATFORM_DATA=[];` and the payload is an object (null = no snapshot yet).
+  // Not one of the sheet's tabs: it comes from platform-spend-data.json and stays built into the page.
+  html = replaceArray(html, 'PLATFORM_DATA', data.platformData || {});
   html = replaceString(html, 'GENERATED_AT', generatedAt);
   // Last, so the placeholder patterns above can never match inside the library code.
   html = html.replace('/*__SHEET_LIBS__*/', () => sheetLibs());

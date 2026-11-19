@@ -106,4 +106,25 @@ standalone `roadmap-timeline.html` file, not for the main report.
 | How data reaches the HTML | `src/report.js` — `replaceArray`, `replaceString` |
 | Markdown rendering for exec summaries | `src/report.js` — `mdToHtml` |
 | Slack fetching and week grouping | `src/slackUpdates.js` |
+| Platform spend and usage tab (data comes from a copy of a Google Sheet; "sync the platform spend data" refreshes it) | `src/platformSpend.js`, `platform-spend-data.json`, `scripts/platform-spend-from-sheet.js` |
 | Everything visual | `template.html` |
+
+
+## The look: one-page overview (since 17 Nov 2026)
+
+`template.html` is the "XCF Workflow" design: a left sidebar, then one scrolling page of summary cards (copied from the
+"XCF Lighthouse - dashboard mockup"). It is still ONE self-contained file; the build inlines fonts, logos, CSS and script
+(`src/brandAssets.js`, called from `src/report.js` before the data is poured in).
+
+- **Where things are:** `brand/README.md` explains every file. The summary cards and the "See more" windows are drawn by
+  `brand/workflow.js` from the same data blocks the tabs use (`MEMBERS`, `PM_DATA`, `REQUESTS_DATA` ...); it changes no data.
+  The report's original detailed tabs (`#view-capacity` ... `#view-regional`) are kept whole, hidden in `#ct-store`, and open from
+  the "open the original view" link at the foot of each window. Keep their ids and the `const NAME = [...]` placeholders as they are.
+- **Generated CSS (commit it):** after editing the CSS inside `template.html` run `node scripts/make-light-theme.js`; after editing
+  `brand/source/mockup.css` run `node scripts/scope-mockup-css.js`. The build does NOT run them, it reads their output.
+- **Quick look without a full build:** `node scripts/brand-preview.js` pours the newest report's data into the template in seconds.
+- **Two work-in-progress cards** (Briefs in review, Assets delivered) show the mockup's sample numbers, labelled "(WIP)" and "Sample
+  numbers": the report has no data for them yet.
+- **Logo:** `brand/assets/xcf-workflow-for-light-bg.png` and `...-for-dark-bg.png`.
+- **Font weights:** the embedded Special Gothic maps 500 and up to the bold file, so use 400 for regular text.
+- The previous design is kept in `brand/archive/`.

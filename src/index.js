@@ -6,6 +6,7 @@ const { saveData } = require('./sheetSync');
 const { buildPMUpdatesData } = require('./slackUpdates');
 const { buildRequestsData } = require('./requestTiming');
 const { buildRegionalData } = require('./regionalRequests');
+const { buildPlatformData } = require('./platformSpend');
 
 async function runReport() {
   console.log(`[${new Date().toISOString()}] Running XCF capacity report...`);
@@ -31,7 +32,15 @@ async function runReport() {
     }),
   ]);
 
-  const report = { ...capacityData, pmData, scopeCreepData, oooData, pmUpdatesData, roadmapData, bauData, requestsData, regionalData };
+  // Platform spend and usage: read from platform-spend-data.json (a copy of the Google Sheet), so no network call
+  let platformData = null;
+  try {
+    platformData = buildPlatformData();
+  } catch (err) {
+    console.warn('[Platform] builder failed, tab will be empty:', err.message);
+  }
+
+  const report = { ...capacityData, pmData, scopeCreepData, oooData, pmUpdatesData, roadmapData, bauData, requestsData, regionalData, platformData };
   saveReport(report);
   // The same datasets, kept so the Google Sheet sync can run without asking Asana again.
   console.log(`Data saved: ${saveData({ ...report, failures })}`);

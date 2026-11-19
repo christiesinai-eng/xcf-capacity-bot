@@ -1,0 +1,273 @@
+/* ══════════════════════════════════════════════════════════════════════════════════════════════════════
+   XCF Control Tower: layout and colour layer ("workflow" look).
+   Look and feel only. It changes fonts, colours, shapes and where the navigation sits. It never changes data.
+   Copied from the "XCF Lighthouse - dashboard mockup" page: warm-grey page, white cards, midnight ink, a left
+   sidebar of grouped links, pill controls, and a light theme by default with a dark theme behind a toggle.
+   The Xero fonts are the ones the mockup falls back to (Special Gothic), embedded below so the report stays one
+   self-contained file with no outside requests.
+   The first (dark, banner and charms) version is kept in brand/archive/.
+   ══════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+@font-face{font-family:'Special Gothic';font-weight:400;font-style:normal;font-display:swap;src:url({{asset:special-gothic-400.ttf}}) format('truetype')}
+@font-face{font-family:'Special Gothic';font-weight:500 700;font-style:normal;font-display:swap;src:url({{asset:special-gothic-500-700.ttf}}) format('truetype')}
+@font-face{font-family:'Special Gothic Condensed One';font-weight:400 700;font-style:normal;font-display:swap;src:url({{asset:special-gothic-condensed-one-400-700.ttf}}) format('truetype')}
+
+/* ── Tokens: light is the default, dark is opt-in ── */
+:root{
+  color-scheme:light;
+  --midnight:#000856;--xero-blue:#3ECCFF;--xui:#1F65D6;--coral:#FF719B;--gold:#FDCC08;--mint:#6AEAAA;--purple:#CF89FE;
+  --bg:#F4F2ED;--card:#FFFFFF;--ink:#000856;--muted:#4B5079;--line:#E3E0DA;--track:#E8EAF3;--soft:#F7F6F2;
+  --coral-bg:rgba(255,113,155,.20);--coral-ink:#A81D48;
+  --mint-bg:rgba(106,234,170,.32);--mint-ink:#0A6240;
+  --gold-bg:rgba(253,204,8,.32);--gold-ink:#6A4E00;
+  --purple-bg:rgba(207,137,254,.28);--purple-ink:#6A22A3;
+  --blue-bg:rgba(31,101,214,.11);--blue-ink:#1A55B8;
+  --shadow:0 1px 3px rgba(0,8,86,.08);
+  --head:'Special Gothic Condensed One','Barlow Condensed','Arial Narrow',Arial,sans-serif;
+  --body:'Special Gothic','Barlow',Helvetica,Arial,sans-serif;
+  /* the report's own tokens, pointed at the palette so every tab picks it up */
+  --mid:var(--card);--surface:var(--card);--surface2:var(--soft);--border:var(--line);
+  --txt:var(--ink);--blue:var(--xui);--sky:var(--xui);
+  --mid-grey:var(--muted);--warm-grey:var(--ink);
+  /* POD pill colours (fill and text) */
+  --pb-perf:#FBEFB6;--pf-perf:#6A4E00;
+  --pb-design:#E6E3FA;--pf-design:#4B3FBF;
+  --pb-studio:#D4F5E5;--pf-studio:#0A6240;
+  --pb-campaign:#DCE8FA;--pf-campaign:#1A55B8;
+  --pb-aim:#D6F3FF;--pf-aim:#0B6A99;
+  --pb-ops:#F3E0FF;--pf-ops:#7A22B5;
+  --pb-gm:#E8EAF3;--pf-gm:#4B5079;
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0B1030;--card:#151B4A;--ink:#F4F6FF;--muted:#B4BBE8;--line:rgba(255,255,255,.16);--track:rgba(255,255,255,.16);--soft:rgba(255,255,255,.06);
+  --coral-ink:#FF9CBA;--mint-ink:#6AEAAA;--gold-ink:#FDCC08;--purple-ink:#DDAEFF;--blue-ink:#7FD8FF;
+  --blue-bg:rgba(62,204,255,.16);--shadow:none;
+  --surface:rgba(255,255,255,.06);--surface2:rgba(255,255,255,.10);--sky:var(--xero-blue);
+  --mid-grey:#cbcac9;--warm-grey:#f2f1ee;
+  --pb-perf:#2a2200;--pf-perf:#FDCC08;
+  --pb-design:#1e1535;--pf-design:#a78bfa;
+  --pb-studio:#062318;--pf-studio:#6aeaaa;
+  --pb-campaign:#0d1a2e;--pf-campaign:#60a5fa;
+  --pb-aim:#002233;--pf-aim:#3eccff;
+  --pb-ops:#1d0d33;--pf-ops:#CF89FE;
+  --pb-gm:#0a0c1a;--pf-gm:#8b9abf;
+}
+
+/* ── Page: sidebar + main ── */
+html{background:var(--bg);scroll-behavior:smooth}
+body{font:400 16px/1.45 var(--body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input,select,textarea{font-family:var(--body)}
+:focus-visible{outline:3px solid var(--xui);outline-offset:2px;border-radius:6px}
+.app{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
+.ct-main{min-width:0;padding:32px 40px 64px}
+
+/* ── Sidebar ── */
+.nav-bar{position:sticky;top:0;align-self:start;height:100vh;padding:24px 14px;display:flex;flex-direction:column;flex-wrap:nowrap;gap:22px;
+  background:var(--card);border-right:1px solid var(--line);border-bottom:0;overflow:auto;scrollbar-width:thin}
+.nav-bar::-webkit-scrollbar{display:block;width:6px}
+.nav-brand{padding:0 10px}
+.nav-brand img{display:block;width:100%;max-width:200px;height:auto}
+.nav-brand .logo-dark{display:none}
+:root[data-theme="dark"] .nav-brand .logo-light{display:none}
+:root[data-theme="dark"] .nav-brand .logo-dark{display:block}
+.nav-brand .wm{display:block;font:800 36px/1 var(--head);color:var(--xui);-webkit-text-stroke:.025em currentColor;paint-order:stroke fill;letter-spacing:-.01em}
+:root[data-theme="dark"] .nav-brand .wm{color:var(--xero-blue)}
+.nav-grp{display:flex;flex-direction:column;gap:2px}
+.nav-grp-label{font-size:14px;font-weight:400;color:var(--muted);padding:0 12px 6px}
+.nav-btn{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px 12px;border-radius:8px;border:0;background:transparent;
+  color:var(--ink);font:400 16px/1.25 var(--body);white-space:normal;transition:background .12s}
+.nav-btn:hover:not(.active){background:var(--soft)}
+.nav-btn.active{background:var(--blue-bg);color:var(--blue-ink);font-weight:400}
+.nav-btn .dot{width:12px;height:12px;border-radius:50%;flex:none;display:inline-block;margin:0;opacity:1}
+.d-blue{background:var(--xui)}.d-sky{background:var(--xero-blue)}.d-coral{background:var(--coral)}.d-gold{background:var(--gold)}.d-mint{background:var(--mint)}.d-purple{background:var(--purple)}.d-grey{background:var(--track)}
+.nav-btn b{margin-left:auto;background:var(--coral-bg);color:var(--coral-ink);font-size:14px;font-weight:400;border-radius:999px;padding:0 9px}
+/* work-in-progress tab: faded, dashed, still clickable */
+.nav-btn.nav-wip{opacity:.62;color:var(--ink);border:0}
+.nav-btn.nav-wip:hover{opacity:.9;background:var(--soft)}
+.nav-btn.nav-wip em{margin-left:auto;font-style:normal;font-size:13px;font-weight:400;border:1px dashed var(--muted);border-radius:999px;padding:0 8px;color:var(--muted)}
+.nav-btn.nav-wip.active{opacity:1;background:var(--blue-bg);color:var(--blue-ink)}
+.nav-btn:focus-visible{outline:3px solid var(--xui);outline-offset:1px}
+.theme{margin-top:auto;border:2px solid var(--xui);background:transparent;color:var(--blue-ink);border-radius:6px;padding:9px 12px;cursor:pointer;font-weight:400;font-size:15px}
+.theme:hover{background:var(--blue-bg)}
+:root[data-theme="dark"] .theme{border-color:var(--xero-blue)}
+
+/* ── Page header ── */
+.top-bar{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;background:transparent;border:0;padding:0 0 4px}
+.top-title{display:block;font:800 52px/1 var(--head);color:var(--ink);letter-spacing:-.01em;-webkit-text-stroke:.025em currentColor;paint-order:stroke fill}
+.top-lead{display:flex;align-items:center;gap:12px;font-size:20px;color:var(--muted);margin-top:10px}
+.xcf-badge{background:var(--blue-bg);border:0;color:var(--blue-ink);font:600 14px/1.6 var(--body);letter-spacing:.04em;padding:0 12px;border-radius:999px;text-transform:none}
+.accent{display:flex;gap:6px;margin-top:14px}
+.accent i{display:block;height:6px;border-radius:99px}
+.top-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-wrap:nowrap;font-size:15px;color:var(--muted);border:0;margin:0;padding:0}
+.top-meta strong{color:var(--ink)!important;font-weight:600}
+.top-meta .dot{display:none}
+.top-meta>span{display:block}
+
+/* ── Footer ── */
+.footer{margin-top:44px;font-size:14px;color:var(--muted);background:transparent;border-top:1px solid var(--line);padding:18px 0 0;max-width:none;text-align:left}
+
+/* ══ Typography ══ */
+.rq-hdr-title,.oo-hdr-title,.pmu-hdr-title,#view-roadmap .rt-hdr-title,#view-forecaster .rt-hdr-title{
+  font-family:var(--head);font-weight:700;-webkit-text-stroke:.02em currentColor;paint-order:stroke fill;font-size:32px;letter-spacing:-.01em;line-height:1.05}
+.section-title,.rg-sect-t,.plt-panel-t,.ps-pod-name,.pm-name,.bau-card-title,.pmu-pm-name,.pmu-proj-hdr,.exec-summary .exec-h2{
+  font-family:var(--head);font-weight:700;-webkit-text-stroke:.015em currentColor;paint-order:stroke fill;letter-spacing:0;line-height:1.1}
+.section-title,.rg-sect-t,.plt-panel-t{font-size:22px}
+.ps-pod-name,.pm-name,.pmu-pm-name,.bau-card-title{font-size:20px}
+.pmu-proj-hdr,.exec-summary .exec-h2{font-size:18px}
+.stat-pill .sv,.rq-stat-v,.rq-cov-big,.rq-cov-pct,.rq-fun-n,.rq-seg-n,.plt-kpi-v,.plt-net-v,.bucket .bv,.ps-metric .mv,
+#view-roadmap .rt-stat .sv,#view-forecaster .rt-stat .sv{
+  font-family:var(--head);font-weight:700;-webkit-text-stroke:.015em currentColor;paint-order:stroke fill;letter-spacing:0}
+.rq-stat-v,.ps-metric .mv{font-size:24px}
+.rq-cov-big,.rq-cov-pct{font-size:32px}
+.plt-kpi-v{font-size:34px}
+.bucket .bv{font-size:38px}
+/* small labels and table headers keep the sentence-case, semibold style of the mockup (no all-caps) */
+.rq-stat-l,.rq-table th,.rq-ubar-l,.rg-fix-head,.rq-bd-h,.rq-cov-l,.rg-col-h,.plt-kpi-l,.plt-table th,.plt-th-btn,.plt-out-h,.tbl-head,
+.fr-pod-label,.pm-cap-label,.pm-h-badge .pm-h-label,.pm-projects-tbl th,.pm-tasks-panel-label,.bau-cols,.oo-name-hdr,.oo-pod-hdr-left,
+.pmu-section-label,.pmu-update-lbl,.exec-summary .exec-h3,#view-roadmap .rt-month-header .rt-row-label,#view-roadmap .rt-fy-cell,
+#view-forecaster .pfc-group-header,#view-forecaster .rt-month-header .rt-row-label{
+  font-family:var(--body);font-weight:600;letter-spacing:.02em;text-transform:none;font-size:12.5px}
+.plt-kpi-l,.rq-stat-l,.rq-cov-l{color:var(--muted)}
+
+/* ══ Shapes: 12px cards, pill controls and badges ══ */
+.ps-card,.pm-card,.bau-card,.exec-summary,.pmu-card,.bucket,.rg-sect,.rg-fix,.plt-panel,.plt-kpi,.rq-stat,.rq-bd,.rq-coverage,
+.expand-panel,.plt-warn,#view-roadmap .rt-timeline-container,#view-forecaster .rt-timeline-container{
+  border-radius:12px;border-color:var(--line);box-shadow:var(--shadow)}
+.ps-card,.pm-card,.bau-card,.exec-summary,.pmu-card,.rg-sect,.rg-fix,.plt-panel,.rq-bd,.rq-coverage{background:var(--card)}
+.rq-tablewrap,.tbl-wrap{border-radius:12px;border-color:var(--line)}
+.rg-sect-h,.plt-panel-h,.rg-fix-h{background:var(--soft);border-bottom-color:var(--line)}
+/* controls become pills */
+.rq-search,.rq-select,.fr-select,#view-roadmap .rt-search,#view-roadmap .rt-filter-btn,#view-forecaster .rt-search,#view-forecaster .pfc-filter-btn{
+  border-radius:999px;background:var(--card);border-color:var(--line)}
+.rq-search,#view-roadmap .rt-search,#view-forecaster .rt-search{padding-left:16px}
+.rq-search:focus{outline-color:var(--xui)}
+/* badges and chips become pills */
+.pod-pill,.status-chip,.od-badge,.mf-badge,.pfc-region-tag,.pfc-proj-status,.pm-h-badge,.rq-chip,.bau-priority,.bau-status,.plt-chip,.plt-scope{border-radius:999px}
+/* the Today / Next 7 days / Next month switch: the mockup's segmented pill */
+.time-tabs{display:inline-flex;background:var(--track);border:0;border-radius:999px;padding:4px;overflow:visible}
+.time-tab{border:0;background:transparent;border-radius:999px;padding:7px 18px;color:var(--muted)}
+.time-tabs .time-tab{border:0}
+.time-tab:hover:not(.active){background:transparent;color:var(--ink)}
+.time-tab.active{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,8,86,.2)}
+.time-tab .ts{color:var(--muted)}
+
+/* ══ Tables ══ */
+.rq-table th,.plt-table th,.pm-projects-tbl th{color:var(--muted);background:var(--soft);border-bottom:1px solid var(--line)}
+.rq-table tbody tr:hover,.plt-table tbody tr:hover{background:var(--blue-bg)}
+.plt-table tfoot td{background:var(--soft);border-top-color:var(--line)}
+
+/* ══ The overview page: the mockup's card styles (generated, scoped to .mk) ══ */
+/*__MOCKUP_SCOPED__*/
+.mk .grp>.t-sub{margin:6px 0 18px}
+.mk .card{scroll-margin-top:16px}
+.mk .num{-webkit-text-stroke:.02em currentColor;paint-order:stroke fill}
+.mk .t-hero,.mk .t-sec,.mk .t-card,.mk .pod .ph h4,.mk .panel h4,.mk .rtile h4{-webkit-text-stroke:.02em currentColor;paint-order:stroke fill}
+.mk .t-sec{font-size:36px}
+.mk .t-card{font-size:25px}
+.mk a{color:inherit}
+.mk .kcard .seemore{margin-left:auto}
+.mk .card.kcard .cardfoot{margin-top:auto}
+.mk .miss ul,.mk .dl ul,.mk .lg,.mk .use,.mk .cause,.mk .legend,.mk .ppl,.mk .mem,.mk .upd{list-style:none;margin:0;padding:0}
+.mk .mem li span.n,.mk .cause li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mk .gantt-note{font-size:14px}
+.mk .pod .pr{flex-wrap:wrap}
+.mk .pod{padding:16px}
+.mk .pods .pr{flex-direction:column;align-items:flex-start;gap:10px}
+.mk .pods .mem li{grid-template-columns:minmax(0,1fr) 44px 46px;gap:8px;font-size:14px}
+.mk #oooTl{grid-template-columns:150px minmax(0,1fr)}
+.mk .gl b{font-size:15px}
+
+/* top boxes: label, then the big number, then the chart or chips. The five boxes share their rows (a grid inside a grid), so
+   the label, the number and the chart line up across the row however long each label or caption is */
+.mk .grid:has(>.kcard) > .kcard{display:grid;grid-template-rows:subgrid;grid-row:span 4;row-gap:14px;align-content:start}
+.mk .kcard .knum{display:flex;align-items:baseline;gap:6px 10px;flex-wrap:wrap;align-content:flex-start}
+.mk .kcard .knum .num{font-size:48px}
+.mk .kcard .kviz{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.mk .kcard .cardfoot{align-self:end}
+.mk .kviz .chip{white-space:normal;line-height:1.3;font-size:13px;padding:3px 10px;border-radius:16px}
+
+/* arrows on cards that show only part of their data */
+.mk .pgr{display:inline-flex;align-items:center;gap:8px}
+.mk .pgr[hidden]{display:none}
+.mk .pgr button{width:36px;height:36px;border-radius:50%;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;display:grid;place-items:center;padding:0;transition:border-color .12s}
+.mk .pgr button:hover:not(:disabled){border-color:var(--xui);color:var(--blue-ink)}
+.mk .pgr button:disabled{opacity:.35;cursor:default}
+.mk .pgr button:focus-visible{outline:3px solid var(--xui);outline-offset:2px}
+.mk .pgr .pg-n{font-size:14px;color:var(--muted);white-space:nowrap}
+.mk #updates .pgr{align-self:flex-start}
+.mk #updates .pgr .pg-n{min-width:110px;text-align:center}
+/* cards laid side by side sit in a row that scrolls across */
+.mk .car{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;padding-bottom:2px}
+.mk .car::-webkit-scrollbar{display:none}
+.mk .pods.car,.mk .two.car{display:flex}
+.mk .car>.pod{flex:0 0 calc((100% - 60px)/4);min-width:0;scroll-snap-align:start}
+.mk .two.car>.pod{flex:0 0 calc((100% - 20px)/2)}
+@media (max-width:1180px){.mk .car>.pod,.mk .two.car>.pod{flex-basis:calc((100% - 20px)/2)}}
+@media (max-width:720px){.mk .car>.pod,.mk .two.car>.pod{flex-basis:100%}}
+@media (prefers-reduced-motion:reduce){.mk .car{scroll-behavior:auto}}
+:root{--data1:#1F65D6}
+:root[data-theme="dark"]{--data1:#3ECCFF}
+
+/* a small hint inside a section title stays in the body face, not the headline face */
+.section-title span{font-family:var(--body);font-weight:400;-webkit-text-stroke:0;letter-spacing:0}
+
+/* ══ "See more" windows ══ */
+.nav-btn{text-decoration:none;cursor:pointer}
+#ct-detail,#ct-orig{margin:auto;border:0;padding:0;border-radius:16px;width:min(1040px,calc(100vw - 32px));max-height:calc(100vh - 32px);background:var(--card);color:var(--ink);box-shadow:0 24px 70px rgba(0,8,86,.4);overflow:hidden}
+#ct-orig{width:min(1280px,calc(100vw - 32px));background:var(--bg)}
+#ct-detail[open],#ct-orig[open]{display:flex;flex-direction:column}
+#ct-detail::backdrop,#ct-orig::backdrop{background:rgba(0,8,86,.5)}
+.ct-dhead{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:24px 28px 18px;border-bottom:1px solid var(--line);background:var(--card)}
+.ct-dhead h2{font:800 32px/1.05 var(--head);-webkit-text-stroke:.02em currentColor;paint-order:stroke fill;margin:0}
+.ct-dhead p{font-size:16px;color:var(--muted);margin:6px 0 0}
+.ct-dact{display:flex;gap:16px;align-items:center;flex:none}
+.ct-dact .link{background:none;border:0;color:var(--blue-ink);font-weight:600;font-size:15px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.ct-dclose{flex:none;width:44px;height:44px;border-radius:50%;border:2px solid var(--line);background:var(--card);color:var(--ink);font-size:18px;cursor:pointer}
+.ct-dclose:hover{border-color:var(--xui);color:var(--blue-ink)}
+#dBody{padding:24px 28px 32px;display:flex;flex-direction:column;gap:28px;overflow:auto}
+/* a pane hidden by the filter buttons must stay hidden even though its own style says display:flex */
+#ct-detail [hidden]{display:none!important}
+#dBody .note2 .link{background:none;border:0;padding:0;font:inherit;color:var(--blue-ink);font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+#dBody .hb li>span:first-child{overflow:hidden;text-overflow:ellipsis}
+#dBody .dt a{color:inherit;text-decoration:none}
+#dBody .dt a:hover{text-decoration:underline}
+#oBody{padding:20px 28px 32px;overflow:auto}
+#oBody .view{display:block;margin:0;padding-top:0;border:0;box-shadow:none;background:transparent;border-radius:0;min-height:0;overflow:visible}
+#oBody .view>.time-tabs,#oBody .view>.buckets,#oBody .view>.tbl-wrap{margin-left:0;margin-right:0}
+#oBody .pod-summary-grid,#oBody #pm-body,#oBody #view-pmteam>div{padding-left:0;padding-right:0}
+#oBody .plt-wrap{padding-left:0;padding-right:0}
+.tbl-wrap{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:16px 22px 8px;margin-bottom:20px}
+#oBody #view-ooo,#oBody #view-forecaster,#oBody #view-pmupdates{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:clip}
+@media (max-width:720px){.ct-dhead{padding:16px 18px 12px}#dBody,#oBody{padding:14px 14px 24px}#ct-detail,#ct-orig{width:100vw;max-height:100vh;border-radius:0}}
+
+/* ══ Platform tab pills ══ */
+.plt-pill{border-color:var(--line);background:var(--card)}
+.plt-pill[aria-pressed="true"]{background:var(--blue-bg);border-color:var(--blue-ink);color:var(--blue-ink)}
+.plt-col[aria-pressed="true"]{border-color:var(--xui);background:var(--blue-bg)}
+.plt-pill:hover{background:var(--soft)}
+.plt-pill[aria-pressed="true"]:hover{background:var(--blue-bg)}
+
+/* ══ Small screens: the sidebar becomes a wrapping bar across the top (as in the mockup) ══ */
+@media (max-width:1180px){
+  .app{grid-template-columns:1fr}
+  .nav-bar{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:12px 16px;border-right:0;border-bottom:1px solid var(--line);overflow:visible}
+  .nav-brand{width:100%}
+  .nav-grp{flex-direction:row;flex-wrap:wrap;gap:4px}
+  .nav-grp-label{display:none}
+  .nav-btn{width:auto}
+  .theme{margin-top:0;margin-left:auto}
+  .ct-main{padding:24px 20px 48px}
+  .top-meta{align-items:flex-start}
+}
+@media (max-width:720px){.top-title{font-size:42px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* ══ Light theme: dark-page colours in the report's own rules, rewritten for a light page (generated) ══ */
+/*__LIGHT_GENERATED__*/
+
+/* ══ Small fixes ══ */
+/* white text on the blue Out of Office bars, in both themes */
+.oo-bar[style*="background:#1f65d6" i],.oo-bar[style*="background:#1f65d6" i] .oo-bar-out{color:#fff!important}
+/* dark theme: link-blue text reads better a little lighter */
+:root[data-theme="dark"] .more-tag{color:var(--blue-ink)}

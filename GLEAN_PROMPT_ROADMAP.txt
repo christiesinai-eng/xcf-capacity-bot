@@ -4,7 +4,7 @@ projects and their Production / In Market / Project Brief Due bars. The XCF dash
 these tabs, so the rules and column layout below matter more than speed.
 
 You may write ONLY to these two tabs: Glean_Roadmap and Glean_Roadmap_Subtasks. Never change any other tab, and
-never change row 1 (the headers) of any tab.
+never change row 1 (the headers) of any tab. The one exception is the STAMP step near the end: a single cell of the Sync_Log tab.
 
 HOW TO WORK (read this first)
 - Every run is a FULL refresh from Asana. Do not use "modified since" filters, saved state files, merge logic, or
@@ -61,6 +61,9 @@ For ONE roadmap item:
 - Its bar type is the enum value name of the custom field gid 1213575237986690 (blank if the field is empty).
 - If the bar type is "Parent task", ignore the task.
 - If the bar type is set to anything else, the bar name is that bar type.
+  This holds whatever the task's name is. For example the task "Creative Foundry - Origin Story - Project Brief due" has
+  bar type "Project Brief Due", so its bar name is "Project Brief Due" even though its name is not exactly "project
+  brief due". Read the bar type of EVERY task before you look at its name.
 - If the bar type is blank, look at the task's name, trimmed and in lower case: "production" gives the bar name
   "Production", "in market" gives "In Market", "project brief due" gives "Project Brief Due". Any other name is not
   a bar task: ignore it.
@@ -107,6 +110,14 @@ For each of Glean_Roadmap_Subtasks and then Glean_Roadmap:
     still text), and that the number of non-empty cells in column A is rows + 1 (the header).
 Do not move on to the next tab until the read-back for this one has passed. If a tab does not pass, say so, stop.
 
+STAMP (the last step before the report; only after EVERY read-back above has passed)
+Read column A of the Sync_Log tab and find the row whose column A is exactly roadmap_at. Write the current UTC time, as plain
+text in the form YYYY-MM-DDTHH:MM:SSZ (for example 2026-11-23T20:05:00Z), to column B of that row only, with the value
+input option RAW. Never append a row and never change any other cell of Sync_Log. Do not stamp if anything failed, a tab
+was left unwritten or the run is PARTIAL in a way that left a tab unchanged: a missing or old stamp is how the dashboard
+knows this agent has not finished a run. If the roadmap_at row is not there, do not create it: say "stamp row missing" in
+the report. This stamp is the one write outside your own tabs that you are allowed.
+
 PHASE 5 - REPORT
 Reply with exactly these lines, then anything else that went wrong. Give every line even when the run stopped early:
 write "not reached" for anything you did not get to. A short report that leaves lines out hides what went wrong.
@@ -116,6 +127,8 @@ Portfolio items fetched (and how many on each page); of those, roadmap items (th
 Calls made: status / bar tasks. Note lines written: RI, ST and ITEM (each must equal the roadmap items). Answers
 repeated because they were for the wrong project: N.
 Bar tasks ignored because their bar type was "Parent task": N.
+Bar tasks named from the bar type field because their own name is not a bar name: N (never 0 at the moment: if it is 0, say so).
 Duplicate check: pairs of items found with the same bar dates (name both), and what you did about each; 0 if none.
 Rows written to each tab, and for each tab whether the read-back passed (first row, last row, count).
 Anything skipped or failed.
+Stamp: the time you wrote to Sync_Log (roadmap_at), or "not stamped" and why.

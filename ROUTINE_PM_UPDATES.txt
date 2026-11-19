@@ -5,6 +5,7 @@ DESTINATION: the Google Sheet "XCF Lighthouse - Dashboard Data", spreadsheet id 
 Glean_PM_Updates_Raw, columns A to C: ts | author | text (row 1 holds those headers).
 You may write ONLY to cells A2:C500 of the tab Glean_PM_Updates_Raw. Never change row 1, never touch any other tab or cell, and never
 write to Glean_PM_Updates (a formula builds it from your tab: it works out the week, the time and removes links).
+The one exception is step 7, the STAMP: a single cell of the Sync_Log tab.
 
 TOOLS: use the Slack connector's tool that reads a channel's messages (slack_read_channel) with response_format = detailed, and the
 Google Sheets connector's tools for reading values (get values) and writing values (update values, with an explicit range). Do not use
@@ -47,6 +48,11 @@ STEPS
 6. Check: read column A of the tab again. The number of filled cells below the header must equal ROWS plus the rows you added, no ts may
    appear twice, and the last row you wrote must show the ts and the first 60 characters of the text you meant to write. If anything is
    off, say so plainly and do not try to fix it by writing more.
-7. Report (your final answer, nothing else): CUTOFF and START; how many messages you read and how many were new; how many rows you wrote
+7. STAMP (only when the check in step 6 passed, and also when there were no new messages, because the sheet is then up to date):
+   read column A of the Sync_Log tab and find the row whose column A is exactly pm_updates_at. Write the current UTC time as plain text
+   in the form YYYY-MM-DDTHH:MM:SSZ to column B of that row only. Never append a row and never change any other cell of Sync_Log.
+   If the check failed, do not stamp: a missing or old stamp is how the dashboard knows this copy job has not finished a run. If the
+   pm_updates_at row is not there, do not create it: say "stamp row missing".
+8. Report (your final answer, nothing else): CUTOFF and START; how many messages you read and how many were new; how many rows you wrote
    and their ts range; the authors you copied with a count each; whether the check passed; whether you stopped with more pages still
-   to read (so more messages may be waiting for the next run); and anything that went wrong or was skipped.
+   to read (so more messages may be waiting for the next run); and anything that went wrong or was skipped. Say whether the stamp was written (and its time) or not stamped and why.

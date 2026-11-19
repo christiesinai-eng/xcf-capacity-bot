@@ -173,6 +173,11 @@ run finishes comfortably. Ask Glean support for the shortest schedule and the lo
 4. Compare with the build (next section). Differences point at a rule the agent read differently.
 5. When it is `COMPLETE` and matches, activate the schedule.
 
+   How in Glean (from the first Tasks agent setup): on the agent card find **When does it run?** and click **Edit**.
+   Set the start date, the time, the timezone **Auckland** and **Repeats: Daily**, then **Save**. Tick the permissions
+   box and click **Activate agent**. Pause it any time from **Edit** next to the schedule. Publishing the agent to
+   other people is not needed: it writes to the shared sheet as its owner.
+
 If the sandbox error comes back, the cause is on the platform side. Send Glean support the trace ids from the run log.
 
 ## Comparing with the build

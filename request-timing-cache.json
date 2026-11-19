@@ -32,12 +32,12 @@
     },
     "1219675656462298": {
       "firstOnTrackAt": null,
-      "firstInProgressAt": null,
+      "firstInProgressAt": "2026-11-15T23:31:56.475Z",
       "firstReviewAt": null,
       "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
+      "startedAt": "2026-11-15T23:31:56.475Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
       "firstStatusAt": null
     },
     "1219674283071380": {
@@ -2040,36 +2040,6 @@
       "isRealStart": false,
       "firstStatusAt": null
     },
-    "1220002363221284": {
-      "firstOnTrackAt": null,
-      "firstInProgressAt": "2026-10-29T03:29:17.026Z",
-      "firstReviewAt": null,
-      "firstCompleteAt": "2026-11-01T04:14:50.174Z",
-      "startedAt": "2026-10-29T03:29:17.026Z",
-      "startedBy": "In Progress",
-      "isRealStart": true,
-      "firstStatusAt": null
-    },
-    "1220044182236072": {
-      "firstOnTrackAt": "2026-11-04T02:20:12.799Z",
-      "firstInProgressAt": null,
-      "firstReviewAt": null,
-      "firstCompleteAt": null,
-      "startedAt": "2026-11-04T02:20:12.799Z",
-      "startedBy": "On Track",
-      "isRealStart": true,
-      "firstStatusAt": "2026-11-04T02:20:12.799Z"
-    },
-    "1220005197547046": {
-      "firstOnTrackAt": null,
-      "firstInProgressAt": null,
-      "firstReviewAt": null,
-      "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
-      "firstStatusAt": null
-    },
     "1219995936020392": {
       "firstOnTrackAt": "2026-10-29T03:11:00.440Z",
       "firstInProgressAt": "2026-10-29T03:11:11.839Z",
@@ -2079,6 +2049,36 @@
       "startedBy": "On Track",
       "isRealStart": true,
       "firstStatusAt": "2026-10-29T03:11:00.440Z"
+    },
+    "1220002363221284": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-10-29T03:29:17.026Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-10-29T03:29:17.026Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
+      "firstStatusAt": null
+    },
+    "1220044182236072": {
+      "firstOnTrackAt": "2026-11-04T02:20:12.799Z",
+      "firstInProgressAt": "2026-11-04T08:48:24.549Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-11-04T02:20:12.799Z",
+      "startedBy": "On Track",
+      "isRealStart": true,
+      "firstStatusAt": "2026-11-04T02:20:12.799Z"
+    },
+    "1220005197547046": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-11-15T23:32:01.302Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-11-15T23:32:01.302Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
+      "firstStatusAt": null
     },
     "1220111790828645": {
       "firstOnTrackAt": "2026-11-02T02:30:31.374Z",
@@ -2090,16 +2090,6 @@
       "isRealStart": true,
       "firstStatusAt": "2026-11-02T02:30:31.374Z"
     },
-    "1220107864535099": {
-      "firstOnTrackAt": null,
-      "firstInProgressAt": null,
-      "firstReviewAt": null,
-      "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
-      "firstStatusAt": null
-    },
     "1220108132864196": {
       "firstOnTrackAt": null,
       "firstInProgressAt": null,
@@ -2109,6 +2099,16 @@
       "startedBy": "Skipped In Progress",
       "isRealStart": false,
       "firstStatusAt": "2026-11-04T04:41:16.362Z"
+    },
+    "1220107864535099": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
     },
     "1220106953772157": {
       "firstOnTrackAt": null,
@@ -2130,16 +2130,6 @@
       "isRealStart": true,
       "firstStatusAt": "2026-11-06T01:09:16.293Z"
     },
-    "1220195650310957": {
-      "firstOnTrackAt": null,
-      "firstInProgressAt": null,
-      "firstReviewAt": null,
-      "firstCompleteAt": null,
-      "startedAt": null,
-      "startedBy": null,
-      "isRealStart": false,
-      "firstStatusAt": "2026-11-04T02:54:43.802Z"
-    },
     "1220179624036784": {
       "firstOnTrackAt": null,
       "firstInProgressAt": "2026-11-06T02:20:59.641Z",
@@ -2159,6 +2149,16 @@
       "startedBy": null,
       "isRealStart": false,
       "firstStatusAt": null
+    },
+    "1220195650310957": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": "2026-11-04T02:54:43.802Z"
     },
     "1220235118902736": {
       "firstOnTrackAt": null,
@@ -2198,7 +2198,7 @@
       "startedAt": null,
       "startedBy": null,
       "isRealStart": false,
-      "firstStatusAt": null
+      "firstStatusAt": "2026-11-11T21:09:46.016Z"
     },
     "1220287329353843": {
       "firstOnTrackAt": null,
@@ -2279,6 +2279,136 @@
       "startedBy": null,
       "isRealStart": false,
       "firstStatusAt": null
+    },
+    "1220412299460874": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-11-11T23:35:00.581Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-11-11T23:35:00.581Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
+      "firstStatusAt": null
+    },
+    "1220412299460882": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-11-11T23:35:00.597Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-11-11T23:35:00.597Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
+      "firstStatusAt": null
+    },
+    "1220412299460878": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-11-11T23:35:00.588Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-11-11T23:35:00.588Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
+      "firstStatusAt": null
+    },
+    "1220412299460870": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-11-11T23:35:00.589Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-11-11T23:35:00.589Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
+      "firstStatusAt": null
+    },
+    "1220412299460862": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-11-11T23:35:00.600Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-11-11T23:35:00.600Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
+      "firstStatusAt": null
+    },
+    "1220412299460866": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-11-11T23:35:00.582Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-11-11T23:35:00.582Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
+      "firstStatusAt": null
+    },
+    "1220505205879365": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": "2026-11-15T23:31:39.551Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-11-15T23:31:39.551Z",
+      "startedBy": "In Progress",
+      "isRealStart": true,
+      "firstStatusAt": null
+    },
+    "1220580773800056": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1220583499022790": {
+      "firstOnTrackAt": "2026-11-16T23:22:05.384Z",
+      "firstInProgressAt": "2026-11-16T23:22:15.750Z",
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": "2026-11-16T23:22:05.384Z",
+      "startedBy": "On Track",
+      "isRealStart": true,
+      "firstStatusAt": "2026-11-16T23:22:05.384Z"
+    },
+    "1220561740012008": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": "2026-11-16T18:22:05.254Z",
+      "startedAt": "2026-11-16T18:22:05.254Z",
+      "startedBy": "Skipped In Progress",
+      "isRealStart": false,
+      "firstStatusAt": "2026-11-16T18:22:05.254Z"
+    },
+    "1220561134039901": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": "2026-11-16T23:33:30.155Z"
+    },
+    "1220558024999049": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
+    },
+    "1220593135274473": {
+      "firstOnTrackAt": null,
+      "firstInProgressAt": null,
+      "firstReviewAt": null,
+      "firstCompleteAt": null,
+      "startedAt": null,
+      "startedBy": null,
+      "isRealStart": false,
+      "firstStatusAt": null
     }
   },
   "requests": {
@@ -2308,9 +2438,9 @@
           "text": "A related request has been identified that may require coordination:\n\nCompleted Task: XCF-14461 | Switch campaign - social media video cutdowns\nhttps://app.asana.com/0/0/1218689017325211\nThis task was completed on Oct 9 2026 and involved creating social media video cutdowns for the Switch campaign in AU/NZ regions.\n\nIn-Progress Task: XCF-14443 | Meta | AUNZ | Switch Cohort2\nhttps://app.asana.com/0/0/1218615654687689\nThis task is currently in progress and involves Meta creative (design/copy) for the Switch campaign in AU/NZ regions, submitted by the same requester (Briana Ruggiero).\n\nBoth this task (XCF-18682) and the above tasks are part of the Switch campaign for AU/NZ regions. Please review to ensure messaging alignment, avoid duplicate video production effort, and coordinate timing with the in-progress XCF-14443 work."
         }
       ],
-      "summary": null,
-      "cause": null,
-      "causedAt": null
+      "summary": "**Unexplained.** The only comment is an automated related-request notice; no human discussion explains the 9 day wait.",
+      "cause": "Unexplained",
+      "causedAt": "2026-11-02"
     },
     "1219669728708328": {
       "code": "XCF-18651",
@@ -2464,9 +2594,9 @@
           "text": "A related request has been identified that may require coordination:\n\nSimilar Campaign Structure: XCFT-1367 | US Switch Q2 2026 – Meta | TikTok | LinkedIn\nhttps://app.asana.com/0/0/1214569681714573\n\nBoth this task (XCF-18411) and XCFT-1367 are US Switch campaigns on Meta with identical structure: 4 key messages, 4 ads per message, and 4 designs per message. While XCFT-1367 was completed in June 2026 and this task is for November 2026 (peak switch season), please review to ensure messaging consistency and confirm this is intended as a seasonal refresh rather than a duplicate effort.\n\nRelated Earlier Phase Tasks:\n\n    XCF-16392 | US Switch creative with price comparison claims (Oct 2026): https://app.asana.com/0/0/1218883098232884\n    XCF-16399 | US Switch YouTube videos (Oct 2026): https://app.asana.com/0/0/1218885064890208\n"
         }
       ],
-      "summary": null,
-      "cause": null,
-      "causedAt": null
+      "summary": "**Unexplained.** The only comment is an automated similar-campaign flag; no human discussion explains the wait.",
+      "cause": "Unexplained",
+      "causedAt": "2026-11-09"
     },
     "1219530593885652": {
       "code": "XCF-18249",
@@ -3012,9 +3142,9 @@
           "text": "Related tasks identified that may require coordination:\n\nRelated Task 1: XCF-17209 | DETAILS TO COME – CS1639 – Inv: Automated reminders nudge\nhttps://app.asana.com/0/0/1219093667707775\n\nRelated Task 2: XCF-17223 | DETAILS TO COME – CS1622 – Bill: Cash-flow manager/Analytics Xsell trigger\nhttps://app.asana.com/0/0/1219093874227120\n\nRelated Task 3: XCF-17216 | DETAILS TO COME – UP1629 – AD: AI Automate for Bank Rec Ignite Users\nhttps://app.asana.com/0/0/1219093873968513\n\nAll four tasks share the following characteristics:\n\n    Same requester: Halle Mitchell\n    Same business group: Lifecycle & customer engagement\n    Same cost centre: 3071\n    Same request category: Performance POD request\n    Same channel: Email\n    Same support needed: Design\n    All have placeholder status (DETAILS TO COME)\n    Similar in-market dates (Nov 3, 10, 17, 2026)\n\nWhile these appear to be separate initiatives (Invoicing, Bills/Cash-flow, Bank Reconciliation, and Upgrade Nudge), they are part of a batch of similar requests from the same requester. Please review to confirm these are distinct requests and coordinate messaging/timing if needed before proceeding."
         }
       ],
-      "summary": null,
-      "cause": null,
-      "causedAt": null
+      "summary": "**Not an XCF delay.** Titled \"ON HOLD TIL Q4\", so it was deliberately parked; the only comment is an automated related-task notice.",
+      "cause": "Capacity queue",
+      "causedAt": "2026-11-09"
     },
     "1219093874227120": {
       "code": "XCF-17223",
@@ -3031,9 +3161,9 @@
           "text": "Related tasks identified that may require coordination:\n\nRelated Task 1: XCF-17209 | DETAILS TO COME – CS1639 – Inv: Automated reminders nudge\nhttps://app.asana.com/0/0/1219093667707775\n\nRelated Task 2: XCF-17216 | DETAILS TO COME – UP1629 – AD: AI Automate for Bank Rec Ignite Users\nhttps://app.asana.com/0/0/1219093873968513\n\nAll three tasks share the following characteristics:\n\n    Same requester: Halle Mitchell\n    Same business group: Lifecycle & customer engagement\n    Same cost centre: 3071\n    Same request category: Performance POD request\n    Same channel: Email\n    Same support needed: Design\n    All have placeholder status (DETAILS TO COME)\n    Similar in-market dates (Nov 3, 10, and 17, 2026)\n\nWhile these appear to be separate initiatives (Invoicing, Bank Reconciliation, and Bills/Cash-flow), they are part of a batch of similar requests from the same requester. Please review to confirm these are distinct requests and coordinate messaging/timing if needed before proceeding."
         }
       ],
-      "summary": null,
-      "cause": null,
-      "causedAt": null
+      "summary": "**Unexplained.** Only an automated related-task notice and an empty comment; the thread does not account for the 37-day wait.",
+      "cause": "Unexplained",
+      "causedAt": "2026-11-09"
     },
     "1219093873968513": {
       "code": "XCF-17216",
@@ -3045,9 +3175,9 @@
           "text": "A related task has been identified that may require coordination:\n\nRelated Task: XCF-17209 | DETAILS TO COME – CS1639 – Inv: Automated reminders nudge\nhttps://app.asana.com/0/0/1219093667707775\n\nBoth this task (XCF-17216) and XCF-17209 share the following characteristics:\n\n    Same requester: Halle Mitchell\n    Same business group: Lifecycle & customer engagement\n    Same cost centre: 3071\n    Same request category: Performance POD request\n    Same channel: Email\n    Both follow the 'DETAILS TO COME' placeholder pattern\n    Similar in-market dates (Nov 3 vs. Nov 10, 2026)\n\nWhile this task focuses on AI Automate for Bank Rec Ignite Users and XCF-17209 focuses on Automated reminders, the high similarity in metadata and placeholder status suggests these may be related requests. Please review to confirm whether this is a separate initiative or a follow-up request before proceeding."
         }
       ],
-      "summary": null,
-      "cause": null,
-      "causedAt": null
+      "summary": "**Unexplained.** The only comment is an automated related-task notice, so nothing in the thread accounts for the ~28 day wait.",
+      "cause": "Unexplained",
+      "causedAt": "2026-11-02"
     },
     "1219093667707775": {
       "code": "XCF-17209",
@@ -7713,9 +7843,9 @@
           "text": "Hey team!\n\nFYI - ZA I am still waiting for the testimonials 🙂 \n\nBut I would still like to get the ball rolling on the templates / SG, thanks!"
         }
       ],
-      "summary": null,
-      "cause": null,
-      "causedAt": null
+      "summary": "**Requester-side.** The requester said they were still waiting on the ZA testimonials but wanted to start templates for SG.",
+      "cause": "Requester-side",
+      "causedAt": "2026-11-09"
     },
     "1219832223274210": {
       "code": "XCF-18997",
@@ -7787,9 +7917,9 @@
           "text": "Potential duplicate identified. Please review the following related tasks before proceeding:\n\n• https://app.asana.com/0/0/1214720834060735/f (Completed May 2026) - UK Decision Tree and Pricing PDF updates\n\n• https://app.asana.com/0/0/1217766528709424/f (Completed Aug 28 2026) - UK Pricing PDF & Decision Tree with updated prices and effective dates\n\nBoth tasks involve UK pricing decision tree updates. XCF-10272 was completed recently and may contain the current version. Please confirm this request is for a new iteration with the Syft feature copy changes before proceeding."
         }
       ],
-      "summary": null,
-      "cause": null,
-      "causedAt": null
+      "summary": "**No blocker.** Started within hours; the only comment is an automated potential-duplicate notice.",
+      "cause": "No blocker",
+      "causedAt": "2026-11-02"
     },
     "1219958979395098": {
       "code": "XCF-19087",
@@ -7801,6 +7931,14 @@
           "text": "Potential related work identified:\n\n• https://app.asana.com/0/1215906401561993/1212712090563583 - Completed SB-focused 1099 messaging\n• https://app.asana.com/0/1215906401561993/1212700691789374 - Completed AB-focused 1099 messaging\n\nThis new request (XCF-19087) combines both SB and AB audiences for 1099 tax messaging. The previous tasks addressed these audiences separately and are now complete. Please review to confirm this is a new consolidated effort rather than a duplicate of existing work."
         }
       ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1219995935807007": {
+      "code": "XCF-19190",
+      "name": "XCF-19190 | Xero DAM headers update",
+      "comments": [],
       "summary": null,
       "cause": null,
       "causedAt": null
@@ -7840,24 +7978,11 @@
           "author": "Deepak Aujla",
           "at": "2026-10-29T03:28:56.621Z",
           "text": "https://app.asana.com/1/41261904390129/profile/1211026264666242 Are we okay to close this quick request?"
-        },
-        {
-          "author": "Jenna Oakley",
-          "at": "2026-10-29T20:20:51.953Z",
-          "text": "Yep! good to close! thanks team!! https://app.asana.com/1/41261904390129/profile/1216496014620082"
         }
       ],
-      "summary": null,
-      "cause": null,
-      "causedAt": null
-    },
-    "1219995935807007": {
-      "code": "XCF-19190",
-      "name": "XCF-19190 | Xero DAM headers update",
-      "comments": [],
-      "summary": null,
-      "cause": null,
-      "causedAt": null
+      "summary": "**No blocker.** Started within hours and assets were created straight away; the comments are just the hand-off and a check on closing it.",
+      "cause": "No blocker",
+      "causedAt": "2026-11-02"
     },
     "1220110731924965": {
       "code": "XCF-19501",
@@ -7870,10 +7995,16 @@
     "1220108132842340": {
       "code": "XCF-19492",
       "name": "XCF-19492 | Request for SVG of a DAM illustration",
-      "comments": [],
-      "summary": null,
-      "cause": null,
-      "causedAt": null
+      "comments": [
+        {
+          "author": "Christie Sinai",
+          "at": "2026-11-02T18:22:11.313Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1204783047017636assigning this one to you to run through studio to create an SVG. Thanks so much!"
+        }
+      ],
+      "summary": "**No blocker.** Assigned straight to a designer to run through studio as an SVG; no discussion of delay.",
+      "cause": "No blocker",
+      "causedAt": "2026-11-09"
     },
     "1220107643036555": {
       "code": "XCF-19484",
@@ -7904,6 +8035,20 @@
       "summary": null,
       "cause": null,
       "causedAt": null
+    },
+    "1220179783280956": {
+      "code": "XCF-19614",
+      "name": "XCF-19614 | AB | Cash flow messaging",
+      "comments": [
+        {
+          "author": "Lee Haider",
+          "at": "2026-11-03T15:55:43.617Z",
+          "text": "Hey https://app.asana.com/1/41261904390129/profile/1216496014620082, can we please prioritize getting these ads and copy ready for stakeholder review by 11/12. Thank you! 🙏"
+        }
+      ],
+      "summary": "**No blocker.** Started quickly; the only comment is the requester asking to prioritise for a 12 Nov stakeholder review.",
+      "cause": "No blocker",
+      "causedAt": "2026-11-09"
     },
     "1220195418002909": {
       "code": "XCF-19643",
@@ -7937,20 +8082,6 @@
       "cause": null,
       "causedAt": null
     },
-    "1220179783280956": {
-      "code": "XCF-19614",
-      "name": "XCF-19614 | AB | Cash flow messaging",
-      "comments": [
-        {
-          "author": "Lee Haider",
-          "at": "2026-11-03T15:55:43.617Z",
-          "text": "Hey https://app.asana.com/1/41261904390129/profile/1216496014620082, can we please prioritize getting these ads and copy ready for stakeholder review by 11/12. Thank you! 🙏"
-        }
-      ],
-      "summary": null,
-      "cause": null,
-      "causedAt": null
-    },
     "1220235118858443": {
       "code": "XCF-19673",
       "name": "XCF-19673 | Sorren Raffle QR Code",
@@ -7976,7 +8107,13 @@
     "1220298814714633": {
       "code": "XCF-19944",
       "name": "XCF-19944 | Milton Keynes signage and brand concept package",
-      "comments": [],
+      "comments": [
+        {
+          "author": "Christie Sinai",
+          "at": "2026-11-08T19:02:00.845Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1204783047017636 assigning you this one. Thanks so much"
+        }
+      ],
       "summary": null,
       "cause": null,
       "causedAt": null
@@ -8029,9 +8166,9 @@
           "text": "Hi https://app.asana.com/1/41261904390129/profile/1204783047017636 assigning you this one to run via the studio. Thanks!"
         }
       ],
-      "summary": null,
-      "cause": null,
-      "causedAt": null
+      "summary": "**No blocker.** Assigned to the studio the same day with a single handover comment; started in under a day.",
+      "cause": "No blocker",
+      "causedAt": "2026-11-16"
     },
     "1220336714857525": {
       "code": "XCF-19957",
@@ -8061,6 +8198,122 @@
       "code": "XCF-20199",
       "name": "XCF-20199 | US | Melio PMAX",
       "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220412299460860": {
+      "code": "XCF-20221",
+      "name": "Sprint | 21st - 24th Dec",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220412299460858": {
+      "code": "XCF-20220",
+      "name": "Sprint | 14th - 18th Dec",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220412299460856": {
+      "code": "XCF-20219",
+      "name": "Sprint | 7th - 11th Dec",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220412299460854": {
+      "code": "XCF-20218",
+      "name": "Sprint | 30th - 4th Dec",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220412299460853": {
+      "code": "XCF-20217",
+      "name": "Sprint | 23rd - 27th Nov",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220412299460850": {
+      "code": "XCF-20216",
+      "name": "Sprint | 16th - 20th Nov",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220505103604956": {
+      "code": "XCF-20282",
+      "name": "XCF-20282 | Statements behavior xsell CS1617 header",
+      "comments": [
+        {
+          "author": "Deepak Aujla",
+          "at": "2026-11-13T00:50:10.520Z",
+          "text": "Hi https://app.asana.com/1/41261904390129/profile/1208494404802815, we just saw this request come in. The performance pod are busy with a number of priority tasks due early next week so won't be able to get to address this in a day. Could we deliver this towards the end of next week / another time? Thanks."
+        }
+      ],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220583626636552": {
+      "code": "XCF-20364",
+      "name": "XCF-20364 | US Brand - Extension Idea Brief",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220580612692470": {
+      "code": "XCF-20358",
+      "name": "XCF-20358 | Image update for UAE homepage",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220561679292499": {
+      "code": "XCF-20340",
+      "name": "XCF-20340 | QR code",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220560990658069": {
+      "code": "XCF-20334",
+      "name": "XCF-20334 | Purchase additional licences/seats for Eleven Lab",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220558024966206": {
+      "code": "XCF-20328",
+      "name": "XCF-20328 | AU Roadshow Launch Copy Review",
+      "comments": [],
+      "summary": null,
+      "cause": null,
+      "causedAt": null
+    },
+    "1220592981805994": {
+      "code": "XCF-20371",
+      "name": "XCF-20371 | Sales team pilot deck review",
+      "comments": [
+        {
+          "author": "Unknown",
+          "at": "2026-11-16T20:56:10.034Z",
+          "text": "Related project identified: https://app.asana.com/0/1215906401561993/1219195198065173 - This was a previous pilot kickoff deck request for US sales that was cancelled in October 2026. While this current request (XCF-20371) appears to be a new pilot deck, please confirm this is a distinct project and not a continuation or re-submission of the previous pilot deck work."
+        }
+      ],
       "summary": null,
       "cause": null,
       "causedAt": null

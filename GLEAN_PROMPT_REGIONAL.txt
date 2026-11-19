@@ -5,7 +5,7 @@ Regional tab counts. The sheet does the counting itself with formulas, so your j
 Do not count, group, total, tidy or correct anything.
 
 You may write ONLY to this tab: Glean_Regional_Raw. Never change any other tab (the tabs next to it, Glean_Regional and
-so on, are formulas that read it), and never change row 1 (the headers).
+so on, are formulas that read it), and never change row 1 (the headers). The one exception is the STAMP step near the end: a single cell of the Sync_Log tab.
 
 HOW TO WORK (read this first)
 - Every run is a FULL refresh from Asana. Do not use "modified since" filters, saved state files, merge logic, or
@@ -73,6 +73,14 @@ nothing and say so.
  c. Read the tab back: row 2, the last row, and column A. Check the first and last rows are what you wrote (dates and
     ids still text), and that the number of non-empty cells in column A is rows + 1 (the header).
 
+STAMP (the last step before the report; only after EVERY read-back above has passed)
+Read column A of the Sync_Log tab and find the row whose column A is exactly regional_at. Write the current UTC time, as plain
+text in the form YYYY-MM-DDTHH:MM:SSZ (for example 2026-11-23T20:05:00Z), to column B of that row only, with the value
+input option RAW. Never append a row and never change any other cell of Sync_Log. Do not stamp if anything failed, a tab
+was left unwritten or the run is PARTIAL in a way that left a tab unchanged: a missing or old stamp is how the dashboard
+knows this agent has not finished a run. If the regional_at row is not there, do not create it: say "stamp row missing" in
+the report. This stamp is the one write outside your own tabs that you are allowed.
+
 PHASE 3 - REPORT
 Reply with exactly these lines, then anything else that went wrong. Give every line even when the run stopped early:
 write "not reached" for anything you did not get to. A short report that leaves lines out hides what went wrong.
@@ -82,3 +90,4 @@ Tasks read (READ) and EXPECTED; pages read (and how many tasks on each page); RE
 Rows written to Glean_Regional_Raw, and whether the read-back passed (first row, last row, count).
 How many rows have status Cancelled, and how many have no project type (just to report; do not change them).
 Anything skipped or failed.
+Stamp: the time you wrote to Sync_Log (regional_at), or "not stamped" and why.

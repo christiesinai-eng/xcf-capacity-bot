@@ -133,7 +133,35 @@ The live dashboard can stay as it is. A separate app, `xcf-sheet-test`, can carr
 (`deploy_app` with `sheets`, then `connect_sheet`), open only to named people. Its header should read "Data: live
 from the Google Sheet". Archive it when done (the app's Manage panel in the Dashboard Directory, or `archive_app`).
 
-## Switching the dashboard to the sheet (one-off)
+## Going live on the Glean tabs (the plan for `xcf-workflow`)
+
+From go-live the page reads the `Glean_` copies of the agent tabs (`SOURCE_TAB` in `src/sheetAdapter.js`), so the six
+Glean agents and the Slack routine are the writers and no Mac is involved. The tab names in the table above are the names
+the page uses internally; `Tasks` is read from `Glean_Tasks`, and so on. `People`, `OOO_Manual`, `Notes` and `Sync_Log`
+keep their names. The old real tabs (`Tasks` ... `Regional_Meta`) still hold the 29 Oct build sync's rows and are not read.
+`RANGES` in `src/sheetAdapter.js` is the list to give `deploy_app` as `sheets.ranges` (20 tabs).
+
+**Freshness.** Each agent stamps its own row of `Sync_Log` (`tasks_at`, `pm_at`, `roadmap_at`, `regional_at`,
+`requests_at`, `comments_at`, `pm_updates_at`) with the UTC time its last run finished, as the last step after its
+read-backs pass (the STAMP step in each prompt). The page shows the oldest stamp as "Updated" and turns the data label amber,
+naming the agent, when a stamp is missing or older than 36 hours. The old build-sync fields in `Sync_Log` are used only while
+there is no stamp. A run that fails writes nothing and does not stamp, so a dead agent shows up on the page within a day and a half.
+
+**Steps (first as a private app, then open it up).**
+
+1. Build from the merged `go-live` tree (`node src/index.js --once`) so the built-in fallback data is today's.
+2. `deploy_app` as `xcf-workflow` (team `creative-foundry`, skill `dashboard-accelerator@3.4`) with
+   `sheets: { sheet_url: <the sheet>, ranges: RANGES }` and `auth_mode: "allowlist"` for the owner only, so it can be
+   checked before anyone else sees it. Then `connect_sheet`, approve Google's read-only consent as someone who can open the
+   sheet, and `sheet_status` until `connected: true`.
+3. Open it: the header must read "Data: live from the Google Sheet" and "Updated" must be today. Compare a few numbers with
+   the live Control Tower. Add `?data=embedded` to see the built-in copy for comparison.
+4. Redeploy the same app with `auth_mode: "okta"` to open it to everyone. Put a one-page "we have moved" file on the old
+   `xcf-capacity-report` URL, pause the 8am deploy task so it does not overwrite that page, and archive the old app after
+   about a week (only its owner can).
+5. Point the Monday summaries task at the sheet's `Notes` tab (`sheetSync notes`) instead of the cache files.
+
+## Switching the dashboard to the sheet (one-off, with the build as the writer)
 
 Done once, after the owner agrees. The page already contains the loader; this is only the deploy.
 

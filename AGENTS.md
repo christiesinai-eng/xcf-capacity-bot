@@ -12,7 +12,7 @@ New to the project and just need to run and deploy it? Read `RUNBOOK.md` instead
 
 ## What it does
 
-Ten tabs, each answering a different planning question:
+Eleven tabs, each answering a different planning question:
 
 | Tab | Question it answers |
 |---|---|
@@ -26,6 +26,7 @@ Ten tabs, each answering a different planning question:
 | PM Project Updates | Weekly PM updates from Slack, with executive summaries |
 | Request Cycle Time | How long requests wait before work starts, and why |
 | Regional Requests | Requests by region, business group and cost centre |
+| Platform spend and usage | What does XCF pay for its platforms (annual cost, NZD), month by month, and how much is each one used? |
 
 ## Architecture
 
@@ -45,6 +46,9 @@ src/sheetAdapter.js   In the page: turns the sheet's rows back into the datasets
 src/sheetLoader.js    In the page: reads /api/sheet before anything is drawn; falls back to the built-in data.
 template.html         The entire dashboard — all CSS and JS inline, self-rendering.
 slack-pm-updates-cache.json   Slack history + hand-written executive summaries.
+src/platformSpend.js          Platform spend and usage tab: reads platform-spend-data.json, adds totals and month-on-month changes.
+platform-spend-data.json      A copy of the "XCF Platform spend and usage tracker" Google Sheet (the build has no Google login).
+                              Refresh it by asking Claude to "sync the platform spend data" (see scripts/platform-spend-from-sheet.js).
 reports/              Generated output (gitignored).
 ```
 
@@ -208,3 +212,22 @@ It spreads a task's estimate evenly across its working days (Mon-Fri) and define
 5 working days from today, month = today up to the day before the same date next month, with the month's
 working days as the capacity. It is used by the build and, unchanged, by the page, and does its sums on whole
 day numbers so the machine's time zone cannot change the answer. Run `npm test` after touching it.
+
+## The look: one-page overview (since 17 Nov 2026)
+
+`template.html` is the "XCF Workflow" design: a left sidebar, then one scrolling page of summary cards (copied from the
+"XCF Lighthouse - dashboard mockup"). It is still ONE self-contained file; the build inlines fonts, logos, CSS and script
+(`src/brandAssets.js`, called from `src/report.js` before the data is poured in).
+
+- **Where things are:** `brand/README.md` explains every file. The summary cards and the "See more" windows are drawn by
+  `brand/workflow.js` from the same data blocks the tabs use (`MEMBERS`, `PM_DATA`, `REQUESTS_DATA` ...); it changes no data.
+  The report's original detailed tabs (`#view-capacity` ... `#view-regional`) are kept whole, hidden in `#ct-store`, and open from
+  the "open the original view" link at the foot of each window. Keep their ids and the `const NAME = [...]` placeholders as they are.
+- **Generated CSS (commit it):** after editing the CSS inside `template.html` run `node scripts/make-light-theme.js`; after editing
+  `brand/source/mockup.css` run `node scripts/scope-mockup-css.js`. The build does NOT run them, it reads their output.
+- **Quick look without a full build:** `node scripts/brand-preview.js` pours the newest report's data into the template in seconds.
+- **Two work-in-progress cards** (Briefs in review, Assets delivered) show the mockup's sample numbers, labelled "(WIP)" and "Sample
+  numbers": the report has no data for them yet.
+- **Logo:** `brand/assets/xcf-workflow-for-light-bg.png` and `...-for-dark-bg.png`.
+- **Font weights:** the embedded Special Gothic maps 500 and up to the bold file, so use 400 for regular text.
+- The previous design is kept in `brand/archive/`.

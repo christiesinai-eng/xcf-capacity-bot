@@ -4,7 +4,7 @@ Time tab shows these comments next to each request and counts them, so copying t
 
 You may write ONLY to these two tabs: Glean_Request_Comments_Raw (columns A to E) and Glean_Request_Comments_Checked (columns A to
 C). Never write to Glean_Request_Comments (it is made by a formula from the Raw tab: it cleans the text and removes links, so you
-never do that) or to any other tab, and never change row 1 (the headers) of any tab.
+never do that) or to any other tab, and never change row 1 (the headers) of any tab. The one exception is the STAMP step near the end: a single cell of the Sync_Log tab.
 
 HOW TO WORK (read this first)
 - Your memory between runs is the two tabs you write. Glean_Request_Comments_Raw holds every comment copied so far.
@@ -120,6 +120,14 @@ PHASE 3 - READ BACK
   almost right but is not. List any row where one of them differs (give the request code and both values) in the report.
 If a check fails, say so in the report and stop. Do not try to repair rows yourself.
 
+STAMP (the last step before the report; only after EVERY read-back above has passed)
+Read column A of the Sync_Log tab and find the row whose column A is exactly comments_at. Write the current UTC time, as plain
+text in the form YYYY-MM-DDTHH:MM:SSZ (for example 2026-11-23T20:05:00Z), to column B of that row only, with the value
+input option RAW. Never append a row and never change any other cell of Sync_Log. Do not stamp if anything failed, a tab
+was left unwritten or the run is PARTIAL in a way that left a tab unchanged: a missing or old stamp is how the dashboard
+knows this agent has not finished a run. If the comments_at row is not there, do not create it: say "stamp row missing" in
+the report. This stamp is the one write outside your own tabs that you are allowed.
+
 PHASE 4 - REPORT
 Reply with exactly these lines, then anything else that went wrong. Give every line even when the run stopped early: write "not
 reached" for anything you did not get to.
@@ -132,3 +140,4 @@ Requests that failed (give their codes).
 Raw tab rows before and after; Checked tab rows before and after; whether the read-back passed (last rows, counts, no repeated
 pair) for each tab.
 Anything skipped or failed.
+Stamp: the time you wrote to Sync_Log (comments_at), or "not stamped" and why.
