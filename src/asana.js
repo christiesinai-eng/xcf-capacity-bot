@@ -791,11 +791,14 @@ async function buildOOOData() {
     entries.push({ name, pod, start, end, source });
   }
 
-  const manualOooNames = new Set(MANUAL_OOO.map(e => e.name));
+  // A manual entry's name can be the start of a full name ("Aniqah" for "Aniqah Mitha"), so match it the same way the
+  // capacity code and step 2 do. An exact-name test let her Asana vacation dates and leave-project task through as well,
+  // and she showed twice on the OOO tab.
+  const hasManualOoo = (name) => MANUAL_OOO.some(e => String(name || '').startsWith(e.name));
 
   // 1. Asana vacation_dates set by each user (skip anyone with a manual override)
   for (const member of workspaceMembers) {
-    if (manualOooNames.has(member.name)) continue;
+    if (hasManualOoo(member.name)) continue;
     const vd = member.vacation_dates;
     if (vd?.start_on && vd?.end_on) {
       const pod = MANUAL_POD[member.name] || podMap[member.name] || 'Unknown';
@@ -831,7 +834,7 @@ async function buildOOOData() {
       if (task.completed || !task.due_on) continue;
       const name = task.assignee?.name;
       if (!name) continue;
-      if (manualOooNames.has(name)) continue; // manual entry takes priority
+      if (hasManualOoo(name)) continue; // manual entry takes priority
       const pod = MANUAL_POD[name] || podMap[name] || 'Unknown';
       addEntry(name, pod, task.start_on || task.due_on, task.due_on, 'project');
     }
