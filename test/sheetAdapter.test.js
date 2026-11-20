@@ -92,6 +92,23 @@ test('a manual leave name that is the start of a full name finds the person', ()
   assert.deepEqual(d.OOO_DATA, [{ name: 'Aniqah Mitha', pod: 'Performance', start: '2026-07-01', end: '2027-07-31', source: 'manual' }]);
 });
 
+test('a manual name that is the start of a full name also hides that person\'s leave-project and Asana rows (Aniqah showed twice)', () => {
+  // What the real Glean_OOO holds for her: a leave-project row under her full name, with different dates from the manual entry.
+  const d = datasets({
+    People: [PEOPLE, ['Aniqah Mitha', 'Performance', 'Y', 'N', 'N', 'N', '', ''], ['Ciaran Carroll', 'Design Studio', 'Y', 'N', 'N', 'N', '', '']],
+    OOO_Manual: [['name', 'start_date', 'end_date', 'note'], ['Aniqah', '2026-07-01', '2027-07-31', 'Name is matched as a prefix of the Asana name.']],
+    OOO: [OOO,
+      ['Aniqah Mitha', 'Performance', '2026-07-13', '2027-07-01', 'project', false],
+      ['Aniqah Mitha', 'Performance', '2026-07-13', '2027-07-01', 'asana', false],
+      ['Ciaran Carroll', 'Design Studio', '2026-11-16', '2027-05-16', 'project', false]],
+  });
+  assert.deepEqual(d.OOO_DATA.filter((o) => o.name === 'Aniqah Mitha'),
+    [{ name: 'Aniqah Mitha', pod: 'Performance', start: '2026-07-01', end: '2027-07-31', source: 'manual' }]);
+  // someone with no manual entry keeps their leave-project row
+  assert.deepEqual(d.OOO_DATA.filter((o) => o.name === 'Ciaran Carroll'),
+    [{ name: 'Ciaran Carroll', pod: 'Design Studio', start: '2026-11-16', end: '2027-05-16', source: 'project' }]);
+});
+
 test('People controls who is on the capacity tab; a joiner with tasks still shows, as Unknown', () => {
   const d = datasets({
     People: [PEOPLE, ['Ada', 'Design', 'Y', 'N', 'N', 'N', '', ''], ['Gone', 'Design', 'N', 'N', 'N', 'N', '', '']],

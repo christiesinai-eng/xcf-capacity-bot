@@ -92,7 +92,7 @@
     }));
     const podOf = new Map(roster.map((p) => [p.name, p.pod]));
     const manual = [];
-    const typedNames = new Set();
+    const typedNames = [];
     (tabs.OOO_Manual || []).forEach((m) => {
       const prefix = str(m.name).trim();
       const start = nul(m.start_date);
@@ -100,13 +100,15 @@
       if (!prefix || !start || !end || start > end) return;
       const person = roster.find((p) => p.name === prefix) || roster.find((p) => p.name.startsWith(prefix));
       const name = person ? person.name : prefix;
-      typedNames.add(prefix);
+      typedNames.push(prefix);
       manual.push({ name, pod: podOf.get(name) || 'Unknown', start, end, source: 'manual', stub: false });
     });
-    // As in the build, Asana leave is only hidden for a person whose name was typed in full: a manual entry for
-    // "Aniqah" does not hide the leave-project entry for "Aniqah Mitha".
-    const asana = rows.filter((o) => !o.stub && o.source === 'asana' && !typedNames.has(o.name));
-    const project = rows.filter((o) => !o.stub && o.source !== 'asana' && o.source !== 'manual' && !typedNames.has(o.name));
+    // As in the build (hasManualOoo in src/asana.js): a manual entry replaces whatever Asana says for anyone whose name
+    // STARTS WITH the typed name, so "Aniqah" hides the Asana and leave-project rows for "Aniqah Mitha". (This once
+    // required the full name, and she showed twice on the live page.)
+    const hasManual = (name) => typedNames.some((t) => str(name).startsWith(t));
+    const asana = rows.filter((o) => !o.stub && o.source === 'asana' && !hasManual(o.name));
+    const project = rows.filter((o) => !o.stub && o.source !== 'asana' && o.source !== 'manual' && !hasManual(o.name));
     const booked = [...asana, ...manual, ...project];
     const bookedNames = new Set(booked.map((o) => o.name));
     const stubs = rows.filter((o) => o.stub && !bookedNames.has(o.name));
