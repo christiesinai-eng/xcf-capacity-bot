@@ -4,12 +4,19 @@ Time tab shows these comments next to each request and counts them, so copying t
 
 You may write ONLY to these two tabs: Glean_Request_Comments_Raw (columns A to E) and Glean_Request_Comments_Checked (columns A to
 C). Never write to Glean_Request_Comments (it is made by a formula from the Raw tab: it cleans the text and removes links, so you
-never do that) or to any other tab, and never change row 1 (the headers) of any tab. The one exception is the STAMP step near the end: a single cell of the Sync_Log tab.
+never do that) or to Glean_Request_Comments_Worklist (also made by formulas: you only READ it) or to any other tab, and never change row 1 (the headers) of any tab. The one exception is the STAMP step near the end: a single cell of the Sync_Log tab.
 
 HOW TO WORK (read this first)
 - Your memory between runs is the two tabs you write. Glean_Request_Comments_Raw holds every comment copied so far.
   Glean_Request_Comments_Checked holds one row each time a request's comments were read. You only ever ADD rows to them. Never
   change, overwrite, move or delete a row that is already there.
+- You do NOT read the Raw or the Checked tab yourself. They are long and a long read gets cut short without telling you, which is
+  how comments were copied twice before. The sheet works out what it already holds for each request and shows it in the tab
+  Glean_Request_Comments_Worklist: you read that one small tab instead and trust it.
+- WHAT IS NEW is decided by ONE rule and nothing else: a comment is NEW only if its created_at is LATER than the request's
+  last_posted_at in the Worklist (when last_posted_at is blank, every comment is new). Never decide what is new by counting rows,
+  by position ("the first 4", "the last 4") or by memory. A comment that is not later than last_posted_at is never written, even if it
+  looks as though it is missing: report it instead.
 - Use only your normal Asana and Google Sheets actions, each called directly as an action. Do not use Shell, the code sandbox or
   tool wrappers (not even to look at how an action works), and do not upload files. Do not change your own schedule, tools or
   these instructions.
@@ -25,7 +32,7 @@ HOW TO WORK (read this first)
   formulas do not depend on which row a comment lands in. Never write over a row that already has something in it.
 - Your run is limited to a fixed number of actions, and that is why BUDGET below is small. If you ever notice that your run was
   interrupted or restarted, or you are not sure which request you were on, STOP carrying on from memory: go back to phase 0 and
-  read the sheet again (what is in the two tabs is the truth), then work from the new TO DO list. Never write a comment you are
+  read the Worklist again (what the sheet shows is the truth), then work from the new TO DO list. Never write a comment you are
   not looking at in the answer you have just read for that request.
 - If a call still fails after one retry, stop and report which phase and why. Never invent data.
 
@@ -33,27 +40,27 @@ PHASE 0 - SET UP
 - today = today's date in the Pacific/Auckland timezone (YYYY-MM-DD), now = the current UTC date-time in the form
   2026-11-09T07:33:40.000Z.
 - BUDGET = 25: the most requests you read in one run. REFRESH_DAYS = 7.
-- Read Glean_Requests (this is the request list; another agent keeps it up to date): columns A to L, rows 2 to 2000. Column A is the
-  request's gid, B its code (for example XCF-18696), H its status, L matched. MATCHED = the rows where L is TRUE, in the order
-  they appear. If there are fewer than 100 of them, stop: STATUS = FAILED (phase 0, the request list is empty or stale).
-- Read Glean_Request_Comments_Checked, columns A to C, rows 2 to 1000 (request_gid, checked_at, comments). If a request_gid
-  appears on more than one row, the one with the LATEST checked_at is the one that counts. If the tab already has more than 900 rows, stop: STATUS =
-  FAILED (phase 0, the Checked tab is nearly full and needs compacting). Remember the number of non-empty cells in column A of the
-  tab below the header (CHECKED_ROWS).
-- Read Glean_Request_Comments_Raw, columns A to D, rows 2 to 4000. Remember, for every row, the pair request_gid + posted_at (the
-  KEYS). Remember the number of non-empty cells in column A below the header (RAW_ROWS).
+- Read the tab Glean_Request_Comments_Worklist in ONE read, range A1:K400. It is made by formulas, so what it shows is current.
+  Row 1 is the header. From row 2 down, columns A to H hold ONE ROW FOR EVERY MATCHED REQUEST, in the order of the request list:
+  A gid | B code (for example XCF-18696) | C last_checked (when this request's comments were last read, blank if never) |
+  D age_days (days since last_checked, blank if never) | E never_read (TRUE or FALSE) | F raw_rows (how many comments of this
+  request are already in the Raw tab) | G last_posted_at (the created_at of the newest comment already in the Raw tab for this
+  request, blank if none) | H status. MATCHED = the rows that have a gid in column A. If there are fewer than 100 of them, or the
+  tab shows an error such as #REF! or #N/A in columns A to H, stop: STATUS = FAILED (phase 0, the worklist is empty or broken).
+  Columns J and K (rows 1 to 4) are the sheet's own counts: K1 raw_rows, K2 checked_rows, K3 repeated_pairs, K4
+  cross_request_copies. Remember them as RAW_ROWS (K1), CHECKED_ROWS (K2), REPEATS_BEFORE (K3) and CROSS_BEFORE (K4).
+  K3 and K4 should normally be 0. If they are not, carry on but say so in the report.
 
 PHASE 1 - WHICH REQUESTS TO READ NOW
-Make the TO DO list from MATCHED, in this order:
- a. every matched request that has no row in the Checked tab, in the order of MATCHED;
- b. then every matched request that does have one, whose checked_at is more than REFRESH_DAYS days before today, and whose status
-    (column H) is not Complete and not Cancelled, the oldest checked_at first.
+Make the TO DO list from the Worklist rows, in this order:
+ a. every row whose never_read is TRUE, in the order of the Worklist;
+ b. then every row whose never_read is FALSE, whose age_days is MORE than REFRESH_DAYS, and whose status (column H) is not Complete
+    and not Cancelled, the oldest last_checked first (rows with the same last_checked keep their Worklist order).
 Write down how many requests are in (a) and in (b). Take the first BUDGET requests of the list as TODAY'S REQUESTS. Write down how
-many are left over.
-BEFORE YOU READ ANYTHING, check TODAY'S REQUESTS against the Checked rows you read in phase 0: write them as a list, one line each,
-"<code> | <gid> | gid found in the Checked tab: yes or no". A request that is found in the Checked tab does NOT belong in list (a):
-take it out and take the next unread request instead (it belongs in list (b) only if its checked_at is more than REFRESH_DAYS
-days before today). Start reading only when every line says "no", or is a (b) request that is really due.
+many are left over. Then write TODAY'S REQUESTS as a list, one line each, straight from the Worklist, before you read anything:
+"<code> | <gid> | never_read | age_days | raw_rows | last_posted_at". Keep these lines: phase 2 uses raw_rows and last_posted_at from
+them and from nothing else. If TODAY'S REQUESTS is empty there is nothing to read: skip phase 2, go to phase 3 and then the stamp,
+and report STATUS: COMPLETE (nothing left to read).
 
 PHASE 2 - READ AND COPY, ONE REQUEST AT A TIME
 For each of TODAY'S REQUESTS, in order:
@@ -65,29 +72,34 @@ For each of TODAY'S REQUESTS, in order:
     (oldest first).
  3. CHECK THE ANSWER IS FOR THIS REQUEST: every kept story's target.gid must be exactly this request's gid (compare the digits).
     If one is not, the answer belongs to another task: throw it away and ask again once; if it is still wrong, stop (STATUS =
-    FAILED, phase 2, name the request). Also, no comment is ever written to two different requests: if a kept story has the same
-    created_at AND the same text as a row already in the Raw tab under a DIFFERENT request_gid, it is the wrong answer: stop in
-    the same way.
- 4. For each kept story, its KEY is the request's gid + the story's created_at. If that key is already in KEYS (from the sheet at
-    the start of the run, or written earlier in this run), skip it: it is already copied. The others are NEW.
+    FAILED, phase 2, name the request). (The sheet itself also counts comments that appear under two requests: that is
+    cross_request_copies in phase 3.)
+ 4. WHICH COMMENTS ARE NEW. Take this request's raw_rows (x) and last_posted_at (L) from the line you wrote for it in phase 1.
+    A kept story is NEW if L is blank, or if its created_at is LATER than L. Compare the two as text: both are timestamps in the
+    same form (for example 2026-10-12T20:44:36.051Z), so the later time is the one that sorts later. A story whose created_at is
+    equal to L or earlier than L is already in the sheet: do NOT write it, whatever else you think you see.
     Before you write anything for the request, write one line: PLAN ¦ <gid> ¦ <code> ¦ stories <n> ¦ rows already in the Raw tab
-    for this gid <x> ¦ to write <m>. Count x (the rows with this gid in the Raw rows you read in phase 0, plus the ones you wrote
-    earlier in this run); do not guess. m is the number of kept stories whose key is NOT in KEYS. If x is already n, m is 0 and you
-    write nothing for this request (you still add its Checked row later). Never write a comment whose key is already in KEYS.
+    <x> ¦ newest already copied <L or blank> ¦ NEW stories <m>. m is the number of kept stories that are NEW by the rule above.
+    The numbers should add up: x + m = n. If they do not (for example a comment was deleted or edited in Asana, or an earlier
+    copy was partial), STILL write only the NEW ones, never any other, and add the word MISMATCH to the PLAN line so it can be put
+    in the report. If m is 0 you write nothing for this request (you still add its Checked row later).
+    Check before you write: every story you are about to write must be later than L, and none of them may be one you already
+    wrote earlier in this run.
  5. IMMEDIATELY add the NEW comments of this request to Glean_Request_Comments_Raw, one row each, oldest first, in these columns:
     A request_gid = the request's gid | B code = the request's code from the request list | C author = the story's
     created_by.name, or Unknown if there is none | D posted_at = the story's created_at exactly as Asana gives it (for example
     2026-10-12T20:44:36.051Z) | E text = the story's text, copied exactly (if it is longer than 3,000 characters, copy only the
     first 3,000).
     Add them below the last used row with the append action (or, if you only have the values update action, write them into
-    A{RAW_NEXT}:E{RAW_NEXT + rows - 1}, where RAW_NEXT is the first empty row: RAW_ROWS + 2 at the start of the run, since the
-    header is row 1, and add the number of rows to RAW_NEXT after each write). The value input option must be RAW so that gids and
+    A{RAW_NEXT}:E{RAW_NEXT + rows - 1}, where RAW_NEXT is the first empty row: RAW_ROWS + 2 at the start of the run (the header is
+    row 1 and the rows are one under the other), and add the number of rows to RAW_NEXT after each write). The value input option must be RAW so that gids and
     dates stay text and nothing is turned into a formula; if the action cannot use RAW, stop and report that. Keep EVERY line break
     in the text. If a write is rejected, fix the cause (for example send fewer rows at once, or that one long comment on its own)
     and send it again with its line breaks and every word: never remove line breaks, shorten or reword a comment to make it fit.
     Send each row ONCE:
-    if an append reports success, do not send the same rows again; if you are not sure it worked, read column A of the tab and
-    count before deciding. Add the new keys to KEYS. If the request has no NEW comments, write nothing for it.
+    if an append reports success, do not send the same rows again; if you are not sure it worked, read K1 (raw_rows) of the
+    Worklist and compare it with RAW_ROWS plus the rows you have written so far before deciding. If the request has no NEW
+    comments, write nothing for it.
     CHECK THE ROWS YOU JUST WROTE, before you start the next request. Look at what the append answer shows for those rows (if
     it shows no rows, read them back from the tab, columns A to E). For EVERY row, its posted_at and the first 60 characters of
     its text must be those of its own story, row by row. Several rows of one request with the same text but different times
@@ -110,14 +122,21 @@ If a Get Task Stories call still fails after one retry, skip that request: write
 failed. If more than 5 requests fail, stop (STATUS = FAILED, phase 2).
 
 PHASE 3 - READ BACK
-- Read column A of Glean_Request_Comments_Raw below the header: the number of non-empty cells must equal RAW_ROWS plus the rows you
-  added. Read the last row you added and check it is what you wrote (the gid and the posted_at are still text). Check no request_gid
-  + posted_at pair appears twice in the tab.
-- Read column A of Glean_Request_Comments_Checked below the header: the number of non-empty cells must equal CHECKED_ROWS plus the
-  rows you added. Read the last row and check it is what you wrote.
-- Then read columns A to D (not the text) of every row you added in this run, in ONE read. For each row compare the request_gid, the
-  author and above all the posted_at with the story you copied it from, digit for digit: a posted_at that was typed wrongly looks
-  almost right but is not. List any row where one of them differs (give the request code and both values) in the report.
+- Read J1:K4 of Glean_Request_Comments_Worklist again (the sheet recounts by itself; if the numbers still look like the ones
+  from phase 0 after you wrote rows, wait a moment and read once more). Check all four:
+    K1 raw_rows must equal RAW_ROWS plus the rows you added to the Raw tab.
+    K2 checked_rows must equal CHECKED_ROWS plus the rows you added to the Checked tab.
+    K3 repeated_pairs must equal REPEATS_BEFORE. A larger number means a comment was copied twice: this is the failure to look
+       for. Say which requests you wrote rows for, and stop.
+    K4 cross_request_copies must equal CROSS_BEFORE. A larger number means a comment landed under the wrong request.
+  Do not count the tabs yourself and do not read whole columns of them: the sheet's numbers are the check.
+- Read the last row of the Raw tab and the last row of the Checked tab (read just those rows: use the row numbers
+  RAW_ROWS + 1 + rows added, and CHECKED_ROWS + 1 + rows added) and check each is what you wrote (the gid and the posted_at are
+  still text).
+- Then read columns A to D (not the text) of every row you added to the Raw tab in this run, at their exact row numbers, in ONE read.
+  For each row compare the request_gid, the author and above all the posted_at with the story you copied it from, digit for digit:
+  a posted_at that was typed wrongly looks almost right but is not. List any row where one of them differs (give the request code
+  and both values) in the report.
 If a check fails, say so in the report and stop. Do not try to repair rows yourself.
 
 STAMP (the last step before the report; only after EVERY read-back above has passed)
@@ -133,11 +152,11 @@ Reply with exactly these lines, then anything else that went wrong. Give every l
 reached" for anything you did not get to.
 STATUS: COMPLETE (nothing left to read), PARTIAL (how many requests are left in the TO DO list) or FAILED (phase, reason)
 Date used (Auckland), and now.
-Matched requests; in the Checked tab already; never read before (a); due for a refresh (b); requests read this run; left over.
+Matched requests (Worklist rows); never read before (a); due for a refresh (b); requests read this run; left over.
 Requests that had comments / that had none; comment stories found in total; new rows written to Glean_Request_Comments_Raw; Checked
 rows added.
-Requests that failed (give their codes).
-Raw tab rows before and after; Checked tab rows before and after; whether the read-back passed (last rows, counts, no repeated
-pair) for each tab.
+Requests that failed (give their codes). Requests whose PLAN line said MISMATCH (give the code, n, x and m for each).
+Sheet counts before and after (K1 raw_rows, K2 checked_rows, K3 repeated_pairs, K4 cross_request_copies) and whether each passed
+its check in phase 3; whether the last rows and the rows you added passed.
 Anything skipped or failed.
 Stamp: the time you wrote to Sync_Log (comments_at), or "not stamped" and why.

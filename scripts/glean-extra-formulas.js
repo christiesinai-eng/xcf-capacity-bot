@@ -41,8 +41,14 @@ const RX_SPACES = '[ \\t]{2,}';
 const WS = '\\s\\x{00A0}\\x{1680}\\x{2000}-\\x{200A}\\x{2028}\\x{2029}\\x{202F}\\x{205F}\\x{3000}\\x{FEFF}';
 const RX_TRIM = `^[${WS}]+|[${WS}]+$`;
 
-function commentsFormula() {
-  const R = (c) => `${RAW_C}!${c}:${c}`; // whole columns: rows inserted by an append action cannot shift them
+// rawTab is a parameter only so the formula can be tried on a scratch copy of the Raw tab.
+//
+// SAFETY NET (20 Nov 2026): the same comment (same request_gid + posted_at) is shown once, whatever the Raw tab holds.
+// The agent has twice copied comments it already had (4 rows, then 156); the Raw read-back catches that and the agent
+// refuses to stamp, but until the rows are removed by hand they would reach the dashboard twice. After the sort,
+// repeated comments sit next to each other; the first copy is kept (MATCH finds the first row with a given key).
+function commentsFormula(rawTab = RAW_C) {
+  const R = (c) => `${rawTab}!${c}:${c}`; // whole columns: rows inserted by an append action cannot shift them
   return '=LET(' +
     `a,${R('A')},` +
     `e,${R('E')},` +
@@ -53,8 +59,37 @@ function commentsFormula() {
     `se,ARRAYFORMULA(REGEXREPLACE(sd,"${RX_URL}","")),` +
     `sf,ARRAYFORMULA(REGEXREPLACE(se,"${RX_SPACES}"," ")),` +
     `sg,ARRAYFORMULA(REGEXREPLACE(sf,"${RX_TRIM}","")),` +
-    `IFERROR(SORT(FILTER(HSTACK(a,${R('B')},${R('C')},${R('D')},sg),(a<>"")*(ROW(a)>1)),1,TRUE,4,TRUE),""))`;
+    `srt,SORT(FILTER(HSTACK(a,${R('B')},${R('C')},${R('D')},sg),(a<>"")*(ROW(a)>1)),1,TRUE,4,TRUE),` +
+    'kk,ARRAYFORMULA(INDEX(srt,0,1)&"|"&INDEX(srt,0,4)),' +
+    'IFERROR(FILTER(srt,ARRAYFORMULA(MATCH(kk,kk,0))=SEQUENCE(ROWS(srt))),""))';
 }
+
+// ── Request comments worklist ───────────────────────────────────────────────────────────────────────────────────
+// What the comments agent reads INSTEAD of scanning the Raw and Checked tabs itself (it lost track of rows twice).
+// One row per matched request: gid | code | last_checked | age_days | never_read | raw_rows | last_posted_at | status.
+// last_posted_at is the newest comment already copied for that request, so the agent copies only comments NEWER than it,
+// which cannot repeat one. The meta cells (J1:K4) are counts the sheet works out, for the agent's read-back.
+const W_HEADERS = ['gid', 'code', 'last_checked', 'age_days', 'never_read', 'raw_rows', 'last_posted_at', 'status'];
+function worklistFormula() {
+  const RAW = RAW_C;
+  const CHK = 'Glean_Request_Comments_Checked';
+  return '=LET(' +
+    'rq,Glean_Requests!A2:L,' +
+    'm,FILTER(rq,UPPER(INDEX(rq,0,12)&"")="TRUE"),' +
+    'g,INDEX(m,0,1),' +
+    `lc,MAP(g,LAMBDA(x,IFERROR(INDEX(SORT(FILTER(${CHK}!B:B,${CHK}!A:A=x),1,FALSE),1),""))),` +
+    `rr,MAP(g,LAMBDA(x,IFERROR(ROWS(FILTER(${RAW}!A:A,${RAW}!A:A=x)),0))),` +
+    `lp,MAP(g,LAMBDA(x,IFERROR(INDEX(SORT(FILTER(${RAW}!D:D,${RAW}!A:A=x),1,FALSE),1),""))),` +
+    'ag,MAP(lc,LAMBDA(x,IF(x="","",TODAY()-DATEVALUE(LEFT(x,10))))),' +
+    'nv,MAP(lc,LAMBDA(x,x="")),' +
+    'IFERROR(HSTACK(g,INDEX(m,0,2),lc,ag,nv,rr,lp,INDEX(m,0,8)),""))';
+}
+const W_META = [
+  ['raw_rows', `=COUNTA(${RAW_C}!A2:A)`],
+  ['checked_rows', '=COUNTA(Glean_Request_Comments_Checked!A2:A)'],
+  ['repeated_pairs', `=IFERROR(K1-COUNTA(UNIQUE(ARRAYFORMULA(FILTER(${RAW_C}!A2:A&"|"&${RAW_C}!D2:D,${RAW_C}!A2:A<>"")))),0)`],
+  ['cross_request_copies', `=IFERROR(COUNTA(UNIQUE(ARRAYFORMULA(FILTER(${RAW_C}!A2:A&"|"&${RAW_C}!D2:D&"|"&${RAW_C}!E2:E,${RAW_C}!A2:A<>""))))-COUNTA(UNIQUE(ARRAYFORMULA(FILTER(${RAW_C}!D2:D&"|"&${RAW_C}!E2:E,${RAW_C}!A2:A<>"")))),0)`],
+];
 
 // ── PM_Updates ──────────────────────────────────────────────────────────────────────────────────────────────────
 // build: weeks keyed by the Monday (UTC) of the message, labelled by that week's Friday ("6 Nov"); message time is
@@ -91,13 +126,13 @@ function pmUpdatesFormula() {
     'IFERROR(SORT(FILTER(HSTACK(ws,wl,au,pa,cl),ok),1,FALSE,4,TRUE),""))';
 }
 
-module.exports = { cleanComment, redactSecrets, stripCommentUrls, stripUrls, pmUpdateRow, commentsFormula, pmUpdatesFormula, RAW_C, RAW_P, C_ROWS, P_ROWS };
+module.exports = { cleanComment, redactSecrets, stripCommentUrls, stripUrls, pmUpdateRow, commentsFormula, pmUpdatesFormula, worklistFormula, W_HEADERS, W_META, RAW_C, RAW_P, C_ROWS, P_ROWS };
 
 if (require.main === module) {
   if (process.argv.includes('--selftest')) {
     console.log(JSON.stringify(cleanComment('  Hi <@U1> see <https://www.canva.com/x|the design>  and https://app.asana.com/0/profile/123 and https://f.io/abc   password: hunter2 ok  '), null, 1));
     console.log(JSON.stringify(pmUpdateRow('1793942236.584499', 'Deepak Aujla', ':clipboard: _WEEKLY_ <https://a.b/c|label> <https://x.y> https://z.w/q end')));
   } else {
-    console.log(JSON.stringify({ comments: commentsFormula(), pmUpdates: pmUpdatesFormula() }, null, 1));
+    console.log(JSON.stringify({ comments: commentsFormula(), pmUpdates: pmUpdatesFormula(), worklist: worklistFormula(), worklistHeaders: W_HEADERS, worklistMeta: W_META }, null, 1));
   }
 }
