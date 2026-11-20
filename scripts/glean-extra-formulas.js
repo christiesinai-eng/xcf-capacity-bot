@@ -69,6 +69,13 @@ function commentsFormula(rawTab = RAW_C) {
 // One row per matched request: gid | code | last_checked | age_days | never_read | raw_rows | last_posted_at | status.
 // last_posted_at is the newest comment already copied for that request, so the agent copies only comments NEWER than it,
 // which cannot repeat one. The meta cells (J1:K4) are counts the sheet works out, for the agent's read-back.
+// The comments agent can only APPEND rows, so it adds its stamp to Glean_Request_Comments_Stamp (header in A1) and this
+// formula, in Sync_Log!B13 (the comments_at row), shows the newest one (blank while there is none).
+const STAMP_TAB = 'Glean_Request_Comments_Stamp';
+function commentsStampFormula() {
+  return `=IF(COUNTA(${STAMP_TAB}!A2:A)=0,"",INDEX(${STAMP_TAB}!A2:A,COUNTA(${STAMP_TAB}!A2:A)))`;
+}
+
 const W_HEADERS = ['gid', 'code', 'last_checked', 'age_days', 'never_read', 'raw_rows', 'last_posted_at', 'status'];
 function worklistFormula() {
   const RAW = RAW_C;
@@ -126,7 +133,7 @@ function pmUpdatesFormula() {
     'IFERROR(SORT(FILTER(HSTACK(ws,wl,au,pa,cl),ok),1,FALSE,4,TRUE),""))';
 }
 
-module.exports = { cleanComment, redactSecrets, stripCommentUrls, stripUrls, pmUpdateRow, commentsFormula, pmUpdatesFormula, worklistFormula, W_HEADERS, W_META, RAW_C, RAW_P, C_ROWS, P_ROWS };
+module.exports = { cleanComment, redactSecrets, stripCommentUrls, stripUrls, pmUpdateRow, commentsFormula, pmUpdatesFormula, worklistFormula, commentsStampFormula, W_HEADERS, W_META, RAW_C, RAW_P, C_ROWS, P_ROWS };
 
 if (require.main === module) {
   if (process.argv.includes('--selftest')) {

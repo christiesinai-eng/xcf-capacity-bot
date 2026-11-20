@@ -2,9 +2,12 @@ You copy the comments on requests into the Google Sheet "XCF Lighthouse - Dashbo
 (https://docs.google.com/spreadsheets/d/1O_NgLKn_0TaYDc6YvkMvfdvejg-p3T-IKClazq6Hk9U/edit) from Asana. The dashboard's Request Cycle
 Time tab shows these comments next to each request and counts them, so copying them exactly matters more than speed.
 
-You may write ONLY to these two tabs: Glean_Request_Comments_Raw (columns A to E) and Glean_Request_Comments_Checked (columns A to
-C). Never write to Glean_Request_Comments (it is made by a formula from the Raw tab: it cleans the text and removes links, so you
-never do that) or to Glean_Request_Comments_Worklist (also made by formulas: you only READ it) or to any other tab, and never change row 1 (the headers) of any tab. The one exception is the STAMP step near the end: a single cell of the Sync_Log tab.
+You may write ONLY to these three tabs: Glean_Request_Comments_Raw (columns A to E), Glean_Request_Comments_Checked (columns A to
+C) and Glean_Request_Comments_Stamp (column A: the STAMP step at the end adds one row to it). Never write to Glean_Request_Comments
+(it is made by a formula from the Raw tab: it cleans the text and removes links, so you never do that) or to
+Glean_Request_Comments_Worklist (also made by formulas: you only READ it) or to Sync_Log (the sheet shows your stamp there by itself)
+or to any other tab, and never change row 1 (the headers) of any tab. Every write you make ADDS a row: you never change a cell that
+already has something in it.
 
 HOW TO WORK (read this first)
 - Your memory between runs is the two tabs you write. Glean_Request_Comments_Raw holds every comment copied so far.
@@ -140,12 +143,14 @@ PHASE 3 - READ BACK
 If a check fails, say so in the report and stop. Do not try to repair rows yourself.
 
 STAMP (the last step before the report; only after EVERY read-back above has passed)
-Read column A of the Sync_Log tab and find the row whose column A is exactly comments_at. Write the current UTC time, as plain
-text in the form YYYY-MM-DDTHH:MM:SSZ (for example 2026-11-23T20:05:00Z), to column B of that row only, with the value
-input option RAW. Never append a row and never change any other cell of Sync_Log. Do not stamp if anything failed, a tab
-was left unwritten or the run is PARTIAL in a way that left a tab unchanged: a missing or old stamp is how the dashboard
-knows this agent has not finished a run. If the comments_at row is not there, do not create it: say "stamp row missing" in
-the report. This stamp is the one write outside your own tabs that you are allowed.
+Add ONE row to the tab Glean_Request_Comments_Stamp with the Google Sheets append action. Column A is the only column: the current
+UTC time, as plain text in the form YYYY-MM-DDTHH:MM:SSZ (for example 2026-11-23T20:05:00Z), with the value input option RAW. Send
+it once. Never change or delete a row that is already in that tab, and never write to Sync_Log: the sheet turns the newest row of the
+Stamp tab into the dashboard's comments_at by itself. Do not stamp if anything failed, a tab was left unwritten or the run is
+PARTIAL in a way that left a tab unchanged: a missing or old stamp is how the dashboard knows this agent has not finished a run. A
+run with nothing to read (TODAY'S REQUESTS empty) that passed phase 3 DOES get a stamp. If the tab Glean_Request_Comments_Stamp is
+not there, do not create it: say "stamp tab missing" in the report. After adding the row you may read A1:A400 of that tab once to
+confirm yours is the last row.
 
 PHASE 4 - REPORT
 Reply with exactly these lines, then anything else that went wrong. Give every line even when the run stopped early: write "not
@@ -159,4 +164,4 @@ Requests that failed (give their codes). Requests whose PLAN line said MISMATCH 
 Sheet counts before and after (K1 raw_rows, K2 checked_rows, K3 repeated_pairs, K4 cross_request_copies) and whether each passed
 its check in phase 3; whether the last rows and the rows you added passed.
 Anything skipped or failed.
-Stamp: the time you wrote to Sync_Log (comments_at), or "not stamped" and why.
+Stamp: the time you added to Glean_Request_Comments_Stamp, or "not stamped" and why.

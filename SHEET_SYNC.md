@@ -147,6 +147,11 @@ read-backs pass (the STAMP step in each prompt). The page shows the oldest stamp
 naming the agent, when a stamp is missing or older than 36 hours. The old build-sync fields in `Sync_Log` are used only while
 there is no stamp. A run that fails writes nothing and does not stamp, so a dead agent shows up on the page within a day and a half.
 
+The **comments agent is the exception**: its Glean agent can only append rows, not write a single cell. It appends one row (the
+time) to the tab `Glean_Request_Comments_Stamp`, and `Sync_Log!B13` (`comments_at`) is a formula that shows that tab's newest
+row (`commentsStampFormula()` in `scripts/glean-extra-formulas.js`; blank while the tab has no rows). The other agents write their
+`Sync_Log` cell directly. Until the agent was changed on 20 Nov the comments stamp was written by hand.
+
 **Steps (first as a private app, then open it up).**
 
 1. Build from the merged `go-live` tree (`node src/index.js --once`) so the built-in fallback data is today's.
