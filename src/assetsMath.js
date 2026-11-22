@@ -126,5 +126,17 @@
       .map((r) => ({ gid: r.gid, name: r.name, type: r.type, date: r.date, assets: assetsOf(r), groups: groupsOf(r) }));
   }
 
-  return { QUARTERS, OVERALL, TYPES, GROUPS, GROUP_LABEL, regionGroup, regionTags, groupsOf, aucklandDate, summarise, biggest };
+  // The delivered requests in a view that have no Asset count, newest first, with the quarter each belongs to.
+  function withoutCount(summary, viewKey) {
+    const v = summary.views[viewKey];
+    if (!v) return [];
+    return summary.rows
+      .filter((r) => r.date >= v.from && r.date <= v.to && !hasCount(r))
+      .map((r) => {
+        const q = QUARTERS.filter((x) => r.date >= x.from && r.date <= x.to)[0];
+        return { gid: r.gid, name: r.name, type: r.type, date: r.date, quarter: q ? q.key : '', groups: groupsOf(r) };
+      });
+  }
+
+  return { QUARTERS, OVERALL, TYPES, GROUPS, GROUP_LABEL, regionGroup, regionTags, groupsOf, aucklandDate, summarise, biggest, withoutCount };
 }));

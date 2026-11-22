@@ -139,3 +139,19 @@ test('the build keeps a request completed on a UTC day just outside a quarter, a
   const noCount = task('2026-08-01T00:00:00.000Z'); noCount.custom_fields = noCount.custom_fields.filter((f) => f.gid !== '1212213385632145');
   assert.equal(rowFromTask(noCount).assets, null, 'a missing count stays empty, never 0');
 });
+
+test('withoutCount lists the delivered requests that have no asset count, newest first, with their quarter', () => {
+  const s = A.summarise([
+    row({ gid: 'a', name: 'Counted', assets: 5, completedAt: '2026-10-07T03:00:00Z' }),
+    row({ gid: 'b', name: 'No count Q3', assets: null, regMicro: ['US', 'SG'], completedAt: '2026-10-09T03:00:00Z' }),
+    row({ gid: 'c', name: 'Zero is no count', assets: 0, completedAt: '2026-08-09T03:00:00Z' }),
+    row({ gid: 'd', name: 'No count Q2', assets: undefined, completedAt: '2026-07-20T03:00:00Z' }),
+    row({ gid: 'e', name: 'Untyped', type: '', assets: null, completedAt: '2026-10-09T03:00:00Z' }),
+  ]);
+  const all = A.withoutCount(s, 'overall');
+  assert.deepEqual(all.map((r) => [r.name, r.quarter]), [['No count Q3', 'FY27 Q3'], ['Zero is no count', 'FY27 Q2'], ['No count Q2', 'FY27 Q2']]);
+  assert.deepEqual(all[0].groups, ['US', 'IM']);
+  assert.deepEqual(A.withoutCount(s, 'FY27 Q3').map((r) => r.name), ['No count Q3']);
+  assert.equal(all.length, s.views.overall.noCount, 'the list is exactly the number the card reports');
+  assert.deepEqual(A.withoutCount(s, 'nope'), []);
+});

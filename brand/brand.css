@@ -271,3 +271,5 @@ button,input,select,textarea{font-family:var(--body)}
 .oo-bar[style*="background:#1f65d6" i],.oo-bar[style*="background:#1f65d6" i] .oo-bar-out{color:#fff!important}
 /* dark theme: link-blue text reads better a little lighter */
 :root[data-theme="dark"] .more-tag{color:var(--blue-ink)}
+/* Assets delivered: the region tiles read best as three over two (four across left one tile on its own) */
+@media (min-width:1181px){.mk .assets .rtiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
