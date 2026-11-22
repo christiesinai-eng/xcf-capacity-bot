@@ -105,6 +105,7 @@ function templateDatasets({ members, missingTasks, overdueTasks, pmData, scopeCr
     })),
     REGIONAL_DATA: regionalData || {},
     ASSETS_DATA: assetsData || [],
+    ASSETS_ADJUSTMENTS: require('./assetsAdjustments').loadAdjustments(),
   };
 }
 
@@ -133,6 +134,7 @@ function generateReport(data) {
   // only cares about the declaration shape it is replacing.
   html = replaceArray(html, 'REGIONAL_DATA', d.REGIONAL_DATA);
   html = replaceArray(html, 'ASSETS_DATA', d.ASSETS_DATA);
+  html = replaceArray(html, 'ASSETS_ADJUSTMENTS', d.ASSETS_ADJUSTMENTS);
   // Same trick: the placeholder is `const PLATFORM_DATA=[];` and the payload is an object (null = no snapshot yet).
   // Not one of the sheet's tabs: it comes from platform-spend-data.json and stays built into the page.
   html = replaceArray(html, 'PLATFORM_DATA', data.platformData || {});

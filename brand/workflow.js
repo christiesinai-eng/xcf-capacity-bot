@@ -207,17 +207,18 @@
       if (cur && $('#k5')) { var uu = usageShare(cur); mount($('#k5'), 84, 12, { v: [uu.high], t: Math.max(uu.total, 1), g: 0 }, ['var(--mint)'], '', uu.high + ' of ' + uu.total + ' tools used daily'); }
     }
 
-    /* Assets delivered: real numbers. The request data holds the delivered requests (Complete, Micro BAU / Roadmap / XCF
+    /* Assets delivered: real numbers. The data holds the completed projects in XCF | Projects (Micro BAU / Roadmap / XCF
        initiative, completed in FY27 Q2 or Q3) with their Asset count, and AssetsMath, the same code the build uses, does the
-       counting. Overall is Q2 plus Q3; the buttons flip to one quarter. */
+       counting, so assets are counted when a project completes. Overall is Q2 plus Q3; the buttons flip to one quarter. */
     var AM = window.AssetsMath;
-    var ASUM = AM.summarise(typeof ASSETS_DATA !== 'undefined' ? ASSETS_DATA : []);
+    var ASUM = AM.summarise(typeof ASSETS_DATA !== 'undefined' ? ASSETS_DATA : [], typeof ASSETS_ADJUSTMENTS !== 'undefined' ? ASSETS_ADJUSTMENTS : []);
     var A_COL = { 'US': 'var(--data1)', 'UK': 'var(--xero-blue)', 'ANZ': 'var(--mint)', 'IM': 'var(--purple)', 'Global': 'var(--gold)', 'No region': 'var(--muted)' };
     function assetDay(d) { return new Date(d + 'T00:00:00Z').toLocaleDateString('en-NZ', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }); }
-    function assetUrl(gid) { return 'https://app.asana.com/1/41261904390129/project/1215906401561993/task/' + encodeURIComponent(gid); }
+    function assetUrl(gid) { return 'https://app.asana.com/1/41261904390129/project/' + encodeURIComponent(gid); }
+    function nProj(n) { return n + (n === 1 ? ' project' : ' projects'); }
     function assetsSpan(v) { return v.key === 'overall' ? 'across ' + AM.QUARTERS.map(function (q) { return q.key; }).join(' and ') : 'in ' + v.label; }
     function assetsLine(v) {
-      if (!v.assets) return 'No assets delivered ' + assetsSpan(v) + ' yet.' + (v.requests ? ' ' + v.requests + (v.requests === 1 ? ' request was' : ' requests were') + ' delivered without an asset count.' : '');
+      if (!v.assets) return 'No assets delivered ' + assetsSpan(v) + ' yet.' + (v.projects ? ' ' + nProj(v.projects) + (v.projects === 1 ? ' was' : ' were') + ' completed without an asset count.' : '');
       var lead = v.assets + (v.assets === 1 ? ' asset' : ' assets') + ' delivered ' + assetsSpan(v) + '. ';
       if (v.top.group === 'Global') return lead + 'Global-tagged work is the largest share, at ' + v.top.share + '% of the total.';
       if (v.top.group === 'No region') return lead + 'Work with no region is the largest share, at ' + v.top.share + '% of the total.';
@@ -225,16 +226,16 @@
     }
     function assetsNote(v, groupSum) {
       var bits = [];
-      if (v.noCount) bits.push(esc(v.noCount + ' of the ' + v.requests + ' delivered requests have no asset count, so they add no assets.') +
-        ' <button class="link" type="button" data-more="assetsnocount" data-preset="' + (v.key === 'overall' ? 'all' : esc(v.key)) + '">See the ' + v.noCount + (v.noCount === 1 ? ' request' : ' requests') + '</button>');
-      if (groupSum > v.assets) bits.push(esc('A request tagged to several regions counts in each, so the regions can add up to more than the total.'));
+      if (v.noCount) bits.push(esc(v.noCount + ' of the ' + v.projects + ' completed ' + (v.projects === 1 ? 'project' : 'projects') + (v.noCount === 1 ? ' has' : ' have') + ' no asset count, so ' + (v.noCount === 1 ? 'it adds' : 'they add') + ' no assets.') +
+        ' <button class="link" type="button" data-more="assetsnocount" data-preset="' + (v.key === 'overall' ? 'all' : esc(v.key)) + '">See the missing counts</button>');
+      if (groupSum > v.assets) bits.push(esc('A project tagged to several regions counts in each, so the regions can add up to more than the total.'));
       return bits.join('<br>');
     }
     function renderAssets() {
       var order = ASUM.order, G = AM.GROUPS;
       put('assets', head('Assets delivered', '<span id="assetSub"></span>',
         '<div class="seg" id="assetRange" role="group" aria-label="Period">' + order.map(function (k, i) { return '<button type="button" aria-pressed="' + (i === 0) + '" data-r="' + esc(k) + '">' + esc(ASUM.views[k].label) + '</button>'; }).join('') + '</div>') +
-        '<p class="t-small" style="margin:0 0 14px">This report summarises assets from Micro BAU requests, Roadmap and XCF initiatives.</p>' +
+        '<p class="t-small" style="margin:0 0 14px">This report summarises assets from completed Micro BAU, Roadmap and XCF initiative projects in XCF | Projects. Assets are counted when a project is completed.</p>' +
         '<div class="assets"><div class="panel" style="align-items:center;justify-content:center"><h4>All regions</h4><div class="ringwrap" id="assetRing"></div></div><div class="rtiles" id="assetTiles"></div></div>' +
         '<p class="t-small cf" id="assetNote"></p><div class="cardfoot">' + seeMore('assets') + '</div>');
       function valsFor(k) {
@@ -252,7 +253,7 @@
         $('#assetRing .ringc').innerHTML = '<span class="num" style="font-size:68px">' + v.assets + '</span><span class="t-small">assets</span>';
         $('#assetTiles').innerHTML = v.groups.length ? v.groups.map(function (r) {
           var col = A_COL[r.group];
-          return '<div class="rtile"><h4><i class="dot" style="background:' + col + '"></i>' + esc(r.label) + '</h4><span class="num">' + r.assets + '</span><span class="t-small">' + r.share + '% of the total</span><span class="t-small">' + r.requests + (r.requests === 1 ? ' request' : ' requests') + '</span><span class="bar"><i style="width:' + Math.min(r.share, 100) + '%;background:' + col + '"></i></span></div>';
+          return '<div class="rtile"><h4><i class="dot" style="background:' + col + '"></i>' + esc(r.label) + '</h4><span class="num">' + r.assets + '</span><span class="t-small">' + r.share + '% of the total</span><span class="t-small">' + nProj(r.projects) + '</span><span class="bar"><i style="width:' + Math.min(r.share, 100) + '%;background:' + col + '"></i></span></div>';
         }).join('') : '<div class="rtile"><span class="t-small">Nothing delivered in this period yet.</span></div>';
         $('#assetNote').innerHTML = assetsNote(v, sum);
       }
@@ -849,15 +850,15 @@
     /* Assets delivered, in full: by region and quarter, by project type, the biggest deliveries, and how it is counted. */
     DET.assets = function () {
       var G = AM.GROUPS, Q = AM.QUARTERS.map(function (q) { return q.key; }), vO = ASUM.views.overall;
-      function grp(v, name) { return v.groups.filter(function (x) { return x.group === name; })[0] || { assets: 0, requests: 0, share: 0 }; }
-      var present = G.filter(function (name) { var x = grp(vO, name); return x.requests > 0 || x.assets > 0; });
+      function grp(v, name) { return v.groups.filter(function (x) { return x.group === name; })[0] || { assets: 0, projects: 0, share: 0 }; }
+      var present = G.filter(function (name) { var x = grp(vO, name); return x.projects > 0 || x.assets > 0; });
       var rows = present.map(function (name) {
         return row(['<b>' + esc(AM.GROUP_LABEL[name]) + '</b>'].concat(Q.map(function (k) { return grp(ASUM.views[k], name).assets; }), ['<b>' + grp(vO, name).assets + '</b>', grp(vO, name).share + '%']));
       });
-      rows.push(row(['<b>Total (each request once)</b>'].concat(Q.map(function (k) { return '<b>' + ASUM.views[k].assets + '</b>'; }), ['<b>' + vO.assets + '</b>', ''])));
-      var typeCell = function (v, t) { return v.types.filter(function (y) { return y.type === t; })[0] || { requests: 0, assets: 0 }; };
+      rows.push(row(['<b>Total (each project once)</b>'].concat(Q.map(function (k) { return '<b>' + ASUM.views[k].assets + '</b>'; }), ['<b>' + vO.assets + '</b>', ''])));
+      var typeCell = function (v, t) { return v.types.filter(function (y) { return y.type === t; })[0] || { projects: 0, assets: 0 }; };
       var typeRows = AM.TYPES.map(function (t) {
-        return row(['<b>' + esc(t) + '</b>'].concat(Q.map(function (k) { var x = typeCell(ASUM.views[k], t); return x.assets + ' <span class="t-small">from ' + x.requests + (x.requests === 1 ? ' request' : ' requests') + '</span>'; }),
+        return row(['<b>' + esc(t) + '</b>'].concat(Q.map(function (k) { var x = typeCell(ASUM.views[k], t); return x.assets + ' <span class="t-small">from ' + nProj(x.projects) + '</span>'; }),
           ['<b>' + typeCell(vO, t).assets + '</b>']));
       });
       var fmtDay = assetDay;
@@ -866,37 +867,42 @@
         return row(['<a href="' + url + '" target="_blank" rel="noopener">' + esc(r.name || r.gid) + '</a>', esc(r.type), fmtDay(r.date),
           esc(r.groups.map(function (g) { return AM.GROUP_LABEL[g]; }).join(', ')), '<b>' + r.assets + '</b>']);
       });
+      var meta = ASUM.meta || {};
       var how = [
-        'Delivered means the request’s Status (XCF) is Complete. It belongs to the quarter it was completed in, by Auckland date, whenever it was created.',
-        'Assets are the number in Asset count (XCF) on the request. A delivered request with no count adds no assets: ' + vO.noCount + ' of ' + vO.requests + ' delivered requests have none.',
-        'Only Micro (BAU), Roadmap and XCF initiative requests are counted. Older requests with no Project type are not.',
+        'Delivered means the project has been completed (closed) in XCF | Projects. Assets are counted when it completes, in the quarter it was completed in, by Auckland date, whatever day it started.',
+        'Assets are the number in Asset count (XCF) on the project. A completed project with no count adds no assets: ' + vO.noCount + ' of ' + nProj(vO.projects) + ' ' + (vO.noCount === 1 ? 'has' : 'have') + ' none and ' + (vO.noCount === 1 ? 'is' : 'are') + ' on the missing counts list.',
+        'Only Micro (BAU), Roadmap and XCF initiative projects are counted. Projects with no Project type are not.',
         'Region comes from Regions (XCF) for Micro (BAU) and from Applicable Regions for Roadmap. ANZ is AU and NZ; IM is every other named region; Global-tagged and no-region work are shown on their own.',
-        'A request tagged to several regions counts in each region once, so the regions can add up to more than the total.'
+        'A project tagged to several regions counts in each region once, so the regions can add up to more than the total.',
+        'Cancelled projects are not counted: ' + (meta.cancelled || 0) + ' completed in these quarters had a Status (XCF) of Cancelled or a last status update of Dropped.',
+        'A short list kept by hand in the Assets_Adjustments tab of the data sheet ' + ((meta.excluded ? 'leaves out ' + nProj(meta.excluded) + ' that made no assets' : 'leaves out nothing yet') + (vO.ignored ? ' and stops ' + nProj(vO.ignored) + ' finished before asset counts began from being chased' : '')) + '.'
       ].map(function (t) { return '<p class="note2">' + esc(t) + '</p>'; }).join('');
-      return { t: 'Assets delivered', s: AM.QUARTERS.map(function (q) { return q.key; }).join(' and ') + ', from Micro BAU requests, Roadmap and XCF initiatives.', h:
+      return { t: 'Assets delivered', s: AM.QUARTERS.map(function (q) { return q.key; }).join(' and ') + ', from completed Micro BAU, Roadmap and XCF initiative projects.', h:
         stats([[vO.assets, 'Overall', 'var(--ink)'], [ASUM.views[Q[0]].assets, Q[0], 'var(--blue-ink)'], [ASUM.views[Q[1]].assets, Q[1], 'var(--blue-ink)'],
-          [vO.requests, 'Requests delivered', 'var(--ink)'], [vO.noCount, 'Without an asset count', 'var(--gold-ink)']]) +
+          [vO.projects, 'Projects completed', 'var(--ink)'], [vO.noCount, 'Missing an asset count', 'var(--gold-ink)']]) +
         sec('By region and quarter', table(['Region'].concat(Q, ['Overall', 'Share of overall']), rows)) +
         sec('By project type', table(['Project type'].concat(Q, ['Overall']), typeRows)) +
-        sec('Biggest deliveries', big.length ? table(['Request', 'Type', 'Delivered', 'Regions', 'Assets'], big) : '<p class="note2">No delivered request has an asset count yet.</p>',
-          'One request can be most of a period, so it is worth seeing what is behind the total.') +
+        sec('Biggest deliveries', big.length ? table(['Project', 'Type', 'Completed', 'Regions', 'Assets'], big) : '<p class="note2">No completed project has an asset count yet.</p>',
+          'One project can be most of a period, so it is worth seeing what is behind the total.') +
         sec('How this is counted', how) };
     };
-    /* The delivered requests with no Asset count, each linked to Asana, so they can be fixed at the source. */
+    /* The missing asset counts: completed projects with no Asset count that are still expected to have one, each linked to
+       Asana, with its owner, so they can be chased and fixed at the source. */
     DET.assetsnocount = function () {
       var Q = AM.QUARTERS.map(function (q) { return q.key; }), vO = ASUM.views.overall;
       var list = AM.withoutCount(ASUM, 'overall');
       var nw = function (t) { return '<span style="white-space:nowrap">' + t + '</span>'; };
       var rows = list.map(function (r) {
-        return row(['<a href="' + assetUrl(r.gid) + '" target="_blank" rel="noopener">' + esc(r.name || r.gid) + '</a>', nw(esc(r.type)), nw(assetDay(r.date)), nw(esc(r.quarter)),
+        return row(['<a href="' + assetUrl(r.gid) + '" target="_blank" rel="noopener">' + esc(r.name || r.gid) + '</a>', nw(esc(r.owner || 'No owner')), nw(esc(r.type)), nw(assetDay(r.date)), nw(esc(r.quarter)),
           esc(r.groups.map(function (g) { return AM.GROUP_LABEL[g]; }).join(', '))], ' data-group="nocount" data-pane="' + esc(r.quarter) + '"');
       });
-      return { t: 'Delivered requests with no asset count', s: vO.noCount + ' of ' + vO.requests + ' delivered requests in ' + Q.join(' and ') + ' have no count, so they add no assets.', h:
+      var older = vO.ignored ? ' (' + vO.ignored + ' older ' + (vO.ignored === 1 ? 'project is' : 'projects are') + ' left off this list on purpose.)' : '';
+      return { t: 'Missing asset counts', s: vO.noCount + ' of ' + nProj(vO.projects) + ' completed in ' + Q.join(' and ') + (vO.noCount === 1 ? ' has' : ' have') + ' no asset count, so ' + (vO.noCount === 1 ? 'it adds' : 'they add') + ' no assets.', h:
         stats([[vO.noCount, 'Overall', 'var(--gold-ink)'], [ASUM.views[Q[0]].noCount, Q[0], 'var(--blue-ink)'], [ASUM.views[Q[1]].noCount, Q[1], 'var(--blue-ink)'],
-          [vO.requests ? Math.round(vO.noCount / vO.requests * 100) + '%' : '0%', 'Of delivered requests', 'var(--ink)']]) +
-        sec('Requests to fix', list.length ? segc('nocount', [['all', 'Overall']].concat(Q.map(function (k) { return [k, k]; }))) + table(['Request', 'Type', 'Delivered', 'Quarter', 'Regions'], rows)
-          : '<p class="note2">Every delivered request has an asset count.</p>',
-          'Open a request in Asana and fill in Asset count (XCF). The count shows here after the next daily refresh.') };
+          [vO.projects ? Math.round(vO.noCount / vO.projects * 100) + '%' : '0%', 'Of completed projects', 'var(--ink)']]) +
+        sec('Projects to fill in', list.length ? segc('nocount', [['all', 'Overall']].concat(Q.map(function (k) { return [k, k]; }))) + table(['Project', 'Owner', 'Type', 'Completed', 'Quarter', 'Regions'], rows)
+          : '<p class="note2">Every completed project has an asset count.</p>',
+          'Open the project in Asana and fill in Asset count (XCF). It leaves this list, and the assets are counted, after the next daily refresh.' + older) };
     };
     /* Briefs in review is still a work-in-progress card: the mockup's own sample numbers, shown as sample */
     DET.briefs = function () {

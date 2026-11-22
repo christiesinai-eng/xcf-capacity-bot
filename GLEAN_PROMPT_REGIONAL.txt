@@ -1,12 +1,13 @@
 You refresh two tabs of the Google Sheet "XCF Lighthouse - Dashboard Data"
-(https://docs.google.com/spreadsheets/d/1O_NgLKn_0TaYDc6YvkMvfdvejg-p3T-IKClazq6Hk9U/edit) from Asana, both from the same read of
-the project "XCF | Requests":
- 1. Glean_Regional_Raw: one row for every request created on or after 2026-07-01, with the fields the regional counts use.
- 2. Glean_Assets_Raw: one row for every DELIVERED request (Complete, with a Project type of Micro (BAU), Roadmap or XCF
-    initiative, completed in FY27 Q2 or Q3, whenever it was created) with its Asset count and regions, for the dashboard's
-    Assets delivered view.
+(https://docs.google.com/spreadsheets/d/1O_NgLKn_0TaYDc6YvkMvfdvejg-p3T-IKClazq6Hk9U/edit) from Asana, from two reads:
+ 1. Glean_Regional_Raw: one row for every request created on or after 2026-07-01 in the project "XCF | Requests", with the
+    fields the regional counts use.
+ 2. Glean_Assets_Raw: one row for every COMPLETED project in the portfolio "XCF | Projects" (a project that has been closed
+    in Asana, with a Project type of Micro (BAU), Roadmap or XCF initiative, completed from 2026-06-30 to 2026-12-31) with its
+    Asset count, regions, status and owner, for the dashboard's Assets delivered view. Assets are counted when a project
+    completes, and the counts live on the projects, not on the requests.
 The sheet and the dashboard do all the counting, so your job is only to COPY the rows exactly. Do not count, group, total,
-tidy or correct anything.
+tidy or correct anything. Do not leave out cancelled projects: the dashboard sets those aside itself.
 
 You may write ONLY to these two tabs: Glean_Regional_Raw and Glean_Assets_Raw. Never change any other tab (the tabs next to
 Glean_Regional_Raw, Glean_Regional and so on, are formulas that read it), and never change row 1 (the headers) of any tab. The one exception is the STAMP step near the end: a single cell of the Sync_Log tab.
@@ -18,22 +19,24 @@ HOW TO WORK (read this first)
 - Use only your normal Asana and Google Sheets actions, each called directly as an action. Do not use Shell, the code
   sandbox or tool wrappers (not even to look at how an action works), and do not upload files: it has been
   unreliable. Do the rules by reading and reasoning.
-- Do not touch Google Sheets at all until phase 1 is finished and READ equals EXPECTED. Writing after the first page,
-  while more pages are still to come, would put a short list in the sheet.
-- Work ONE page at a time. Straight after reading a page, write one note line per request on it (phase 1 says how) and
-  then forget the page. Build the tabs from your note lines only. Never keep a raw page around to use later: a mix-up
-  between two requests would put one request's values on another, which is worse than no values.
-- Finish the phases in order. The sheet write (phase 2) is the point of the run. If a call still fails after one
+- Do not touch Google Sheets at all until phase 1 AND phase 1B are finished and every count matches. Writing after the first
+  page, while more pages are still to come, would put a short list in the sheet.
+- Work ONE page at a time. Straight after reading a page, write one note line per request or project on it (the phases say
+  how) and then forget the page. Build the tabs from your note lines only. Never keep a raw page around to use later: a
+  mix-up between two items would put one item's values on another, which is worse than no values.
+- Finish the phases in order. The sheet write (phases 2 and 2B) is the point of the run. If a call still fails after one
   retry, stop and report which phase and why. Write nothing rather than a part-filled tab.
 - Never invent data. A stale tab is better than a half-filled one.
 
 PHASE 0 - SET UP
 - today = today's date in the Pacific/Auckland timezone, as YYYY-MM-DD, from the clock. now = the current UTC date-time.
-- The project is "XCF | Requests", Asana project gid 1215906401561993. Use the Asana "Get Project" action with
+- The requests project is "XCF | Requests", Asana project gid 1215906401561993. Use the Asana "Get Project" action with
   project_id = 1215906401561993 and opt_fields = gid,name to get task_counts. EXPECTED = task_counts.num_tasks (every
   task in the project, done or not).
+- The projects portfolio is "XCF | Projects", Asana portfolio gid 1217210785824637. It has no count to check against, so
+  phase 1B has its own rule for knowing it has read everything.
 
-PHASE 1 - READ THE PROJECT, ONE PAGE AT A TIME
+PHASE 1 - READ THE REQUESTS PROJECT, ONE PAGE AT A TIME
 Use the Asana "Get Tasks" action with project = 1215906401561993, limit = 40 and opt_fields =
 gid,name,created_at,completed_at,custom_fields.gid,custom_fields.enum_value.name,custom_fields.multi_enum_values.name,custom_fields.text_value,custom_fields.number_value
 Read page after page with the offset token from the previous page until no token comes back. This is every task in
@@ -56,25 +59,47 @@ Match each custom field by its GID, never by its name:
   a line break, replace each line break with a single space.
 - name = the task's name exactly, except a leading "[Converted to project] " is removed.
 - created_on = the first 10 characters of created_at (YYYY-MM-DD).
-Then, on the same page, write one DEL note line for every task on it, WHATEVER ITS created_at, that is DELIVERED. A task is
-delivered when ALL of these hold: its status (field 1211986892220398) is exactly Complete; its completed_at is not empty and
-its first 10 characters (the UTC date) are from 2026-06-30 to 2026-12-31 inclusive; and its project type (field 1217575429570978)
-is exactly Micro (BAU), Roadmap or XCF initiative. A task with no project type never gets a DEL line. A task can have both a
-REQ line and a DEL line.
-DEL ¦ <gid> ¦ <name> ¦ <project type> ¦ <completed_at> ¦ <asset count> ¦ <regions micro> ¦ <regions roadmap>
-- name, project type, regions micro and regions roadmap are worked out exactly as for the REQ line. Copy BOTH region fields
-  as they are: do not pick one of them for the project type.
-- completed_at = the task's completed_at exactly as Asana gives it (for example 2026-10-28T03:12:44.123Z).
+When the last page is done: READ must equal EXPECTED. If it does not, read again the pages you may have missed; if it
+still does not match, stop (STATUS = FAILED, phase 1, and say READ and EXPECTED). Check no gid has two REQ lines.
+Then write down "READ <n> = EXPECTED <n>" and the number of REQ lines.
+
+PHASE 1B - READ THE PROJECTS PORTFOLIO, ONE PAGE AT A TIME
+Use the Asana "Get Items for Portfolio" action with portfolio_gid = 1217210785824637, limit = 100 and opt_fields =
+name,gid,completed,completed_at,owner.name,current_status_update.status_type,custom_fields.gid,custom_fields.number_value,custom_fields.enum_value.name,custom_fields.multi_enum_values.name
+Keep calling with the offset token from the previous page until no token comes back. You are finished ONLY when a page
+comes back with fewer than 100 items and no token. A page with exactly 100 items means there is another page: if no
+token came with it, stop with STATUS = FAILED (phase 1B) and say so, rather than carry on with a short list. The portfolio
+holds about 490 items over five pages. Count every item you read (PREAD). If PREAD is under 300, treat it as a bad fetch:
+STATUS = FAILED (phase 1B).
+For each page, IMMEDIATELY write one progress line:
+PPAGE <page number> ¦ <items on this page> ¦ PREAD so far <running total> ¦ token <YES or NO>
+and then go through the items on that page one by one and write one note line for every item that is COMPLETED: its
+completed field is exactly true, its completed_at is not empty, the first 10 characters of completed_at (the UTC date) are
+from 2026-06-30 to 2026-12-31 inclusive, and its project type (field 1217575429570978, enum_value.name) is exactly
+Micro (BAU), Roadmap or XCF initiative. An item with no project type never gets a line. An item that is not completed never
+gets a line, whatever its Status (XCF) says. Do NOT leave a project out because it looks cancelled or dropped: copy it.
+PRJ ¦ <gid> ¦ <name> ¦ <project type> ¦ <completed_at> ¦ <asset count> ¦ <regions micro> ¦ <regions roadmap> ¦ <status xcf> ¦ <status update> ¦ <owner>
+- name = the project's name exactly as Asana gives it (do not remove any prefix, do not shorten it).
+- project type = enum_value.name of field 1217575429570978.
+- completed_at = the item's completed_at exactly as Asana gives it (for example 2026-10-28T03:12:44.123Z).
 - asset count = number_value of field 1212213385632145, as a plain number (for example 120 or 2.5). Leave it EMPTY when the
   field is empty: never turn an empty count into 0.
-When the last page is done: READ must equal EXPECTED. If it does not, read again the pages you may have missed; if it
-still does not match, stop (STATUS = FAILED, phase 1, and say READ and EXPECTED). Check no gid has two REQ lines and no gid
-has two DEL lines.
-Then write down "READ <n> = EXPECTED <n>", the number of REQ lines and the number of DEL lines. Phase 2 starts only after that
-line exists.
+- regions micro = the names in multi_enum_values of field 1213486033990545, in the order Asana gives them, joined with a
+  semicolon and a space ("; "). regions roadmap = the same for field 1212086752729219. Copy BOTH region fields as they are:
+  do not pick one of them for the project type.
+- status xcf = enum_value.name of field 1211986892220398 (leave empty when it has no value).
+- status update = current_status_update.status_type, exactly as Asana gives it (for example on_track, complete or dropped);
+  leave it empty when the project has no status update.
+- owner = owner.name, or empty when it has no owner.
+(the separator is the character ¦ with a space each side.)
+When the last page is done, check no gid has two PRJ lines. Also count how many of the items you read had a
+current_status_update with a status_type at all (SU). The dashboard sets aside projects whose last update is "dropped", so if
+SU is 0 the action did not return it: say "STATUS UPDATES NOT RETURNED" in the report (still write the tab).
+Then write down "PREAD <n>", the number of PRJ lines, and SU. Phase 2 starts only after phase 1 and phase 1B both have their
+line.
 
-PHASE 2 - WRITE
-Columns of Glean_Regional_Raw, in this order, built from the note lines only:
+PHASE 2 - WRITE THE REQUESTS TAB
+Columns of Glean_Regional_Raw, in this order, built from the REQ note lines only:
 gid | name | created_on | status | project_type | regions_roadmap | regions_micro | business_group | cost_centre
 Everything is text. Leave a cell blank rather than writing "null". Sort by created_on (oldest first), then gid.
 Safety check first: if there would be fewer than 200 rows, treat it as a bad fetch: write nothing and report
@@ -90,19 +115,20 @@ nothing and say so.
  c. Read the tab back: row 2, the last row, and column A. Check the first and last rows are what you wrote (dates and
     ids still text), and that the number of non-empty cells in column A is rows + 1 (the header).
 
-PHASE 2B - WRITE THE DELIVERED ASSETS (only after phase 2 is finished and its read-back passed)
-Columns of Glean_Assets_Raw, in this order, built from the DEL lines only:
-gid | name | project_type | completed_at | asset_count | regions_micro | regions_roadmap
-Everything is text: asset_count is the plain number, or blank when the DEL line has none. Leave a cell blank rather than
+PHASE 2B - WRITE THE COMPLETED PROJECTS (only after phase 2 is finished and its read-back passed)
+Columns of Glean_Assets_Raw, in this order, built from the PRJ lines only:
+gid | name | project_type | completed_at | asset_count | regions_micro | regions_roadmap | status_xcf | status_update | owner
+Everything is text: asset_count is the plain number, or blank when the PRJ line has none. Leave a cell blank rather than
 writing "null". Sort by completed_at (oldest first), then gid.
-Safety check first: if there would be fewer than 40 rows, treat it as a bad fetch: write nothing to this tab and report
+Safety check first: if there would be fewer than 60 rows, treat it as a bad fetch: write nothing to this tab and report
 STATUS = FAILED (phase 2B). Also read how many rows the tab holds now; if it would drop to less than half of them, write
 nothing to it and say so.
  a. Write the rows with the Google Sheets values update, starting at A2, with the value input option RAW (so ids and
     timestamps stay text). If there are more than 140 rows, write them in consecutive chunks of at most 140 as in phase 2.
- b. Then clear everything below the last row you wrote: A{rows+2} to column G and row 1000. Never clear first and write second.
- c. Read the tab back: row 2, the last row, and column A. Check the first and last rows are what you wrote (completed_at and
-    ids still text), and that the number of non-empty cells in column A is rows + 1 (the header).
+ b. Then clear everything below the last row you wrote: A{rows+2} to column J and row 1000. Never clear first and write second.
+ c. Read the tab back: row 1, row 2, the last row, and column A. Check row 1 still has ten headers ending in owner, the first
+    and last rows are what you wrote (completed_at and ids still text), and that the number of non-empty cells in column A is
+    rows + 1 (the header).
 Phase 2B never changes Glean_Regional_Raw.
 
 STAMP (the last step before the report; only after EVERY read-back above has passed)
@@ -118,10 +144,11 @@ Reply with exactly these lines, then anything else that went wrong. Give every l
 write "not reached" for anything you did not get to. A short report that leaves lines out hides what went wrong.
 STATUS: COMPLETE or FAILED (phase, reason)
 Date used (Auckland), and now.
-Tasks read (READ) and EXPECTED; pages read (and how many tasks on each page); REQ note lines written; DEL note lines written.
+Requests: tasks read (READ) and EXPECTED; pages read (and how many tasks on each page); REQ note lines written.
+Projects: items read (PREAD); pages read (and how many items on each page); PRJ note lines written; SU (items with a status update).
 Rows written to Glean_Regional_Raw, and whether the read-back passed (first row, last row, count).
 Rows written to Glean_Assets_Raw, and whether the read-back passed (first row, last row, count); how many of those rows have
-no asset count (just to report).
-How many rows have status Cancelled, and how many have no project type (just to report; do not change them).
+no asset count, how many have Status (XCF) Cancelled or status update dropped (just to report).
+How many request rows have status Cancelled, and how many have no project type (just to report; do not change them).
 Anything skipped or failed.
 Stamp: the time you wrote to Sync_Log (regional_at), or "not stamped" and why.

@@ -36,10 +36,11 @@ test('reading the reply: ragged rows, quoted tab names and empty rows', () => {
   assert.equal(SheetAdapter.tabNameOf('Tasks'), 'Tasks');
 });
 
-test('no more than twenty tabs, the most the platform allows; the four Regional tabs are gone and Assets is in', () => {
+test('no more than twenty tabs, the most the platform allows; the four Regional tabs are gone and Assets and its adjustments are in', () => {
   assert.ok(SheetAdapter.TABS.length <= 20, 'the platform allows at most 20');
   assert.equal(new Set(SheetAdapter.TABS).size, SheetAdapter.TABS.length);
   assert.ok(SheetAdapter.TABS.includes('Assets'));
+  assert.ok(SheetAdapter.TABS.includes('Assets_Adjustments'));
   ['Regional', 'Regional_Panels', 'Regional_Unrecognised', 'Regional_Meta'].forEach((t) => assert.ok(!SheetAdapter.TABS.includes(t), t + ' is not read any more'));
 });
 
@@ -166,19 +167,37 @@ test('PM updates: weeks newest first, with the executive summary rendered when o
   assert.equal(d.PM_UPDATES_DATA[1].messages[0].text, 'earlier');
 });
 
-test('assets: the delivered-requests tab becomes rows the page can count; empty cells are null, lists split', () => {
+test('assets: the completed-projects tab becomes rows the page can count; empty cells are null, lists split', () => {
   const d = datasets({
     People: [PEOPLE],
-    Assets: [['gid', 'name', 'project_type', 'completed_at', 'asset_count', 'regions_micro', 'regions_roadmap'],
-      ['1', 'Asset resizing for third parties', 'Micro (BAU)', '2026-10-28T03:00:00.000Z', '120', 'UK', ''],
-      ['2', 'Roadmap thing', 'Roadmap', '2026-11-06T03:00:00.000Z', '', '', 'NZ; UK'],
-      ['', 'a row with no gid is dropped', 'Roadmap', '2026-11-06T03:00:00.000Z', '5', '', '']],
+    Assets: [['gid', 'name', 'project_type', 'completed_at', 'asset_count', 'regions_micro', 'regions_roadmap', 'status_xcf', 'status_update', 'owner'],
+      ['1', 'XCF-1 | Asset resizing for third parties', 'Micro (BAU)', '2026-10-28T03:00:00.000Z', '120', 'UK', '', 'Complete', 'complete', 'Pat'],
+      ['2', 'XCFP-2 | Roadmap thing', 'Roadmap', '2026-11-06T03:00:00.000Z', '', '', 'NZ; UK', 'Cancelled', 'dropped', ''],
+      ['', 'a row with no gid is dropped', 'Roadmap', '2026-11-06T03:00:00.000Z', '5', '', '', '', '', '']],
   });
   assert.deepEqual(d.ASSETS_DATA, [
-    { gid: '1', name: 'Asset resizing for third parties', type: 'Micro (BAU)', completedAt: '2026-10-28T03:00:00.000Z', assets: 120, regMicro: ['UK'], regRoadmap: [] },
-    { gid: '2', name: 'Roadmap thing', type: 'Roadmap', completedAt: '2026-11-06T03:00:00.000Z', assets: null, regMicro: [], regRoadmap: ['NZ', 'UK'] },
+    { gid: '1', name: 'XCF-1 | Asset resizing for third parties', type: 'Micro (BAU)', completedAt: '2026-10-28T03:00:00.000Z', assets: 120, regMicro: ['UK'], regRoadmap: [], status: 'Complete', update: 'complete', owner: 'Pat' },
+    { gid: '2', name: 'XCFP-2 | Roadmap thing', type: 'Roadmap', completedAt: '2026-11-06T03:00:00.000Z', assets: null, regMicro: [], regRoadmap: ['NZ', 'UK'], status: 'Cancelled', update: 'dropped', owner: '' },
   ]);
   assert.deepEqual(datasets({ People: [PEOPLE] }).ASSETS_DATA, [], 'no Assets tab: an empty list, not an error');
+});
+
+test('assets: the adjustments tab becomes lines the maths can apply; a line with no match is dropped', () => {
+  const d = datasets({
+    People: [PEOPLE],
+    Assets_Adjustments: [['match', 'action', 'asset_count', 'reason'],
+      ['XCFP-386', 'ignore_missing', '', 'Finished before asset counts began'],
+      ['XCFP-887', 'set_count', '10', 'Delivery sheet'],
+      ['', 'exclude', '', 'no match: dropped']],
+  });
+  assert.deepEqual(d.ASSETS_ADJUSTMENTS, [
+    { match: 'XCFP-386', action: 'ignore_missing', asset_count: null, reason: 'Finished before asset counts began' },
+    { match: 'XCFP-887', action: 'set_count', asset_count: '10', reason: 'Delivery sheet' },
+  ]);
+  const AM = require('../src/assetsMath');
+  const s = AM.summarise([{ gid: '9', name: 'XCFP-887 | x', type: 'Roadmap', completedAt: '2026-11-06T03:00:00.000Z', assets: null, regMicro: [], regRoadmap: [] }], d.ASSETS_ADJUSTMENTS);
+  assert.equal(s.views.overall.assets, 10, 'the sheet text "10" is read as the number 10');
+  assert.deepEqual(datasets({ People: [PEOPLE] }).ASSETS_ADJUSTMENTS, [], 'no tab: no adjustments');
 });
 
 test('the sync log says how fresh the sheet is', () => {
@@ -195,7 +214,7 @@ test('the page reads the Glean_ copies of the agent tabs and still calls them by
   assert.equal(new Set(SheetAdapter.RANGES).size, SheetAdapter.RANGES.length);
   assert.equal(SheetAdapter.RANGES[SheetAdapter.TABS.indexOf('Tasks')], 'Glean_Tasks');
   assert.equal(SheetAdapter.RANGES[SheetAdapter.TABS.indexOf('Assets')], 'Glean_Assets_Raw');
-  ['People', 'OOO_Manual', 'Notes', 'Sync_Log'].forEach((t) => assert.equal(SheetAdapter.RANGES[SheetAdapter.TABS.indexOf(t)], t));
+  ['People', 'OOO_Manual', 'Notes', 'Assets_Adjustments', 'Sync_Log'].forEach((t) => assert.equal(SheetAdapter.RANGES[SheetAdapter.TABS.indexOf(t)], t));
   const tabs = SheetAdapter.parseSheetResponse({
     ranges: SheetAdapter.RANGES.map((name, i) => ({ range: `'${name}'!A1:B2`, values: [['k'], [name]] })),
   });

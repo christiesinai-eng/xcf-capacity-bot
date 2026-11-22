@@ -6,7 +6,7 @@ const { saveData } = require('./sheetSync');
 const { buildPMUpdatesData } = require('./slackUpdates');
 const { buildRequestsData } = require('./requestTiming');
 const { buildRegionalData } = require('./regionalRequests');
-const { buildAssetsData } = require('./assetsRequests');
+const { buildAssetsData } = require('./assetsProjects');
 const { buildPlatformData } = require('./platformSpend');
 
 async function runReport() {

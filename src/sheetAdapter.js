@@ -17,7 +17,7 @@
   // The tabs the page reads, in the order declared to the platform (it allows at most 20).
   const TABS = ['People', 'Tasks', 'Missing_Tasks', 'Overdue_Tasks', 'OOO', 'OOO_Manual', 'PM_Projects', 'PM_Tasks',
     'Roadmap', 'Roadmap_Subtasks', 'Scope_Creep', 'PM_Updates', 'Requests', 'Request_Comments', 'Notes',
-    'Assets', 'Sync_Log'];
+    'Assets', 'Assets_Adjustments', 'Sync_Log'];
   // The sheet tab each logical tab is read from. The Glean agents write the `Glean_` copies, so the page reads those
   // (formula tabs among them). People, OOO_Manual, Notes and Sync_Log are edited by hand and keep their names.
   // Still 20 tabs, so still within the platform's limit. RANGES is what `deploy_app` is given as `ranges`.
@@ -25,8 +25,9 @@
   ['Tasks', 'Missing_Tasks', 'Overdue_Tasks', 'OOO', 'PM_Projects', 'PM_Tasks', 'Roadmap', 'Roadmap_Subtasks', 'Scope_Creep',
     'PM_Updates', 'Requests', 'Request_Comments']
     .forEach((t) => { SOURCE_TAB[t] = 'Glean_' + t; });
-  // The delivered requests behind the Assets delivered view, copied raw by the Regional agent. (The four Regional
-  // formula tabs are no longer read: the Regional view was taken off the page, which freed their slots.)
+  // The completed projects behind the Assets delivered view, copied raw by the Regional agent. (The four Regional
+  // formula tabs are no longer read: the Regional view was taken off the page, which freed their slots.) Assets_Adjustments
+  // is edited by hand and keeps its name.
   SOURCE_TAB.Assets = 'Glean_Assets_Raw';
   const RANGES = TABS.map((t) => SOURCE_TAB[t] || t);
   const LOGICAL = {};
@@ -298,17 +299,22 @@
     // page and its tabs are no longer read, so this is an empty shape; kept so the page's dormant view still loads.)
     const REGIONAL_DATA = buildRegional(tabs);
 
-    // Delivered requests, raw: the page counts them with AssetsMath, the same code the build uses.
+    // Completed projects, raw: the page counts them with AssetsMath, the same code the build uses.
     const ASSETS_DATA = (tabs.Assets || []).map((r) => ({
       gid: str(r.gid), name: str(r.name), type: str(r.project_type), completedAt: str(r.completed_at),
       assets: num(r.asset_count), regMicro: list(r.regions_micro), regRoadmap: list(r.regions_roadmap),
+      status: str(r.status_xcf), update: str(r.status_update), owner: str(r.owner),
     })).filter((r) => r.gid);
+    // The hand-kept adjustments (match, action, asset_count, reason); assetsMath.js decides what each one does.
+    const ASSETS_ADJUSTMENTS = (tabs.Assets_Adjustments || []).map((r) => ({
+      match: str(r.match), action: str(r.action), asset_count: nul(r.asset_count), reason: str(r.reason),
+    })).filter((r) => r.match.trim());
 
     // How fresh the sheet says it is (written by the build sync into Sync_Log).
     const sync = syncInfo(log, opts.nowMs);
 
     return {
-      MEMBERS, MISSING_TASKS, OVERDUE_TASKS, PM_DATA, SCOPE_CREEP_DATA, OOO_DATA: ooo, PM_UPDATES_DATA, RT_RAW_TASKS, REQUESTS_DATA, REGIONAL_DATA, ASSETS_DATA,
+      MEMBERS, MISSING_TASKS, OVERDUE_TASKS, PM_DATA, SCOPE_CREEP_DATA, OOO_DATA: ooo, PM_UPDATES_DATA, RT_RAW_TASKS, REQUESTS_DATA, REGIONAL_DATA, ASSETS_DATA, ASSETS_ADJUSTMENTS,
       GENERATED_AT: sync.generatedAt, windows: win, sync,
     };
   }

@@ -1,0 +1,74 @@
+[
+  {
+    "match": "XCF-9725",
+    "action": "exclude",
+    "asset_count": null,
+    "reason": "No assets were created"
+  },
+  {
+    "match": "XCF-1373",
+    "action": "ignore_missing",
+    "asset_count": null,
+    "reason": "Old: before asset counts started mid-September 2026"
+  },
+  {
+    "match": "XCFP-820",
+    "action": "ignore_missing",
+    "asset_count": null,
+    "reason": "Old: before asset counts started mid-September 2026"
+  },
+  {
+    "match": "XCFP-491",
+    "action": "ignore_missing",
+    "asset_count": null,
+    "reason": "Old: before asset counts started mid-September 2026"
+  },
+  {
+    "match": "XCFP-879",
+    "action": "ignore_missing",
+    "asset_count": null,
+    "reason": "Old: before asset counts started mid-September 2026"
+  },
+  {
+    "match": "XCFT-7425",
+    "action": "ignore_missing",
+    "asset_count": null,
+    "reason": "Old: before asset counts started mid-September 2026"
+  },
+  {
+    "match": "XCFP-386",
+    "action": "ignore_missing",
+    "asset_count": null,
+    "reason": "Old: before asset counts started mid-September 2026"
+  },
+  {
+    "match": "XCFP-389",
+    "action": "ignore_missing",
+    "asset_count": null,
+    "reason": "Old: before asset counts started mid-September 2026"
+  },
+  {
+    "match": "UK Next Gen Payroll: Mid-tier beta",
+    "action": "ignore_missing",
+    "asset_count": null,
+    "reason": "Old: before asset counts started mid-September 2026"
+  },
+  {
+    "asset_count": null,
+    "match": "XCFT-5772",
+    "action": "exclude",
+    "reason": "No assets created: a creative overview only"
+  },
+  {
+    "asset_count": null,
+    "match": "XCFT-1195",
+    "action": "ignore_missing",
+    "reason": "Old: before asset counts started mid-September 2026"
+  },
+  {
+    "asset_count": null,
+    "match": "XCFT-2161",
+    "action": "ignore_missing",
+    "reason": "Old: before asset counts started mid-September 2026"
+  }
+]

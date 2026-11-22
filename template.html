@@ -1135,6 +1135,7 @@ const BAU_DATA=[];
 const REQUESTS_DATA=[];
 const REGIONAL_DATA=[];
 const ASSETS_DATA=[];
+const ASSETS_ADJUSTMENTS=[];
 const PLATFORM_DATA=[];
 
 /* ── DATA FROM THE GOOGLE SHEET ──
@@ -1147,7 +1148,7 @@ const WIN=CapacityMath.windows(NZ_TODAY);   // week = next 5 working days, month
   const swap=(arr,rows)=>{arr.length=0;rows.forEach(x=>arr.push(x));};
   swap(MEMBERS,S.MEMBERS); swap(MISSING_TASKS,S.MISSING_TASKS); swap(OVERDUE_TASKS,S.OVERDUE_TASKS);
   swap(PM_DATA,S.PM_DATA); swap(SCOPE_CREEP_DATA,S.SCOPE_CREEP_DATA); swap(OOO_DATA,S.OOO_DATA);
-  swap(PM_UPDATES_DATA,S.PM_UPDATES_DATA); swap(REQUESTS_DATA,S.REQUESTS_DATA); swap(ASSETS_DATA,S.ASSETS_DATA||[]);
+  swap(PM_UPDATES_DATA,S.PM_UPDATES_DATA); swap(REQUESTS_DATA,S.REQUESTS_DATA); swap(ASSETS_DATA,S.ASSETS_DATA||[]); swap(ASSETS_ADJUSTMENTS,S.ASSETS_ADJUSTMENTS||[]);
   Object.keys(REGIONAL_DATA).forEach(k=>{delete REGIONAL_DATA[k];}); Object.assign(REGIONAL_DATA,S.REGIONAL_DATA);
 })();
 const GEN_AT=(window.__SHEET__&&window.__SHEET__.GENERATED_AT)||GENERATED_AT;

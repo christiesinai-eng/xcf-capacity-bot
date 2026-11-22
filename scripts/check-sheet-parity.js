@@ -71,5 +71,10 @@ compare('RT_RAW_TASKS', got.RT_RAW_TASKS, expected.RT_RAW_TASKS);
 compare('REQUESTS_DATA', got.REQUESTS_DATA, expected.REQUESTS_DATA);
 // REGIONAL_DATA is no longer read from the sheet (the Regional view left the page, which freed four tab slots for Assets).
 compare('ASSETS_DATA', got.ASSETS_DATA, expected.ASSETS_DATA);
+// The adjustments are numbers in the config file and text in the sheet, so compare what the maths makes of them.
+{
+  const AM = require('../src/assetsMath');
+  compare('ASSETS_SUMMARY (data + adjustments)', AM.summarise(got.ASSETS_DATA, got.ASSETS_ADJUSTMENTS), AM.summarise(expected.ASSETS_DATA, expected.ASSETS_ADJUSTMENTS));
+}
 console.log(`\n${bad ? bad + ' dataset(s) differ' : 'Every dataset the page uses is identical'} (today = ${today}, ${dataFile})`);
 process.exit(bad ? 1 : 0);

@@ -166,14 +166,15 @@ const PIPELINE_TABS = [
     },
   },
   {
-    // Raw copies of the delivered requests behind the Assets delivered view: Complete, Project type Micro (BAU), Roadmap
-    // or XCF initiative, completed in FY27 Q2 or Q3. The counting (quarter, region groups, totals) is done by the page with
-    // assetsMath.js, the same code the build uses, so the tab holds no totals.
+    // Raw copies of the completed projects behind the Assets delivered view: closed in Asana, Project type Micro (BAU),
+    // Roadmap or XCF initiative, completed in FY27 Q2 or Q3 (cancelled ones included, so the page can say how many it set
+    // aside). The counting (quarter, region groups, totals, cancelled, adjustments) is done by the page with assetsMath.js,
+    // the same code the build uses, so the tab holds no totals.
     name: 'Assets',
     source: 'assetsData', // the dataset it is built from
-    columns: [['gid', S], ['name', S], ['project_type', S], ['completed_at', S], ['asset_count', N], ['regions_micro', S], ['regions_roadmap', S]],
+    columns: [['gid', S], ['name', S], ['project_type', S], ['completed_at', S], ['asset_count', N], ['regions_micro', S], ['regions_roadmap', S], ['status_xcf', S], ['status_update', S], ['owner', S]],
     key: 0,
-    rows: (d) => (d.assetsData || []).map((r) => [r.gid, r.name, r.type, r.completedAt, r.assets, list(r.regMicro), list(r.regRoadmap)]),
+    rows: (d) => (d.assetsData || []).map((r) => [r.gid, r.name, r.type, r.completedAt, r.assets, list(r.regMicro), list(r.regRoadmap), r.status, r.update, r.owner]),
   },
 ];
 
