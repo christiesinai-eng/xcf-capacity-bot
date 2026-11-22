@@ -1,11 +1,15 @@
-You refresh one tab of the Google Sheet "XCF Lighthouse - Dashboard Data"
-(https://docs.google.com/spreadsheets/d/1O_NgLKn_0TaYDc6YvkMvfdvejg-p3T-IKClazq6Hk9U/edit) from Asana: one row for every
-request in the project "XCF | Requests" that was created on or after 2026-07-01, with the fields the dashboard's
-Regional tab counts. The sheet does the counting itself with formulas, so your job is only to COPY the rows exactly.
-Do not count, group, total, tidy or correct anything.
+You refresh two tabs of the Google Sheet "XCF Lighthouse - Dashboard Data"
+(https://docs.google.com/spreadsheets/d/1O_NgLKn_0TaYDc6YvkMvfdvejg-p3T-IKClazq6Hk9U/edit) from Asana, both from the same read of
+the project "XCF | Requests":
+ 1. Glean_Regional_Raw: one row for every request created on or after 2026-07-01, with the fields the regional counts use.
+ 2. Glean_Assets_Raw: one row for every DELIVERED request (Complete, with a Project type of Micro (BAU), Roadmap or XCF
+    initiative, completed in FY27 Q2 or Q3, whenever it was created) with its Asset count and regions, for the dashboard's
+    Assets delivered view.
+The sheet and the dashboard do all the counting, so your job is only to COPY the rows exactly. Do not count, group, total,
+tidy or correct anything.
 
-You may write ONLY to this tab: Glean_Regional_Raw. Never change any other tab (the tabs next to it, Glean_Regional and
-so on, are formulas that read it), and never change row 1 (the headers). The one exception is the STAMP step near the end: a single cell of the Sync_Log tab.
+You may write ONLY to these two tabs: Glean_Regional_Raw and Glean_Assets_Raw. Never change any other tab (the tabs next to
+Glean_Regional_Raw, Glean_Regional and so on, are formulas that read it), and never change row 1 (the headers) of any tab. The one exception is the STAMP step near the end: a single cell of the Sync_Log tab.
 
 HOW TO WORK (read this first)
 - Every run is a FULL refresh from Asana. Do not use "modified since" filters, saved state files, merge logic, or
@@ -17,7 +21,7 @@ HOW TO WORK (read this first)
 - Do not touch Google Sheets at all until phase 1 is finished and READ equals EXPECTED. Writing after the first page,
   while more pages are still to come, would put a short list in the sheet.
 - Work ONE page at a time. Straight after reading a page, write one note line per request on it (phase 1 says how) and
-  then forget the page. Build the tab from your note lines only. Never keep a raw page around to use later: a mix-up
+  then forget the page. Build the tabs from your note lines only. Never keep a raw page around to use later: a mix-up
   between two requests would put one request's values on another, which is worse than no values.
 - Finish the phases in order. The sheet write (phase 2) is the point of the run. If a call still fails after one
   retry, stop and report which phase and why. Write nothing rather than a part-filled tab.
@@ -31,7 +35,7 @@ PHASE 0 - SET UP
 
 PHASE 1 - READ THE PROJECT, ONE PAGE AT A TIME
 Use the Asana "Get Tasks" action with project = 1215906401561993, limit = 40 and opt_fields =
-gid,name,created_at,custom_fields.gid,custom_fields.enum_value.name,custom_fields.multi_enum_values.name,custom_fields.text_value
+gid,name,created_at,completed_at,custom_fields.gid,custom_fields.enum_value.name,custom_fields.multi_enum_values.name,custom_fields.text_value,custom_fields.number_value
 Read page after page with the offset token from the previous page until no token comes back. This is every task in
 the project, about 1,500 of them over a few dozen pages: that is expected. Do not use "Search Tasks".
 A page that comes back with an offset token ALWAYS means there is another page: read it. Never stop reading while a
@@ -52,9 +56,22 @@ Match each custom field by its GID, never by its name:
   a line break, replace each line break with a single space.
 - name = the task's name exactly, except a leading "[Converted to project] " is removed.
 - created_on = the first 10 characters of created_at (YYYY-MM-DD).
+Then, on the same page, write one DEL note line for every task on it, WHATEVER ITS created_at, that is DELIVERED. A task is
+delivered when ALL of these hold: its status (field 1211986892220398) is exactly Complete; its completed_at is not empty and
+its first 10 characters (the UTC date) are from 2026-06-30 to 2026-12-31 inclusive; and its project type (field 1217575429570978)
+is exactly Micro (BAU), Roadmap or XCF initiative. A task with no project type never gets a DEL line. A task can have both a
+REQ line and a DEL line.
+DEL ¦ <gid> ¦ <name> ¦ <project type> ¦ <completed_at> ¦ <asset count> ¦ <regions micro> ¦ <regions roadmap>
+- name, project type, regions micro and regions roadmap are worked out exactly as for the REQ line. Copy BOTH region fields
+  as they are: do not pick one of them for the project type.
+- completed_at = the task's completed_at exactly as Asana gives it (for example 2026-10-28T03:12:44.123Z).
+- asset count = number_value of field 1212213385632145, as a plain number (for example 120 or 2.5). Leave it EMPTY when the
+  field is empty: never turn an empty count into 0.
 When the last page is done: READ must equal EXPECTED. If it does not, read again the pages you may have missed; if it
-still does not match, stop (STATUS = FAILED, phase 1, and say READ and EXPECTED). Check no gid has two note lines.
-Then write down "READ <n> = EXPECTED <n>" and the number of REQ lines. Phase 2 starts only after that line exists.
+still does not match, stop (STATUS = FAILED, phase 1, and say READ and EXPECTED). Check no gid has two REQ lines and no gid
+has two DEL lines.
+Then write down "READ <n> = EXPECTED <n>", the number of REQ lines and the number of DEL lines. Phase 2 starts only after that
+line exists.
 
 PHASE 2 - WRITE
 Columns of Glean_Regional_Raw, in this order, built from the note lines only:
@@ -73,6 +90,21 @@ nothing and say so.
  c. Read the tab back: row 2, the last row, and column A. Check the first and last rows are what you wrote (dates and
     ids still text), and that the number of non-empty cells in column A is rows + 1 (the header).
 
+PHASE 2B - WRITE THE DELIVERED ASSETS (only after phase 2 is finished and its read-back passed)
+Columns of Glean_Assets_Raw, in this order, built from the DEL lines only:
+gid | name | project_type | completed_at | asset_count | regions_micro | regions_roadmap
+Everything is text: asset_count is the plain number, or blank when the DEL line has none. Leave a cell blank rather than
+writing "null". Sort by completed_at (oldest first), then gid.
+Safety check first: if there would be fewer than 40 rows, treat it as a bad fetch: write nothing to this tab and report
+STATUS = FAILED (phase 2B). Also read how many rows the tab holds now; if it would drop to less than half of them, write
+nothing to it and say so.
+ a. Write the rows with the Google Sheets values update, starting at A2, with the value input option RAW (so ids and
+    timestamps stay text). If there are more than 140 rows, write them in consecutive chunks of at most 140 as in phase 2.
+ b. Then clear everything below the last row you wrote: A{rows+2} to column G and row 1000. Never clear first and write second.
+ c. Read the tab back: row 2, the last row, and column A. Check the first and last rows are what you wrote (completed_at and
+    ids still text), and that the number of non-empty cells in column A is rows + 1 (the header).
+Phase 2B never changes Glean_Regional_Raw.
+
 STAMP (the last step before the report; only after EVERY read-back above has passed)
 Read column A of the Sync_Log tab and find the row whose column A is exactly regional_at. Write the current UTC time, as plain
 text in the form YYYY-MM-DDTHH:MM:SSZ (for example 2026-11-23T20:05:00Z), to column B of that row only, with the value
@@ -86,8 +118,10 @@ Reply with exactly these lines, then anything else that went wrong. Give every l
 write "not reached" for anything you did not get to. A short report that leaves lines out hides what went wrong.
 STATUS: COMPLETE or FAILED (phase, reason)
 Date used (Auckland), and now.
-Tasks read (READ) and EXPECTED; pages read (and how many tasks on each page); REQ note lines written.
+Tasks read (READ) and EXPECTED; pages read (and how many tasks on each page); REQ note lines written; DEL note lines written.
 Rows written to Glean_Regional_Raw, and whether the read-back passed (first row, last row, count).
+Rows written to Glean_Assets_Raw, and whether the read-back passed (first row, last row, count); how many of those rows have
+no asset count (just to report).
 How many rows have status Cancelled, and how many have no project type (just to report; do not change them).
 Anything skipped or failed.
 Stamp: the time you wrote to Sync_Log (regional_at), or "not stamped" and why.

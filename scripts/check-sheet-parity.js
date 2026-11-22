@@ -69,6 +69,7 @@ compare('OOO_DATA', got.OOO_DATA, expected.OOO_DATA, { unordered: true });
 compare('PM_UPDATES_DATA', got.PM_UPDATES_DATA, expected.PM_UPDATES_DATA);
 compare('RT_RAW_TASKS', got.RT_RAW_TASKS, expected.RT_RAW_TASKS);
 compare('REQUESTS_DATA', got.REQUESTS_DATA, expected.REQUESTS_DATA);
-compare('REGIONAL_DATA', got.REGIONAL_DATA, expected.REGIONAL_DATA);
+// REGIONAL_DATA is no longer read from the sheet (the Regional view left the page, which freed four tab slots for Assets).
+compare('ASSETS_DATA', got.ASSETS_DATA, expected.ASSETS_DATA);
 console.log(`\n${bad ? bad + ' dataset(s) differ' : 'Every dataset the page uses is identical'} (today = ${today}, ${dataFile})`);
 process.exit(bad ? 1 : 0);

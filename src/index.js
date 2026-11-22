@@ -6,13 +6,14 @@ const { saveData } = require('./sheetSync');
 const { buildPMUpdatesData } = require('./slackUpdates');
 const { buildRequestsData } = require('./requestTiming');
 const { buildRegionalData } = require('./regionalRequests');
+const { buildAssetsData } = require('./assetsRequests');
 const { buildPlatformData } = require('./platformSpend');
 
 async function runReport() {
   console.log(`[${new Date().toISOString()}] Running XCF capacity report...`);
   const failures = []; // datasets that could not be built; the sheet sync keeps their last good rows
 
-  const [capacityData, pmData, scopeCreepData, oooData, roadmapData, bauData, pmUpdatesData, requestsData, regionalData] = await Promise.all([
+  const [capacityData, pmData, scopeCreepData, oooData, roadmapData, bauData, pmUpdatesData, requestsData, regionalData, assetsData] = await Promise.all([
     buildMemberData(),
     buildPMData(),
     buildScopeCreepData(),
@@ -30,6 +31,11 @@ async function runReport() {
       failures.push('regionalData');
       return null;
     }),
+    buildAssetsData().catch((err) => {
+      console.warn('[Assets] builder failed, view will be empty:', err.message);
+      failures.push('assetsData');
+      return null;
+    }),
   ]);
 
   // Platform spend and usage: read from platform-spend-data.json (a copy of the Google Sheet), so no network call
@@ -40,7 +46,7 @@ async function runReport() {
     console.warn('[Platform] builder failed, tab will be empty:', err.message);
   }
 
-  const report = { ...capacityData, pmData, scopeCreepData, oooData, pmUpdatesData, roadmapData, bauData, requestsData, regionalData, platformData };
+  const report = { ...capacityData, pmData, scopeCreepData, oooData, pmUpdatesData, roadmapData, bauData, requestsData, regionalData, assetsData, platformData };
   saveReport(report);
   // The same datasets, kept so the Google Sheet sync can run without asking Asana again.
   console.log(`Data saved: ${saveData({ ...report, failures })}`);

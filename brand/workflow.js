@@ -207,17 +207,59 @@
       if (cur && $('#k5')) { var uu = usageShare(cur); mount($('#k5'), 84, 12, { v: [uu.high], t: Math.max(uu.total, 1), g: 0 }, ['var(--mint)'], '', uu.high + ' of ' + uu.total + ' tools used daily'); }
     }
 
-    /* Assets delivered: copied from the mockup with its sample numbers (the report has no asset data yet) */
-    var ASSETS = [['US', 96, 'var(--data1)'], ['UK', 64, 'var(--xero-blue)'], ['ANZ', 52, 'var(--mint)'], ['IM', 36, 'var(--purple)']];
+    /* Assets delivered: real numbers. The request data holds the delivered requests (Complete, Micro BAU / Roadmap / XCF
+       initiative, completed in FY27 Q2 or Q3) with their Asset count, and AssetsMath, the same code the build uses, does the
+       counting. Overall is Q2 plus Q3; the buttons flip to one quarter. */
+    var AM = window.AssetsMath;
+    var ASUM = AM.summarise(typeof ASSETS_DATA !== 'undefined' ? ASSETS_DATA : []);
+    var A_COL = { 'US': 'var(--data1)', 'UK': 'var(--xero-blue)', 'ANZ': 'var(--mint)', 'IM': 'var(--purple)', 'Global': 'var(--gold)', 'No region': 'var(--muted)' };
+    function assetsSpan(v) { return v.key === 'overall' ? 'across ' + AM.QUARTERS.map(function (q) { return q.key; }).join(' and ') : 'in ' + v.label; }
+    function assetsLine(v) {
+      if (!v.assets) return 'No assets delivered ' + assetsSpan(v) + ' yet.' + (v.requests ? ' ' + v.requests + (v.requests === 1 ? ' request was' : ' requests were') + ' delivered without an asset count.' : '');
+      var lead = v.assets + (v.assets === 1 ? ' asset' : ' assets') + ' delivered ' + assetsSpan(v) + '. ';
+      if (v.top.group === 'Global') return lead + 'Global-tagged work is the largest share, at ' + v.top.share + '% of the total.';
+      if (v.top.group === 'No region') return lead + 'Work with no region is the largest share, at ' + v.top.share + '% of the total.';
+      return lead + (v.top.group === 'UK' || v.top.group === 'US' ? 'The ' : '') + v.top.label + ' delivers the most, at ' + v.top.share + '% of the total.';
+    }
+    function assetsNote(v, groupSum) {
+      var bits = [];
+      if (v.noCount) bits.push(v.noCount + ' of the ' + v.requests + ' delivered requests have no asset count, so they add no assets.');
+      if (groupSum > v.assets) bits.push('A request tagged to several regions counts in each, so the regions can add up to more than the total.');
+      return bits.join(' ');
+    }
     function renderAssets() {
-      var tot = ASSETS.reduce(function (a, r) { return a + r[1]; }, 0);
-      put('assets', head('Assets delivered this quarter (WIP)', '248 assets so far in FY27 Q3. The US delivers the most, at 38.7% of the total.', chip('WIP coming soon', 'grey')) +
-        '<div class="assets"><div class="panel" style="align-items:center;justify-content:center"><h4>Global</h4><div class="ringwrap" id="assetRing"></div></div><div class="rtiles" id="assetTiles"></div></div><div class="cardfoot">' + seeMore('assets') + '</div>');
-      mount($('#assetRing'), 150, 22, { v: ASSETS.map(function (r) { return r[1]; }), t: tot, g: 4 }, ASSETS.map(function (r) { return r[2]; }), '<span class="num" style="font-size:44px">' + tot + '</span><span class="t-small">assets</span>', 'Assets delivered by region');
-      $('#assetTiles').innerHTML = ASSETS.map(function (r) {
-        var p = (r[1] / tot * 100).toFixed(1);
-        return '<div class="rtile"><h4><i class="dot" style="background:' + r[2] + '"></i>' + r[0] + '</h4><span class="num">' + r[1] + '</span><span class="t-small">' + p + '% of global</span><span class="bar"><i style="width:' + p + '%;background:' + r[2] + '"></i></span></div>';
-      }).join('');
+      var order = ASUM.order, G = AM.GROUPS;
+      put('assets', head('Assets delivered (WIP)', '<span id="assetSub"></span>',
+        '<div class="seg" id="assetRange" role="group" aria-label="Period">' + order.map(function (k, i) { return '<button type="button" aria-pressed="' + (i === 0) + '" data-r="' + esc(k) + '">' + esc(ASUM.views[k].label) + '</button>'; }).join('') + '</div>') +
+        '<p class="t-small" style="margin:0 0 14px">This report summarises assets from Micro BAU requests, Roadmap and XCF initiatives.</p>' +
+        '<div class="assets"><div class="panel" style="align-items:center;justify-content:center"><h4>All regions</h4><div class="ringwrap" id="assetRing"></div></div><div class="rtiles" id="assetTiles"></div></div>' +
+        '<p class="t-small cf" id="assetNote"></p><div class="cardfoot">' + seeMore('assets') + '</div>');
+      function valsFor(k) {
+        var by = {}; ASUM.views[k].groups.forEach(function (x) { by[x.group] = x; });
+        return G.map(function (g) { return by[g] ? by[g].assets : 0; });
+      }
+      var first = valsFor(order[0]);
+      var api = mount($('#assetRing'), 150, 22, { v: first, t: first.reduce(function (a, b) { return a + b; }, 0) || 1, g: 4 }, G.map(function (g) { return A_COL[g]; }), '', 'Assets delivered by region');
+      function paint(k) {
+        var v = ASUM.views[k];
+        var vals = valsFor(k);
+        var sum = vals.reduce(function (a, b) { return a + b; }, 0);
+        $('#assetSub').textContent = assetsLine(v);
+        api.set(vals, sum || 1, 4);
+        $('#assetRing .ringc').innerHTML = '<span class="num" style="font-size:44px">' + v.assets + '</span><span class="t-small">assets</span>';
+        $('#assetTiles').innerHTML = v.groups.length ? v.groups.map(function (r) {
+          var col = A_COL[r.group];
+          return '<div class="rtile"><h4><i class="dot" style="background:' + col + '"></i>' + esc(r.label) + '</h4><span class="num">' + r.assets + '</span><span class="t-small">' + r.share + '% of the total</span><span class="t-small">' + r.requests + (r.requests === 1 ? ' request' : ' requests') + '</span><span class="bar"><i style="width:' + Math.min(r.share, 100) + '%;background:' + col + '"></i></span></div>';
+        }).join('') : '<div class="rtile"><span class="t-small">Nothing delivered in this period yet.</span></div>';
+        $('#assetNote').textContent = assetsNote(v, sum);
+      }
+      paint(order[0]);
+      $$('#assetRange button').forEach(function (b) {
+        b.addEventListener('click', function () {
+          $$('#assetRange button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+          paint(b.dataset.r);
+        });
+      });
     }
 
     /* ═════════════ People and capacity ═════════════ */
@@ -801,17 +843,43 @@
         sec('Tool by tool', table(['Platform', 'Usage', 'Change' + (pn ? ' vs ' + esc(pn) : ''), 'Annual cost', 'How usage is checked'], rows), 'Only platforms counted in the total are included.') + orig('spend') };
     };
 
-    /* the two work-in-progress cards: the mockup's own sample numbers, shown as sample */
+    /* Assets delivered, in full: by region and quarter, by project type, the biggest deliveries, and how it is counted. */
     DET.assets = function () {
-      var R = [['US', 61, 35, 'var(--data1)'], ['UK', 40, 24, 'var(--xero-blue)'], ['ANZ', 33, 19, 'var(--mint)'], ['IM', 22, 14, 'var(--purple)']];
-      var rows = R.map(function (r) { var t = r[1] + r[2]; return row(['<b>' + r[0] + '</b>', r[1], r[2], '<b>' + t + '</b>', (t / 248 * 100).toFixed(1) + '%']); });
-      rows.push(row(['<b>Global</b>', '156', '92', '<b>248</b>', '100%']));
-      var bars = R.map(function (r) { var t = r[1] + r[2]; return '<li><span><b>' + r[0] + '</b></span><span class="stack" style="height:14px"><i style="flex:' + r[1] + ';background:' + r[3] + '"></i><i style="flex:' + r[2] + ';background:' + r[3] + ';opacity:.5"></i></span><b>' + t + '</b></li>'; }).join('');
-      return { t: 'Assets delivered this quarter (WIP)', s: 'FY27 Q3 so far, globally and by region. These are sample numbers.', h:
-        stats([['248', 'Global', 'var(--ink)'], ['96', 'US', 'var(--blue-ink)'], ['64', 'UK', 'var(--blue-ink)'], ['52', 'ANZ', 'var(--mint-ink)'], ['36', 'IM', 'var(--purple-ink)']]) +
-        sec('By region and month', table(['Region', 'Oct', 'Nov so far', 'Total', 'Share of global'], rows)) +
-        sec('Mix by month', '<ul class="hb">' + bars + '</ul><p class="note2">Solid is October, lighter is November so far.</p>') };
+      var G = AM.GROUPS, Q = AM.QUARTERS.map(function (q) { return q.key; }), vO = ASUM.views.overall;
+      function grp(v, name) { return v.groups.filter(function (x) { return x.group === name; })[0] || { assets: 0, requests: 0, share: 0 }; }
+      var present = G.filter(function (name) { var x = grp(vO, name); return x.requests > 0 || x.assets > 0; });
+      var rows = present.map(function (name) {
+        return row(['<b>' + esc(AM.GROUP_LABEL[name]) + '</b>'].concat(Q.map(function (k) { return grp(ASUM.views[k], name).assets; }), ['<b>' + grp(vO, name).assets + '</b>', grp(vO, name).share + '%']));
+      });
+      rows.push(row(['<b>Total (each request once)</b>'].concat(Q.map(function (k) { return '<b>' + ASUM.views[k].assets + '</b>'; }), ['<b>' + vO.assets + '</b>', ''])));
+      var typeCell = function (v, t) { return v.types.filter(function (y) { return y.type === t; })[0] || { requests: 0, assets: 0 }; };
+      var typeRows = AM.TYPES.map(function (t) {
+        return row(['<b>' + esc(t) + '</b>'].concat(Q.map(function (k) { var x = typeCell(ASUM.views[k], t); return x.assets + ' <span class="t-small">from ' + x.requests + (x.requests === 1 ? ' request' : ' requests') + '</span>'; }),
+          ['<b>' + typeCell(vO, t).assets + '</b>']));
+      });
+      var fmtDay = function (d) { return new Date(d + 'T00:00:00Z').toLocaleDateString('en-NZ', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }); };
+      var big = AM.biggest(ASUM, 'overall', 8).map(function (r) {
+        var url = 'https://app.asana.com/1/41261904390129/project/1215906401561993/task/' + encodeURIComponent(r.gid);
+        return row(['<a href="' + url + '" target="_blank" rel="noopener">' + esc(r.name || r.gid) + '</a>', esc(r.type), fmtDay(r.date),
+          esc(r.groups.map(function (g) { return AM.GROUP_LABEL[g]; }).join(', ')), '<b>' + r.assets + '</b>']);
+      });
+      var how = [
+        'Delivered means the request’s Status (XCF) is Complete. It belongs to the quarter it was completed in, by Auckland date, whenever it was created.',
+        'Assets are the number in Asset count (XCF) on the request. A delivered request with no count adds no assets: ' + vO.noCount + ' of ' + vO.requests + ' delivered requests have none.',
+        'Only Micro (BAU), Roadmap and XCF initiative requests are counted. Older requests with no Project type are not.',
+        'Region comes from Regions (XCF) for Micro (BAU) and from Applicable Regions for Roadmap. ANZ is AU and NZ; IM is every other named region; Global-tagged and no-region work are shown on their own.',
+        'A request tagged to several regions counts in each region once, so the regions can add up to more than the total.'
+      ].map(function (t) { return '<p class="note2">' + esc(t) + '</p>'; }).join('');
+      return { t: 'Assets delivered (WIP)', s: AM.QUARTERS.map(function (q) { return q.key; }).join(' and ') + ', from Micro BAU requests, Roadmap and XCF initiatives.', h:
+        stats([[vO.assets, 'Overall', 'var(--ink)'], [ASUM.views[Q[0]].assets, Q[0], 'var(--blue-ink)'], [ASUM.views[Q[1]].assets, Q[1], 'var(--blue-ink)'],
+          [vO.requests, 'Requests delivered', 'var(--ink)'], [vO.noCount, 'Without an asset count', 'var(--gold-ink)']]) +
+        sec('By region and quarter', table(['Region'].concat(Q, ['Overall', 'Share of overall']), rows)) +
+        sec('By project type', table(['Project type'].concat(Q, ['Overall']), typeRows)) +
+        sec('Biggest deliveries', big.length ? table(['Request', 'Type', 'Delivered', 'Regions', 'Assets'], big) : '<p class="note2">No delivered request has an asset count yet.</p>',
+          'One request can be most of a period, so it is worth seeing what is behind the total.') +
+        sec('How this is counted', how) };
     };
+    /* Briefs in review is still a work-in-progress card: the mockup's own sample numbers, shown as sample */
     DET.briefs = function () {
       var rows = [['US', '4 days'], ['UK', '3 days'], ['ANZ', '3 days'], ['US', '2 days'], ['IM', '2 days'], ['UK', '1 day'], ['ANZ', '1 day'], ['US', '1 day'], ['IM', 'Today']].map(function (r, i) { return row(['<b>XCF-0000</b> Sample brief ' + (i + 1), r[0], r[1], chip('Waiting on review', 'blue')]); });
       return { t: 'Briefs in review (WIP)', s: 'Briefs that have been submitted and are waiting on a review. These are sample numbers.', h:

@@ -165,6 +165,16 @@ const PIPELINE_TABS = [
       ];
     },
   },
+  {
+    // Raw copies of the delivered requests behind the Assets delivered view: Complete, Project type Micro (BAU), Roadmap
+    // or XCF initiative, completed in FY27 Q2 or Q3. The counting (quarter, region groups, totals) is done by the page with
+    // assetsMath.js, the same code the build uses, so the tab holds no totals.
+    name: 'Assets',
+    source: 'assetsData', // the dataset it is built from
+    columns: [['gid', S], ['name', S], ['project_type', S], ['completed_at', S], ['asset_count', N], ['regions_micro', S], ['regions_roadmap', S]],
+    key: 0,
+    rows: (d) => (d.assetsData || []).map((r) => [r.gid, r.name, r.type, r.completedAt, r.assets, list(r.regMicro), list(r.regRoadmap)]),
+  },
 ];
 
 // Normalise a raw value to what the sheet will hold: text stays text, '' and null both mean "empty".

@@ -779,7 +779,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="nav-grp"><span class="nav-grp-label">Speed and spend</span>
     <a class="nav-btn" href="#cycle"><i class="dot d-mint"></i>Request cycle time</a>
     <a class="nav-btn" href="#spend"><i class="dot d-gold"></i>Platform spend and usage</a>
-    <button class="nav-btn nav-wip" type="button" data-more="regional" title="Work in progress"><i class="dot d-grey"></i>Regional Requests - WIP</button>
   </div>
   <button class="theme" id="theme-toggle" type="button">Switch to dark mode</button>
 </aside>
@@ -1135,6 +1134,7 @@ const PM_UPDATES_DATA=[];
 const BAU_DATA=[];
 const REQUESTS_DATA=[];
 const REGIONAL_DATA=[];
+const ASSETS_DATA=[];
 const PLATFORM_DATA=[];
 
 /* ── DATA FROM THE GOOGLE SHEET ──
@@ -1147,7 +1147,7 @@ const WIN=CapacityMath.windows(NZ_TODAY);   // week = next 5 working days, month
   const swap=(arr,rows)=>{arr.length=0;rows.forEach(x=>arr.push(x));};
   swap(MEMBERS,S.MEMBERS); swap(MISSING_TASKS,S.MISSING_TASKS); swap(OVERDUE_TASKS,S.OVERDUE_TASKS);
   swap(PM_DATA,S.PM_DATA); swap(SCOPE_CREEP_DATA,S.SCOPE_CREEP_DATA); swap(OOO_DATA,S.OOO_DATA);
-  swap(PM_UPDATES_DATA,S.PM_UPDATES_DATA); swap(REQUESTS_DATA,S.REQUESTS_DATA);
+  swap(PM_UPDATES_DATA,S.PM_UPDATES_DATA); swap(REQUESTS_DATA,S.REQUESTS_DATA); swap(ASSETS_DATA,S.ASSETS_DATA||[]);
   Object.keys(REGIONAL_DATA).forEach(k=>{delete REGIONAL_DATA[k];}); Object.assign(REGIONAL_DATA,S.REGIONAL_DATA);
 })();
 const GEN_AT=(window.__SHEET__&&window.__SHEET__.GENERATED_AT)||GENERATED_AT;

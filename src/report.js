@@ -83,7 +83,7 @@ function nztStamp() {
 
 // Everything the template is filled with, in the shape the page expects. Also what the Google Sheet
 // adapter has to reproduce (see scripts/check-sheet-parity.js).
-function templateDatasets({ members, missingTasks, overdueTasks, pmData, scopeCreepData, oooData, pmUpdatesData, roadmapData, bauData, requestsData, regionalData }) {
+function templateDatasets({ members, missingTasks, overdueTasks, pmData, scopeCreepData, oooData, pmUpdatesData, roadmapData, bauData, requestsData, regionalData, assetsData }) {
   return {
     MEMBERS: members,
     MISSING_TASKS: missingTasks,
@@ -104,6 +104,7 @@ function templateDatasets({ members, missingTasks, overdueTasks, pmData, scopeCr
       summaryHtml: r.summary ? mdToHtml(r.summary) : null,
     })),
     REGIONAL_DATA: regionalData || {},
+    ASSETS_DATA: assetsData || [],
   };
 }
 
@@ -131,6 +132,7 @@ function generateReport(data) {
   // Placeholder is an array literal but the payload is an object — replaceArray
   // only cares about the declaration shape it is replacing.
   html = replaceArray(html, 'REGIONAL_DATA', d.REGIONAL_DATA);
+  html = replaceArray(html, 'ASSETS_DATA', d.ASSETS_DATA);
   // Same trick: the placeholder is `const PLATFORM_DATA=[];` and the payload is an object (null = no snapshot yet).
   // Not one of the sheet's tabs: it comes from platform-spend-data.json and stays built into the page.
   html = replaceArray(html, 'PLATFORM_DATA', data.platformData || {});
@@ -143,7 +145,7 @@ function generateReport(data) {
 // The browser-side libraries, in load order: arithmetic, markdown, the sheet adapter, then the loader that uses them.
 function sheetLibs() {
   const read = (f) => fs.readFileSync(path.join(__dirname, f), 'utf8');
-  const code = ['capacityMath.js', 'markdown.js', 'sheetAdapter.js', 'sheetLoader.js'].map(read).join('\n');
+  const code = ['capacityMath.js', 'markdown.js', 'assetsMath.js', 'sheetAdapter.js', 'sheetLoader.js'].map(read).join('\n');
   if (/<\/script/i.test(code)) throw new Error('a browser library contains </script>, which would end the inline script early');
   return code;
 }

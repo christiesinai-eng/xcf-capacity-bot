@@ -36,9 +36,11 @@ test('reading the reply: ragged rows, quoted tab names and empty rows', () => {
   assert.equal(SheetAdapter.tabNameOf('Tasks'), 'Tasks');
 });
 
-test('twenty tabs, the most the platform allows', () => {
-  assert.equal(SheetAdapter.TABS.length, 20);
-  assert.equal(new Set(SheetAdapter.TABS).size, 20);
+test('no more than twenty tabs, the most the platform allows; the four Regional tabs are gone and Assets is in', () => {
+  assert.ok(SheetAdapter.TABS.length <= 20, 'the platform allows at most 20');
+  assert.equal(new Set(SheetAdapter.TABS).size, SheetAdapter.TABS.length);
+  assert.ok(SheetAdapter.TABS.includes('Assets'));
+  ['Regional', 'Regional_Panels', 'Regional_Unrecognised', 'Regional_Meta'].forEach((t) => assert.ok(!SheetAdapter.TABS.includes(t), t + ' is not read any more'));
 });
 
 test('hours are worked out from the dates and estimate, for today, the next 5 working days and the month', () => {
@@ -164,21 +166,19 @@ test('PM updates: weeks newest first, with the executive summary rendered when o
   assert.equal(d.PM_UPDATES_DATA[1].messages[0].text, 'earlier');
 });
 
-test('regional: shares are worked out from the counts and the panel total', () => {
+test('assets: the delivered-requests tab becomes rows the page can count; empty cells are null, lists split', () => {
   const d = datasets({
     People: [PEOPLE],
-    Regional_Panels: [['request_type', 'dimension', 'source_field', 'quarter', 'total', 'with_value', 'missing', 'requests', 'not_captured'], ['Micro (BAU)', 'Region', 'Regions (XCF)', 'FY27 Q3', 85, 65, 0, 65, false]],
-    Regional: [['request_type', 'dimension', 'source_field', 'quarter', 'label', 'count'], ['Micro (BAU)', 'Region', 'Regions (XCF)', 'FY27 Q3', 'Global', 19], ['Micro (BAU)', 'Region', 'Regions (XCF)', 'FY27 Q3', 'UK', 16]],
-    Regional_Meta: [['group', 'key', 'value', 'pct'], ['quarter', 'FY27 Q3', '', ''], ['type_completion', '2026-10', 71, 97], ['by_quarter', 'FY27 Q3', 71, ''], ['total', 'totalInWindow', 509, '']],
-    Regional_Unrecognised: [['gid', 'name', 'raw_value', 'quarter', 'request_type', 'url'], ['5', 'XCF-2', 'Global education', 'FY27 Q3', 'Micro (BAU)', 'u']],
+    Assets: [['gid', 'name', 'project_type', 'completed_at', 'asset_count', 'regions_micro', 'regions_roadmap'],
+      ['1', 'Asset resizing for third parties', 'Micro (BAU)', '2026-10-28T03:00:00.000Z', '120', 'UK', ''],
+      ['2', 'Roadmap thing', 'Roadmap', '2026-11-06T03:00:00.000Z', '', '', 'NZ; UK'],
+      ['', 'a row with no gid is dropped', 'Roadmap', '2026-11-06T03:00:00.000Z', '5', '', '']],
   });
-  const g = d.REGIONAL_DATA;
-  assert.deepEqual(g.quarters, ['FY27 Q3']);
-  assert.deepEqual(g.sections[0].panels[0].rows, [{ label: 'Global', count: 19, pct: 22.4 }, { label: 'UK', count: 16, pct: 18.8 }]);
-  assert.equal(g.sections[0].panels[0].total, 85);
-  assert.equal(g.meta.totalInWindow, 509);
-  assert.deepEqual(g.meta.typeCompletion, [{ month: '2026-10', n: 71, pct: 97 }]);
-  assert.equal(g.unrecognised[0].raw, 'Global education');
+  assert.deepEqual(d.ASSETS_DATA, [
+    { gid: '1', name: 'Asset resizing for third parties', type: 'Micro (BAU)', completedAt: '2026-10-28T03:00:00.000Z', assets: 120, regMicro: ['UK'], regRoadmap: [] },
+    { gid: '2', name: 'Roadmap thing', type: 'Roadmap', completedAt: '2026-11-06T03:00:00.000Z', assets: null, regMicro: [], regRoadmap: ['NZ', 'UK'] },
+  ]);
+  assert.deepEqual(datasets({ People: [PEOPLE] }).ASSETS_DATA, [], 'no Assets tab: an empty list, not an error');
 });
 
 test('the sync log says how fresh the sheet is', () => {
@@ -191,10 +191,10 @@ test('the sync log says how fresh the sheet is', () => {
 });
 
 test('the page reads the Glean_ copies of the agent tabs and still calls them by their page names', () => {
-  assert.equal(SheetAdapter.RANGES.length, 20);                       // the platform allows at most 20
-  assert.equal(new Set(SheetAdapter.RANGES).size, 20);
+  assert.ok(SheetAdapter.RANGES.length <= 20);                        // the platform allows at most 20
+  assert.equal(new Set(SheetAdapter.RANGES).size, SheetAdapter.RANGES.length);
   assert.equal(SheetAdapter.RANGES[SheetAdapter.TABS.indexOf('Tasks')], 'Glean_Tasks');
-  assert.equal(SheetAdapter.RANGES[SheetAdapter.TABS.indexOf('Regional_Meta')], 'Glean_Regional_Meta');
+  assert.equal(SheetAdapter.RANGES[SheetAdapter.TABS.indexOf('Assets')], 'Glean_Assets_Raw');
   ['People', 'OOO_Manual', 'Notes', 'Sync_Log'].forEach((t) => assert.equal(SheetAdapter.RANGES[SheetAdapter.TABS.indexOf(t)], t));
   const tabs = SheetAdapter.parseSheetResponse({
     ranges: SheetAdapter.RANGES.map((name, i) => ({ range: `'${name}'!A1:B2`, values: [['k'], [name]] })),
