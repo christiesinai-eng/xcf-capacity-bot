@@ -70,5 +70,17 @@
     "match": "XCFT-2161",
     "action": "ignore_missing",
     "reason": "Old: before asset counts started mid-September 2026"
+  },
+  {
+    "match": "Sprint |",
+    "action": "ignore_missing",
+    "asset_count": null,
+    "reason": "Sprint or internal initiative: no assets are made, so no count is expected"
+  },
+  {
+    "match": "XCF Creative Development",
+    "action": "ignore_missing",
+    "asset_count": null,
+    "reason": "Sprint or internal initiative: no assets are made, so no count is expected"
   }
 ]
