@@ -11,9 +11,11 @@ HOW TO WORK (read this first)
   schedule, tools or these instructions.
 - Use only your normal Asana and Google Sheets actions. Do not use the code sandbox and do not upload files: it has
   been unreliable. Do the rules by reading and reasoning.
-- Keep your working notes small. As soon as you have read a page of tasks, keep only these fields per task: gid,
-  name, due_on, start_on, estimated minutes, parent gid, the project names with each project's gid, created_by (gid and name), status. Drop
-  everything else.
+- Work ONE member at a time, and write each member's tasks down as TASK note lines the moment you read them (phase 1
+  says how). Every TASK line starts with the member's name. Never keep a raw page around to use later, and never attach
+  a task to the member before or after the one whose Get Tasks call returned it: that mix-up has put one person's tasks
+  on another person's name (it happened on 24 Nov: nearly every row of Glean_Tasks carried the neighbouring member's name),
+  which is worse than no rows. Build every tab from the TASK lines only.
 - Finish the phases in order. The sheet write (phase 5) is the point of the run, so do not spend effort on
   anything that is not listed. If a phase cannot finish, stop and report which phase and why.
 - Never invent data. A stale tab is better than a half-filled one.
@@ -41,6 +43,11 @@ custom_fields.enum_value.name,custom_fields.display_value
 Keep calling with the offset token from the previous page until no token comes back. Do not use "Search Tasks" for
 this: it returns at most 100 results and cannot page. Skip any task that comes back with completed = true. Handle
 each task once (de-duplicate by gid). Record, for each member, how many incomplete tasks you fetched.
+After EACH page, and before you read anything for the next member, write one note line per task on it:
+TASK ¦ <member name> ¦ <gid> ¦ <name> ¦ <due_on> ¦ <start_on> ¦ <estimated minutes> ¦ <parent gid> ¦ <project names, each with its gid> ¦ <created_by gid> ¦ <created_by name> ¦ <status>
+(the separator is the character ¦ with a space each side; leave a field empty when it has no value.) <member name> is the
+member whose user gid you passed in THAT Get Tasks call: copy it from your member list for that call, never from the
+member before or after. Then forget the page. Every later phase uses the TASK lines and nothing else about tasks.
 A member whose tasks cannot be read: retry once, then stop the run (do not carry on with a member missing).
 
 PHASE 2 - RULES THAT NEED NO LOOKUPS
@@ -103,6 +110,12 @@ Apply to the tasks that survived rules 1 and 2, in order:
    overdue task leave start_date BLANK (the dashboard counts no hours for overdue tasks, and the build leaves it
    blank). Every other task keeps its start_date.
 6. Anything left goes in Glean_Tasks with overdue = FALSE.
+
+ATTRIBUTION CHECK (after phase 4 and BEFORE any write): pick three tasks that are going into Glean_Tasks: the first
+member's first task, a task of a member from the middle of the list, and the last member's last task. For each, use the Asana
+"Get Task" action with opt_fields = gid,name,assignee.name and check that assignee.name is exactly the member on that task's
+TASK line (and that its name matches). If any of the three does not match, STOP with STATUS = FAILED (attribution check)
+and write NOTHING: the tasks have been attached to the wrong people. Say which task, which member you had, and who Asana says.
 
 Exact columns. Leave a cell blank rather than writing "null". Dates are plain text YYYY-MM-DD. Ids are text.
 est_hours is a number. overdue is TRUE or FALSE.
@@ -169,6 +182,7 @@ Date used (Auckland), and now.
 Members processed (of how many capacity members).
 For each member: name - incomplete tasks fetched - rows in Glean_Tasks.
 Incomplete tasks fetched in total; tasks left after rules 1 and 2.
+Attribution check: the three tasks you checked (member, task name, gid) and whether Asana's assignee matched each one.
 Rule 4 counts: tasks that were missing / skipped by check a / b / c / d / added to Glean_Missing_Tasks.
 Parent lookups: used from cache / fetched this run / budget.
 Rows written to each of the five tabs, and for each tab whether the read-back passed (first row, last row, count).
