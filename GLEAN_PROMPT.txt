@@ -12,7 +12,7 @@ HOW TO WORK (read this first)
 - Use only your normal Asana and Google Sheets actions. Do not use the code sandbox and do not upload files: it has
   been unreliable. Do the rules by reading and reasoning.
 - Keep your working notes small. As soon as you have read a page of tasks, keep only these fields per task: gid,
-  name, due_on, start_on, estimated minutes, parent gid, the project names, created_by (gid and name), status. Drop
+  name, due_on, start_on, estimated minutes, parent gid, the project names with each project's gid, created_by (gid and name), status. Drop
   everything else.
 - Finish the phases in order. The sheet write (phase 5) is the point of the run, so do not spend effort on
   anything that is not listed. If a phase cannot finish, stop and report which phase and why.
@@ -106,10 +106,13 @@ Apply to the tasks that survived rules 1 and 2, in order:
 
 Exact columns. Leave a cell blank rather than writing "null". Dates are plain text YYYY-MM-DD. Ids are text.
 est_hours is a number. overdue is TRUE or FALSE.
-Glean_Tasks:         assignee | pod | task | project | start_date | due_date | est_hours | overdue
+Glean_Tasks:         assignee | pod | task | project | start_date | due_date | est_hours | overdue | task_gid | project_gid
 Glean_Missing_Tasks: task | task_gid | project | assignee | created_by | pod | missing_reason
 Glean_Overdue_Tasks: task | task_gid | project | assignee | pod | due_date
 assignee is the member's name. pod comes from People.
+On Glean_Tasks, task_gid is the task's own gid and project_gid is the gid of the project whose name you put in project (the
+same membership: memberships.project.gid next to memberships.project.name). Leave project_gid blank when project is blank.
+Both are text, copied digit for digit. The dashboard uses them to link each task and project to Asana.
 created_by (Glean_Missing_Tasks) is the creator's name, or the single character "—" when the task has no creator.
 A task whose name is empty in Asana keeps its row with an empty task cell: never skip it and never invent a name.
 Sort Glean_Tasks by assignee, then due_date, then task. Sort Glean_Missing_Tasks by assignee, then task. Sort

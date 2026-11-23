@@ -300,6 +300,8 @@ async function buildMemberData() {
 
       // Use first qualifying project as the display name
       const projectName = qualifyingProjects[0] ?? '';
+      // the same project's gid, so the capacity task list can link to it in Asana
+      const projectGid = (t.memberships || []).find(m => m.project?.name === projectName)?.project?.gid ?? '';
 
       // Subtask whose estimate rolls up to its parent — report the parent instead of the subtask
       if (!estimatedHours && parentInfo?.est) {
@@ -378,6 +380,8 @@ async function buildMemberData() {
         // Still include in the member task list so the expand panel shows it
         memberTasks.push({
           name: t.name,
+          gid: t.gid,
+          projGid: projectGid,
           due: dueDate,
           est: estimatedHours,
           proj: projectName,
@@ -394,6 +398,8 @@ async function buildMemberData() {
 
       memberTasks.push({
         name: t.name,
+        gid: t.gid,
+        projGid: projectGid,
         start: startDate,
         due: dueDate,
         est: estimatedHours,

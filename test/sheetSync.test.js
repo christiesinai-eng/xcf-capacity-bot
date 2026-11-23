@@ -148,7 +148,7 @@ test('checks formulas cover every column of every tab, by column letter', () => 
   assert.equal(f.length, PIPELINE_TABS.length + 1);
   const tasks = f.find((r) => r[0] === 'Tasks');
   assert.equal(tasks[1], "=COUNTA('Tasks'!A:A)-1");
-  assert.equal(tasks[2], '=' + 'ABCDEF'.split('').map((c) => `SUMPRODUCT(LEN('Tasks'!${c}:${c}))`).join('+'));
+  assert.equal(tasks[2], '=' + 'ABCDEFIJ'.split('').map((c) => `SUMPRODUCT(LEN('Tasks'!${c}:${c}))`).join('+'));
   assert.equal(tasks[3], "=SUM('Tasks'!G:G)");
   assert.equal(tasks[4], "=COUNTIF('Tasks'!H:H,TRUE)");
   const meta = f.find((r) => r[0] === 'Regional_Meta');
@@ -193,8 +193,8 @@ test('buildTables normalises types and leaves manual leave to the OOO_Manual tab
     roadmapData: [{ name: 'R', url: 'u', pmName: 'P', completed: false, dropped: false, regions: ['MY', 'RoAsia (ID, PH, HK)'], subtasks: [{ name: 's', start_on: null, due_on: '2026-12-01' }] }],
     requestsData: [{ gid: '1219962096154488', code: 'XCF-1', name: 'n', regions: [], comments: [{ author: 'A', at: 't', text: 'see https://canva.com/x now' }], matched: false, isRealStart: false, durationHours: null, commentCount: 1 }],
   });
-  assert.deepEqual(t.Tasks.rows[0], ['Ada', 'Design', 'Task', '', '', '2026-10-30', 4, false]);
-  assert.deepEqual(t.Tasks.rows[1], ['Ada', 'Design', 'Late', 'XCF-1', '', '2026-10-01', 2, true]);
+  assert.deepEqual(t.Tasks.rows[0], ['Ada', 'Design', 'Task', '', '', '2026-10-30', 4, false, '', '']);
+  assert.deepEqual(t.Tasks.rows[1], ['Ada', 'Design', 'Late', 'XCF-1', '', '2026-10-01', 2, true, '', '']);
   assert.equal(t.OOO.rows.length, 2, 'manual rows are not repeated in OOO');
   assert.deepEqual(t.OOO.rows[1], ['Cy', 'Design', '', '', '', true]);
   assert.equal(t.Roadmap.rows[0][5], 'MY; RoAsia (ID, PH, HK)');

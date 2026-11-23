@@ -262,3 +262,15 @@ test('assets: a copy with project_type and completed_at the wrong way round is r
   const s = require('../src/assetsMath').summarise(d.ASSETS_DATA, []);
   assert.equal(s.views.overall.assets, 9, 'both rows count');
 });
+
+test('tasks: task_gid and project_gid, when the sheet has them, ride along so the capacity list can link to Asana; without them nothing changes', () => {
+  const head = ['assignee', 'pod', 'task', 'project', 'start_date', 'due_date', 'est_hours', 'overdue', 'task_gid', 'project_gid'];
+  const d = datasets({
+    People: [PEOPLE],
+    Tasks: [head, ['Ada', 'Design', 'Banner', 'XCF-1 | Thing', '2026-10-28', '2026-11-05', '6', 'FALSE', '123', '456'],
+      ['Ada', 'Design', 'No ids', 'XCF-2', '2026-10-28', '2026-11-05', '6', 'FALSE', '', '']],
+  });
+  const ada = d.MEMBERS.find((m) => m.name === 'Ada');
+  assert.deepEqual([ada.tasks[0].gid, ada.tasks[0].projGid], ['123', '456']);
+  assert.equal('gid' in ada.tasks[1], false, 'a row with no ids has no gid key');
+});

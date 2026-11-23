@@ -25,10 +25,10 @@ const PIPELINE_TABS = [
   {
     name: 'Tasks',
     source: 'members', // the dataset it is built from
-    columns: [['assignee', S], ['pod', S], ['task', S], ['project', S], ['start_date', S], ['due_date', S], ['est_hours', N], ['overdue', B]],
+    columns: [['assignee', S], ['pod', S], ['task', S], ['project', S], ['start_date', S], ['due_date', S], ['est_hours', N], ['overdue', B], ['task_gid', S], ['project_gid', S]],
     key: 0,
     rows: (d) => (d.members || []).flatMap((m) =>
-      (m.tasks || []).map((t) => [m.name, m.pod, t.name, t.proj, t.start, t.due, t.est, !!t.overdue])),
+      (m.tasks || []).map((t) => [m.name, m.pod, t.name, t.proj, t.start, t.due, t.est, !!t.overdue, t.gid, t.projGid])),
   },
   {
     name: 'Missing_Tasks',

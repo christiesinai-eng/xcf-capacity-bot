@@ -661,7 +661,11 @@
         });
         if (!ts.length) return '<p class="note2" style="margin:12px 0 0">No tasks with an estimate and a due date.</p>';
         var li = ts.map(function (t) {
-          return '<li><div><b>' + esc(t.name || 'Untitled task') + '</b>' + (t.overdue ? ' ' + chip('Overdue', 'coral') : '') + '<br><span class="t-small">' + esc(t.proj || 'No project') + '</span></div>' +
+          // links into Asana when the task and project ids are known (the sheet carries them from the Tasks agent's next run)
+          var tUrl = t.gid ? (t.projGid ? 'https://app.asana.com/1/41261904390129/project/' + encodeURIComponent(t.projGid) + '/task/' + encodeURIComponent(t.gid) : 'https://app.asana.com/0/0/' + encodeURIComponent(t.gid)) : '';
+          var pUrl = t.projGid ? 'https://app.asana.com/1/41261904390129/project/' + encodeURIComponent(t.projGid) : '';
+          var nm = esc(t.name || 'Untitled task'), pj = esc(t.proj || 'No project');
+          return '<li><div><b>' + (tUrl ? '<a href="' + tUrl + '" target="_blank" rel="noopener">' + nm + '</a>' : nm) + '</b>' + (t.overdue ? ' ' + chip('Overdue', 'coral') : '') + '<br><span class="t-small">' + (pUrl && t.proj ? '<a href="' + pUrl + '" target="_blank" rel="noopener">' + pj + '</a>' : pj) + '</span></div>' +
             '<div class="t-small">' + (t.est || 0) + 'h estimated<br>due ' + (t.due ? fmtDate(t.due) : '–') + '</div>' +
             '<div class="t-small">today <b>' + (t.th || 0).toFixed(2) + 'h</b><br>this week <b>' + (t.wh || 0).toFixed(2) + 'h</b></div></li>';
         }).join('');

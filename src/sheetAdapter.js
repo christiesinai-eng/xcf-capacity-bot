@@ -183,13 +183,14 @@
         const start = nul(t.start_date);
         const due = nul(t.due_date);
         const overdue = bool(t.overdue);
-        if (overdue) return { name: str(t.task), due, est, proj: str(t.project), th: 0, wh: 0, overdue: true, _mh: 0 };
-        return {
-          name: str(t.task), start, due, est, proj: str(t.project),
+        const ids = Object.assign(nul(t.task_gid) ? { gid: str(t.task_gid) } : {}, nul(t.project_gid) ? { projGid: str(t.project_gid) } : {});
+        if (overdue) return Object.assign({ name: str(t.task) }, ids, { due, est, proj: str(t.project), th: 0, wh: 0, overdue: true, _mh: 0 });
+        return Object.assign({ name: str(t.task) }, ids, {
+          start, due, est, proj: str(t.project),
           th: CM.round2(CM.hoursOnDate(est, start, due, today)),
           wh: CM.round2(CM.sumHoursOverRange(est, start, due, win.weekFrom, win.weekTo)),
           _mh: CM.sumHoursOverRange(est, start, due, win.monthFrom, win.monthTo),
-        };
+        });
       });
       const active = ts.filter((t) => !t.overdue);
       const away = onLeaveToday(p.name);
