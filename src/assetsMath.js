@@ -135,7 +135,7 @@
     });
     return {
       key: spec.key, label: spec.label || spec.key, from: spec.from, to: spec.to,
-      assets: total, projects: mine.length, withCount: mine.filter(hasCount).length,
+      assets: total, projects: mine.length, withCount: mine.filter(hasCount).length, noRegion: tally['No region'].projects,
       noCount: mine.filter((r) => !hasCount(r) && !r.ignored).length,   // no count, and still expected to have one
       ignored: mine.filter((r) => !hasCount(r) && r.ignored).length,    // no count, marked as old work: not chased
       groups, types, top: ranked.length ? { group: ranked[0].group, label: ranked[0].label, share: total > 0 ? Math.round(ranked[0].assets / total * 1000) / 10 : 0 } : null,
@@ -197,5 +197,18 @@
       });
   }
 
-  return { QUARTERS, OVERALL, TYPES, GROUPS, GROUP_LABEL, ACTIONS, regionGroup, regionTags, groupsOf, aucklandDate, isCancelled, adjusts, cleanAdjustments, summarise, biggest, withoutCount };
+  // The delivered projects in a view that have no region on them (so they sit under "No region"), newest first, with the
+  // field to fill in: Applicable Regions for a Roadmap project, Regions (XCF) for the rest.
+  function withoutRegion(summary, viewKey) {
+    const v = summary.views[viewKey];
+    if (!v) return [];
+    return summary.rows
+      .filter((r) => r.date >= v.from && r.date <= v.to && groupsOf(r)[0] === 'No region')
+      .map((r) => {
+        const q = QUARTERS.filter((x) => r.date >= x.from && r.date <= x.to)[0];
+        return { gid: r.gid, name: r.name, type: r.type, date: r.date, quarter: q ? q.key : '', owner: str(r.owner), assets: assetsOf(r), field: r.type === 'Roadmap' ? 'Applicable Regions' : 'Regions (XCF)' };
+      });
+  }
+
+  return { QUARTERS, OVERALL, TYPES, GROUPS, GROUP_LABEL, ACTIONS, regionGroup, regionTags, groupsOf, aucklandDate, isCancelled, adjusts, cleanAdjustments, summarise, biggest, withoutCount, withoutRegion };
 }));

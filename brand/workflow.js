@@ -228,6 +228,8 @@
       var bits = [];
       if (v.noCount) bits.push(esc(v.noCount + ' of the ' + v.projects + ' completed ' + (v.projects === 1 ? 'project' : 'projects') + (v.noCount === 1 ? ' has' : ' have') + ' no asset count, so ' + (v.noCount === 1 ? 'it adds' : 'they add') + ' no assets.') +
         ' <button class="link" type="button" data-more="assetsnocount" data-preset="' + (v.key === 'overall' ? 'all' : esc(v.key)) + '">See the missing counts</button>');
+      if (v.noRegion) bits.push(esc(v.noRegion + ' of the ' + v.projects + ' completed ' + (v.projects === 1 ? 'project' : 'projects') + (v.noRegion === 1 ? ' has' : ' have') + ' no region, so ' + (v.noRegion === 1 ? 'it sits' : 'they sit') + ' under No region.') +
+        ' <button class="link" type="button" data-more="assetsnoregion" data-preset="' + (v.key === 'overall' ? 'all' : esc(v.key)) + '">See the projects with no region</button>');
       if (groupSum > v.assets) bits.push(esc('A project tagged to several regions counts in each, so the regions can add up to more than the total.'));
       return bits.join('<br>');
     }
@@ -903,6 +905,24 @@
         sec('Projects to fill in', list.length ? segc('nocount', [['all', 'Overall']].concat(Q.map(function (k) { return [k, k]; }))) + table(['Project', 'Owner', 'Type', 'Completed', 'Quarter', 'Regions'], rows)
           : '<p class="note2">Every completed project has an asset count.</p>',
           'Open the project in Asana and fill in Asset count (XCF). It leaves this list, and the assets are counted, after the next daily refresh.' + older) };
+    };
+    /* The completed projects with no region on them, each linked to Asana with the field to fill in, so they can be fixed at the
+       source. They are counted (their assets are in the total) but sit under No region in the regional split. */
+    DET.assetsnoregion = function () {
+      var Q = AM.QUARTERS.map(function (q) { return q.key; }), vO = ASUM.views.overall;
+      var list = AM.withoutRegion(ASUM, 'overall');
+      var nw = function (t) { return '<span style="white-space:nowrap">' + t + '</span>'; };
+      var assetsIn = list.reduce(function (a, r) { return a + r.assets; }, 0);
+      var rows = list.map(function (r) {
+        return row(['<a href="' + assetUrl(r.gid) + '" target="_blank" rel="noopener">' + esc(r.name || r.gid) + '</a>', nw(esc(r.owner || 'No owner')), nw(esc(r.type)), nw(assetDay(r.date)), nw(esc(r.quarter)),
+          r.assets ? '<b>' + r.assets + '</b>' : '–', nw(esc(r.field))], ' data-group="noreg" data-pane="' + esc(r.quarter) + '"');
+      });
+      return { t: 'Projects with no region', s: vO.noRegion + ' of ' + nProj(vO.projects) + ' completed in ' + Q.join(' and ') + (vO.noRegion === 1 ? ' has' : ' have') + ' no region, so ' + (vO.noRegion === 1 ? 'it sits' : 'they sit') + ' under No region.', h:
+        stats([[vO.noRegion, 'Overall', 'var(--gold-ink)'], [ASUM.views[Q[0]].noRegion, Q[0], 'var(--blue-ink)'], [ASUM.views[Q[1]].noRegion, Q[1], 'var(--blue-ink)'],
+          [assetsIn, 'Assets in these projects', 'var(--ink)']]) +
+        sec('Projects to fill in', list.length ? segc('noreg', [['all', 'Overall']].concat(Q.map(function (k) { return [k, k]; }))) + table(['Project', 'Owner', 'Type', 'Completed', 'Quarter', 'Assets', 'Field to fill in'], rows)
+          : '<p class="note2">Every completed project has a region.</p>',
+          'Open the project in Asana and fill in the region (Applicable Regions for a Roadmap project, Regions (XCF) for the rest). Their assets already count in the total; the regional split updates after the next daily refresh.') };
     };
     /* Briefs in review is still a work-in-progress card: the mockup's own sample numbers, shown as sample */
     DET.briefs = function () {

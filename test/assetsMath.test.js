@@ -213,3 +213,21 @@ test('withoutCount lists the completed projects that have no asset count, newest
   assert.equal(all.length, s.views.overall.noCount, 'the list is exactly the number the card reports');
   assert.deepEqual(A.withoutCount(s, 'nope'), []);
 });
+
+test('withoutRegion lists the completed projects with no region tag, with the field to fill in, and the view counts them', () => {
+  const s = A.summarise([
+    row({ gid: 'a', name: 'Has region', regMicro: ['UK'], completedAt: '2026-10-07T03:00:00Z' }),
+    row({ gid: 'b', name: 'Micro none', regMicro: [], assets: 3, completedAt: '2026-10-09T03:00:00Z', owner: 'Quincey' }),
+    row({ gid: 'c', name: 'Blank tag', regMicro: [' '], assets: null, completedAt: '2026-08-09T03:00:00Z' }),
+    row({ gid: 'd', name: 'Roadmap none', type: 'Roadmap', regMicro: ['US'], regRoadmap: [], assets: 5, completedAt: '2026-07-20T03:00:00Z' }),
+    row({ gid: 'e', name: 'Roadmap with its own region', type: 'Roadmap', regMicro: [], regRoadmap: ['AU'], completedAt: '2026-10-09T03:00:00Z' }),
+  ]);
+  const all = A.withoutRegion(s, 'overall');
+  assert.deepEqual(all.map((r) => [r.name, r.quarter, r.assets, r.field]), [
+    ['Micro none', 'FY27 Q3', 3, 'Regions (XCF)'], ['Blank tag', 'FY27 Q2', 0, 'Regions (XCF)'], ['Roadmap none', 'FY27 Q2', 5, 'Applicable Regions']]);
+  assert.equal(all[0].owner, 'Quincey');
+  assert.equal(s.views.overall.noRegion, 3, 'the card and the list agree');
+  assert.equal(s.views['FY27 Q3'].noRegion, 1);
+  assert.deepEqual(A.withoutRegion(s, 'FY27 Q3').map((r) => r.name), ['Micro none']);
+  assert.deepEqual(A.withoutRegion(s, 'nope'), []);
+});
