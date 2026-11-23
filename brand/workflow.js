@@ -653,14 +653,33 @@
         var sc = m.ooo ? 'ooo' : ({ 'chip-over': 'over', 'chip-under': 'under', 'chip-avail': 'avail' })[statusChip(h, key, cap).cls];
         return { m: m, h: h, pct: Math.round(h / max * 100), sc: sc };
       }).sort(function (a, b) { return (a.sc === 'ooo') - (b.sc === 'ooo') || b.pct - a.pct; });
+      // Each person's tasks: click the row to open them (the list the report used to show when you clicked a person).
+      function capTasks(m) {
+        var ts = (m.tasks || []).slice().sort(function (a, b) {
+          var ha = key === 'week' ? a.wh : key === 'today' ? a.th : a.est, hb = key === 'week' ? b.wh : key === 'today' ? b.th : b.est;
+          return (hb || 0) - (ha || 0) || String(a.due || '').localeCompare(String(b.due || ''));
+        });
+        if (!ts.length) return '<p class="note2" style="margin:12px 0 0">No tasks with an estimate and a due date.</p>';
+        var li = ts.map(function (t) {
+          return '<li><div><b>' + esc(t.name || 'Untitled task') + '</b>' + (t.overdue ? ' ' + chip('Overdue', 'coral') : '') + '<br><span class="t-small">' + esc(t.proj || 'No project') + '</span></div>' +
+            '<div class="t-small">' + (t.est || 0) + 'h estimated<br>due ' + (t.due ? fmtDate(t.due) : '–') + '</div>' +
+            '<div class="t-small">today <b>' + (t.th || 0).toFixed(2) + 'h</b><br>this week <b>' + (t.wh || 0).toFixed(2) + 'h</b></div></li>';
+        }).join('');
+        var notes = (m.missing > 0 ? '<p class="note2" style="margin:10px 0 0">' + plural(m.missing, 'task') + ' left out of the hours: no estimate or due date.</p>' : '') +
+          (m.overdue > 0 ? '<p class="note2" style="margin:6px 0 0">' + plural(m.overdue, 'overdue task') + ' left out of the hours.</p>' : '');
+        return '<ul class="cap-tl">' + li + '</ul>' + notes;
+      }
       var rows = people.map(function (p) {
         var s = SMAP[p.sc], gap = CAPACITY_GAP_MEMBERS.has(p.m.name);
-        return row(['<b>' + esc(p.m.name) + '</b>' + (gap ? '<br><span class="t-small">Free for incoming micros</span>' : ''), esc(p.m.pod), p.sc === 'ooo' ? '–' : p.h.toFixed(1) + 'h', p.sc === 'ooo' ? '–' : pbar(p.pct, s[2]), chip(s[1], s[0])], ' data-group="people" data-pane="' + p.sc + '"');
+        var pane = ' data-group="people" data-pane="' + p.sc + '"';
+        return row(['<b>' + esc(p.m.name) + '</b>' + (gap ? '<br><span class="t-small">Free for incoming micros</span>' : ''), esc(p.m.pod), p.sc === 'ooo' ? '–' : p.h.toFixed(1) + 'h', p.sc === 'ooo' ? '–' : pbar(p.pct, s[2]), chip(s[1], s[0])],
+          ' class="cap-row" tabindex="0" role="button" aria-expanded="false"' + pane) +
+          '<tr class="cap-tasks" hidden' + pane + '><td colspan="5">' + capTasks(p.m) + '</td></tr>';
       });
       var special = Object.keys(typeof MEMBER_CAPACITY !== 'undefined' ? MEMBER_CAPACITY : {}).map(function (n) { return n + ' (' + MEMBER_CAPACITY[n] + ' hours)'; });
       return { t: 'Team capacity', s: 'Everyone, grouped by how full their time is. ' + (dl[key] || key) + '.', h:
         stats([[cs[0], 'Over capacity', 'var(--coral-ink)'], [cs[1], 'Under capacity', 'var(--gold-ink)'], [cs[2], 'Available', 'var(--mint-ink)'], [cs[3], 'Out of office', 'var(--purple-ink)']]) +
-        sec('Everyone', segc('people', [['all', 'All'], ['over', 'Over capacity'], ['under', 'Under capacity'], ['avail', 'Available'], ['ooo', 'Out of office']]) + table(['Person', 'Pod', 'Booked', 'Utilisation', 'Status'], rows) + '<p class="note2">Showing all ' + N + ' people.</p>') +
+        sec('Everyone', segc('people', [['all', 'All'], ['over', 'Over capacity'], ['under', 'Under capacity'], ['avail', 'Available'], ['ooo', 'Out of office']]) + table(['Person', 'Pod', 'Booked', 'Utilisation', 'Status'], rows) + '<p class="note2">Showing all ' + N + ' people. Click a person to see their tasks.</p>') +
         sec('How this is worked out', '<p>Utilisation is hours booked divided by the person’s capacity: ' + (key === 'today' ? '6 hours for most people' : key === 'week' ? '6 hours a day over the next 5 working days' : '6 hours a day over the next ' + WIN.monthWorkdays + ' working days') + (special.length ? ', except ' + esc(special.join(' and ')) : '') + '. It counts incomplete tasks only, so it shows work still to do. Asana Workload also counts completed tasks until their due date, so it can read higher for people who finished work early.</p>') + orig('capacity') };
     };
 
@@ -963,10 +982,21 @@
     // the segmented filters inside the window (the mockup's own behaviour)
     body.addEventListener('click', function (e) {
       var o = e.target.closest('[data-orig]'); if (o) { openOriginal(o.getAttribute('data-orig')); return; }
+      var cr = e.target.closest('tr.cap-row'); if (cr) { toggleCapRow(cr); return; }
       var b = e.target.closest('[data-seg] button'); if (!b) return;
       var sg = b.closest('[data-seg]'), n = sg.dataset.seg, v = b.dataset.v;
       $$('button', sg).forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
       $$('[data-group="' + n + '"]', body).forEach(function (el) { el.hidden = !(v === 'all' || el.dataset.pane === v); });
+      $$('tr.cap-tasks:not(.open)', body).forEach(function (el) { el.hidden = true; }); // a closed person stays closed after filtering
+    });
+    // open or close one person's tasks in the Team capacity window
+    function toggleCapRow(tr) {
+      var d = tr.nextElementSibling; if (!d || !d.classList.contains('cap-tasks')) return;
+      var open = d.hidden; d.hidden = !open; d.classList.toggle('open', open); tr.classList.toggle('open', open); tr.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    body.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var cr = e.target.closest && e.target.closest('tr.cap-row'); if (cr && e.target === cr) { e.preventDefault(); toggleCapRow(cr); }
     });
     document.addEventListener('click', function (e) {
       var m = e.target.closest && e.target.closest('[data-more]');
