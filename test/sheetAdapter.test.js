@@ -249,3 +249,16 @@ test('a reply missing a tab the page needs is not used', () => {
   const partial = SheetAdapter.parseSheetResponse({ ranges: [{ range: 'People!A1:B2', values: [['name'], ['Ada']] }] }, ['People']);
   assert.equal(SheetAdapter.isUsable(partial), false);
 });
+
+test('assets: a copy with project_type and completed_at the wrong way round is read the right way round', () => {
+  const head = ['gid', 'name', 'project_type', 'completed_at', 'asset_count', 'regions_micro', 'regions_roadmap', 'status_xcf', 'status_update', 'owner'];
+  const d = datasets({
+    People: [PEOPLE],
+    Assets: [head,
+      ['1', 'XCF-1 | Right way', 'Micro (BAU)', '2026-10-28T03:00:00.000Z', '4', 'UK', '', 'Complete', 'complete', 'Pat'],
+      ['2', 'XCF-2 | Swapped', '2026-10-29T03:00:00.000Z', 'Roadmap', '5', '', 'US', 'Complete', 'complete', 'Pat']],
+  });
+  assert.deepEqual(d.ASSETS_DATA.map((r) => [r.gid, r.type, r.completedAt]), [['1', 'Micro (BAU)', '2026-10-28T03:00:00.000Z'], ['2', 'Roadmap', '2026-10-29T03:00:00.000Z']]);
+  const s = require('../src/assetsMath').summarise(d.ASSETS_DATA, []);
+  assert.equal(s.views.overall.assets, 9, 'both rows count');
+});

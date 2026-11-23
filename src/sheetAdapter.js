@@ -300,8 +300,12 @@
     const REGIONAL_DATA = buildRegional(tabs);
 
     // Completed projects, raw: the page counts them with AssetsMath, the same code the build uses.
+    // (A copy that put the timestamp under project_type and the type under completed_at, as the Regional agent did once on
+    // 23 Nov, is put the right way round here, so a swapped run cannot blank the card.)
+    const isStamp = (v) => /^\d{4}-\d\d-\d\dT/.test(str(v));
+    const swapped = (r) => isStamp(r.project_type) && !isStamp(r.completed_at);
     const ASSETS_DATA = (tabs.Assets || []).map((r) => ({
-      gid: str(r.gid), name: str(r.name), type: str(r.project_type), completedAt: str(r.completed_at),
+      gid: str(r.gid), name: str(r.name), type: str(swapped(r) ? r.completed_at : r.project_type), completedAt: str(swapped(r) ? r.project_type : r.completed_at),
       assets: num(r.asset_count), regMicro: list(r.regions_micro), regRoadmap: list(r.regions_roadmap),
       status: str(r.status_xcf), update: str(r.status_update), owner: str(r.owner),
     })).filter((r) => r.gid);

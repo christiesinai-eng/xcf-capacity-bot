@@ -118,6 +118,10 @@ nothing and say so.
 PHASE 2B - WRITE THE COMPLETED PROJECTS (only after phase 2 is finished and its read-back passed)
 Columns of Glean_Assets_Raw, in this order, built from the PRJ lines only:
 gid | name | project_type | completed_at | asset_count | regions_micro | regions_roadmap | status_xcf | status_update | owner
+COLUMN C IS THE PROJECT TYPE (words: Micro (BAU), Roadmap or XCF initiative) AND COLUMN D IS completed_at (a timestamp such as
+2026-10-28T03:12:44.123Z). Write them in that order: a run once put the timestamp in C and the type in D, which blanked the
+dashboard. The PRJ line has them in the same order (project type, then completed_at), so copy straight across.
+Example of row 2: 1218206669199743 | XCF-10082 | Request for ... | Micro (BAU) | 2026-09-07T04:33:15.835Z | 3 | Global | | In Progress | complete | Pete Montgomery
 Everything is text: asset_count is the plain number, or blank when the PRJ line has none. Leave a cell blank rather than
 writing "null". Sort by completed_at (oldest first), then gid.
 Safety check first: if there would be fewer than 60 rows, treat it as a bad fetch: write nothing to this tab and report
@@ -128,7 +132,9 @@ nothing to it and say so.
  b. Then clear everything below the last row you wrote: A{rows+2} to column J and row 1000. Never clear first and write second.
  c. Read the tab back: row 1, row 2, the last row, and column A. Check row 1 still has ten headers ending in owner, the first
     and last rows are what you wrote (completed_at and ids still text), and that the number of non-empty cells in column A is
-    rows + 1 (the header).
+    rows + 1 (the header). Also read column C and column D of rows 2 and the last row: C must hold a project type in words
+    (Micro (BAU), Roadmap or XCF initiative) and D must hold a timestamp ending in Z. If C holds a timestamp, you swapped the
+    two columns: rewrite them the right way round and read back again before you stamp.
 Phase 2B never changes Glean_Regional_Raw.
 
 STAMP (the last step before the report; only after EVERY read-back above has passed)
@@ -147,6 +153,7 @@ Date used (Auckland), and now.
 Requests: tasks read (READ) and EXPECTED; pages read (and how many tasks on each page); REQ note lines written.
 Projects: items read (PREAD); pages read (and how many items on each page); PRJ note lines written; SU (items with a status update).
 Rows written to Glean_Regional_Raw, and whether the read-back passed (first row, last row, count).
+Column check: the exact text of C2 and D2 of Glean_Assets_Raw (C2 should be a project type, D2 a timestamp).
 Rows written to Glean_Assets_Raw, and whether the read-back passed (first row, last row, count); how many of those rows have
 no asset count, how many have Status (XCF) Cancelled or status update dropped (just to report).
 How many request rows have status Cancelled, and how many have no project type (just to report; do not change them).
