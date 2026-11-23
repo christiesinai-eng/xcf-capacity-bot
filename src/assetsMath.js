@@ -12,14 +12,15 @@
 //   Which     : Project type Micro (BAU), Roadmap or XCF initiative. Projects with no Project type are not counted.
 //   Assets    : the number in Asset count (XCF) on the project. A delivered project with no count adds no assets; it is
 //               still counted as a delivered project and listed, so the gap is visible and can be chased.
-//   Region    : Micro (BAU) uses Regions (XCF); Roadmap uses Applicable Regions; XCF initiative uses Regions (XCF) and
-//               falls back to Applicable Regions. Grouped as US, UK, ANZ (AU and NZ), IM (every other named region),
-//               Global (a Global tag) and No region.
+//   Region    : Micro (BAU) and XCF initiative use Regions (XCF); Roadmap uses Applicable Regions. When that field is empty the
+//               other one is used (24 Nov: a Micro project with Applicable Regions filled in was left under No region).
+//               Grouped as US, UK, ANZ (AU and NZ), IM (every other named region), Global (a Global tag) and No region.
 //   Several   : a project tagged with several regions counts in each GROUP it touches, once (AU and NZ are one ANZ).
 //               So the groups can add up to more than the total.
 //   Adjusted  : a short list kept by hand in the sheet tab Assets_Adjustments, applied after the rules above:
 //                 exclude         the project is not counted at all (it made no assets, or is not an asset project)
 //                 ignore_missing  the project is not listed as missing a count (old work); any count it has still counts
+//                 ignore_region   the project is not listed as missing a region (sprints have none); it still sits under No region
 //                 set_count       the count to use instead of what Asana holds (asset_count)
 //               A line matches a project by its XCF code (XCFP-386) or, when it is not a code, by words in its name.
 //
@@ -56,9 +57,8 @@
   function regionTags(row) {
     const micro = (row.regMicro || []).filter((x) => str(x).trim());
     const road = (row.regRoadmap || []).filter((x) => str(x).trim());
-    if (row.type === 'Roadmap') return road;
-    if (row.type === 'Micro (BAU)') return micro;
-    return micro.length ? micro : road; // XCF initiative
+    if (row.type === 'Roadmap') return road.length ? road : micro;
+    return micro.length ? micro : road; // Micro (BAU) and XCF initiative
   }
 
   // The distinct groups a request counts in (never empty: a request with no region is in 'No region').
@@ -89,7 +89,7 @@
   const hasCount = (row) => assetsOf(row) > 0;
 
   // ---- the hand-kept adjustments --------------------------------------------------------------------------------------
-  const ACTIONS = ['exclude', 'ignore_missing', 'set_count'];
+  const ACTIONS = ['exclude', 'ignore_missing', 'ignore_region', 'set_count'];
   const isCode = (m) => /^XCF[TP]?-\d+$/i.test(m);
   // A line matches a project by its XCF code anywhere in the name ("XCFP-386 | Multi-Product Strategy", "XCF-5 Sprint"), where
   // XCF-5 must not match XCF-50 or XCFP-5; otherwise by the words, any case.
@@ -135,7 +135,7 @@
     });
     return {
       key: spec.key, label: spec.label || spec.key, from: spec.from, to: spec.to,
-      assets: total, projects: mine.length, withCount: mine.filter(hasCount).length, noRegion: tally['No region'].projects,
+      assets: total, projects: mine.length, withCount: mine.filter(hasCount).length, noRegion: mine.filter((r) => groupsOf(r)[0] === 'No region' && !r.regionIgnored).length, // no region, and still expected to have one
       noCount: mine.filter((r) => !hasCount(r) && !r.ignored).length,   // no count, and still expected to have one
       ignored: mine.filter((r) => !hasCount(r) && r.ignored).length,    // no count, marked as old work: not chased
       groups, types, top: ranked.length ? { group: ranked[0].group, label: ranked[0].label, share: total > 0 ? Math.round(ranked[0].assets / total * 1000) / 10 : 0 } : null,
@@ -159,9 +159,10 @@
       if (isCancelled(r)) { meta.cancelled += 1; return; }
       const mine = adj.filter((a) => adjusts(a, r));
       if (mine.some((a) => a.action === 'exclude')) { meta.excluded += 1; return; }
-      const row = Object.assign({}, r, { date, ignored: false });
+      const row = Object.assign({}, r, { date, ignored: false, regionIgnored: false });
       mine.forEach((a) => {
         if (a.action === 'ignore_missing') row.ignored = true;
+        if (a.action === 'ignore_region') row.regionIgnored = true;
         if (a.action === 'set_count' && a.assets !== null && isFinite(a.assets)) row.assets = a.assets;
       });
       if (mine.length) meta.adjusted += 1;
@@ -203,7 +204,7 @@
     const v = summary.views[viewKey];
     if (!v) return [];
     return summary.rows
-      .filter((r) => r.date >= v.from && r.date <= v.to && groupsOf(r)[0] === 'No region')
+      .filter((r) => r.date >= v.from && r.date <= v.to && groupsOf(r)[0] === 'No region' && !r.regionIgnored)
       .map((r) => {
         const q = QUARTERS.filter((x) => r.date >= x.from && r.date <= x.to)[0];
         return { gid: r.gid, name: r.name, type: r.type, date: r.date, quarter: q ? q.key : '', owner: str(r.owner), assets: assetsOf(r), field: r.type === 'Roadmap' ? 'Applicable Regions' : 'Regions (XCF)' };

@@ -874,7 +874,7 @@
         'Delivered means the project has been completed (closed) in XCF | Projects. Assets are counted when it completes, in the quarter it was completed in, by Auckland date, whatever day it started.',
         'Assets are the number in Asset count (XCF) on the project. A completed project with no count adds no assets: ' + vO.noCount + ' of ' + nProj(vO.projects) + ' ' + (vO.noCount === 1 ? 'has' : 'have') + ' none and ' + (vO.noCount === 1 ? 'is' : 'are') + ' on the missing counts list.',
         'Only Micro (BAU), Roadmap and XCF initiative projects are counted. Projects with no Project type are not.',
-        'Region comes from Regions (XCF) for Micro (BAU) and from Applicable Regions for Roadmap. ANZ is AU and NZ; IM is every other named region; Global-tagged and no-region work are shown on their own.',
+        'Region comes from Regions (XCF) for Micro (BAU) and from Applicable Regions for Roadmap, and from the other one when that is empty. ANZ is AU and NZ; IM is every other named region; Global-tagged and no-region work are shown on their own.',
         'A project tagged to several regions counts in each region once, so the regions can add up to more than the total.',
         'Cancelled projects are not counted: ' + (meta.cancelled || 0) + ' completed in these quarters had a Status (XCF) of Cancelled or a last status update of Dropped.',
         'A short list kept by hand in the Assets_Adjustments tab of the data sheet ' + ((meta.excluded ? 'leaves out ' + nProj(meta.excluded) + ' that made no assets' : 'leaves out nothing yet') + (vO.ignored ? ' and stops ' + nProj(vO.ignored) + ' finished before asset counts began from being chased' : '')) + '.'
@@ -922,7 +922,7 @@
           [assetsIn, 'Assets in these projects', 'var(--ink)']]) +
         sec('Projects to fill in', list.length ? segc('noreg', [['all', 'Overall']].concat(Q.map(function (k) { return [k, k]; }))) + table(['Project', 'Owner', 'Type', 'Completed', 'Quarter', 'Assets', 'Field to fill in'], rows)
           : '<p class="note2">Every completed project has a region.</p>',
-          'Open the project in Asana and fill in the region (Applicable Regions for a Roadmap project, Regions (XCF) for the rest). Their assets already count in the total; the regional split updates after the next daily refresh.') };
+          'Open the project in Asana and fill in the region (Applicable Regions for a Roadmap project, Regions (XCF) for the rest; either one works). Sprint projects are left off. Their assets already count in the total; the regional split updates after the next daily refresh.') };
     };
     /* Briefs in review is still a work-in-progress card: the mockup's own sample numbers, shown as sample */
     DET.briefs = function () {

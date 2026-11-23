@@ -100,5 +100,11 @@
     "match": "XCFT-1142",
     "action": "ignore_missing",
     "reason": "Old: before asset counts started mid-September 2026"
+  },
+  {
+    "match": "Sprint |",
+    "action": "ignore_region",
+    "asset_count": null,
+    "reason": "Sprint projects have no region"
   }
 ]

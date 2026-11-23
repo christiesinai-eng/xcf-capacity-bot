@@ -40,16 +40,36 @@ test('assets are the Asset count; a completed project with no count adds nothing
   assert.equal(v.noCount, 4);
 });
 
-test('the region comes from Regions (XCF) for Micro, Applicable Regions for Roadmap, either for an XCF initiative', () => {
+test('the region comes from Regions (XCF) for Micro, Applicable Regions for Roadmap, and from the other field when that is empty', () => {
   const v = view([
-    row({ type: 'Micro (BAU)', assets: 1, regMicro: ['US'], regRoadmap: ['UK'] }),           // Micro ignores Applicable Regions
-    row({ type: 'Roadmap', assets: 10, regMicro: ['US'], regRoadmap: ['UK'] }),              // Roadmap ignores Regions (XCF)
+    row({ type: 'Micro (BAU)', assets: 1, regMicro: ['US'], regRoadmap: ['UK'] }),           // Micro prefers Regions (XCF)
+    row({ type: 'Roadmap', assets: 10, regMicro: ['US'], regRoadmap: ['UK'] }),              // Roadmap prefers Applicable Regions
     row({ type: 'XCF initiative', assets: 100, regMicro: ['AU'], regRoadmap: ['UK'] }),      // initiative: Regions (XCF) first
     row({ type: 'XCF initiative', assets: 1000, regMicro: [], regRoadmap: ['UK'] }),         // ... else Applicable Regions
   ]);
   assert.equal(g(v, 'US').assets, 1);
   assert.equal(g(v, 'UK').assets, 1010);
   assert.equal(g(v, 'ANZ').assets, 100);
+});
+
+test('a Micro project with only Applicable Regions filled in (and a Roadmap one with only Regions (XCF)) is not left under No region', () => {
+  const v = view([
+    row({ type: 'Micro (BAU)', assets: 9, regMicro: [], regRoadmap: ['AU', 'NZ'] }),
+    row({ type: 'Roadmap', assets: 4, regMicro: ['US'], regRoadmap: [] }),
+    row({ type: 'Micro (BAU)', assets: 2, regMicro: [], regRoadmap: [] }),
+  ]);
+  assert.equal(g(v, 'ANZ').assets, 9);
+  assert.equal(g(v, 'US').assets, 4);
+  assert.equal(g(v, 'No region').assets, 2);
+  assert.equal(v.noRegion, 1);
+});
+
+test('ignore_region keeps a project off the no-region list (sprints have none) but it still sits under No region', () => {
+  const rows = [row({ gid: 's', name: 'XCF-14516 Sprint | 9th - 13th Nov', type: 'XCF initiative', assets: null }), row({ gid: 'x', name: 'XCFP-1 | Real work', assets: 2 })];
+  const s = A.summarise(rows, [{ match: 'Sprint |', action: 'ignore_region', reason: 'sprints have no region' }]);
+  assert.equal(s.views.overall.noRegion, 1, 'the card counts only the one still expected to have a region');
+  assert.deepEqual(A.withoutRegion(s, 'overall').map((r) => r.name), ['XCFP-1 | Real work']);
+  assert.equal(g(s.views.overall, 'No region').projects, 2, 'both still sit under No region in the split');
 });
 
 test('regions are grouped US, UK, ANZ (AU and NZ), IM (every other named region), Global; none is its own group', () => {
@@ -219,7 +239,7 @@ test('withoutRegion lists the completed projects with no region tag, with the fi
     row({ gid: 'a', name: 'Has region', regMicro: ['UK'], completedAt: '2026-10-07T03:00:00Z' }),
     row({ gid: 'b', name: 'Micro none', regMicro: [], assets: 3, completedAt: '2026-10-09T03:00:00Z', owner: 'Quincey' }),
     row({ gid: 'c', name: 'Blank tag', regMicro: [' '], assets: null, completedAt: '2026-08-09T03:00:00Z' }),
-    row({ gid: 'd', name: 'Roadmap none', type: 'Roadmap', regMicro: ['US'], regRoadmap: [], assets: 5, completedAt: '2026-07-20T03:00:00Z' }),
+    row({ gid: 'd', name: 'Roadmap none', type: 'Roadmap', regMicro: [], regRoadmap: [], assets: 5, completedAt: '2026-07-20T03:00:00Z' }),
     row({ gid: 'e', name: 'Roadmap with its own region', type: 'Roadmap', regMicro: [], regRoadmap: ['AU'], completedAt: '2026-10-09T03:00:00Z' }),
   ]);
   const all = A.withoutRegion(s, 'overall');
