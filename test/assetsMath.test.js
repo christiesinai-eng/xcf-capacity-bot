@@ -64,12 +64,14 @@ test('a Micro project with only Applicable Regions filled in (and a Roadmap one 
   assert.equal(v.noRegion, 1);
 });
 
-test('ignore_region keeps a project off the no-region list (sprints have none) but it still sits under No region', () => {
+test('ignore_region keeps a project off the no-region list and the No region tile (sprints have none) but it still counts in the totals', () => {
   const rows = [row({ gid: 's', name: 'XCF-14516 Sprint | 9th - 13th Nov', type: 'XCF initiative', assets: null }), row({ gid: 'x', name: 'XCFP-1 | Real work', assets: 2 })];
   const s = A.summarise(rows, [{ match: 'Sprint |', action: 'ignore_region', reason: 'sprints have no region' }]);
   assert.equal(s.views.overall.noRegion, 1, 'the card counts only the one still expected to have a region');
   assert.deepEqual(A.withoutRegion(s, 'overall').map((r) => r.name), ['XCFP-1 | Real work']);
-  assert.equal(g(s.views.overall, 'No region').projects, 2, 'both still sit under No region in the split');
+  assert.equal(g(s.views.overall, 'No region').projects, 1, 'only the one still expected to have a region sits under No region');
+  assert.equal(s.views.overall.projects, 2, 'both projects count');
+  assert.equal(s.views.overall.assets, 2);
 });
 
 test('regions are grouped US, UK, ANZ (AU and NZ), IM (every other named region), Global; none is its own group', () => {

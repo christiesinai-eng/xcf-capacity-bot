@@ -922,7 +922,7 @@
           [assetsIn, 'Assets in these projects', 'var(--ink)']]) +
         sec('Projects to fill in', list.length ? segc('noreg', [['all', 'Overall']].concat(Q.map(function (k) { return [k, k]; }))) + table(['Project', 'Owner', 'Type', 'Completed', 'Quarter', 'Assets', 'Field to fill in'], rows)
           : '<p class="note2">Every completed project has a region.</p>',
-          'Open the project in Asana and fill in the region (Applicable Regions for a Roadmap project, Regions (XCF) for the rest; either one works). Sprint projects are left off. Their assets already count in the total; the regional split updates after the next daily refresh.') };
+          'Open the project in Asana and fill in the region (Applicable Regions for a Roadmap project, Regions (XCF) for the rest; either one works). Sprint projects are left off, here and under No region. Their assets already count in the total; the regional split updates after the next daily refresh.') };
     };
     /* Briefs in review is still a work-in-progress card: the mockup's own sample numbers, shown as sample */
     DET.briefs = function () {

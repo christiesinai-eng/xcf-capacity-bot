@@ -20,7 +20,7 @@
 //   Adjusted  : a short list kept by hand in the sheet tab Assets_Adjustments, applied after the rules above:
 //                 exclude         the project is not counted at all (it made no assets, or is not an asset project)
 //                 ignore_missing  the project is not listed as missing a count (old work); any count it has still counts
-//                 ignore_region   the project is not listed as missing a region (sprints have none); it still sits under No region
+//                 ignore_region   the project is not listed as missing a region and not shown under No region (sprints have none); it still counts in the totals
 //                 set_count       the count to use instead of what Asana holds (asset_count)
 //               A line matches a project by its XCF code (XCFP-386) or, when it is not a code, by words in its name.
 //
@@ -124,7 +124,9 @@
     const total = mine.reduce((a, r) => a + assetsOf(r), 0);
     const tally = {};
     GROUPS.forEach((g) => { tally[g] = { group: g, label: GROUP_LABEL[g], assets: 0, projects: 0 }; });
-    mine.forEach((r) => groupsOf(r).forEach((g) => { tally[g].assets += assetsOf(r); tally[g].projects += 1; }));
+    // A project kept off the no-region list by hand (a sprint) has no region and never will, so it is not shown under No region
+    // either; it still counts in the totals.
+    mine.forEach((r) => groupsOf(r).forEach((g) => { if (g === 'No region' && r.regionIgnored) return; tally[g].assets += assetsOf(r); tally[g].projects += 1; }));
     const groups = GROUPS.map((g) => tally[g])
       .filter((g) => g.assets > 0 || g.projects > 0)
       .map((g) => Object.assign({}, g, { share: total > 0 ? Math.round(g.assets / total * 1000) / 10 : 0 }));
