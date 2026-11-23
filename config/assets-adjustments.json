@@ -82,5 +82,23 @@
     "action": "ignore_missing",
     "asset_count": null,
     "reason": "Sprint or internal initiative: no assets are made, so no count is expected"
+  },
+  {
+    "asset_count": null,
+    "match": "XCF-5554",
+    "action": "exclude",
+    "reason": "0 assets: no assets were made"
+  },
+  {
+    "asset_count": null,
+    "match": "XCFT-5664",
+    "action": "exclude",
+    "reason": "0 assets: no assets were made"
+  },
+  {
+    "asset_count": null,
+    "match": "XCFT-1142",
+    "action": "ignore_missing",
+    "reason": "Old: before asset counts started mid-September 2026"
   }
 ]
