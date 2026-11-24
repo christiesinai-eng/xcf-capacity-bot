@@ -85,19 +85,37 @@ test('regions are grouped US, UK, ANZ (AU and NZ), IM (every other named region)
   assert.equal(g(v, 'No region').assets, 10);
 });
 
-test('a project tagged with several regions counts once in each group it touches; the total counts it once', () => {
+test('a project tagged to more than one region group counts once, under Multiple regions, so the regions add up to the total', () => {
   const v = view([
-    row({ assets: 10, regMicro: ['AU', 'NZ'] }),               // one ANZ, not two
-    row({ assets: 6, regMicro: ['US', 'UK', 'SG', 'ZA'] }),    // US, UK and IM (IM once)
+    row({ assets: 10, regMicro: ['AU', 'NZ'] }),               // one ANZ group, not two: stays ANZ
+    row({ assets: 6, regMicro: ['US', 'UK', 'SG', 'ZA'] }),    // US, UK and IM: Multiple regions
+    row({ assets: 4, regMicro: ['UK'] }),
+    row({ assets: 3, regMicro: ['Global', 'US'] }),            // Global and US: Multiple regions
   ]);
-  assert.equal(v.assets, 16, 'the total counts each request once');
+  assert.equal(v.assets, 23, 'the total counts each project once');
   assert.equal(g(v, 'ANZ').assets, 10);
-  assert.equal(g(v, 'US').assets, 6);
-  assert.equal(g(v, 'UK').assets, 6);
-  assert.equal(g(v, 'IM').assets, 6);
-  assert.equal(g(v, 'IM').projects, 1);
+  assert.equal(g(v, 'UK').assets, 4);
+  assert.equal(g(v, 'Multiple').assets, 9);
+  assert.equal(g(v, 'Multiple').projects, 2);
+  assert.equal(g(v, 'US').assets, 0, 'a multi-region project is not also under US');
   const sum = v.groups.reduce((a, x) => a + x.assets, 0);
-  assert.ok(sum > v.assets, 'the groups add up to more than the total, as the page says');
+  assert.equal(sum, v.assets, 'the regions add up to the total');
+  assert.equal(v.groups.find((x) => x.group === 'Multiple').label, 'Multiple regions');
+  assert.equal(v.top.group, 'ANZ', 'Multiple regions is never the headline region');
+});
+
+test('multiRegion lists the projects behind the Multiple regions tile with the regions they cover, biggest first', () => {
+  const s = A.summarise([
+    row({ gid: 'a', name: 'Two regions', assets: 6, regMicro: ['US', 'UK'], completedAt: '2026-10-07T03:00:00Z', owner: 'Pat' }),
+    row({ gid: 'b', name: 'Bigger', assets: 20, regMicro: ['AU', 'Global'], completedAt: '2026-08-09T03:00:00Z' }),
+    row({ gid: 'c', name: 'Single', assets: 50, regMicro: ['NZ'] }),
+    row({ gid: 'd', name: 'AU and NZ only', assets: 5, regMicro: ['AU', 'NZ'] }),
+  ]);
+  const all = A.multiRegion(s, 'overall');
+  assert.deepEqual(all.map((r) => [r.name, r.assets, r.combo]), [['Bigger', 20, 'ANZ + Global-tagged'], ['Two regions', 6, 'US + UK']]);
+  assert.equal(all[1].owner, 'Pat');
+  assert.deepEqual(A.multiRegion(s, 'FY27 Q3').map((r) => r.name), ['Two regions']);
+  assert.deepEqual(A.multiRegion(s, 'nope'), []);
 });
 
 test('the real FY27 Q3 so far: a 120-asset UK project and a 2-asset AU one', () => {

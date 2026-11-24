@@ -15,8 +15,8 @@
 //   Region    : Micro (BAU) and XCF initiative use Regions (XCF); Roadmap uses Applicable Regions. When that field is empty the
 //               other one is used (24 Nov: a Micro project with Applicable Regions filled in was left under No region).
 //               Grouped as US, UK, ANZ (AU and NZ), IM (every other named region), Global (a Global tag) and No region.
-//   Several   : a project tagged with several regions counts in each GROUP it touches, once (AU and NZ are one ANZ).
-//               So the groups can add up to more than the total.
+//   Several   : a project tagged to more than one region GROUP (AU and NZ are one ANZ) is counted once, under 'Multiple regions',
+//               so the regions always add up to the total. Which regions it covers is shown beside it.
 //   Adjusted  : a short list kept by hand in the sheet tab Assets_Adjustments, applied after the rules above:
 //                 exclude         the project is not counted at all (it made no assets, or is not an asset project)
 //                 ignore_missing  the project is not listed as missing a count (old work); any count it has still counts
@@ -37,8 +37,8 @@
   const OVERALL = { key: 'overall', label: 'Overall', from: QUARTERS[0].from, to: QUARTERS[QUARTERS.length - 1].to };
   const TYPES = ['Micro (BAU)', 'Roadmap', 'XCF initiative'];
   // Display order of the groups, and what each is called on the page.
-  const GROUPS = ['US', 'UK', 'ANZ', 'IM', 'Global', 'No region'];
-  const GROUP_LABEL = { US: 'US', UK: 'UK', ANZ: 'ANZ', IM: 'IM', Global: 'Global-tagged', 'No region': 'No region' };
+  const GROUPS = ['US', 'UK', 'ANZ', 'IM', 'Global', 'Multiple', 'No region'];
+  const GROUP_LABEL = { US: 'US', UK: 'UK', ANZ: 'ANZ', IM: 'IM', Global: 'Global-tagged', Multiple: 'Multiple regions', 'No region': 'No region' };
 
   const str = (v) => (v === undefined || v === null ? '' : String(v));
 
@@ -76,6 +76,13 @@
     if (!str(iso) || isNaN(d.getTime())) return null;
     if (!fmt) fmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'Pacific/Auckland', year: 'numeric', month: '2-digit', day: '2-digit' });
     return fmt.format(d);
+  }
+
+  // The one bucket a project's assets are shown under, so every asset is counted once: its region group when it has just one,
+  // 'Multiple' when it is tagged to more than one group (AU and NZ are one group, ANZ), 'No region' when it has none.
+  function bucketOf(row) {
+    const gs = groupsOf(row);
+    return gs.length > 1 ? 'Multiple' : gs[0];
   }
 
   function inTypes(row) { return TYPES.indexOf(row.type) >= 0; }
@@ -126,11 +133,11 @@
     GROUPS.forEach((g) => { tally[g] = { group: g, label: GROUP_LABEL[g], assets: 0, projects: 0 }; });
     // A project kept off the no-region list by hand (a sprint) has no region and never will, so it is not shown under No region
     // either; it still counts in the totals.
-    mine.forEach((r) => groupsOf(r).forEach((g) => { if (g === 'No region' && r.regionIgnored) return; tally[g].assets += assetsOf(r); tally[g].projects += 1; }));
+    mine.forEach((r) => { const g = bucketOf(r); if (g === 'No region' && r.regionIgnored) return; tally[g].assets += assetsOf(r); tally[g].projects += 1; });
     const groups = GROUPS.map((g) => tally[g])
       .filter((g) => g.assets > 0 || g.projects > 0)
       .map((g) => Object.assign({}, g, { share: total > 0 ? Math.round(g.assets / total * 1000) / 10 : 0 }));
-    const ranked = groups.filter((g) => g.assets > 0).slice().sort((a, b) => b.assets - a.assets || GROUPS.indexOf(a.group) - GROUPS.indexOf(b.group));
+    const ranked = groups.filter((g) => g.assets > 0 && g.group !== 'Multiple').slice().sort((a, b) => b.assets - a.assets || GROUPS.indexOf(a.group) - GROUPS.indexOf(b.group));
     const types = TYPES.map((t) => {
       const of = mine.filter((r) => r.type === t);
       return { type: t, projects: of.length, assets: of.reduce((a, r) => a + assetsOf(r), 0) };
@@ -200,6 +207,21 @@
       });
   }
 
+  // The projects in a view that are tagged to more than one region group, biggest first, with the regions they cover. Worked out
+  // from the region tags the projects already have, so nobody has to fill in anything extra.
+  function multiRegion(summary, viewKey) {
+    const v = summary.views[viewKey];
+    if (!v) return [];
+    return summary.rows
+      .filter((r) => r.date >= v.from && r.date <= v.to && bucketOf(r) === 'Multiple')
+      .map((r) => {
+        const q = QUARTERS.filter((x) => r.date >= x.from && r.date <= x.to)[0];
+        const gs = groupsOf(r).slice().sort((a, b) => GROUPS.indexOf(a) - GROUPS.indexOf(b));
+        return { gid: r.gid, name: r.name, type: r.type, date: r.date, quarter: q ? q.key : '', owner: str(r.owner), assets: assetsOf(r), groups: gs, combo: gs.map((g) => GROUP_LABEL[g]).join(' + ') };
+      })
+      .sort((a, b) => b.assets - a.assets || (a.date < b.date ? 1 : -1));
+  }
+
   // The delivered projects in a view that have no region on them (so they sit under "No region"), newest first, with the
   // field to fill in: Applicable Regions for a Roadmap project, Regions (XCF) for the rest.
   function withoutRegion(summary, viewKey) {
@@ -213,5 +235,5 @@
       });
   }
 
-  return { QUARTERS, OVERALL, TYPES, GROUPS, GROUP_LABEL, ACTIONS, regionGroup, regionTags, groupsOf, aucklandDate, isCancelled, adjusts, cleanAdjustments, summarise, biggest, withoutCount, withoutRegion };
+  return { QUARTERS, OVERALL, TYPES, GROUPS, GROUP_LABEL, ACTIONS, regionGroup, regionTags, groupsOf, aucklandDate, isCancelled, adjusts, cleanAdjustments, summarise, biggest, withoutCount, withoutRegion, multiRegion, bucketOf };
 }));

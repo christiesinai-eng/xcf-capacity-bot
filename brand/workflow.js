@@ -212,7 +212,7 @@
        counting, so assets are counted when a project completes. Overall is Q2 plus Q3; the buttons flip to one quarter. */
     var AM = window.AssetsMath;
     var ASUM = AM.summarise(typeof ASSETS_DATA !== 'undefined' ? ASSETS_DATA : [], typeof ASSETS_ADJUSTMENTS !== 'undefined' ? ASSETS_ADJUSTMENTS : []);
-    var A_COL = { 'US': 'var(--data1)', 'UK': 'var(--xero-blue)', 'ANZ': 'var(--mint)', 'IM': 'var(--purple)', 'Global': 'var(--gold)', 'No region': 'var(--muted)' };
+    var A_COL = { 'US': 'var(--data1)', 'UK': 'var(--xero-blue)', 'ANZ': 'var(--mint)', 'IM': 'var(--purple)', 'Global': 'var(--gold)', 'Multiple': 'var(--coral)', 'No region': 'var(--muted)' };
     function assetDay(d) { return new Date(d + 'T00:00:00Z').toLocaleDateString('en-NZ', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }); }
     function assetUrl(gid) { return 'https://app.asana.com/1/41261904390129/project/' + encodeURIComponent(gid); }
     function nProj(n) { return n + (n === 1 ? ' project' : ' projects'); }
@@ -230,7 +230,9 @@
         ' <button class="link" type="button" data-more="assetsnocount" data-preset="' + (v.key === 'overall' ? 'all' : esc(v.key)) + '">See the missing counts</button>');
       if (v.noRegion) bits.push(esc(v.noRegion + ' of the ' + v.projects + ' completed ' + (v.projects === 1 ? 'project' : 'projects') + (v.noRegion === 1 ? ' has' : ' have') + ' no region, so ' + (v.noRegion === 1 ? 'it sits' : 'they sit') + ' under No region.') +
         ' <button class="link" type="button" data-more="assetsnoregion" data-preset="' + (v.key === 'overall' ? 'all' : esc(v.key)) + '">See the projects with no region</button>');
-      if (groupSum > v.assets) bits.push(esc('A project tagged to several regions counts in each, so the regions can add up to more than the total.'));
+      var mu = v.groups.filter(function (x) { return x.group === 'Multiple'; })[0];
+      if (mu && mu.projects) bits.push(esc(nProj(mu.projects) + ' cover more than one region, so each is counted once, under Multiple regions.') +
+        ' <button class="link" type="button" data-more="assetsmulti" data-preset="' + (v.key === 'overall' ? 'all' : esc(v.key)) + '">See which regions they cover</button>');
       return bits.join('<br>');
     }
     function renderAssets() {
@@ -898,7 +900,7 @@
         'Assets are the number in Asset count (XCF) on the project. A completed project with no count adds no assets: ' + vO.noCount + ' of ' + nProj(vO.projects) + ' ' + (vO.noCount === 1 ? 'has' : 'have') + ' none and ' + (vO.noCount === 1 ? 'is' : 'are') + ' on the missing counts list.',
         'Only Micro (BAU), Roadmap and XCF initiative projects are counted. Projects with no Project type are not.',
         'Region comes from Regions (XCF) for Micro (BAU) and from Applicable Regions for Roadmap, and from the other one when that is empty. ANZ is AU and NZ; IM is every other named region; Global-tagged and no-region work are shown on their own.',
-        'A project tagged to several regions counts in each region once, so the regions can add up to more than the total.',
+        'A project tagged to regions in more than one group (for example US and UK) is counted once, under Multiple regions, so the regions add up to the total. AU and NZ count together as ANZ, so a project for both stays in ANZ.',
         'Cancelled projects are not counted: ' + (meta.cancelled || 0) + ' completed in these quarters had a Status (XCF) of Cancelled or a last status update of Dropped.',
         'A short list kept by hand in the Assets_Adjustments tab of the data sheet ' + ((meta.excluded ? 'leaves out ' + nProj(meta.excluded) + ' that made no assets' : 'leaves out nothing yet') + (vO.ignored ? ' and stops ' + nProj(vO.ignored) + ' finished before asset counts began from being chased' : '')) + '.'
       ].map(function (t) { return '<p class="note2">' + esc(t) + '</p>'; }).join('');
@@ -928,6 +930,27 @@
         sec('Projects to fill in', list.length ? segc('nocount', [['all', 'Overall']].concat(Q.map(function (k) { return [k, k]; }))) + table(['Project', 'Owner', 'Type', 'Completed', 'Quarter', 'Regions'], rows)
           : '<p class="note2">Every completed project has an asset count.</p>',
           'Open the project in Asana and fill in Asset count (XCF). It leaves this list, and the assets are counted, after the next daily refresh.' + older) };
+    };
+    /* The projects tagged to more than one region group: they sit under Multiple regions on the card, and this shows which regions
+       each one covers and links it to Asana. Worked out from the region tags the projects already have. */
+    DET.assetsmulti = function () {
+      var Q = AM.QUARTERS.map(function (q) { return q.key; }), vO = ASUM.views.overall;
+      var list = AM.multiRegion(ASUM, 'overall');
+      var nw = function (t) { return '<span style="white-space:nowrap">' + t + '</span>'; };
+      var byCombo = {}; list.forEach(function (r) { var c = byCombo[r.combo] || (byCombo[r.combo] = { combo: r.combo, assets: 0, projects: 0 }); c.assets += r.assets; c.projects += 1; });
+      var combos = Object.keys(byCombo).map(function (k) { return byCombo[k]; }).sort(function (a, b) { return b.assets - a.assets; });
+      var comboRows = combos.map(function (c) { return row(['<b>' + esc(c.combo) + '</b>', nProj(c.projects), '<b>' + c.assets + '</b>']); });
+      var rows = list.map(function (r) {
+        return row(['<a href="' + assetUrl(r.gid) + '" target="_blank" rel="noopener">' + esc(r.name || r.gid) + '</a>', nw(esc(r.owner || 'No owner')), nw(assetDay(r.date)), nw(esc(r.quarter)), esc(r.combo), r.assets ? '<b>' + r.assets + '</b>' : '–'],
+          ' data-group="multi" data-pane="' + esc(r.quarter) + '"');
+      });
+      var inMulti = function (k) { var m = ASUM.views[k].groups.filter(function (x) { return x.group === 'Multiple'; })[0]; return m ? m.assets : 0; };
+      return { t: 'Projects covering more than one region', s: nProj(list.length) + ' completed in ' + Q.join(' and ') + ' cover more than one region. Each is counted once, under Multiple regions.', h:
+        stats([[inMulti('overall'), 'Assets, overall', 'var(--ink)'], [inMulti(Q[0]), Q[0], 'var(--blue-ink)'], [inMulti(Q[1]), Q[1], 'var(--blue-ink)'], [list.length, 'Projects', 'var(--ink)']]) +
+        sec('Which regions they cover', combos.length ? table(['Regions', 'Projects', 'Assets'], comboRows) : '<p class="note2">No project covers more than one region.</p>',
+          'AU and NZ count together as ANZ, so a project for both of them is not here. Global-tagged work together with a named region is.') +
+        sec('The projects', list.length ? segc('multi', [['all', 'Overall']].concat(Q.map(function (k) { return [k, k]; }))) + table(['Project', 'Owner', 'Completed', 'Quarter', 'Regions', 'Assets'], rows) : '<p class="note2">No project covers more than one region.</p>',
+          'This comes from the region tags the projects already have in Asana, so there is nothing extra to fill in.') };
     };
     /* The completed projects with no region on them, each linked to Asana with the field to fill in, so they can be fixed at the
        source. They are counted (their assets are in the total) but sit under No region in the regional split. */
