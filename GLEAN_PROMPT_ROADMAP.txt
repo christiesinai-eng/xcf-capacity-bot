@@ -19,7 +19,7 @@ HOW TO WORK (read this first)
 
 PHASE 1 - THE PORTFOLIO
 Use the Asana "Get Items for Portfolio" action with portfolio_gid = 1217210785824637, limit = 100 and opt_fields =
-name,gid,completed,custom_fields.gid,custom_fields.enum_value.name,custom_fields.multi_enum_values.name
+name,gid,completed,current_status_update.status_type,current_status_update.title,custom_fields.gid,custom_fields.enum_value.name,custom_fields.multi_enum_values.name
 Keep calling with the offset token from the previous page until no token comes back. You are finished ONLY when a page
 comes back with fewer than 100 items and no token. A page with exactly 100 items means there is another page: if no
 token came with it, stop with STATUS = FAILED (phase 1) and say so, rather than carry on with a short list. (The
@@ -27,7 +27,12 @@ portfolio holds several hundred items over five or so pages.) Write down how man
 Work ONE PAGE AT A TIME. Straight after reading a page, go through its items one by one and write ONE note line for
 each item whose custom field gid 1217575429570978 (Project type) has an enum value named exactly "Roadmap", then
 forget the page (a long list held in your head gets short without anyone noticing):
-RI <gid> | <name> | <completed> | <regions>
+RI <gid> | <name> | <completed> | <regions> | <project_status or -> | <status_title or -> | <dropped TRUE or FALSE>
+- project_status = current_status_update.status_type OF THAT SAME ITEM on this page (a dash - if the item has no status update);
+- status_title = current_status_update.title of that same item (a dash - if none);
+- dropped = TRUE when project_status is exactly "dropped", otherwise FALSE. (On 25 Nov a run marked ten live projects as dropped
+  and missed the five that really were: statuses fetched one project at a time had been attached to the wrong projects. The
+  status now travels on the item's own line, so it cannot be attached to another project.)
 - name = exactly as Asana gives it;
 - completed = TRUE or FALSE (FALSE when the field is missing);
 - regions = the names in multi_enum_values of the custom field gid 1212086752729219, in the order Asana returns them,
@@ -35,15 +40,11 @@ RI <gid> | <name> | <completed> | <regions>
 Ignore every other item: no note line and no further calls for it. When the last page is done, count the RI lines and
 write the count down. From here on use ONLY the RI lines: they are the ROADMAP ITEMS, in portfolio order.
 
-PHASE 2 - STATUS, ONE CALL PER ROADMAP ITEM
-Use the Asana "Get Project" action with project_id = the item's gid and opt_fields =
-gid,current_status_update.status_type,current_status_update.title
-- project_status = current_status_update.status_type (blank if the project has no status update).
-- status_title = current_status_update.title (blank if none).
-- dropped = TRUE when project_status is exactly "dropped", otherwise FALSE.
-Check the answer's gid is the one you asked for; if it is not, ask again once, and if it is still wrong stop (STATUS =
-FAILED, phase 2, name the item). IMMEDIATELY write one note line:
+PHASE 2 - STATUS (NO CALLS: it is already on the RI lines)
+Do NOT call "Get Project" for status. For each RI line, in order, write one note line that copies project_status,
+status_title and dropped from THAT SAME RI line (same gid):
 ST <gid> | <project_status or -> | <status_title or -> | <dropped TRUE or FALSE>
+Then count the ST lines with dropped TRUE and write the count and the names down; they go in the report.
 
 PHASE 3 - BAR TASKS, ONE PROJECT AT A TIME
 Go through the roadmap items ONE AT A TIME, in portfolio order. Never make the calls for several projects at once
@@ -124,8 +125,9 @@ write "not reached" for anything you did not get to. A short report that leaves 
 STATUS: COMPLETE or FAILED (phase, reason)
 Date used (Auckland), and now.
 Portfolio items fetched (and how many on each page); of those, roadmap items (the RI lines).
-Calls made: status / bar tasks. Note lines written: RI, ST and ITEM (each must equal the roadmap items). Answers
-repeated because they were for the wrong project: N.
+Calls made: bar tasks (there are no status calls now). Note lines written: RI, ST and ITEM (each must equal the roadmap items).
+Answers repeated because they were for the wrong project: N.
+Projects marked dropped: how many, and their names (today it is five: XCF-13626, XCFP-530, XCFP-52, XCFP-458, XCFP-32).
 Bar tasks ignored because their bar type was "Parent task": N.
 Bar tasks named from the bar type field because their own name is not a bar name: N (never 0 at the moment: if it is 0, say so).
 Duplicate check: pairs of items found with the same bar dates (name both), and what you did about each; 0 if none.
