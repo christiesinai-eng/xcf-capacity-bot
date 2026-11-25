@@ -85,7 +85,14 @@ For each of TODAY'S REQUESTS, in order:
     <x> ¦ newest already copied <L or blank> ¦ NEW stories <m>. m is the number of kept stories that are NEW by the rule above.
     The numbers should add up: x + m = n. If they do not (for example a comment was deleted or edited in Asana, or an earlier
     copy was partial), STILL write only the NEW ones, never any other, and add the word MISMATCH to the PLAN line so it can be put
-    in the report. If m is 0 you write nothing for this request (you still add its Checked row later).
+    in the report. If m is 0 you write nothing for this request (you still add its Checked row later, unless the ZERO CHECK
+    below stops it).
+    ZERO CHECK (on 26 Nov a run recorded 0 comments for requests that have comments, and that hid real comments for a week).
+    If n is 0 and x (the rows already in the Raw tab for this request) is more than 0, the answer is not believable: a comment
+    that was copied earlier does not vanish from Asana. Ask Get Task Stories for this request once more and read every page.
+    If n is still 0, treat the request as FAILED: write no Checked row for it, count it as failed and name it in the report as
+    ZERO-WITH-ROWS. Never record a 0 in the Checked tab for a request unless the answer you read for it really held no comment
+    story and its raw_rows (x) is 0.
     Check before you write: every story you are about to write must be later than L, and none of them may be one you already
     wrote earlier in this run.
  5. IMMEDIATELY add the NEW comments of this request to Glean_Request_Comments_Raw, one row each, oldest first, in these columns:
@@ -160,7 +167,7 @@ Date used (Auckland), and now.
 Matched requests (Worklist rows); never read before (a); due for a refresh (b); requests read this run; left over.
 Requests that had comments / that had none; comment stories found in total; new rows written to Glean_Request_Comments_Raw; Checked
 rows added.
-Requests that failed (give their codes). Requests whose PLAN line said MISMATCH (give the code, n, x and m for each).
+Requests that failed (give their codes, and say which of them were ZERO-WITH-ROWS). Requests whose PLAN line said MISMATCH (give the code, n, x and m for each).
 Sheet counts before and after (K1 raw_rows, K2 checked_rows, K3 repeated_pairs, K4 cross_request_copies) and whether each passed
 its check in phase 3; whether the last rows and the rows you added passed.
 Anything skipped or failed.
