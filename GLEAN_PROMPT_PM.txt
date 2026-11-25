@@ -162,12 +162,16 @@ parent_url
    1000, and read back that column A holds only the header.
 
 STAMP (the last step before the report; only after EVERY read-back above has passed)
-Read column A of the Sync_Log tab and find the row whose column A is exactly pm_at. Write the current UTC time, as plain
+Read the range A1:B30 of the Sync_Log tab in ONE read (give that exact range, not just "column A") and find the row whose
+column A is exactly pm_at (it is normally row 9, so cell B9; the rows tasks_at, pm_at, roadmap_at are next to each other).
+If you cannot find it, read A1:B60 once more before you decide it is missing (on 26 Nov a run said the row was missing
+when it was there, so a short or cut-off read is the likely cause). Write the current UTC time, as plain
 text in the form YYYY-MM-DDTHH:MM:SSZ (for example 2026-11-23T20:05:00Z), to column B of that row only, with the value
 input option RAW. Never append a row and never change any other cell of Sync_Log. Do not stamp if anything failed, a tab
 was left unwritten or the run is PARTIAL in a way that left a tab unchanged: a missing or old stamp is how the dashboard
-knows this agent has not finished a run. If the pm_at row is not there, do not create it: say "stamp row missing" in
-the report. This stamp is the one write outside your own tabs that you are allowed.
+knows this agent has not finished a run. If the pm_at row is still not there after the second, longer read, do not create
+it: say "stamp row missing" in the report and copy the first 15 values of column A that you read, so the cause can be seen.
+This stamp is the one write outside your own tabs that you are allowed.
 
 PHASE 6 - REPORT
 Reply with exactly these lines, then anything else that went wrong. Give every line even when the run stopped early:
