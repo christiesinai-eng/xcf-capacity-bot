@@ -121,6 +121,9 @@ LIST CHECK (after phase 4 and BEFORE any write). This is plain counting and matc
  3. The number of Glean_Tasks rows with overdue = TRUE must equal the number of Glean_Overdue_Tasks rows, and every
     Glean_Overdue_Tasks task_gid must be a Glean_Tasks row with overdue = TRUE. If the counts differ after step 1 and 2, STOP with
     STATUS = FAILED (list check) and write NOTHING; say both counts.
+ 4. On Glean_Missing_Tasks, created_by must be a PERSON'S NAME (the created_by name on the TASK line) or the single character "—".
+    It must never be the creator's gid (a long number). If any created_by is all digits, replace it with the name from the same
+    TASK line now. (On 25 Nov a scheduled run wrote the gid instead of the name on 12 of the 14 rows.)
 Write the three counts (Glean_Tasks rows, of which overdue; Glean_Overdue_Tasks rows; Glean_Missing_Tasks rows) in your report.
 
 ATTRIBUTION CHECK (after phase 4 and BEFORE any write): pick three tasks that are going into Glean_Tasks: the first
@@ -194,7 +197,7 @@ Date used (Auckland), and now.
 Members processed (of how many capacity members).
 For each member: name - incomplete tasks fetched - rows in Glean_Tasks.
 Incomplete tasks fetched in total; tasks left after rules 1 and 2.
-List check: Glean_Tasks rows (of which overdue = TRUE) / Glean_Overdue_Tasks rows / Glean_Missing_Tasks rows, and how many rows you removed in steps 1 and 2.
+List check: Glean_Tasks rows (of which overdue = TRUE) / Glean_Overdue_Tasks rows / Glean_Missing_Tasks rows, how many rows you removed in steps 1 and 2, and how many created_by values you corrected in step 4.
 Attribution check: the three tasks you checked (member, task name, gid) and whether Asana's assignee matched each one.
 Rule 4 counts: tasks that were missing / skipped by check a / b / c / d / added to Glean_Missing_Tasks.
 Parent lookups: used from cache / fetched this run / budget.
