@@ -14,8 +14,9 @@
 //               still counted as a delivered project and listed, so the gap is visible and can be chased.
 //   Region    : Micro (BAU) and XCF initiative use Regions (XCF); Roadmap uses Applicable Regions. When that field is empty the
 //               other one is used (24 Nov: a Micro project with Applicable Regions filled in was left under No region).
-//               Grouped as US, UK, ANZ (AU and NZ), IM (every other named region), Global (a Global tag) and No region.
-//   Several   : a project tagged to more than one region GROUP (AU and NZ are one ANZ) is counted once, under 'Multiple regions',
+//               Grouped as US, UK, AU, NZ, IM (every other named region), Global (a Global tag) and No region. (AU and NZ were one
+//               group, ANZ, until 25 Nov. A tag literally called ANZ counts for both AU and NZ.)
+//   Several   : a project tagged to more than one region GROUP (for example AU and NZ, or US and UK) is counted once, under 'Multiple regions',
 //               so the regions always add up to the total. Which regions it covers is shown beside it.
 //   Adjusted  : a short list kept by hand in the sheet tab Assets_Adjustments, applied after the rules above:
 //                 exclude         the project is not counted at all (it made no assets, or is not an asset project)
@@ -37,8 +38,8 @@
   const OVERALL = { key: 'overall', label: 'Overall', from: QUARTERS[0].from, to: QUARTERS[QUARTERS.length - 1].to };
   const TYPES = ['Micro (BAU)', 'Roadmap', 'XCF initiative'];
   // Display order of the groups, and what each is called on the page.
-  const GROUPS = ['US', 'UK', 'ANZ', 'IM', 'Global', 'Multiple', 'No region'];
-  const GROUP_LABEL = { US: 'US', UK: 'UK', ANZ: 'ANZ', IM: 'IM', Global: 'Global-tagged', Multiple: 'Multiple regions', 'No region': 'No region' };
+  const GROUPS = ['US', 'UK', 'AU', 'NZ', 'IM', 'Global', 'Multiple', 'No region'];
+  const GROUP_LABEL = { US: 'US', UK: 'UK', AU: 'AU', NZ: 'NZ', IM: 'IM', Global: 'Global-tagged', Multiple: 'Multiple regions', 'No region': 'No region' };
 
   const str = (v) => (v === undefined || v === null ? '' : String(v));
 
@@ -49,8 +50,17 @@
     if (/^global/i.test(t)) return 'Global';
     if (t === 'US') return 'US';
     if (t === 'UK') return 'UK';
-    if (t === 'AU' || t === 'NZ' || t === 'ANZ') return 'ANZ';
+    if (t === 'AU') return 'AU';
+    if (t === 'NZ') return 'NZ';
+    if (t === 'ANZ') return 'AU'; // see regionGroups: a tag called ANZ counts for both
     return 'IM';
+  }
+
+  // A tag's group or groups: one, except a tag literally called ANZ, which stands for both Australia and New Zealand.
+  function regionGroups(tag) {
+    if (str(tag).trim() === 'ANZ') return ['AU', 'NZ'];
+    const g = regionGroup(tag);
+    return g ? [g] : [];
   }
 
   // The region tags that count for this request, by its Project type.
@@ -64,7 +74,7 @@
   // The distinct groups a request counts in (never empty: a request with no region is in 'No region').
   function groupsOf(row) {
     const seen = [];
-    regionTags(row).forEach((tag) => { const g = regionGroup(tag); if (g && seen.indexOf(g) < 0) seen.push(g); });
+    regionTags(row).forEach((tag) => regionGroups(tag).forEach((g) => { if (seen.indexOf(g) < 0) seen.push(g); }));
     return seen.length ? seen : ['No region'];
   }
 
@@ -79,7 +89,7 @@
   }
 
   // The one bucket a project's assets are shown under, so every asset is counted once: its region group when it has just one,
-  // 'Multiple' when it is tagged to more than one group (AU and NZ are one group, ANZ), 'No region' when it has none.
+  // 'Multiple' when it is tagged to more than one group (for example AU and NZ), 'No region' when it has none.
   function bucketOf(row) {
     const gs = groupsOf(row);
     return gs.length > 1 ? 'Multiple' : gs[0];
@@ -235,5 +245,5 @@
       });
   }
 
-  return { QUARTERS, OVERALL, TYPES, GROUPS, GROUP_LABEL, ACTIONS, regionGroup, regionTags, groupsOf, aucklandDate, isCancelled, adjusts, cleanAdjustments, summarise, biggest, withoutCount, withoutRegion, multiRegion, bucketOf };
+  return { QUARTERS, OVERALL, TYPES, GROUPS, GROUP_LABEL, ACTIONS, regionGroup, regionGroups, regionTags, groupsOf, aucklandDate, isCancelled, adjusts, cleanAdjustments, summarise, biggest, withoutCount, withoutRegion, multiRegion, bucketOf };
 }));

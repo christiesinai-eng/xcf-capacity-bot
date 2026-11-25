@@ -206,8 +206,8 @@ button,input,select,textarea{font-family:var(--body)}
 @media (max-width:1180px){.mk .car>.pod,.mk .two.car>.pod{flex-basis:calc((100% - 20px)/2)}}
 @media (max-width:720px){.mk .car>.pod,.mk .two.car>.pod{flex-basis:100%}}
 @media (prefers-reduced-motion:reduce){.mk .car{scroll-behavior:auto}}
-:root{--data1:#1F65D6}
-:root[data-theme="dark"]{--data1:#3ECCFF}
+:root{--data1:#1F65D6;--data2:#FF9F43}
+:root[data-theme="dark"]{--data1:#3ECCFF;--data2:#FFB366}
 
 /* a small hint inside a section title stays in the body face, not the headline face */
 .section-title span{font-family:var(--body);font-weight:400;-webkit-text-stroke:0;letter-spacing:0}
@@ -272,7 +272,7 @@ button,input,select,textarea{font-family:var(--body)}
 /* dark theme: link-blue text reads better a little lighter */
 :root[data-theme="dark"] .more-tag{color:var(--blue-ink)}
 /* Assets delivered: the region tiles read best as three over two (four across left one tile on its own) */
-@media (min-width:1181px){.mk .assets .rtiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1181px){.mk .assets .rtiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
 
 /* Team capacity window: click a person to open their tasks */
 #dBody tr.cap-row{cursor:pointer}

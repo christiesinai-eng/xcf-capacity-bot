@@ -212,7 +212,7 @@
        counting, so assets are counted when a project completes. Overall is Q2 plus Q3; the buttons flip to one quarter. */
     var AM = window.AssetsMath;
     var ASUM = AM.summarise(typeof ASSETS_DATA !== 'undefined' ? ASSETS_DATA : [], typeof ASSETS_ADJUSTMENTS !== 'undefined' ? ASSETS_ADJUSTMENTS : []);
-    var A_COL = { 'US': 'var(--data1)', 'UK': 'var(--xero-blue)', 'ANZ': 'var(--mint)', 'IM': 'var(--purple)', 'Global': 'var(--gold)', 'Multiple': 'var(--coral)', 'No region': 'var(--muted)' };
+    var A_COL = { 'US': 'var(--data1)', 'UK': 'var(--xero-blue)', 'AU': 'var(--mint)', 'NZ': 'var(--data2)', 'IM': 'var(--purple)', 'Global': 'var(--gold)', 'Multiple': 'var(--coral)', 'No region': 'var(--muted)' };
     function assetDay(d) { return new Date(d + 'T00:00:00Z').toLocaleDateString('en-NZ', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }); }
     function assetUrl(gid) { return 'https://app.asana.com/1/41261904390129/project/' + encodeURIComponent(gid); }
     function nProj(n) { return n + (n === 1 ? ' project' : ' projects'); }
@@ -899,8 +899,8 @@
         'Delivered means the project has been completed (closed) in XCF | Projects. Assets are counted when it completes, in the quarter it was completed in, by Auckland date, whatever day it started.',
         'Assets are the number in Asset count (XCF) on the project. A completed project with no count adds no assets: ' + vO.noCount + ' of ' + nProj(vO.projects) + ' ' + (vO.noCount === 1 ? 'has' : 'have') + ' none and ' + (vO.noCount === 1 ? 'is' : 'are') + ' on the missing counts list.',
         'Only Micro (BAU), Roadmap and XCF initiative projects are counted. Projects with no Project type are not.',
-        'Region comes from Regions (XCF) for Micro (BAU) and from Applicable Regions for Roadmap, and from the other one when that is empty. ANZ is AU and NZ; IM is every other named region; Global-tagged and no-region work are shown on their own.',
-        'A project tagged to regions in more than one group (for example US and UK) is counted once, under Multiple regions, so the regions add up to the total. AU and NZ count together as ANZ, so a project for both stays in ANZ.',
+        'Region comes from Regions (XCF) for Micro (BAU) and from Applicable Regions for Roadmap, and from the other one when that is empty. AU and NZ are shown separately; IM is every other named region; Global-tagged and no-region work are shown on their own.',
+        'A project tagged to regions in more than one group (for example US and UK) is counted once, under Multiple regions, so the regions add up to the total. A project for both AU and NZ is in Multiple regions.',
         'Cancelled projects are not counted: ' + (meta.cancelled || 0) + ' completed in these quarters had a Status (XCF) of Cancelled or a last status update of Dropped.',
         'A short list kept by hand in the Assets_Adjustments tab of the data sheet ' + ((meta.excluded ? 'leaves out ' + nProj(meta.excluded) + ' that made no assets' : 'leaves out nothing yet') + (vO.ignored ? ' and stops ' + nProj(vO.ignored) + ' finished before asset counts began from being chased' : '')) + '.'
       ].map(function (t) { return '<p class="note2">' + esc(t) + '</p>'; }).join('');
@@ -948,7 +948,7 @@
       return { t: 'Projects covering more than one region', s: nProj(list.length) + ' completed in ' + Q.join(' and ') + ' cover more than one region. Each is counted once, under Multiple regions.', h:
         stats([[inMulti('overall'), 'Assets, overall', 'var(--ink)'], [inMulti(Q[0]), Q[0], 'var(--blue-ink)'], [inMulti(Q[1]), Q[1], 'var(--blue-ink)'], [list.length, 'Projects', 'var(--ink)']]) +
         sec('Which regions they cover', combos.length ? table(['Regions', 'Projects', 'Assets'], comboRows) : '<p class="note2">No project covers more than one region.</p>',
-          'AU and NZ count together as ANZ, so a project for both of them is not here. Global-tagged work together with a named region is.') +
+          'A project for both AU and NZ is here, as is Global-tagged work together with a named region.') +
         sec('The projects', list.length ? segc('multi', [['all', 'Overall']].concat(Q.map(function (k) { return [k, k]; }))) + table(['Project', 'Owner', 'Completed', 'Quarter', 'Regions', 'Assets'], rows) : '<p class="note2">No project covers more than one region.</p>',
           'This comes from the region tags the projects already have in Asana, so there is nothing extra to fill in.') };
     };

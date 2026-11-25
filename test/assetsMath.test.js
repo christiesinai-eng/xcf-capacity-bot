@@ -49,7 +49,7 @@ test('the region comes from Regions (XCF) for Micro, Applicable Regions for Road
   ]);
   assert.equal(g(v, 'US').assets, 1);
   assert.equal(g(v, 'UK').assets, 1010);
-  assert.equal(g(v, 'ANZ').assets, 100);
+  assert.equal(g(v, 'AU').assets, 100);
 });
 
 test('a Micro project with only Applicable Regions filled in (and a Roadmap one with only Regions (XCF)) is not left under No region', () => {
@@ -58,7 +58,7 @@ test('a Micro project with only Applicable Regions filled in (and a Roadmap one 
     row({ type: 'Roadmap', assets: 4, regMicro: ['US'], regRoadmap: [] }),
     row({ type: 'Micro (BAU)', assets: 2, regMicro: [], regRoadmap: [] }),
   ]);
-  assert.equal(g(v, 'ANZ').assets, 9);
+  assert.equal(g(v, 'Multiple').assets, 9, 'AU and NZ both tagged: two groups');
   assert.equal(g(v, 'US').assets, 4);
   assert.equal(g(v, 'No region').assets, 2);
   assert.equal(v.noRegion, 1);
@@ -74,10 +74,13 @@ test('ignore_region keeps a project off the no-region list and the No region til
   assert.equal(s.views.overall.assets, 2);
 });
 
-test('regions are grouped US, UK, ANZ (AU and NZ), IM (every other named region), Global; none is its own group', () => {
+test('regions are grouped US, UK, AU, NZ, IM (every other named region), Global; none is its own group', () => {
   const G = (tag) => A.regionGroup(tag);
   assert.deepEqual(['US', 'UK', 'AU', 'NZ', 'CA', 'SG', 'ZA', 'UAE', 'IR', 'EMEA', 'RoAsia (ID, PH, HK)', 'IE', 'Other'].map(G),
-    ['US', 'UK', 'ANZ', 'ANZ', 'IM', 'IM', 'IM', 'IM', 'IM', 'IM', 'IM', 'IM', 'IM']);
+    ['US', 'UK', 'AU', 'NZ', 'IM', 'IM', 'IM', 'IM', 'IM', 'IM', 'IM', 'IM', 'IM']);
+  assert.deepEqual(A.regionGroups('ANZ'), ['AU', 'NZ'], 'a tag called ANZ stands for both');
+  assert.deepEqual(A.regionGroups('SG'), ['IM']);
+  assert.deepEqual(A.regionGroups(' '), []);
   assert.equal(G('Global'), 'Global');
   assert.equal(G('Global (All Markets) '), 'Global', 'Asana has a trailing space on this one');
   assert.equal(G(' '), null);
@@ -87,13 +90,13 @@ test('regions are grouped US, UK, ANZ (AU and NZ), IM (every other named region)
 
 test('a project tagged to more than one region group counts once, under Multiple regions, so the regions add up to the total', () => {
   const v = view([
-    row({ assets: 10, regMicro: ['AU', 'NZ'] }),               // one ANZ group, not two: stays ANZ
+    row({ assets: 10, regMicro: ['AU'] }),                     // AU on its own: AU
     row({ assets: 6, regMicro: ['US', 'UK', 'SG', 'ZA'] }),    // US, UK and IM: Multiple regions
     row({ assets: 4, regMicro: ['UK'] }),
     row({ assets: 3, regMicro: ['Global', 'US'] }),            // Global and US: Multiple regions
   ]);
   assert.equal(v.assets, 23, 'the total counts each project once');
-  assert.equal(g(v, 'ANZ').assets, 10);
+  assert.equal(g(v, 'AU').assets, 10);
   assert.equal(g(v, 'UK').assets, 4);
   assert.equal(g(v, 'Multiple').assets, 9);
   assert.equal(g(v, 'Multiple').projects, 2);
@@ -101,7 +104,7 @@ test('a project tagged to more than one region group counts once, under Multiple
   const sum = v.groups.reduce((a, x) => a + x.assets, 0);
   assert.equal(sum, v.assets, 'the regions add up to the total');
   assert.equal(v.groups.find((x) => x.group === 'Multiple').label, 'Multiple regions');
-  assert.equal(v.top.group, 'ANZ', 'Multiple regions is never the headline region');
+  assert.equal(v.top.group, 'AU', 'Multiple regions is never the headline region');
 });
 
 test('multiRegion lists the projects behind the Multiple regions tile with the regions they cover, biggest first', () => {
@@ -109,11 +112,11 @@ test('multiRegion lists the projects behind the Multiple regions tile with the r
     row({ gid: 'a', name: 'Two regions', assets: 6, regMicro: ['US', 'UK'], completedAt: '2026-10-07T03:00:00Z', owner: 'Pat' }),
     row({ gid: 'b', name: 'Bigger', assets: 20, regMicro: ['AU', 'Global'], completedAt: '2026-08-09T03:00:00Z' }),
     row({ gid: 'c', name: 'Single', assets: 50, regMicro: ['NZ'] }),
-    row({ gid: 'd', name: 'AU and NZ only', assets: 5, regMicro: ['AU', 'NZ'] }),
+    row({ gid: 'd', name: 'AU and NZ', assets: 5, regMicro: ['AU', 'NZ'] }),
   ]);
   const all = A.multiRegion(s, 'overall');
-  assert.deepEqual(all.map((r) => [r.name, r.assets, r.combo]), [['Bigger', 20, 'ANZ + Global-tagged'], ['Two regions', 6, 'US + UK']]);
-  assert.equal(all[1].owner, 'Pat');
+  assert.deepEqual(all.map((r) => [r.name, r.assets, r.combo]), [['Bigger', 20, 'AU + Global-tagged'], ['AU and NZ', 5, 'AU + NZ'], ['Two regions', 6, 'US + UK']].sort((a, b) => b[1] - a[1]));
+  assert.equal(all[2].owner, 'Pat');
   assert.deepEqual(A.multiRegion(s, 'FY27 Q3').map((r) => r.name), ['Two regions']);
   assert.deepEqual(A.multiRegion(s, 'nope'), []);
 });
@@ -128,7 +131,7 @@ test('the real FY27 Q3 so far: a 120-asset UK project and a 2-asset AU one', () 
   assert.equal(v.projects, 3);
   assert.equal(v.noCount, 1);
   assert.deepEqual(v.top, { group: 'UK', label: 'UK', share: 98.4 });
-  assert.equal(g(v, 'ANZ').share, 1.6);
+  assert.equal(g(v, 'AU').share, 1.6);
   assert.equal(g(v, 'Global').projects, 1, 'a Global-tagged project with no count still shows as a project');
   assert.equal(g(v, 'Global').assets, 0);
 });
