@@ -61,8 +61,13 @@ gid,name,created_at,assignee.name,custom_fields.gid,custom_fields.enum_value.nam
 Read page after page with the offset token from the previous page until no token comes back. This is every task in the
 project (about 1,500, over about 37 pages): that is expected. A page that comes back with an offset token ALWAYS means
 there is another page: read it. Never stop reading while a token is still coming back. Do not use "Search Tasks".
-Count every task you read (READ). For each page, IMMEDIATELY write one progress line:
-PAGE ¦ <page number> ¦ <tasks on this page> ¦ READ so far <running total> ¦ token <YES or NO>
+Count every task you read (READ). Most of the tasks in this project are OLD: created before 2026-07-01. An OLD task gets
+NO REQ line, is never counted as a request, and its project is never looked up. (On 27 Nov a run wrote a REQ line for
+every task, 1,493 of them, so 302 projects had to be looked up instead of about 50: the run hit the lookup cap in phase 3
+and wrote nothing.) For each task, look at the first 10 characters of created_at FIRST: if that date is earlier than
+2026-07-01 the task is OLD and you do nothing more with it. For each page, IMMEDIATELY write one progress line:
+PAGE ¦ <page number> ¦ <tasks on this page> ¦ OLD <n> ¦ SKIPPED <n> ¦ REQ <n> ¦ READ so far <running total> ¦ token <YES or NO>
+(OLD + SKIPPED + REQ must equal the tasks on this page: if it does not, count the page again.)
 and then one note line for every task on it whose created_at date (the first 10 characters) is 2026-07-01 or later and
 that is not skipped (older tasks get no note line):
 REQ ¦ <gid> ¦ <code> ¦ <name> ¦ <pod> ¦ <requester> ¦ <assignee> ¦ <status> ¦ <quarter> ¦ <project type> ¦ <regions> ¦ <project gid> ¦ <submitted at>
@@ -94,10 +99,17 @@ REQ ¦ <gid> ¦ <code> ¦ <name> ¦ <pod> ¦ <requester> ¦ <assignee> ¦ <statu
   it empty (the request is not matched).
 - submitted at = created_at exactly as Asana gives it (for example 2026-07-02T01:23:45.678Z).
 When the last page is done: READ must equal EXPECTED. If it does not, read again the pages you may have missed; if it
-still does not match, stop (STATUS = FAILED, phase 2, and say READ and EXPECTED). Check no gid has two REQ lines. Then
-write down "READ <n> = EXPECTED <n>" and the number of REQ lines. From here on use ONLY the REQ and PRJ lines.
+still does not match, stop (STATUS = FAILED, phase 2, and say READ and EXPECTED). Check no gid has two REQ lines.
+DATE CHECK: add up the PAGE lines: OLD + SKIPPED + REQ must equal READ. OLD must NOT be 0: most of the project is older
+than 2026-07-01, so an OLD of 0 means the date rule was not applied. Also find the oldest submitted at among the REQ lines:
+it must be 2026-07-01 or later. If either check fails, go back over your PAGE and REQ lines and remove the REQ line of every
+task created before 2026-07-01 before you go on. Then
+write down "READ <n> = EXPECTED <n>", the OLD, SKIPPED and REQ counts, and the oldest submitted at. From here on use ONLY
+the REQ and PRJ lines.
 
 PHASE 3 - WHEN EACH PROJECT'S WORK STARTED
+First, if you find more than 60 projects TO DO below, go back and check the DATE CHECK of phase 2: far too many projects
+almost always means REQ lines were written for tasks created before 2026-07-01. Fix those first.
 List the distinct project gids on the REQ lines, in the order they first appear. A project that has a row in
 Glean_Request_Timing_Cache needs nothing from you: the sheet looks its dates up itself. Every other project is TO DO. A
 project with no start date yet is never saved in the cache, so it is looked up again on every run; that is intended.
@@ -182,8 +194,8 @@ Date used (Auckland), and now.
 Phase 0: whether Get Task Stories worked with a project gid, and the In Progress time you found for project
 1213702136901618.
 Portfolio items fetched (and how many on each page); PRJ lines written.
-Tasks read (READ) and EXPECTED; pages read (and how many tasks on each page); REQ lines written; tasks skipped by the
-code or Sprint rules.
+Tasks read (READ) and EXPECTED; pages read (and how many tasks on each page); OLD tasks (created before 2026-07-01, no
+line); REQ lines written and the oldest submitted at among them; tasks skipped by the code or Sprint rules.
 Projects on the REQ lines; found in the cache; looked up this run; still to do; lookups that failed; projects with a start
 date (of those: count only TIME lines whose started_at is a date, not a dash; this must equal the number of rows you added
 to Glean_Request_Timing_Cache, and if it does not, say so).
