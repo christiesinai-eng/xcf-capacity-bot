@@ -150,8 +150,12 @@ write starting at row n+2, never higher), in the columns of its header (a dash i
 the value input option RAW, so the project gid stays text. Never save a project with no start: before saving a project,
 look at the started_at on its TIME line; if it is a dash, do not save it, whether the lookup failed or the project simply
 has not started yet (On Hold, Backlog and Additional Information Needed projects are the usual ones). The tab must never
-hold a row whose started_at cell is empty. Read the tab back to check
-the new rows are there, that no project appears twice and that the rows above them are unchanged.
+hold a row whose started_at cell is empty. RIGHT BEFORE you add rows, read column A of the cache again (the whole column)
+and take out of your save list every project that is already in it: a project you looked up this run that turns out to be
+in column A is NOT new, so do not save it again. (On 28 Nov a run saved a project that already had a row, and then stopped.)
+Read the tab back to check the new rows are there and that the rows above them are unchanged. If a project still appears
+twice, do NOT stop, do NOT delete anything and do NOT count it as a failure: write "DUPLICATE CACHE ROW <gid>, rows <a> and
+<b>" in the report and carry on to phase 4 (the sheet reads the first row for a project, so the page is not affected).
 If more than 60 projects were TO DO, you stop after the 60th: reply STATUS = PARTIAL, say how many projects are left,
 and do NOT write Glean_Requests (a list with missing start dates would be wrong, not just old). Running it again
 continues from the cache. A run with 60 or fewer TO DO projects carries on to phase 4.
